@@ -15,6 +15,6 @@
 - [x] AddInManagerManual
 - [x] AddInManagerManual
 - [x] AddInManagerManual
-- [] Application
+- [ ] Application
 
 ### Download
