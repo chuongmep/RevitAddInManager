@@ -13,8 +13,8 @@
 ### Command
 
 - [x] AddInManagerManual
-- [x] AddInManagerManual
-- [x] AddInManagerManual
+- [x] AddInManagerFaceless
+- [x] AddInManagerReadOnly
 - [ ] Application
 
 ### Download
