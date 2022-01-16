@@ -7,8 +7,15 @@
         <img src="https://img.shields.io/twitter/follow/chuongmep?style=social&logo=twitter"
             alt="follow on Twitter"></a>
 
-### WORK IN PROCESS 
+## WORK IN PROCESS
+
+### Add-In Manager
+
 ![](pic/_Image_9044512f-8ec0-4f18-a18f-4ec98ead1974.png)
+
+### StartUp Add-In Manager
+
+![](pic/_Image_fd36c982-f8dd-4961-af2c-61301ee6eb4a.png)
 
 ### Command
 
@@ -16,5 +23,6 @@
 - [x] AddInManagerFaceless
 - [x] AddInManagerReadOnly
 - [ ] Application
+- [ ] StartUp
 
 ### Download
