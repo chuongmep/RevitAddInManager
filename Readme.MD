@@ -1,5 +1,5 @@
 
-# Revit Addin Manager
+# Revit Add-in Manager
 ![Revit API](https://img.shields.io/badge/Revit%20API-2021-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgray.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -9,7 +9,7 @@
 
 ## WORK IN PROCESS
 
-### Description
+## Description
 
 The Plugin support developer improve developer to increase job performance with some feature
 - Add-in tester
@@ -24,7 +24,7 @@ The Plugin support developer improve developer to increase job performance with 
 
 ![](pic/Revit_3h2Yrkpc0h.png)
 
-### Add-In Manager
+## Add-In Manager
 
 ![](pic/_Image_9044512f-8ec0-4f18-a18f-4ec98ead1974.png)
 
@@ -43,10 +43,16 @@ The Plugin support developer improve developer to increase job performance with 
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk
 - [x] Enable or Disable Add-in with right click
 
-### Installation
+## Installation
 
 TODO
 
-### Sponsors
+## License
+
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [License](License.md) file for full details.
+
+Credit to [icons8.com](https://icons8.com) for the Revit Add-in Manager icons.
+
+## Sponsors
 
 Thanks to JetBrains for providing licenses for Rider and dotUltimate tools, which both make open-source development a real pleasure!
