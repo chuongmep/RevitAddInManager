@@ -55,7 +55,7 @@ TODO
 
 ## Author
 
-Originally implemented by Autodesk with platform Windows Forms And now it Maintain by [ChuongHo](https://github.com/chuongmep) with platform WPF and add more feature to fit with the progressive development of modern technology. His focus is to work smarter and achieve the most effective practices to enhance data utilization and digital collaboration among AEC parties.
+Originally implemented by Autodesk with platform **Windows Forms** and now it maintain by [ChuongHo](https://github.com/chuongmep) with platform **WPF** and add more feature to fit with the progressive development of modern technology. His focus is to work smarter and achieve the most effective practices to enhance data utilization and digital collaboration among AEC parties.
 
 ## License
 
