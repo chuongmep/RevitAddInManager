@@ -40,33 +40,31 @@
   </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdWindows, Version=2018.11.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\AdWindows.dll</HintPath>
+    <Reference Include="AdWindows, Version=3.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\AdWindows.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RevitAPI, Version=20.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\RevitAPI.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="RevitAddInUtility, Version=21.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\RevitAddInUtility.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPIIFC, Version=20.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\RevitAPIIFC.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="RevitAPI, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\RevitAPI.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPIMacros, Version=20.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\RevitAPIMacros.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="RevitAPIIFC, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\RevitAPIIFC.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPIUI, Version=20.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="RevitAPIMacros, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\RevitAPIMacros.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPIUIMacros, Version=20.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\RevitAPIUIMacros.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="RevitAPIUI, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUIMacros, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\RevitAPIUIMacros.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,8 +78,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
-    <Reference Include="UIFramework, Version=20.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net472\UIFramework.dll</HintPath>
+    <Reference Include="UIFramework, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Chuongmep.RevitAPI.1.0.1\lib\net48\UIFramework.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
