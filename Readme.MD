@@ -78,3 +78,16 @@ All other brand names, product names or trademarks belong to their respective ho
 ## Sponsors
 
 Thanks to [JetBrains](https://www.jetbrains.com/) for providing licenses for [Rider](https://www.jetbrains.com/rider/) and [dotUltimate](https://www.jetbrains.com/dotnet/) tools, which both make open-source development a real pleasure!
+
+
+I suggest you some of these projects, hope you will like it.
+
+[RevitLookup](https://github.com/jeremytammik/RevitLookup)
+
+[RevitLookupWpf](https://github.com/chuongmep/RevitLookupWpf)
+
+[Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
+
+[Revit.Async](https://github.com/KennanChan/Revit.Async)
+
+[pyRevit](https://github.com/eirannejad/pyRevit)
