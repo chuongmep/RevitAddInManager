@@ -32,10 +32,6 @@ The Plugin support developer improve developer to increase job performance with 
 
 ![](pic/_Image_9044512f-8ec0-4f18-a18f-4ec98ead1974.png)
 
-### Startup Add-In Manager
-
-![](pic/_Image_fd36c982-f8dd-4961-af2c-61301ee6eb4a.png)
-
 ### Command
 
 - [x] AddInManagerManual
@@ -43,6 +39,8 @@ The Plugin support developer improve developer to increase job performance with 
 - [x] AddInManagerReadOnly
 - [ ] Application
 ### Startup
+
+![](pic/_Image_fd36c982-f8dd-4961-af2c-61301ee6eb4a.png)
 
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk
 - [x] Enable or Disable Add-in with right click
