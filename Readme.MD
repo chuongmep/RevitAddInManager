@@ -65,10 +65,6 @@ Credit to [icons8.com](https://icons8.com) for the Revit Add-in Manager icons.
 
 © 2010 Autodesk, Inc.  All rights reserved. All use of this Software is subject to the terms and conditions of the Autodesk End User License Agreement accepted upon installation of this Software and/or packaged with the Software.
 
-## Third-Party Software Credits and Attributions
-
-[SplitButton](SplitButton_License(BSD).txt) Copyright (c) 2010, wyDay. All rights reserved.
-
 ## Trademarks
 
 Autodesk and Revit  are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates, in the USA and/or other countries. 
