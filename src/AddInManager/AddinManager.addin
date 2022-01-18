@@ -5,6 +5,6 @@
         <FullClassName>AddInManager.App</FullClassName>
         <AddInId>A7C7965D-E72F-4769-A3AC-BE0C14764BA2</AddInId>
         <VendorId>ADSK</VendorId>
-        <VendorDescription>Chuong.Ho, www.chuongmep.com</VendorDescription>
+        <VendorDescription>Autodesk, https://www.autodesk.com/</VendorDescription>
     </AddIn>
 </RevitAddIns>

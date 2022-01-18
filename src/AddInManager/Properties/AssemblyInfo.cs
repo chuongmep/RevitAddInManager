@@ -12,7 +12,7 @@ using System.Runtime.Versioning;
 [assembly: AssemblyCopyright("Copyright (c) 2014 Autodesk, Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyTitle("AddInManager")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("AddInManager Support Revit API")]
 [assembly: AssemblyConfiguration("")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
