@@ -15,7 +15,11 @@
 
 ## Summary
 
-The Plugin support developer improve developer to increase job performance with some feature
+The Plugin support developer improve developer to increase job performance with some feature. Frequent need to open and close **assemblers** is very difficult for .NET Framework , recent improvement with .NET Core has some improved API to make it easier. So this project helps make these jobs easier through copy-and-reload tricks can use for .NET Framework and .NET Core in feature.
+
+In addition, I open a project to attract talents from all over the world to support development, I'm a person, who loves open source very much and writes code every day as a pleasure.
+
+Some feature include: 
 - Add-in tester
 - Add-in manager
     - AddInManagerFaceless
