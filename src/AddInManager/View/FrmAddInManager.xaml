@@ -99,7 +99,7 @@
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding ExecuteAddin}" Header="Run" />
+                                <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                 <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                 <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
                             </ContextMenu>
@@ -136,6 +136,7 @@
                 <TabItem
                     x:Name="TabApp"
                     FontSize="14"
+                    Foreground="SteelBlue"
                     Header="Load App"
                     IsEnabled="True">
                     <Grid>
@@ -151,7 +152,7 @@
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <TreeView.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Command="{Binding ExecuteAddin}" Header="Run" />
+                                    <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                     <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                     <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
                                 </ContextMenu>
@@ -179,7 +180,7 @@
                             </TreeView.ItemContainerStyle>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding ExecuteAddin}" CommandParameter="{Binding}" />
+                                    <i:InvokeCommandAction Command="{Binding ExecuteAddinApp}" CommandParameter="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TreeView>
@@ -391,7 +392,7 @@
         <StackPanel Grid.Row="3">
             <Button
                 Margin="1,1,1,1"
-                Command="{Binding ExecuteAddin}"
+                Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
                 Foreground="SteelBlue" />
         </StackPanel>
