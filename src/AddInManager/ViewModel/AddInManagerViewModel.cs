@@ -45,8 +45,8 @@ namespace AddInManager.ViewModel
         public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
 
-        public ICommand RemoveCommand => new RelayCommand(RemoveAddinCmd);
-        public ICommand SaveCommand => new RelayCommand(SaveCommandCmd);
+        public ICommand RemoveCommand => new RelayCommand(RemoveAddinClick);
+        public ICommand SaveCommand => new RelayCommand(SaveCommandClick);
 
 
 
@@ -54,10 +54,10 @@ namespace AddInManager.ViewModel
 
        
 
-        public ICommand ExecuteAddin => new RelayCommand(ExecuteAddinCmd);
+        public ICommand ExecuteAddin => new RelayCommand(ExecuteAddinClick);
 
 
-        public ICommand FreshSearch => new RelayCommand(FreshSearchCmd);
+        public ICommand FreshSearch => new RelayCommand(FreshSearchClick);
 
 
         public string SearchText { get; set; }
@@ -150,7 +150,7 @@ namespace AddInManager.ViewModel
 
             return MainTrees;
         }
-        private void ExecuteAddinCmd()
+        private void ExecuteAddinClick()
         {
             try
             {
@@ -214,7 +214,7 @@ namespace AddInManager.ViewModel
             CommandItems = FreshTreeItems(false);
 
         }
-        private void RemoveAddinCmd()
+        private void RemoveAddinClick()
         {
             try
             {
@@ -253,7 +253,7 @@ namespace AddInManager.ViewModel
                 MessageBox.Show(e.ToString());
             }
         }
-        private void SaveCommandCmd()
+        private void SaveCommandClick()
         {
             DialogResult DialogResult = MessageBox.Show("It will create file addin and load to revit, do you want continue?", Resource.AppName,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -270,7 +270,7 @@ namespace AddInManager.ViewModel
             }
            
         }
-        private void FreshSearchCmd()
+        private void FreshSearchClick()
         {
             if (string.IsNullOrEmpty(SearchText))
             {
@@ -296,24 +296,18 @@ namespace AddInManager.ViewModel
             List<RevitAddin> revitAddins = GetAddinFromFolder(path1);
             List<RevitAddin> addinsProgramData = GetAddinFromFolder(path2);
             List<RevitAddin> addinsPlugins = GetAddinFromFolder(path3);
-            //TODO
             if (FrmAddInManager != null) { FrmAddInManager.TabControl.SelectedIndex = 2; }
-            foreach (RevitAddin revitAddin in revitAddins)
-            {
-                _addinStartup.Add(revitAddin);
-            }
-
-            foreach (RevitAddin RevitAddin in addinsProgramData)
-            {
-                _addinStartup.Add(RevitAddin);
-            }
+            revitAddins.ForEach(x=>_addinStartup.Add(x));
+            addinsProgramData.ForEach(x=>_addinStartup.Add(x));
             addinsPlugins.ForEach(x=>_addinStartup.Add(x));
 
         }
 
         List<RevitAddin> GetAddinFromFolder(string folder)
         {
-            string[] strings = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(".addin")).ToArray();
+            string fileFormat = ".addin";
+            string XmlTagParent = "RevitAddIns";
+            string[] strings = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(fileFormat)).ToArray();
             if (strings.Length == 0) return new List<RevitAddin>();
             List<RevitAddin> revitAddins = new List<RevitAddin>();
             foreach (string path_name in strings)
@@ -323,7 +317,7 @@ namespace AddInManager.ViewModel
                 foreach (XmlNode node in doc.ChildNodes)
                 {
 
-                    if (node.Name == "RevitAddIns")
+                    if (node.Name == XmlTagParent)
                     {
                         foreach (XmlNode addiNode in node.ChildNodes)
                         {
@@ -375,9 +369,9 @@ namespace AddInManager.ViewModel
 
         private void ClearCommandClick()
         {
-
+            string FolderName = "RevitAddins";
             string tempFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Temp", "RevitAddins");
+                "Temp", FolderName);
             if (Directory.Exists(tempFolder))
             {
                 Process.Start(tempFolder);
