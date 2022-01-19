@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\.github\workflows\*.yml" LinkBase="ci" />
+    <None Include="..\..\.github\workflows\*.yml" LinkBase="ci" />
   </ItemGroup>
 </Project>

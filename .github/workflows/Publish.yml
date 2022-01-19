@@ -16,8 +16,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Run './build/build.cmd'
-        run: ./build/build.cmd --root ./build
+      - name: Run './src/build/build.cmd'
+        run: ./src/build/build.cmd --root ./src/build
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           SignFile: ${{ secrets.SIGN_FILE }}
