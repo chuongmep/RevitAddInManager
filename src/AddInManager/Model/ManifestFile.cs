@@ -39,7 +39,7 @@ namespace AddInManager.Model
 			XmlElement documentElement = this.m_xmlDoc.DocumentElement;
 			if (!documentElement.Name.Equals(this.ROOT_NODE))
 			{
-				
+
 				throw new  System.ArgumentException(this.INCORRECT_NODE);
 			}
 			if (documentElement.ChildNodes.Count == 0)
@@ -119,7 +119,7 @@ namespace AddInManager.Model
 				this.m_fileName = value;
 			}
 		}
-		
+
 		public bool Local
 		{
 			get

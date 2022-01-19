@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Input;
 
-namespace AddInManager.Model
+namespace AddInManager.View.Control
 {
     public class MouseDoubleClick
     {
@@ -39,7 +33,7 @@ namespace AddInManager.Model
 
         private static void CommandChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            Control control = target as Control;
+            System.Windows.Controls.Control control = target as System.Windows.Controls.Control;
             if (control != null)
             {
                 if ((e.NewValue != null) && (e.OldValue == null))
@@ -55,7 +49,7 @@ namespace AddInManager.Model
 
         private static void OnMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            Control control = sender as Control;
+            System.Windows.Controls.Control control = sender as System.Windows.Controls.Control;
             ICommand command = (ICommand)control.GetValue(CommandProperty);
             object commandParameter = control.GetValue(CommandParameterProperty);
             command.Execute(commandParameter);

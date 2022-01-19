@@ -92,7 +92,7 @@
     <Compile Include="Model\AddinItem.cs" />
     <Compile Include="Model\AddinItemComparer.cs" />
     <Compile Include="Model\BitmapSourceConverter.cs" />
-    <Compile Include="Model\MouseDoubleClick.cs" />
+    <Compile Include="View\Control\MouseDoubleClick.cs" />
     <Compile Include="Model\RevitAddin.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
