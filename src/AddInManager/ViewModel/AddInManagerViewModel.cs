@@ -39,6 +39,20 @@ namespace AddInManager.ViewModel
             }
             set => OnPropertyChanged(ref _commandItems, value);
         }
+        private ObservableCollection<AddinModel> _applicationItems;
+        public ObservableCollection<AddinModel> ApplicationItems
+        {
+            get
+            {
+                if (_applicationItems == null)
+                {
+                    _applicationItems = new ObservableCollection<AddinModel>();
+                }
+                return _applicationItems;
+            }
+            set => OnPropertyChanged(ref _applicationItems, value);
+        }
+
 
         public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
         public ICommand ManagerCommand => new RelayCommand(ManagerCommandClick);
@@ -97,15 +111,16 @@ namespace AddInManager.ViewModel
         {
             AssemLoader = new AssemLoader();
             this.MAddinManagerBase = AddinManagerBase.Instance;
-            CommandItems = FreshTreeItems(false);
+            CommandItems = FreshTreeCommandItems(false,this.MAddinManagerBase.AddinManager.Commands);
+            ApplicationItems = FreshTreeCommandItems(false, this.MAddinManagerBase.AddinManager.Applications);
             this.ExternalCommandData = data;
             ManagerCommandClick();
         }
 
 
-        public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText)
+        public ObservableCollection<AddinModel> FreshTreeCommandItems(bool isSearchText, Addins addins)
         {
-            Addins addins = this.MAddinManagerBase.AddinManager.Commands;
+            //Addins addins = this.MAddinManagerBase.AddinManager.Commands;
             ObservableCollection<AddinModel> MainTrees = new ObservableCollection<AddinModel>();
             foreach (KeyValuePair<string, Addin> keyValuePair in addins.AddinDict)
             {
@@ -210,8 +225,24 @@ namespace AddInManager.ViewModel
                 MessageBox.Show(Resource.LoadInvalid);
                 return;
             }
+
+            switch (addinType)
+            {
+                case AddinType.Command:
+                    this.FrmAddInManager.TabControl.SelectedIndex = 0;
+                    this.FrmAddInManager.TabCommand.Focus();
+                    break;
+                case AddinType.Application:
+                    this.FrmAddInManager.TabControl.SelectedIndex = 1;
+                    this.FrmAddInManager.TabApp.Focus();
+                    break;
+                case AddinType.Mixed:
+                    break;
+                default:
+                    throw new System.ArgumentOutOfRangeException();
+            }
             this.MAddinManagerBase.AddinManager.SaveToAimIni();
-            CommandItems = FreshTreeItems(false);
+            CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
 
         }
         private void RemoveAddinClick()
@@ -228,7 +259,7 @@ namespace AddInManager.ViewModel
                         this.MAddinManagerBase.ActiveCmd = null;
                         this.MAddinManagerBase.ActiveCmdItem = null;
                         this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                        CommandItems = FreshTreeItems(false);
+                        CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
                         return;
                     }
                     foreach (AddinModel addinChild in parent.Children)
@@ -245,7 +276,7 @@ namespace AddInManager.ViewModel
                 this.MAddinManagerBase.ActiveCmd = null;
                 this.MAddinManagerBase.ActiveCmdItem = null;
                 this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                CommandItems = FreshTreeItems(false);
+                CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
 
             }
             catch (Exception e)
@@ -255,7 +286,7 @@ namespace AddInManager.ViewModel
         }
         private void SaveCommandClick()
         {
-            DialogResult DialogResult = MessageBox.Show("It will create file addin and load to revit, do you want continue?", Resource.AppName,
+            DialogResult DialogResult = MessageBox.Show($@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (DialogResult == DialogResult.Yes)
             {
@@ -274,10 +305,10 @@ namespace AddInManager.ViewModel
         {
             if (string.IsNullOrEmpty(SearchText))
             {
-                CommandItems = FreshTreeItems(false);
+                CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
                 return;
             }
-            CommandItems = FreshTreeItems(true);
+            CommandItems = FreshTreeCommandItems(true,MAddinManagerBase.AddinManager.Commands);
         }
         private void ManagerCommandClick()
         {

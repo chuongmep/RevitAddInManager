@@ -87,12 +87,13 @@
         <Grid Grid.Row="1">
             <TabControl x:Name="TabControl">
                 <TabItem
+                    x:Name="TabCommand"
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load Command">
 
                     <TreeView
-                        x:Name="TreeView"
+                        x:Name="TreeViewCommand"
                         FontSize="12"
                         ItemsSource="{Binding CommandItems, Mode=TwoWay}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -133,14 +134,54 @@
 
                 </TabItem>
                 <TabItem
+                    x:Name="TabApp"
                     FontSize="14"
                     Header="Load App"
-                    IsEnabled="False">
+                    IsEnabled="True">
                     <Grid>
-                        <TreeView x:Name="TreeViewApp">
-                            <TreeViewItem Header="AppName">
-                                <TreeViewItem Header="Test001" />
-                            </TreeViewItem>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="339*" />
+                        </Grid.ColumnDefinitions>
+                        <TreeView
+                            x:Name="TreeViewApp"
+                            Grid.ColumnSpan="2"
+                            FontSize="12"
+                            ItemsSource="{Binding ApplicationItems, Mode=TwoWay}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <TreeView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding ExecuteAddin}" Header="Run" />
+                                    <MenuItem Command="{Binding LoadCommand}" Header="Load" />
+                                    <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
+                                </ContextMenu>
+                            </TreeView.ContextMenu>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--  These elements are bound to a FooViewModel object.  -->
+                                        <CheckBox
+                                            VerticalAlignment="Center"
+                                            Focusable="False"
+                                            IsChecked="{Binding IsChecked}" />
+                                        <ContentPresenter Margin="2,0" Content="{Binding Name, Mode=OneTime}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="IsExpanded" Value="True" />
+                                    <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=TwoWay}" />
+                                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                                    <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
+                                    <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding ExecuteAddin}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TreeView>
                     </Grid>
                 </TabItem>

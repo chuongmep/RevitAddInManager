@@ -11,11 +11,11 @@ using Autodesk.Revit.UI;
 namespace RevitTest
 {
     [Transaction(TransactionMode.Manual)]
-    public class Class1:  IExternalCommand
+    public class TestCommand:  IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show("Class1");
+            MessageBox.Show("TestCommand");
             return Result.Succeeded;
         }
     }
