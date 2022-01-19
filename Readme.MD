@@ -57,6 +57,10 @@ Some feature include:
 
 ## Installation
 
+## Guideline
+
+You can visit to wiki and read document or access by this [link](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Add-In-Manager)
+
 TODO
 
 ## Author
