@@ -127,7 +127,7 @@
                         </TreeView.ItemContainerStyle>
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding ExecuteAddin}" CommandParameter="{Binding}" />
+                                <i:InvokeCommandAction Command="{Binding ExecuteAddinCommand}" CommandParameter="{Binding}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TreeView>
