@@ -95,6 +95,8 @@ I suggest you some of these projects, hope you will like it.
 
 [Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
 
+[Revit.TestRunner](https://github.com/geberit/Revit.TestRunner)
+
 [Revit.Async](https://github.com/KennanChan/Revit.Async)
 
 [pyRevit](https://github.com/eirannejad/pyRevit)
