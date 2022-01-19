@@ -90,6 +90,7 @@ namespace AddInManager.Model
 
             if (null == assembly || !this.IsAPIReferenced(assembly))
             {
+                //TODO : Assembly Can not load because some problem, need check again
                 return null;
             }
             return assembly;
