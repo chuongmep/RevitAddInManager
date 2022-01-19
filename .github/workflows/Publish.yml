@@ -1,0 +1,24 @@
+# ------------------------------------------------------------------------------
+# Publish.yml
+# ------------------------------------------------------------------------------
+
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  Publish:
+    name: Publish
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run './build/build.cmd'
+        run: ./build/build.cmd --root ./build
+        env:
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          SignFile: ${{ secrets.SIGN_FILE }}
+          SignPassword: ${{ secrets.SIGN_PASSWORD }}
