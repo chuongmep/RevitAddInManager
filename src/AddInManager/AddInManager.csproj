@@ -107,7 +107,6 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Compile Include="Model\StaticUtil.cs" />
     <Compile Include="ViewModel\AddInManagerViewModel.cs" />
     <Compile Include="ViewModel\AddinModel.cs" />
