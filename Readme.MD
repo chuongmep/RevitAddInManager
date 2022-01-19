@@ -13,6 +13,12 @@
 ![.NET Framework](https://img.shields.io/badge/.NET_Framework-4.8-yellow)
 ## WORK IN PROCESS
 
+- [ ] Application
+- [ ] Console
+- [ ] Add-in Extend for Autocad And Naviswork
+- [ ] Startup add-in enable and disable
+- [ ] Installation
+
 ## Summary
 
 The Plugin support developer improve developer to increase job performance with some feature. Frequent need to open and close **assemblers** is very difficult for .NET Framework , recent improvement with .NET Core has some improved API to make it easier. So this project helps make these jobs easier through copy-and-reload tricks can use for .NET Framework and .NET Core in feature.
