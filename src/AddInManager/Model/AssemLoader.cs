@@ -172,14 +172,7 @@ namespace AddInManager.Model
                 }
                 if (string.IsNullOrEmpty(text))
                 {
-                    using (AssemblySelectorForm assemblySelectorForm = new AssemblySelectorForm(args.Name))
-                    {
-                        if (assemblySelectorForm.ShowDialog() != DialogResult.OK)
-                        {
-                            return null;
-                        }
-                        text = assemblySelectorForm.m_resultPath;
-                    }
+                    return null;
                 }
                 result = this.CopyAndLoadAddin(text, true);
             }

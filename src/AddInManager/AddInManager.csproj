@@ -91,12 +91,6 @@
     <Compile Include="ViewModel\AddinsCommand.cs" />
     <Compile Include="Model\AddinType.cs" />
     <Compile Include="Command\AddinManagerBase.cs" />
-    <Compile Include="View\AssemblySelectorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\AssemblySelectorForm.Designer.cs">
-      <DependentUpon>AssemblySelectorForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Model\AssemLoader.cs" />
     <Compile Include="Command\AddInManagerCommand.cs" />
     <Compile Include="Model\FileUtils.cs" />
@@ -124,7 +118,6 @@
     <Compile Include="Model\VisibilityMode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AssemblySelectorForm.resources" />
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
