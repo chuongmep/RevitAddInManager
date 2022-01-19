@@ -112,7 +112,7 @@ namespace AddInManager.ViewModel
         {
             AssemLoader = new AssemLoader();
             this.MAddinManagerBase = AddinManagerBase.Instance;
-            CommandItems = FreshTreeCommandItems(false,this.MAddinManagerBase.AddinManager.Commands);
+            CommandItems = FreshTreeCommandItems(false, this.MAddinManagerBase.AddinManager.Commands);
             ApplicationItems = FreshTreeCommandItems(false, this.MAddinManagerBase.AddinManager.Applications);
             this.ExternalCommandData = data;
             ManagerCommandClick();
@@ -275,7 +275,7 @@ namespace AddInManager.ViewModel
                     throw new System.ArgumentOutOfRangeException();
             }
             this.MAddinManagerBase.AddinManager.SaveToAimIni();
-            CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
+            CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
 
         }
         private void RemoveAddinClick()
@@ -292,7 +292,7 @@ namespace AddInManager.ViewModel
                         this.MAddinManagerBase.ActiveCmd = null;
                         this.MAddinManagerBase.ActiveCmdItem = null;
                         this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                        CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
+                        CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
                         return;
                     }
                     foreach (AddinModel addinChild in parent.Children)
@@ -309,7 +309,7 @@ namespace AddInManager.ViewModel
                 this.MAddinManagerBase.ActiveCmd = null;
                 this.MAddinManagerBase.ActiveCmdItem = null;
                 this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
+                CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
 
             }
             catch (Exception e)
@@ -323,6 +323,7 @@ namespace AddInManager.ViewModel
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (DialogResult == DialogResult.Yes)
             {
+
                 if (!this.MAddinManagerBase.AddinManager.HasItemsToSave())
                 {
                     MessageBox.Show(Resources.NoItemsSelected, Resources.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -338,10 +339,10 @@ namespace AddInManager.ViewModel
         {
             if (string.IsNullOrEmpty(SearchText))
             {
-                CommandItems = FreshTreeCommandItems(false,MAddinManagerBase.AddinManager.Commands);
+                CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
                 return;
             }
-            CommandItems = FreshTreeCommandItems(true,MAddinManagerBase.AddinManager.Commands);
+            CommandItems = FreshTreeCommandItems(true, MAddinManagerBase.AddinManager.Commands);
         }
         private void ManagerCommandClick()
         {

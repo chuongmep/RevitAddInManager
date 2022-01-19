@@ -93,6 +93,7 @@
     <Compile Include="Model\AddinItemComparer.cs" />
     <Compile Include="Model\BitmapSourceConverter.cs" />
     <Compile Include="Model\ProductType.cs" />
+    <Compile Include="Model\DefaultSetting.cs" />
     <Compile Include="View\Control\MouseDoubleClick.cs" />
     <Compile Include="Model\RevitAddin.cs" />
     <Compile Include="Resource.Designer.cs">

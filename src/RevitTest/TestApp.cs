@@ -12,13 +12,13 @@ namespace RevitTest
     {
         public Result OnStartup(UIControlledApplication application)
         {
-            MessageBox.Show("Startup");
+            MessageBox.Show(@"Startup");
             return Result.Succeeded;
         }
 
         public Result OnShutdown(UIControlledApplication application)
         {
-            MessageBox.Show("ShutDown");
+            MessageBox.Show(@"ShutDown");
             return Result.Cancelled;
         }
     }

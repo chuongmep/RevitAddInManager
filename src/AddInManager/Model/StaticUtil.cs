@@ -12,13 +12,13 @@ namespace AddInManager.Model
             MessageBox.Show(msg, Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        public static string commandFullName = typeof(IExternalCommand).FullName;
+        public static string CommandFullName = typeof(IExternalCommand).FullName;
 
 
-        public static string appFullName = typeof(IExternalApplication).FullName;
+        public static string AppFullName = typeof(IExternalApplication).FullName;
 
-        public static RegenerationOption m_regenOption;
+        public static RegenerationOption RegenOption;
 
-        public static TransactionMode m_tsactMode;
+        public static TransactionMode TransactMode;
     }
 }

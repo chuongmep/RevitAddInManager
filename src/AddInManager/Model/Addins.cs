@@ -124,7 +124,7 @@ namespace AddInManager.Model
                                     list2.Add(type2.Name);
                                     goto IL_1A7;
                                 }
-                                if (transactionMode != StaticUtil.m_tsactMode)
+                                if (transactionMode != StaticUtil.TransactMode)
                                 {
                                     list3.Add(type2.Name);
                                     goto IL_1A7;
@@ -139,7 +139,7 @@ namespace AddInManager.Model
                 {
                     throw new System.ArgumentException(e.ToString());
                 }
-            IL_1A7:;
+                IL_1A7:;
             }
             if (list2.Count > 0)
             {

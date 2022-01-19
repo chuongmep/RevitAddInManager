@@ -16,7 +16,7 @@ namespace AddInManager.Model
         {
             string folderPath = Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             string tempPath = Path.Combine(folderPath, "Temp");
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(tempPath, "RevitAddins"));
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(tempPath, DefaultSetting.TempFolderName));
             if (!directoryInfo.Exists)
             {
                 directoryInfo.Create();
@@ -238,6 +238,5 @@ namespace AddInManager.Model
             return num / 1024L / 1024L;
         }
 
-        private const string TempFolderName = "RevitAddins";
     }
 }

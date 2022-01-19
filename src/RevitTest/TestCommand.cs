@@ -15,7 +15,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show("TestCommand");
+            MessageBox.Show(@"TestCommand");
             return Result.Succeeded;
         }
     }
@@ -24,7 +24,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show("Class2");
+            MessageBox.Show(@"Class2");
             return Result.Succeeded;
         }
     }
@@ -33,7 +33,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show("Class3");
+            MessageBox.Show(@"Class3");
             return Result.Succeeded;
         }
     }
@@ -42,7 +42,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show("Class4");
+            MessageBox.Show(@"Class4");
             return Result.Succeeded;
         }
     }
@@ -51,7 +51,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show("Class5");
+            MessageBox.Show(@"Class5");
             return Result.Succeeded;
         }
     }

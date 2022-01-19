@@ -318,7 +318,7 @@
                             VerticalAlignment="Center"
                             Content="All Version"
                             Foreground="SteelBlue"
-                            IsEnabled="False"
+                            IsEnabled="True"
                             ToolTip="Available Command or Application Addin For All Version" />
                         <RadioButton
                             Margin="5,0,5,0"

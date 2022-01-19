@@ -38,7 +38,7 @@ namespace AddInManager.Model
 
         public void SaveToManifest()
         {
-            ManifestFile manifestFile = new ManifestFile(this.m_name + ".addin");
+            ManifestFile manifestFile = new ManifestFile(this.m_name + DefaultSetting.FormatExAddin);
             if (this.AddinType == AddinType.Application)
             {
                 manifestFile.Applications.Add(this);

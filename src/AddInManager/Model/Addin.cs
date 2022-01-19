@@ -112,7 +112,7 @@ namespace AddInManager.Model
             }
             AddinType addinType = this.m_itemList[0].AddinType;
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(this.m_filePath);
-            ManifestFile manifestFile = new ManifestFile(fileNameWithoutExtension + ".addin");
+            ManifestFile manifestFile = new ManifestFile(fileNameWithoutExtension + DefaultSetting.FormatExAddin);
             if (addinType == AddinType.Application)
             {
                 manifestFile.Applications = this.m_itemList;

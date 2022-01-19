@@ -58,7 +58,7 @@ namespace AddInManager.Model
                 XmlAttribute xmlAttribute = xmlNode.Attributes[0];
                 if (xmlAttribute.Value.Equals(this.APPLICATION_NODE))
                 {
-                    this.parseExternalApplications(xmlNode);
+                    this.ParseExternalApplications(xmlNode);
                 }
                 else
                 {
@@ -66,7 +66,7 @@ namespace AddInManager.Model
                     {
                         throw new System.ArgumentException(this.INCORRECT_NODE);
                     }
-                    this.parseExternalCommands(xmlNode);
+                    this.ParseExternalCommands(xmlNode);
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace AddInManager.Model
             {
                 throw new System.ArgumentNullException(this.FILENAME_NULL_OR_EMPTY);
             }
-            if (!filePath.ToLower().EndsWith(this.ADDIN))
+            if (!filePath.ToLower().EndsWith(DefaultSetting.FormatExAddin))
             {
                 throw new System.ArgumentException(this.FILENAME_INCORRECT_WARNING + filePath);
             }
@@ -93,7 +93,7 @@ namespace AddInManager.Model
             }
             FileInfo fileInfo = new FileInfo(filePath);
             this.m_xmlDoc = new XmlDocument();
-            this.createXMLForManifest();
+            this.CreateXmlForManifest();
             if (File.Exists(filePath))
             {
                 File.SetAttributes(filePath, FileAttributes.Normal);
@@ -110,26 +110,14 @@ namespace AddInManager.Model
 
         public string FileName
         {
-            get
-            {
-                return this.m_fileName;
-            }
-            set
-            {
-                this.m_fileName = value;
-            }
+            get => this.m_fileName;
+            set => this.m_fileName = value;
         }
 
         public bool Local
         {
-            get
-            {
-                return this.m_local;
-            }
-            set
-            {
-                this.m_local = value;
-            }
+            get => this.m_local;
+            set => this.m_local = value;
         }
 
 
@@ -140,42 +128,27 @@ namespace AddInManager.Model
                 if (string.IsNullOrEmpty(this.m_filePath))
                 {
                     string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
-                    this.m_filePath = Path.Combine(path, "AimInternal.ini");
+                    this.m_filePath = Path.Combine(path, DefaultSetting.AimInternalName);
                 }
                 return this.m_filePath;
             }
-            set
-            {
-                this.m_filePath = value;
-            }
+            set => this.m_filePath = value;
         }
 
 
         public List<AddinItem> Applications
         {
-            get
-            {
-                return this.m_applications;
-            }
-            set
-            {
-                this.m_applications = value;
-            }
+            get => this.m_applications;
+            set => this.m_applications = value;
         }
 
         public List<AddinItem> Commands
         {
-            get
-            {
-                return this.m_commands;
-            }
-            set
-            {
-                this.m_commands = value;
-            }
+            get => this.m_commands;
+            set => this.m_commands = value;
         }
 
-        private XmlDocument createXMLForManifest()
+        private XmlDocument CreateXmlForManifest()
         {
             XmlNode xmlNode = this.m_xmlDoc.AppendChild(this.m_xmlDoc.CreateElement(this.ROOT_NODE));
             foreach (AddinItem currentApp in this.m_applications)
@@ -183,7 +156,7 @@ namespace AddInManager.Model
                 XmlElement xmlElement = this.m_xmlDoc.CreateElement(this.ADDIN_NODE);
                 xmlElement.SetAttribute(this.TYPE_ATTRIBUTE, this.APPLICATION_NODE);
                 xmlNode.AppendChild(xmlElement);
-                this.addApplicationToXmlElement(xmlElement, currentApp);
+                this.AddApplicationToXmlElement(xmlElement, currentApp);
                 XmlElement xmlElement2 = this.m_xmlDoc.CreateElement(this.VENDORID);
                 xmlElement2.InnerText = "ADSK";
                 xmlElement.AppendChild(xmlElement2);
@@ -196,7 +169,7 @@ namespace AddInManager.Model
                 XmlElement xmlElement3 = this.m_xmlDoc.CreateElement(this.ADDIN_NODE);
                 xmlElement3.SetAttribute(this.TYPE_ATTRIBUTE, this.COMMAND_NODE);
                 xmlNode.AppendChild(xmlElement3);
-                this.addCommandToXmlElement(xmlElement3, command);
+                this.AddCommandToXmlElement(xmlElement3, command);
                 XmlElement xmlElement4 = this.m_xmlDoc.CreateElement(this.VENDORID);
                 xmlElement4.InnerText = "ADSK";
                 xmlElement3.AppendChild(xmlElement4);
@@ -207,7 +180,7 @@ namespace AddInManager.Model
             return this.m_xmlDoc;
         }
 
-        private void addAddInItemToXmlElement(XmlElement xmlEle, AddinItem addinItem)
+        private void AddAddInItemToXmlElement(XmlElement xmlEle, AddinItem addinItem)
         {
             if (!string.IsNullOrEmpty(addinItem.AssemblyPath))
             {
@@ -236,7 +209,7 @@ namespace AddInManager.Model
             }
         }
 
-        private void addApplicationToXmlElement(XmlElement appEle, AddinItem currentApp)
+        private void AddApplicationToXmlElement(XmlElement appEle, AddinItem currentApp)
         {
             if (!string.IsNullOrEmpty(currentApp.Name))
             {
@@ -244,12 +217,12 @@ namespace AddInManager.Model
                 xmlElement.InnerText = currentApp.Name;
                 appEle.AppendChild(xmlElement);
             }
-            this.addAddInItemToXmlElement(appEle, currentApp);
+            this.AddAddInItemToXmlElement(appEle, currentApp);
         }
 
-        private void addCommandToXmlElement(XmlElement commandEle, AddinItem command)
+        private void AddCommandToXmlElement(XmlElement commandEle, AddinItem command)
         {
-            this.addAddInItemToXmlElement(commandEle, command);
+            this.AddAddInItemToXmlElement(commandEle, command);
             XmlElement xmlElement;
             if (!string.IsNullOrEmpty(command.Name))
             {
@@ -273,23 +246,23 @@ namespace AddInManager.Model
             commandEle.AppendChild(xmlElement);
         }
 
-        private void parseExternalApplications(XmlNode nodeApplication)
+        private void ParseExternalApplications(XmlNode nodeApplication)
         {
             AddinItem addinItem = new AddinItem(AddinType.Application);
-            this.parseApplicationItems(addinItem, nodeApplication);
+            this.ParseApplicationItems(addinItem, nodeApplication);
             this.m_applications.Add(addinItem);
         }
 
-        private void parseExternalCommands(XmlNode nodeCommand)
+        private void ParseExternalCommands(XmlNode nodeCommand)
         {
             AddinItem addinItem = new AddinItem(AddinType.Command);
-            this.parseCommandItems(addinItem, nodeCommand);
+            this.ParseCommandItems(addinItem, nodeCommand);
             this.m_commands.Add(addinItem);
         }
 
-        private void parseApplicationItems(AddinItem addinApp, XmlNode nodeAddIn)
+        private void ParseApplicationItems(AddinItem addinApp, XmlNode nodeAddIn)
         {
-            this.parseAddInItem(addinApp, nodeAddIn);
+            this.ParseAddInItem(addinApp, nodeAddIn);
             XmlElement xmlElement = nodeAddIn[this.NAME_NODE];
             if (xmlElement != null && !string.IsNullOrEmpty(xmlElement.InnerText))
             {
@@ -297,9 +270,9 @@ namespace AddInManager.Model
             }
         }
 
-        private void parseCommandItems(AddinItem command, XmlNode nodeAddIn)
+        private void ParseCommandItems(AddinItem command, XmlNode nodeAddIn)
         {
-            this.parseAddInItem(command, nodeAddIn);
+            this.ParseAddInItem(command, nodeAddIn);
             XmlElement xmlElement = nodeAddIn[this.TEXT];
             if (xmlElement != null)
             {
@@ -313,11 +286,11 @@ namespace AddInManager.Model
             xmlElement = nodeAddIn[this.VISIBILITYMODE];
             if (xmlElement != null && !string.IsNullOrEmpty(xmlElement.InnerText))
             {
-                command.VisibilityMode = this.parseVisibilityMode(xmlElement.InnerText);
+                command.VisibilityMode = this.ParseVisibilityMode(xmlElement.InnerText);
             }
         }
 
-        private void parseAddInItem(AddinItem addinItem, XmlNode nodeAddIn)
+        private void ParseAddInItem(AddinItem addinItem, XmlNode nodeAddIn)
         {
             XmlElement xmlElement = nodeAddIn[this.ASSEMBLY];
             if (xmlElement != null)
@@ -358,7 +331,7 @@ namespace AddInManager.Model
             }
         }
 
-        private VisibilityMode parseVisibilityMode(string visibilityModeString)
+        private VisibilityMode ParseVisibilityMode(string visibilityModeString)
         {
             VisibilityMode visibilityMode = VisibilityMode.AlwaysVisible;
             VisibilityMode result;
@@ -438,8 +411,6 @@ namespace AddInManager.Model
         private string VISIBILITYMODE = "VisibilityMode";
 
         private string UNKNOW_VISIBILITYMODE = "Unrecognizable VisibilityMode!";
-
-        private string ADDIN = ".addin";
 
         private string FILENAME_INCORRECT_WARNING = "File name is incorrect, not .addin file .";
 

@@ -16,9 +16,9 @@ namespace AddInManager.Command
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            AddInManager.Model.StaticUtil.m_regenOption = RegenerationOption.Manual;
-            AddInManager.Model.StaticUtil.m_regenOption = RegenerationOption.Manual;
-            AddInManager.Model.StaticUtil.m_tsactMode = TransactionMode.Manual;
+            AddInManager.Model.StaticUtil.RegenOption = RegenerationOption.Manual;
+            AddInManager.Model.StaticUtil.RegenOption = RegenerationOption.Manual;
+            AddInManager.Model.StaticUtil.TransactMode = TransactionMode.Manual;
             return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
         }
     }
@@ -35,8 +35,8 @@ namespace AddInManager.Command
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            AddInManager.Model.StaticUtil.m_regenOption = RegenerationOption.Manual;
-            AddInManager.Model.StaticUtil.m_tsactMode = TransactionMode.ReadOnly;
+            AddInManager.Model.StaticUtil.RegenOption = RegenerationOption.Manual;
+            AddInManager.Model.StaticUtil.TransactMode = TransactionMode.ReadOnly;
             return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, true);
         }
     }

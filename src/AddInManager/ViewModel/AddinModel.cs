@@ -9,7 +9,6 @@ namespace AddInManager.ViewModel
     {
 
         bool? _isChecked = false;
-        private bool? _isParent = false;
         AddinModel _parent;
 
         public AddinModel(string name)
@@ -36,15 +35,11 @@ namespace AddInManager.ViewModel
 
         public bool? IsChecked
         {
-            get { return _isChecked; }
-            set { this.SetIsChecked(value, true, true); }
+            get => _isChecked;
+            set => this.SetIsChecked(value, true, true);
         }
 
-        public bool? IsParentTree
-        {
-            get => _isParent;
-            set => _isParent = value;
-        }
+        public bool? IsParentTree { get; set; } = false;
 
         void SetIsChecked(bool? value, bool updateChildren, bool updateParent)
         {
