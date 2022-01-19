@@ -8,7 +8,7 @@ using System.Runtime.Versioning;
 [assembly: AssemblyVersion("2015.0.0.0")]
 [assembly: AssemblyFileVersion("2015.0.0.0")]
 [assembly: AssemblyCompany("Autodesk, Inc.")]
-[assembly: AssemblyProduct("Autodesk Revit")]
+[assembly: AssemblyProduct("AddInManager")]
 [assembly: AssemblyCopyright("Copyright (c) 2014 Autodesk, Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyTitle("AddInManager")]
@@ -16,3 +16,4 @@ using System.Runtime.Versioning;
 [assembly: AssemblyConfiguration("")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
+[assembly: AssemblyInformationalVersion("2022.0.0")]
