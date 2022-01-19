@@ -38,6 +38,9 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 .vs/
 
+#Rider
+.idea
+
 #Nuget packages folder
 packages/
 *.html
