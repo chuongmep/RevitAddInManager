@@ -16,4 +16,3 @@ using System.Runtime.Versioning;
 [assembly: AssemblyConfiguration("")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
-[assembly: AssemblyInformationalVersion("2022.0.0")]
