@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ricaun.Nuke" Version="*" />
     <PackageReference Include="ricaun.Nuke.PackageBuilder" Version="*" />
   </ItemGroup>
 
