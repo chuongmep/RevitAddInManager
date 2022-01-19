@@ -13,9 +13,9 @@ namespace AddInManager.Model
         /// </summary>
         public enum MyEnum
         {
-            Revit =1,
-            Autocad =2,
-            Naviswork =3,
+            Revit = 1,
+            Autocad = 2,
+            Naviswork = 3,
             Unknown = -1
         }
     }

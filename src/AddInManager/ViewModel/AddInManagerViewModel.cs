@@ -52,7 +52,7 @@ namespace AddInManager.ViewModel
 
         public ICommand OpenAssemblyCommand => new RelayCommand(OpenAssemblyCommandClick);
 
-       
+
 
         public ICommand ExecuteAddin => new RelayCommand(ExecuteAddinClick);
 
@@ -268,7 +268,7 @@ namespace AddInManager.ViewModel
                 FrmAddInManager.Close();
                 System.Windows.MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
             }
-           
+
         }
         private void FreshSearchClick()
         {
@@ -297,9 +297,9 @@ namespace AddInManager.ViewModel
             List<RevitAddin> addinsProgramData = GetAddinFromFolder(path2);
             List<RevitAddin> addinsPlugins = GetAddinFromFolder(path3);
             if (FrmAddInManager != null) { FrmAddInManager.TabControl.SelectedIndex = 2; }
-            revitAddins.ForEach(x=>_addinStartup.Add(x));
-            addinsProgramData.ForEach(x=>_addinStartup.Add(x));
-            addinsPlugins.ForEach(x=>_addinStartup.Add(x));
+            revitAddins.ForEach(x => _addinStartup.Add(x));
+            addinsProgramData.ForEach(x => _addinStartup.Add(x));
+            addinsPlugins.ForEach(x => _addinStartup.Add(x));
 
         }
 
@@ -358,7 +358,7 @@ namespace AddInManager.ViewModel
                             {
                                 revitAddins.Add(revitAddin);
                             }
-                            
+
 
                         }
                     }
@@ -385,7 +385,7 @@ namespace AddInManager.ViewModel
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             if (IsCurrentVersion)
             {
-               
+
                 string folder = Path.Combine(folderPath, AdskPath,
                     ExternalCommandData.Application.Application.VersionNumber);
                 if (Directory.Exists(folder))
@@ -393,7 +393,7 @@ namespace AddInManager.ViewModel
                     string[] filePaths = Directory.GetFiles(folder).Where(x => x.Contains(FileNameExtension)).ToArray();
                     if (filePaths.Length == 0)
                     {
-                        System.Windows.MessageBox.Show(FrmAddInManager,"File Empty!", Resource.AppName, MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                        System.Windows.MessageBox.Show(FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         return;
                     }
                     foreach (string s in filePaths)

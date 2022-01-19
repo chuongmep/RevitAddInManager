@@ -24,7 +24,7 @@ namespace AddInManager.Model
             set => this.m_tempFolder = value;
         }
 
-       
+
         public AssemLoader()
         {
             this.m_tempFolder = string.Empty;
@@ -32,7 +32,7 @@ namespace AddInManager.Model
             this.m_copiedFiles = new Dictionary<string, DateTime>();
         }
 
-        
+
         public void CopyGeneratedFilesBack()
         {
             string[] files = Directory.GetFiles(this.m_tempFolder, "*.*", SearchOption.AllDirectories);
@@ -87,7 +87,7 @@ namespace AddInManager.Model
             }
             this.m_tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
             Assembly assembly = this.CopyAndLoadAddin(originalFilePath, parsingOnly);
-           
+
             if (null == assembly || !this.IsAPIReferenced(assembly))
             {
                 return null;
@@ -95,7 +95,7 @@ namespace AddInManager.Model
             return assembly;
         }
 
-        
+
         private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
         {
             string text = string.Empty;
@@ -215,7 +215,7 @@ namespace AddInManager.Model
             return String.Empty;
         }
 
-        
+
         private string SearchAssemblyFileInOriginalFolders(string assemName)
         {
             string[] array = new string[]
@@ -279,7 +279,7 @@ namespace AddInManager.Model
             }
             return null;
         }
-        
+
         private bool IsAPIReferenced(Assembly assembly)
         {
             if (string.IsNullOrEmpty(this.m_revitAPIAssemblyFullName))

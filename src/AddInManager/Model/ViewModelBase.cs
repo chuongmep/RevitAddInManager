@@ -22,7 +22,7 @@ namespace AddInManager.Model
         }
 
         #region Can Optimize
-        
+
         public void OnPropertyChanged<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
             property = value;

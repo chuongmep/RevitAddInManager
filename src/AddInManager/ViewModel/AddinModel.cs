@@ -7,7 +7,7 @@ namespace AddInManager.ViewModel
 {
     public class AddinModel : ViewModelBase
     {
-        
+
         bool? _isChecked = false;
         private bool? _isParent = false;
         AddinModel _parent;
@@ -28,7 +28,7 @@ namespace AddInManager.ViewModel
         }
         public List<AddinModel> Children { get; set; }
 
-        public Addin Addin { get; set;  }
+        public Addin Addin { get; set; }
         public AddinItem AddinItem { get; set; }
         public bool IsInitiallySelected { get; set; }
 

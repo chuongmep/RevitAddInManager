@@ -66,20 +66,21 @@ namespace AddInManager.Model
         /// <param name="imageSource"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public static ImageSource Resize(this ImageSource imageSource,int size)
+        public static ImageSource Resize(this ImageSource imageSource, int size)
         {
             return Thumbnail(imageSource, size);
         }
 
-        private static ImageSource Thumbnail( ImageSource source, int size )
+        private static ImageSource Thumbnail(ImageSource source, int size)
         {
-            Rect rect = new Rect( 0, 0, size, size );
+            Rect rect = new Rect(0, 0, size, size);
             DrawingVisual drawingVisual = new DrawingVisual();
-            using( DrawingContext drawingContext = drawingVisual.RenderOpen() ) {
-                drawingContext.DrawImage( source, rect );
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(source, rect);
             }
-            RenderTargetBitmap resizedImage = new RenderTargetBitmap( (int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default );
-            resizedImage.Render( drawingVisual );
+            RenderTargetBitmap resizedImage = new RenderTargetBitmap((int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
+            resizedImage.Render(drawingVisual);
 
             return resizedImage;
         }
