@@ -90,6 +90,15 @@ namespace AddInManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Not Found, Please Check File Again.
+        /// </summary>
+        internal static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap folder {
@@ -123,6 +132,15 @@ namespace AddInManager {
         internal static string NeedAdmin {
             get {
                 return ResourceManager.GetString("NeedAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully.
+        /// </summary>
+        internal static string Successfully {
+            get {
+                return ResourceManager.GetString("Successfully", resourceCulture);
             }
         }
     }

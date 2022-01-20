@@ -41,9 +41,10 @@ namespace AddInManager.Model
             {
                 RenamePath();
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException e)
             {
                 //TODO : Resource.NeedAdmin : Access Denied
+                throw new System.ArgumentException(Resource.NeedAdmin, e);
             }
         }
         private bool RenamePath()
@@ -60,13 +61,13 @@ namespace AddInManager.Model
                     newFilePath = Path.Combine(dir, newName);
                     break;
                 case VisibleModel.Disable:
-                    newName = FileName.Replace(DefaultSetting.FormatDisable, "");
+                    newName = FileName.Replace(DefaultSetting.FormatDisable,"");
                     newFilePath = Path.Combine(dir, newName);
                     break;
                 default:
                     throw new System.ArgumentOutOfRangeException();
             }
-
+            if(File.Exists(newFilePath))File.Delete(newFilePath);
             if (FilePath != null)
             {
                 File.Move(FilePath, newFilePath);

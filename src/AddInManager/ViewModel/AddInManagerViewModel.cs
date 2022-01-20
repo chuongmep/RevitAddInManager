@@ -57,7 +57,7 @@ namespace AddInManager.ViewModel
 
 
         public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
-        public ICommand ManagerCommand => new RelayCommand(FreshItemStartupClick);
+        public ICommand ManagerCommand => new RelayCommand(()=>FreshItemStartupClick(false));
         public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
 
@@ -123,14 +123,14 @@ namespace AddInManager.ViewModel
         {
             AssemLoader = new AssemLoader();
             this.MAddinManagerBase = AddinManagerBase.Instance;
-            CommandItems = FreshTreeCommandItems(false, this.MAddinManagerBase.AddinManager.Commands);
-            ApplicationItems = FreshTreeCommandItems(false, this.MAddinManagerBase.AddinManager.Applications);
+            CommandItems = FreshTreeItems(false, this.MAddinManagerBase.AddinManager.Commands);
+            ApplicationItems = FreshTreeItems(false, this.MAddinManagerBase.AddinManager.Applications);
             this.ExternalCommandData = data;
-            FreshItemStartupClick();
+            FreshItemStartupClick(false);
         }
 
 
-        public ObservableCollection<AddinModel> FreshTreeCommandItems(bool isSearchText, Addins addins)
+        public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
         {
             //Addins addins = this.MAddinManagerBase.AddinManager.Commands;
             ObservableCollection<AddinModel> MainTrees = new ObservableCollection<AddinModel>();
@@ -286,7 +286,7 @@ namespace AddInManager.ViewModel
                     throw new System.ArgumentOutOfRangeException();
             }
             this.MAddinManagerBase.AddinManager.SaveToAimIni();
-            CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
+            CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
 
         }
         private void RemoveAddinClick()
@@ -303,7 +303,7 @@ namespace AddInManager.ViewModel
                         this.MAddinManagerBase.ActiveCmd = null;
                         this.MAddinManagerBase.ActiveCmdItem = null;
                         this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                        CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
+                        CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                         return;
                     }
                     foreach (AddinModel addinChild in parent.Children)
@@ -320,7 +320,7 @@ namespace AddInManager.ViewModel
                 this.MAddinManagerBase.ActiveCmd = null;
                 this.MAddinManagerBase.ActiveCmdItem = null;
                 this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
+                CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
 
             }
             catch (Exception e)
@@ -348,15 +348,35 @@ namespace AddInManager.ViewModel
         }
         private void FreshSearchClick()
         {
-            if (string.IsNullOrEmpty(SearchText))
+            bool flag = string.IsNullOrEmpty(SearchText);
+            if (FrmAddInManager.TabControl.SelectedIndex == 0)
             {
-                CommandItems = FreshTreeCommandItems(false, MAddinManagerBase.AddinManager.Commands);
-                return;
+                if (flag)
+                {
+                    CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+                    return;
+                }
+                CommandItems = FreshTreeItems(true, MAddinManagerBase.AddinManager.Commands);
             }
-            CommandItems = FreshTreeCommandItems(true, MAddinManagerBase.AddinManager.Commands);
+            else if (FrmAddInManager.TabControl.SelectedIndex == 1)
+            {
+                if (flag)
+                {
+                    ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
+                    return;
+                }
+                ApplicationItems = FreshTreeItems(true, MAddinManagerBase.AddinManager.Applications);
+            }
+            else
+            {
+                if (flag) FreshItemStartupClick(false);
+                else FreshItemStartupClick(true);
+            }
+          
         }
-        private void FreshItemStartupClick()
+        private void FreshItemStartupClick(bool isSearch)
         {
+            
             //Get All AddIn
             if (_addinStartup == null) _addinStartup = new ObservableCollection<RevitAddin>();
             _addinStartup.Clear();
@@ -376,15 +396,20 @@ namespace AddInManager.ViewModel
             revitAddins.ForEach(x => _addinStartup.Add(x));
             addinsProgramData.ForEach(x => _addinStartup.Add(x));
             addinsPlugins.ForEach(x => _addinStartup.Add(x));
+            if (isSearch)
+            {
+                _addinStartup = _addinStartup.Where(x=>x.Name.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .OrderBy(x => x.Name).ToObservableCollection();
+                OnPropertyChanged(nameof(AddInStartUps));
+                return;
+            }
             _addinStartup = _addinStartup.OrderBy(x => x.Name).ToObservableCollection();
-
         }
 
         List<RevitAddin> GetAddinFromFolder(string folder)
         {
-            string[] AddinFilePathsVisiable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
-            if (AddinFilePathsVisiable.Length == 0) return new List<RevitAddin>();
             List<RevitAddin> revitAddins = new List<RevitAddin>();
+            string[] AddinFilePathsVisiable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
             foreach (string AddinFilePath in AddinFilePathsVisiable)
             {
                 RevitAddin revitAddin = new RevitAddin();
@@ -398,6 +423,8 @@ namespace AddInManager.ViewModel
             string[] AddinFilePathsDisable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatDisable)).ToArray();
             foreach (string AddinFilePath in AddinFilePathsDisable)
             {
+                //string checkFile = Path.GetFileName(AddinFilePath).Replace(DefaultSetting.FormatDisable, String.Empty);
+                //if(File.Exists(checkFile)) continue;
                 RevitAddin revitAddin = new RevitAddin();
                 revitAddin.FilePath = AddinFilePath;
                 revitAddin.Name = Path.GetFileName(AddinFilePath);
@@ -469,7 +496,8 @@ namespace AddInManager.ViewModel
             {
                 revitAddin.SetToggleState();
             }
-            FreshItemStartupClick();
+            FrmAddInManager.Close();
+            MessageBox.Show(Resource.Successfully,Resource.AppName);
         }
         private void ClearCommandClick()
         {
@@ -516,17 +544,26 @@ namespace AddInManager.ViewModel
         void EditAddinCommandClick()
         {
             RevitAddin revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
-            if (revitAddin != null)
+            MessageBox.Show(revitAddin.FilePath);
+            if (revitAddin != null && File.Exists(revitAddin.FilePath))
             {
                 Process.Start(revitAddin.FilePath);
+            }
+            else
+            {
+                MessageBox.Show(Resource.FileNotFound, Resource.AppName);
             }
         }
         private void OpenLocalAddinCommandClick()
         {
             RevitAddin revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
-            if (revitAddin != null)
+            if (revitAddin != null && File.Exists(revitAddin.FilePath))
             {
                 System.Diagnostics.Process.Start("explorer.exe", "/select, " + revitAddin.FilePath);
+            }
+            else
+            {
+                MessageBox.Show(Resource.FileNotFound, Resource.AppName);
             }
         }
 
