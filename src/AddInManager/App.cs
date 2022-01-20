@@ -46,11 +46,11 @@ namespace AddInManager
 
         private static ImageSource SetImage(Bitmap bitmap)
         {
-           return BitmapSourceConverter.ConvertFromImage(Resource.dev1).Resize(16);
+           return BitmapSourceConverter.ConvertFromImage(bitmap).Resize(16);
         }
         private static ImageSource SetLargeImage(Bitmap bitmap)
         {
-            return BitmapSourceConverter.ConvertFromImage(Resource.dev1).Resize(32);
+            return BitmapSourceConverter.ConvertFromImage(bitmap).Resize(32);
         }
     }
 }
