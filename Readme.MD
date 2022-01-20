@@ -58,6 +58,8 @@ Some feature include:
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk
 - [x] Enable or Disable Add-in with right click
 
+---
+
 ## Installation
 
 TODO
