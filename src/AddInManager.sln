@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32104.313
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddInManager", "AddInManager\AddInManager.csproj", "{595046CA-AA3A-42A3-B8E5-6028C6655642}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitTest", "RevitTest\RevitTest.csproj", "{D2F76E6D-2F22-4E04-8321-21118F0DF582}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "Build\Build.csproj", "{8795F216-E4F1-47CE-972C-DAB5E13504E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{A8C653F0-9815-4238-A744-600D90EB1DD5}"
+	ProjectSection(SolutionItems) = preProject
+		..\CHANGELOG.md = ..\CHANGELOG.md
+		..\Readme.MD = ..\Readme.MD
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,8 @@ Global
 		{D2F76E6D-2F22-4E04-8321-21118F0DF582}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2F76E6D-2F22-4E04-8321-21118F0DF582}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2F76E6D-2F22-4E04-8321-21118F0DF582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8795F216-E4F1-47CE-972C-DAB5E13504E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8795F216-E4F1-47CE-972C-DAB5E13504E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
