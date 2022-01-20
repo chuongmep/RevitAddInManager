@@ -370,9 +370,8 @@ namespace AddInManager.ViewModel
 
         List<RevitAddin> GetAddinFromFolder(string folder)
         {
-            string fileFormat = ".addin";
             string XmlTagParent = "RevitAddIns";
-            string[] strings = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(fileFormat)).ToArray();
+            string[] strings = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
             if (strings.Length == 0) return new List<RevitAddin>();
             List<RevitAddin> revitAddins = new List<RevitAddin>();
             foreach (string path_name in strings)
@@ -434,9 +433,8 @@ namespace AddInManager.ViewModel
 
         private void ClearCommandClick()
         {
-            string FolderName = "RevitAddins";
             string tempFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Temp", FolderName);
+                "Temp", DefaultSetting.TempFolderName);
             if (Directory.Exists(tempFolder))
             {
                 Process.Start(tempFolder);
@@ -446,7 +444,6 @@ namespace AddInManager.ViewModel
         private void ExploreCommandClick()
         {
             string AdskPath = "Autodesk\\Revit\\Addins";
-            string FileNameExtension = "ExternalTool";
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             if (IsCurrentVersion)
             {
@@ -455,7 +452,7 @@ namespace AddInManager.ViewModel
                     ExternalCommandData.Application.Application.VersionNumber);
                 if (Directory.Exists(folder))
                 {
-                    string[] filePaths = Directory.GetFiles(folder).Where(x => x.Contains(FileNameExtension)).ToArray();
+                    string[] filePaths = Directory.GetFiles(folder).Where(x => x.Contains(DefaultSetting.FileName)).ToArray();
                     if (filePaths.Length == 0)
                     {
                         System.Windows.MessageBox.Show(FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
