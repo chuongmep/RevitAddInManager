@@ -103,7 +103,7 @@ All other brand names, product names or trademarks belong to their respective ho
 Many Thanks all contributors for this repository. Feel free to contribute!
 
 <a href = "https://github.com/chuongmep/RevitAddInManager/graphs/contributors">
-  <img src = "https://contrib.rocks/image?repo = chuongmep/RevitAddInManager"/>
+  <img src = "https://contrib.rocks/image?repo=chuongmep/RevitAddInManager"/>
 </a>
 
 ---
