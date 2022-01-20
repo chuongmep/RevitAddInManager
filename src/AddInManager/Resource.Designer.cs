@@ -116,5 +116,14 @@ namespace AddInManager {
                 return ResourceManager.GetString("LoadInvalid", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Check Again Directory And Open Full  Access Admin!.
+        /// </summary>
+        internal static string NeedAdmin {
+            get {
+                return ResourceManager.GetString("NeedAdmin", resourceCulture);
+            }
+        }
     }
 }

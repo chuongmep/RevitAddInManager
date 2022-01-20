@@ -194,7 +194,7 @@
                     IsEnabled="True">
                     <Grid>
                         <DataGrid
-                            x:Name="dtgMain"
+                            x:Name="DataGridStartup"
                             AlternatingRowBackground="Transparent"
                             AlternationCount="2"
                             AutoGenerateColumns="False"
@@ -208,10 +208,9 @@
                             VerticalScrollBarVisibility="Auto">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Command="{Binding OpenAssemblyCommand}" Header="Open Location Assembly" />
-                                    <MenuItem Header="Enable" />
-                                    <MenuItem Header="Disable" />
-                                    <MenuItem Header="Save Change" />
+                                    <MenuItem Command="{Binding OpenLocalAddinCommand}" Header="Open Location Addin" />
+                                    <MenuItem Command="{Binding EditAddinCommand}" Header="Edit Addin" />
+                                    <MenuItem Header="Toggle" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisableToggle}" />
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.Resources>
@@ -244,21 +243,6 @@
                                 </Style>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
-                                <!--<DataGridTemplateColumn Width="40" Header="...">
-                                    <DataGridTemplateColumn.HeaderStyle>
-                                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                        </Style>
-                                    </DataGridTemplateColumn.HeaderStyle>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="model:RevitAddin">
-                                            <CheckBox
-                                                VerticalAlignment="Center"
-                                                Click="CheckList_click"
-                                                IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>-->
                                 <DataGridTemplateColumn Width="80" Header="State">
                                     <DataGridTemplateColumn.HeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -271,19 +255,20 @@
                                                 Height="25"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
-                                                Content="Enable"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisableToggle}"
+                                                Content="{Binding State}"
                                                 FontSize="10" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn
-                                    Width="1*"
-                                    Binding="{Binding Assembly}"
-                                    Header="Assembly" />
+                                    Width="0.6*"
+                                    Binding="{Binding NameNotEx}"
+                                    Header="Name" />
                                 <DataGridTextColumn
-                                    Width="0.5*"
-                                    Binding="{Binding FullClassName}"
-                                    Header="Full Class Name" />
+                                    Width="*"
+                                    Binding="{Binding FilePath}"
+                                    Header="Full Path" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>

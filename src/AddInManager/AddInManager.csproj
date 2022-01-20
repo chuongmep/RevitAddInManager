@@ -39,6 +39,7 @@
       None
     </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2015.*" IncludeAssets="build; compile" PrivateAssets="All" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="*" />
@@ -70,6 +71,7 @@
     <Compile Include="Model\AddinItem.cs" />
     <Compile Include="Model\AddinItemComparer.cs" />
     <Compile Include="Model\BitmapSourceConverter.cs" />
+    <Compile Include="Model\IEConverter.cs" />
     <Compile Include="Model\ProductType.cs" />
     <Compile Include="Model\DefaultSetting.cs" />
     <Compile Include="View\Control\MouseDoubleClick.cs" />

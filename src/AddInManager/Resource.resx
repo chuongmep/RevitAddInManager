@@ -136,4 +136,7 @@
   <data name="LoadInvalid" xml:space="preserve">
     <value>File Load Is Invalid</value>
   </data>
+  <data name="NeedAdmin" xml:space="preserve">
+    <value>Please Check Again Directory And Open Full  Access Admin!</value>
+  </data>
 </root>

@@ -16,4 +16,10 @@ namespace AddInManager.Model
         NotVisibleInPlumbing = 128,
         NotVisibleInMEP = 224
     }
+
+    public enum VisibleModel
+    {
+        Enable,
+        Disable
+    }
 }
