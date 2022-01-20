@@ -107,7 +107,6 @@ namespace AddInManager.Model
             this.m_fileName = Path.GetFileName(fileInfo.FullName);
         }
 
-
         public string FileName
         {
             get => this.m_fileName;
@@ -120,7 +119,12 @@ namespace AddInManager.Model
             set => this.m_local = value;
         }
 
-
+        private string _vendorDescription;
+        public string VendorDescription
+        {
+            get => _vendorDescription;
+            set => _vendorDescription = value;
+        }
         public string FilePath
         {
             get
@@ -174,7 +178,8 @@ namespace AddInManager.Model
                 xmlElement4.InnerText = "ADSK";
                 xmlElement3.AppendChild(xmlElement4);
                 xmlElement4 = this.m_xmlDoc.CreateElement(this.VENDORDESCRIPTION);
-                xmlElement4.InnerText = "Autodesk, www.autodesk.com";
+                if(VendorDescription==string.Empty) xmlElement4.InnerText = "Autodesk, www.autodesk.com";
+                else xmlElement4.InnerText = VendorDescription;
                 xmlElement3.AppendChild(xmlElement4);
             }
             return this.m_xmlDoc;

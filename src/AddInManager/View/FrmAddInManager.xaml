@@ -304,8 +304,9 @@
                         Width="Auto"
                         Height="90"
                         Margin="1,1,1,1"
+                        Text="{Binding VendorDescription}"
                         TextWrapping="Wrap"
-                        ToolTip="Vendor Description Want Add More To Addin File" />
+                        ToolTip="Default Autodesk, www.autodesk.com" />
                 </GroupBox>
                 <Grid>
                     <Grid.ColumnDefinitions>

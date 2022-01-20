@@ -173,10 +173,10 @@ namespace AddInManager.ViewModel
             return false;
         }
 
-        public IEnumerable<string> SaveToAllUserManifest(AddInManagerViewModel vm)
+        public List<string> SaveToAllUserManifest(AddInManagerViewModel vm)
         {
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            
+            List<string> filePaths = new List<string>();
             List<string> folders = new List<string>();
             if (!vm.IsCurrentVersion)
             {
@@ -184,29 +184,43 @@ namespace AddInManager.ViewModel
                     SearchOption.TopDirectoryOnly);
                 foreach (string Directory in Directories) folders.Add(Directory);
             }
-            else folders.Add(Path.Combine(folderPath, DefaultSetting.AdskPath, vm.ExternalCommandData.Application.Application.VersionNumber));
-            ManifestFile manifestFile = new ManifestFile(false);
-            foreach (AddinModel parrent in vm.CommandItems)
+            else
             {
-                foreach (AddinModel chidrent in parrent.Children)
-                {
-                    if (chidrent.IsChecked == true) manifestFile.Commands.Add(chidrent.AddinItem);
-                }
-            }
-            foreach (AddinModel parrent in vm.ApplicationItems)
-            {
-                foreach (AddinModel chidrent in parrent.Children)
-                {
-                    if (chidrent.IsChecked == true) manifestFile.Applications.Add(chidrent.AddinItem);
-                }
+                string folder = Path.Combine(folderPath, DefaultSetting.AdskPath,
+                    vm.ExternalCommandData.Application.Application.VersionNumber);
+                folders.Add(folder);
             }
 
+            ManifestFile manifestFile = new ManifestFile(false){VendorDescription = vm.VendorDescription};
+            if (vm.FrmAddInManager.TabControl.SelectedIndex == 0)
+            {
+                foreach (AddinModel parrent in vm.CommandItems)
+                {
+                    foreach (AddinModel chidrent in parrent.Children)
+                    {
+                        if (chidrent.IsChecked == true) manifestFile.Commands.Add(chidrent.AddinItem);
+                    }
+                }
+            }
+            else if(vm.FrmAddInManager.TabControl.SelectedIndex==1)
+            {
+                foreach (AddinModel parrent in vm.ApplicationItems)
+                {
+                    foreach (AddinModel chidrent in parrent.Children)
+                    {
+                        if (chidrent.IsChecked == true) manifestFile.Applications.Add(chidrent.AddinItem);
+                    }
+                }
+
+            }
             foreach (string folder in folders)
             {
                 string filePath = this.GetProperFilePath(folder, DefaultSetting.FileName, DefaultSetting.FormatExAddin);
                 manifestFile.SaveAs(filePath);
-                yield return filePath;
+                filePaths.Add(filePath);
             }
+
+            return filePaths;
         }
 
         public void SaveToLocalManifest()

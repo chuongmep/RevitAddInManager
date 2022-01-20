@@ -81,7 +81,7 @@ namespace AddInManager.ViewModel
         public bool IsCurrentVersion
         {
             get => _IsCurrentVersion;
-            set => _IsCurrentVersion = value;
+            set => OnPropertyChanged(ref _IsCurrentVersion, value);
         }
 
         public ICommand ExploreCommand => new RelayCommand(ExploreCommandClick);
@@ -102,6 +102,14 @@ namespace AddInManager.ViewModel
         }
 
         public ICommand HelpCommand => new RelayCommand(HelpCommandClick);
+
+
+        private string _vendorDescription = string.Empty;
+        public string VendorDescription
+        {
+            get => _vendorDescription;
+            set=> _vendorDescription = value;
+        }
 
         private void HelpCommandClick()
         {
@@ -329,9 +337,9 @@ namespace AddInManager.ViewModel
                     MessageBox.Show(Resources.NoItemsSelected, Resources.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
-                this.MAddinManagerBase.AddinManager.SaveToAllUserManifest(this);
-                FrmAddInManager.Close();
+                MAddinManagerBase.AddinManager.SaveToAllUserManifest(this);
                 System.Windows.MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
+                FrmAddInManager.Close();
             }
 
         }
