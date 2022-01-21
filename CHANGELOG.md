@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix Set Image ribbon, see pull request [#3](https://github.com/chuongmep/RevitAddInManager/pull/3)
 
 [vNext]: ../../compare/1.0.0...HEAD
-[2015.0.1]: ../../compare/2015.0.0
+[2015.0.1]: ../../compare/2015.0.
 
 ## [2015.0.0] / 2022-01-19
 - Rollback Product
