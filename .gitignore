@@ -42,7 +42,7 @@ _ReSharper*/
 .idea
 
 #Installer
-/output/
+output
 
 #Nuget packages folder
 packages/
