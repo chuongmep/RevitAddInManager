@@ -30,7 +30,6 @@ namespace AddinManager
             AddPushButton(PulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
             AddPushButton(PulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
             AddPushButton(PulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
-            AddPushButton(PulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
         }
 
         private static PushButton AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
