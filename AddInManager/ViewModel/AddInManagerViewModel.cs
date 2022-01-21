@@ -537,7 +537,6 @@ namespace AddinManager.ViewModel
         void EditAddinCommandClick()
         {
             RevitAddin revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
-            MessageBox.Show(revitAddin.FilePath);
             if (revitAddin != null && File.Exists(revitAddin.FilePath))
             {
                 Process.Start(revitAddin.FilePath);
