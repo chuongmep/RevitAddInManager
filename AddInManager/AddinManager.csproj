@@ -56,7 +56,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -77,6 +77,8 @@
     <ItemGroup>
       <RootItem Include="$(ProjectDir)*.addin" />
       <AddinItem Include="$(TargetDir)$(AssemblyName).*" />
+      <AddinItem Include="$(TargetDir)System.Windows.Interactivity.dll" />
+      <AddinItem Include="$(TargetDir)Microsoft.Expression.Interactions.dll" />
     </ItemGroup>
 
     <PropertyGroup>

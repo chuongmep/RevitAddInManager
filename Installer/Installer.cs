@@ -9,6 +9,7 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
 
+
 const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "AddinManager";
 const string outputName = "AddinManager";

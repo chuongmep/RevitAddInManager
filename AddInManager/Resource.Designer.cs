@@ -22,7 +22,7 @@ namespace AddinManager {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace AddinManager {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AddinManager.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace AddinManager {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to Revit Addin Manager.
         /// </summary>
-        internal static string AppName {
+        public static string AppName {
             get {
                 return ResourceManager.GetString("AppName", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon dev {
+        public static System.Drawing.Icon dev {
             get {
                 object obj = ResourceManager.GetObject("dev", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -82,7 +82,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dev1 {
+        public static System.Drawing.Bitmap dev1 {
             get {
                 object obj = ResourceManager.GetObject("dev1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -92,7 +92,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to File Not Found, Please Check File Again.
         /// </summary>
-        internal static string FileNotFound {
+        public static string FileNotFound {
             get {
                 return ResourceManager.GetString("FileNotFound", resourceCulture);
             }
@@ -101,7 +101,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap folder {
+        public static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -111,7 +111,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to File Load Is Cancelld.
         /// </summary>
-        internal static string LoadCancelled {
+        public static string LoadCancelled {
             get {
                 return ResourceManager.GetString("LoadCancelled", resourceCulture);
             }
@@ -120,7 +120,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to File Load Is Invalid.
         /// </summary>
-        internal static string LoadInvalid {
+        public static string LoadInvalid {
             get {
                 return ResourceManager.GetString("LoadInvalid", resourceCulture);
             }
@@ -129,7 +129,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to Please Check Again Directory And Open Full  Access Admin!.
         /// </summary>
-        internal static string NeedAdmin {
+        public static string NeedAdmin {
             get {
                 return ResourceManager.GetString("NeedAdmin", resourceCulture);
             }
@@ -138,7 +138,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to Not Any Item Selected.
         /// </summary>
-        internal static string NoItemSelected {
+        public static string NoItemSelected {
             get {
                 return ResourceManager.GetString("NoItemSelected", resourceCulture);
             }
@@ -147,7 +147,7 @@ namespace AddinManager {
         /// <summary>
         ///   Looks up a localized string similar to Successfully.
         /// </summary>
-        internal static string Successfully {
+        public static string Successfully {
             get {
                 return ResourceManager.GetString("Successfully", resourceCulture);
             }

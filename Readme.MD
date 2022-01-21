@@ -12,15 +12,13 @@
 ![Visual Studio 2022](https://img.shields.io/badge/Visual_Studio_2022-17.1.0-yellow)
 ![.NET Framework](https://img.shields.io/badge/.NET_Framework-4.8-yellow)
 
-[![Publish](../../actions/workflows/Publish.yml/badge.svg)](../../actions)
-[![Develop](../../actions/workflows/Develop.yml/badge.svg)](../../actions)
+[![Publish](../../actions/workflows/Workflow.yml/badge.svg)](../../actions)
 
 ## WORK IN PROCESS
 
 - [ ] Console
 - [ ] Add-in Extend for Autocad And Naviswork
-- [ ] Startup add-in enable and disable
-- [ ] Installation
+- [x] Startup add-in enable and disable
 
 ## Summary
 
