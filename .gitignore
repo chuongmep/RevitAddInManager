@@ -41,6 +41,9 @@ _ReSharper*/
 #Rider
 .idea
 
+#Installer
+/output/
+
 #Nuget packages folder
 packages/
 *.html
