@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-[assembly: AssemblyVersion("2015.0.0.0")]
-[assembly: AssemblyFileVersion("2015.0.0.0")]
+[assembly: AssemblyVersion("2015.0.1.0")]
+[assembly: AssemblyFileVersion("2015.0.1.0")]
 [assembly: AssemblyCompany("Autodesk, Inc.")]
 [assembly: AssemblyProduct("Autodesk Revit")]
 [assembly: AssemblyCopyright("Copyright (c) 2014 Autodesk, Inc. All rights reserved.")]
