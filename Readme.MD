@@ -49,6 +49,7 @@ Some feature include:
 - [x] AddInManagerFaceless
 - [x] AddInManagerReadOnly
 - [x] Application
+
 ### Startup
 
 ![](pic/_Image_fd36c982-f8dd-4961-af2c-61301ee6eb4a.png)
@@ -60,7 +61,7 @@ Some feature include:
 
 ## Installation
 
-TODO
+Please follow last release at section [Release](https://github.com/chuongmep/RevitAddInManager/releases/latest)
 
 ---
 
@@ -116,14 +117,14 @@ Thanks to [JetBrains](https://www.jetbrains.com/) for providing licenses for [Ri
 
 I suggest you some of these projects, hope you will like it.
 
-[RevitLookup](https://github.com/jeremytammik/RevitLookup)
+- [RevitLookup](https://github.com/jeremytammik/RevitLookup)
 
-[RevitLookupWpf](https://github.com/chuongmep/RevitLookupWpf)
+- [RevitLookupWpf](https://github.com/chuongmep/RevitLookupWpf)
 
-[Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
+- [Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
 
-[Revit.TestRunner](https://github.com/geberit/Revit.TestRunner)
+- [Revit.TestRunner](https://github.com/geberit/Revit.TestRunner)
 
-[Revit.Async](https://github.com/KennanChan/Revit.Async)
+- [Revit.Async](https://github.com/KennanChan/Revit.Async)
 
-[pyRevit](https://github.com/eirannejad/pyRevit)
+- [pyRevit](https://github.com/eirannejad/pyRevit)

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Installer;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
@@ -17,13 +18,14 @@ const string outputDir = "output";
 
 var version = GetAssemblyVersion(out var dllVersion);
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(dllVersion);
-
 var project = new Project
 {
     Name = projectName,
     OutDir = outputDir,
     Platform = Platform.x64,
+    Description = "Project Support Developer Work With Revit API",
     UI = WUI.WixUI_InstallDir,
+    ReinstallMode = "e",
     Version = new Version(version),
     OutFileName = fileName.ToString(),
     InstallScope = InstallScope.perUser,
@@ -35,6 +37,7 @@ var project = new Project
     {
         Manufacturer = "Autodesk",
         HelpLink = "https://github.com/chuongmep/RevitAddInManager/issues",
+        Comments = "Project Support Developer With Revit API",
         ProductIcon = @"Installer\Resources\Icons\ShellIcon.ico"
     },
     Dirs = new Dir[]
@@ -54,16 +57,21 @@ WixEntity[] GenerateWixEntities()
 
     foreach (var directory in args)
     {
-        var directoryInfo = new DirectoryInfo(directory);
-        var fileVersion = versionRegex.Match(directoryInfo.Name).Value;
-        var files = new Files($@"{directory}\*.*");
-        if (versionStorages.ContainsKey(fileVersion))
-            versionStorages[fileVersion].Add(files);
-        else
-            versionStorages.Add(fileVersion, new List<WixEntity> {files});
+        Console.WriteLine($"Find dll in  directory: {directory}");
+        //DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+        //string fileVersion = versionRegex.Match(directoryInfo.Name).Value;
+        Files files = new Files($@"{directory}\*.*");
+        foreach (int version in Enum.GetValues(typeof(BuildVersions.RevitVersion)))
+        {
+            Console.WriteLine($"Start addd file to folder {directory}/{version}");
+            if (versionStorages.ContainsKey(version.ToString()))
+                versionStorages[version.ToString()].Add(files);
+            else
+                versionStorages.Add(version.ToString(), new List<WixEntity> { files });
+            Console.WriteLine($"Added '{version}' version files: ");
+        }
 
         var assemblies = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
-        Console.WriteLine($"Added '{fileVersion}' version files: ");
         foreach (var assembly in assemblies) Console.WriteLine($"'{assembly}'");
     }
 
@@ -72,9 +80,10 @@ WixEntity[] GenerateWixEntities()
 
 string GetAssemblyVersion(out string originalVersion)
 {
+    string AssemblyName = @"AddinManager.dll";
     foreach (var directory in args)
     {
-        var assemblies = Directory.GetFiles(directory, @"AddinManager.dll", SearchOption.AllDirectories);
+        var assemblies = Directory.GetFiles(directory,AssemblyName, SearchOption.AllDirectories);
         if (assemblies.Length == 0) continue;
         var fileVersionInfo = FileVersionInfo.GetVersionInfo(assemblies[0]);
         var versionGroups = fileVersionInfo.ProductVersion.Split('.');
@@ -86,5 +95,5 @@ string GetAssemblyVersion(out string originalVersion)
         return wixVersion;
     }
 
-    throw new Exception($"Cant find AddinManager.dll file");
+    throw new Exception($"Cant find {AssemblyName} file");
 }
