@@ -17,7 +17,7 @@
 ## WORK IN PROCESS
 
 - [ ] Console
-- [ ] Add-in Extend for Autocad And Naviswork
+- [ ] Add-in Extend for **Autocad** And **Naviswork**
 - [x] Startup add-in enable and disable
 
 ## Summary
@@ -64,10 +64,37 @@ Some feature include:
 Please follow last release at section [Release](https://github.com/chuongmep/RevitAddInManager/releases/latest)
 
 ---
+## Build
+
+Debugging:
+
+- Run **Debug Profile** in Visual Studio or **Run Configuration** in JetBrains Rider. The required files have been added. All project files will be automatically copied to the
+  Revit plugins folder.
+
+Creating a package:
+
+- Open the terminal of your IDE.
+- Install Nuke global tools `dotnet tool install Nuke.GlobalTool --global`.
+- Run `nuke` command.
+- The generated package will be in the **output** folder.
+
+For more information on building, see the [**RevitTemplates**](https://github.com/Nice3point/RevitTemplates) Wiki page.
+
+**Note:** The project currently supports the version Revit from 2014 to 2023.
+
+Please refer to the [changelog](Changelog.md) for details.
+
+---
 
 ## Guideline
 
-You can visit to wiki and read document or access by this [link](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Add-In-Manager)
+You can visit to wiki and read document or access by this [link](https://github.com/chuongmep/RevitAddInManager/wiki).
+
+Some topic common:
+- [How to install Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-install-AddinManager)
+- [How to Uninstall Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-Uninstall-AddinManager)
+- [How To Use Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Add-In-Manager)
+- [Fix Problem With Installer AddinManager](https://github.com/chuongmep/RevitAddInManager/wiki/Fix-Problem-With-Installer-AddinManager)
 
 ---
 
