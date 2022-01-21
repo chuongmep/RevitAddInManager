@@ -15,8 +15,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-
-            Solution
+            TaskDialog.Show("Command","Hello Word");
             return Result.Succeeded;
         }
     }

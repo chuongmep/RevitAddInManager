@@ -5,10 +5,15 @@
         <PlatformTarget>x64</PlatformTarget>
         <TargetFramework>net48</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <Configurations>Debug;Release;Installer</Configurations>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <Optimize>true</Optimize>
         <DebugType>none</DebugType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Installer'">
+      <Optimize>true</Optimize>
+      <DebugType>none</DebugType>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="WixSharp.bin">

@@ -9,7 +9,7 @@ using Serilog;
 partial class Build
 {
     readonly Regex StreamRegex = new("'(.+?)'", RegexOptions.Compiled);
-
+    readonly string AssemblyProject = "" ;
     Target CreateInstaller => _ => _
         .TriggeredBy(Compile)
         .OnlyWhenStatic(() => IsLocalBuild || GitRepository.IsOnMasterBranch())
@@ -19,7 +19,7 @@ partial class Build
             var buildDirectories = GetBuildDirectories();
             var configurations = GetConfigurations(InstallerConfiguration);
 
-            var releasesDirectory = Solution.Directory / "Releases";
+            var releasesDirectory = Solution.Directory/"AddInManager"/"bin"/"Release";
             var releasesInfos = new DirectoryInfo(releasesDirectory).EnumerateDirectories().Select(info => info.FullName).ToList();
 
             foreach (var directoryGroup in buildDirectories)
