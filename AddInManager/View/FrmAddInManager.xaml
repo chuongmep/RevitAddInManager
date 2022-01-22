@@ -65,11 +65,6 @@
                         </Style.Triggers>
                     </Style>
                 </TextBox.Style>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding FreshSearch}" CommandParameter="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </TextBox>
             <Button
                 Grid.Column="1"
@@ -85,7 +80,7 @@
 
 
         <Grid Grid.Row="1">
-            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
@@ -107,7 +102,6 @@
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
                                 <StackPanel Orientation="Horizontal">
-                                    <!--  These elements are bound to a FooViewModel object.  -->
                                     <CheckBox
                                         VerticalAlignment="Center"
                                         Focusable="False"
@@ -123,13 +117,10 @@
                                 <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
                                 <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
                                 <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
+                                <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
                             </Style>
                         </TreeView.ItemContainerStyle>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding ExecuteAddinCommand}" CommandParameter="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
                     </TreeView>
 
                 </TabItem>
@@ -176,13 +167,10 @@
                                     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
                                     <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
                                     <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
+                                    <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                    <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinApp, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
                                 </Style>
                             </TreeView.ItemContainerStyle>
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding ExecuteAddinApp}" CommandParameter="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
                         </TreeView>
                     </Grid>
                 </TabItem>

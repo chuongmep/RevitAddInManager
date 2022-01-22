@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2022.1.0" />
-    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,8 +76,6 @@
     <ItemGroup>
       <RootItem Include="$(ProjectDir)*.addin" />
       <AddinItem Include="$(TargetDir)$(AssemblyName).*" />
-      <AddinItem Include="$(TargetDir)System.Windows.Interactivity.dll" />
-      <AddinItem Include="$(TargetDir)Microsoft.Expression.Interactions.dll" />
     </ItemGroup>
 
     <PropertyGroup>

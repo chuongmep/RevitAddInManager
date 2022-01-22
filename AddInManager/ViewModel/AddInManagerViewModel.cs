@@ -71,7 +71,17 @@ namespace AddinManager.ViewModel
 
         public ICommand VisableToggle => new RelayCommand(SetToggleVisible);
 
-        public string SearchText { get; set; }
+        private string _searchText;
+
+        public string SearchText
+        {
+            get
+            {
+                FreshSearchClick();
+                return _searchText;
+            }
+            set => OnPropertyChanged(ref _searchText, value);
+        }
 
         private bool _IsCurrentVersion = true;
         public bool IsCurrentVersion
@@ -142,7 +152,7 @@ namespace AddinManager.ViewModel
                 {
                     if (isSearchText)
                     {
-                        if (addinItem.FullClassName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                        if (addinItem.FullClassName.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                         {
                             addinModels.Add(new AddinModel(addinItem.FullClassName)
                             {
@@ -361,7 +371,7 @@ namespace AddinManager.ViewModel
         }
         private void FreshSearchClick()
         {
-            bool flag = string.IsNullOrEmpty(SearchText);
+            bool flag = string.IsNullOrEmpty(_searchText);
             if (SelectedTab == 0)
             {
                 if (flag)
@@ -411,7 +421,7 @@ namespace AddinManager.ViewModel
             addinsPlugins.ForEach(x => _addinStartup.Add(x));
             if (isSearch)
             {
-                _addinStartup = _addinStartup.Where(x=>x.Name.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                _addinStartup = _addinStartup.Where(x=>x.Name.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                     .OrderBy(x => x.Name).ToObservableCollection();
                 OnPropertyChanged(nameof(AddInStartUps));
                 return;
