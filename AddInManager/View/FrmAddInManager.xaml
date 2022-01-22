@@ -85,7 +85,7 @@
 
 
         <Grid Grid.Row="1">
-            <TabControl x:Name="TabControl">
+            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"

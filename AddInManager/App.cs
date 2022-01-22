@@ -24,12 +24,12 @@ namespace AddinManager
         {
             RibbonPanel ribbonPanel = application.CreateRibbonPanel("External Tools");
             PulldownButtonData pulldownButtonData = new PulldownButtonData("Options", "Add-in Manager");
-            PulldownButton PulldownButton = (PulldownButton)ribbonPanel.AddItem(pulldownButtonData);
-            PulldownButton.Image = SetImage(Resource.dev1);
-            PulldownButton.LargeImage = SetLargeImage(Resource.dev1);
-            AddPushButton(PulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
-            AddPushButton(PulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
-            AddPushButton(PulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
+            PulldownButton pulldownButton = (PulldownButton)ribbonPanel.AddItem(pulldownButtonData);
+            pulldownButton.Image = SetImage(Resource.dev1);
+            pulldownButton.LargeImage = SetLargeImage(Resource.dev1);
+            AddPushButton(pulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
+            AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
+            AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
         }
 
         private static PushButton AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)

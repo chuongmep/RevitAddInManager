@@ -12,6 +12,7 @@ namespace AddinManager.ViewModel
             {
                 this.ReadExternalApplication(file, i++);
             }
+
             base.SortAddin();
         }
 
@@ -23,6 +24,7 @@ namespace AddinManager.ViewModel
             {
                 return false;
             }
+
             base.AddItem(new AddinItem(AddinType.Application)
             {
                 Name = string.Empty,
@@ -45,12 +47,14 @@ namespace AddinManager.ViewModel
                     {
                         break;
                     }
+
                     if (addinItem.Save)
                     {
                         this.WriteExternalApplication(file, addinItem, ++num);
                     }
                 }
             }
+
             file.Write("ExternalApplications", "EACount", num);
         }
 

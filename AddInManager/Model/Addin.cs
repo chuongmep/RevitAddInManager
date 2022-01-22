@@ -7,51 +7,51 @@ namespace AddinManager.Model
     {
         public List<AddinItem> ItemList
         {
-            get => this.m_itemList;
-            set => this.m_itemList = value;
+            get => this._mItemList;
+            set => this._mItemList = value;
         }
 
         public string FilePath
         {
-            get => this.m_filePath;
-            set => this.m_filePath = value;
+            get => this._FilePath;
+            set => this._FilePath = value;
         }
 
         public bool Save
         {
-            get => this.m_save;
-            set => this.m_save = value;
+            get => this._mSave;
+            set => this._mSave = value;
         }
 
         public bool Hidden
         {
-            get => this.m_hidden;
-            set => this.m_hidden = value;
+            get => this._mHidden;
+            set => this._mHidden = value;
         }
 
         public Addin(string filePath)
         {
-            this.m_itemList = new List<AddinItem>();
-            this.m_filePath = filePath;
-            this.m_save = true;
+            this._mItemList = new List<AddinItem>();
+            this._FilePath = filePath;
+            this._mSave = true;
         }
 
         public Addin(string filePath, List<AddinItem> itemList)
         {
-            this.m_itemList = itemList;
-            this.m_filePath = filePath;
+            this._mItemList = itemList;
+            this._FilePath = filePath;
             this.SortAddinItem();
-            this.m_save = true;
+            this._mSave = true;
         }
 
         public void SortAddinItem()
         {
-            this.m_itemList.Sort(new AddinItemComparer());
+            this._mItemList.Sort(new AddinItemComparer());
         }
         public void RemoveItem(AddinItem item)
         {
-            this.m_itemList.Remove(item);
-            if (this.m_itemList.Count == 0)
+            this._mItemList.Remove(item);
+            if (this._mItemList.Count == 0)
             {
                 AddinManagerBase.Instance.AddinManager.RemoveAddin(this);
             }
@@ -59,17 +59,17 @@ namespace AddinManager.Model
 
         public void SaveToLocalIni(IniFile file)
         {
-            if (this.m_itemList == null || this.m_itemList.Count == 0)
+            if (this._mItemList == null || this._mItemList.Count == 0)
             {
                 return;
             }
-            AddinType addinType = this.m_itemList[0].AddinType;
+            AddinType addinType = this._mItemList[0].AddinType;
             if (addinType == AddinType.Command)
             {
                 file.WriteSection("ExternalCommands");
                 file.Write("ExternalCommands", "ECCount", 0);
                 int num = 0;
-                foreach (AddinItem addinItem in this.m_itemList)
+                foreach (AddinItem addinItem in this._mItemList)
                 {
                     if (addinItem.Save)
                     {
@@ -82,7 +82,7 @@ namespace AddinManager.Model
             file.WriteSection("ExternalApplications");
             file.Write("ExternalApplications", "EACount", 0);
             int num2 = 0;
-            foreach (AddinItem item in this.m_itemList)
+            foreach (AddinItem item in this._mItemList)
             {
                 this.WriteExternalApplication(file, item, ++num2);
             }
@@ -105,30 +105,30 @@ namespace AddinManager.Model
 
         public void SaveToLocalManifest()
         {
-            if (this.m_itemList == null || this.m_itemList.Count == 0)
+            if (this._mItemList == null || this._mItemList.Count == 0)
             {
                 return;
             }
-            AddinType addinType = this.m_itemList[0].AddinType;
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(this.m_filePath);
+            AddinType addinType = this._mItemList[0].AddinType;
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(this._FilePath);
             ManifestFile manifestFile = new ManifestFile(fileNameWithoutExtension + DefaultSetting.FormatExAddin);
             if (addinType == AddinType.Application)
             {
-                manifestFile.Applications = this.m_itemList;
+                manifestFile.Applications = this._mItemList;
             }
             else if (addinType == AddinType.Command)
             {
-                manifestFile.Commands = this.m_itemList;
+                manifestFile.Commands = this._mItemList;
             }
             manifestFile.Save();
         }
 
-        private List<AddinItem> m_itemList;
+        private List<AddinItem> _mItemList;
 
-        private string m_filePath;
+        private string _FilePath;
 
-        private bool m_save;
+        private bool _mSave;
 
-        private bool m_hidden;
+        private bool _mHidden;
     }
 }

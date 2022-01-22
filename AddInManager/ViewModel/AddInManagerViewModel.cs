@@ -47,8 +47,7 @@ namespace AddinManager.ViewModel
             }
             set => OnPropertyChanged(ref _applicationItems, value);
         }
-
-
+        
         public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
         public ICommand ManagerCommand => new RelayCommand(()=>FreshItemStartupClick(false));
         public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
@@ -107,6 +106,13 @@ namespace AddinManager.ViewModel
             set=> _vendorDescription = value;
         }
 
+        private int _selectedTab;
+        public int SelectedTab
+        {
+            get => _selectedTab;
+            set => OnPropertyChanged(ref _selectedTab, value);
+        }
+
         private void HelpCommandClick()
         {
             Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
@@ -121,8 +127,7 @@ namespace AddinManager.ViewModel
             this.ExternalCommandData = data;
             FreshItemStartupClick(false);
         }
-
-
+        
         public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
         {
             //Addins addins = this.MAddinManagerBase.AddinManager.Commands;
@@ -130,7 +135,7 @@ namespace AddinManager.ViewModel
             foreach (KeyValuePair<string, Addin> keyValuePair in addins.AddinDict)
             {
                 Addin addin = keyValuePair.Value;
-                string Title = keyValuePair.Key;
+                string title = keyValuePair.Key;
                 List<AddinItem> addinItemList = addin.ItemList;
                 List<AddinModel> addinModels = new List<AddinModel>();
                 foreach (AddinItem addinItem in addinItemList)
@@ -157,7 +162,7 @@ namespace AddinManager.ViewModel
                         });
                     }
                 }
-                AddinModel root = new AddinModel(Title)
+                AddinModel root = new AddinModel(title)
                 {
                     IsChecked = true,
                     Children = addinModels,
@@ -266,11 +271,11 @@ namespace AddinManager.ViewModel
             switch (addinType)
             {
                 case AddinType.Command:
-                    this.FrmAddInManager.TabControl.SelectedIndex = 0;
+                    this.SelectedTab = 0;
                     this.FrmAddInManager.TabCommand.Focus();
                     break;
                 case AddinType.Application:
-                    this.FrmAddInManager.TabControl.SelectedIndex = 1;
+                    this.SelectedTab = 1;
                     this.FrmAddInManager.TabApp.Focus();
                     break;
                 case AddinType.Mixed:
@@ -286,34 +291,49 @@ namespace AddinManager.ViewModel
         {
             try
             {
-                foreach (AddinModel parent in CommandItems)
+                //TODO: Check null Selected
+                if (SelectedTab == 0)
                 {
-                    if (parent.IsInitiallySelected)
+                    foreach (AddinModel parent in CommandItems)
                     {
-                        this.MAddinManagerBase.ActiveCmd = parent.Addin;
-                        this.MAddinManagerBase.ActiveCmdItem = parent.AddinItem;
-                        this.MAddinManagerBase.AddinManager.Commands.RemoveAddIn(this.MAddinManagerBase.ActiveCmd);
-                        this.MAddinManagerBase.ActiveCmd = null;
-                        this.MAddinManagerBase.ActiveCmdItem = null;
-                        this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                        CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
-                        return;
-                    }
-                    foreach (AddinModel addinChild in parent.Children)
-                    {
-                        if (addinChild.IsInitiallySelected)
+                        if (parent.IsInitiallySelected)
                         {
-                            //Set Value to run for add-in command
                             this.MAddinManagerBase.ActiveCmd = parent.Addin;
-                            this.MAddinManagerBase.ActiveCmdItem = addinChild.AddinItem;
+                            this.MAddinManagerBase.ActiveCmdItem = parent.AddinItem;
+                            if (this.MAddinManagerBase.ActiveCmd != null)
+                            {
+                                this.MAddinManagerBase.AddinManager.Commands.RemoveAddIn(this.MAddinManagerBase.ActiveCmd);
+                            }
+                            this.MAddinManagerBase.ActiveCmd = null;
+                            this.MAddinManagerBase.ActiveCmdItem = null;
+                            this.MAddinManagerBase.AddinManager.SaveToAimIni();
+                            CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+                            return;
+                        }
+                        foreach (AddinModel addinChild in parent.Children)
+                        {
+                            if (addinChild.IsInitiallySelected)
+                            {
+                                //Set Value to run for add-in command
+                                this.MAddinManagerBase.ActiveCmd = parent.Addin;
+                                this.MAddinManagerBase.ActiveCmdItem = addinChild.AddinItem;
+                            }
                         }
                     }
+
+                    if (this.MAddinManagerBase.ActiveCmdItem != null)
+                    {
+                        this.MAddinManagerBase.ActiveCmd.RemoveItem(this.MAddinManagerBase.ActiveCmdItem);
+                        this.MAddinManagerBase.ActiveCmd = null;
+                        this.MAddinManagerBase.ActiveCmdItem = null;
+                    }
+                    CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                 }
-                this.MAddinManagerBase.ActiveCmd.RemoveItem(this.MAddinManagerBase.ActiveCmdItem);
-                this.MAddinManagerBase.ActiveCmd = null;
-                this.MAddinManagerBase.ActiveCmdItem = null;
+                
+                //TODO : Remove Support Application
+
+               
                 this.MAddinManagerBase.AddinManager.SaveToAimIni();
-                CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
 
             }
             catch (Exception e)
@@ -342,7 +362,7 @@ namespace AddinManager.ViewModel
         private void FreshSearchClick()
         {
             bool flag = string.IsNullOrEmpty(SearchText);
-            if (FrmAddInManager.TabControl.SelectedIndex == 0)
+            if (SelectedTab == 0)
             {
                 if (flag)
                 {
@@ -351,7 +371,7 @@ namespace AddinManager.ViewModel
                 }
                 CommandItems = FreshTreeItems(true, MAddinManagerBase.AddinManager.Commands);
             }
-            else if (FrmAddInManager.TabControl.SelectedIndex == 1)
+            else if (SelectedTab == 1)
             {
                 if (flag)
                 {
@@ -385,7 +405,7 @@ namespace AddinManager.ViewModel
             List<RevitAddin> revitAddins = GetAddinFromFolder(Folder1);
             List<RevitAddin> addinsProgramData = GetAddinFromFolder(Folder2);
             List<RevitAddin> addinsPlugins = GetAddinFromFolder(Folder3);
-            if (FrmAddInManager != null) { FrmAddInManager.TabControl.SelectedIndex = 2; }
+            if (FrmAddInManager != null) { SelectedTab = 2; }
             revitAddins.ForEach(x => _addinStartup.Add(x));
             addinsProgramData.ForEach(x => _addinStartup.Add(x));
             addinsPlugins.ForEach(x => _addinStartup.Add(x));

@@ -48,7 +48,7 @@ namespace AddinManager.Model
 
         public static bool SameFile(string file1, string file2)
         {
-            return 0 == string.Compare(file1.Trim(), file2.Trim(), true);
+            return 0 == String.Compare(file1.Trim(), file2.Trim(), StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool CreateFile(string filePath)

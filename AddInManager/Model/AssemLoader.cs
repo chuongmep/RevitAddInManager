@@ -9,45 +9,45 @@ namespace AddinManager.Model
     {
         public string OriginalFolder
         {
-            get => this.m_originalFolder;
-            set => this.m_originalFolder = value;
+            get => this._mOriginalFolder;
+            set => this._mOriginalFolder = value;
         }
 
         public string TempFolder
         {
-            get => this.m_tempFolder;
-            set => this.m_tempFolder = value;
+            get => this._mTempFolder;
+            set => this._mTempFolder = value;
         }
 
 
         public AssemLoader()
         {
-            this.m_tempFolder = string.Empty;
-            this.m_refedFolders = new List<string>();
-            this.m_copiedFiles = new Dictionary<string, DateTime>();
+            this._mTempFolder = string.Empty;
+            this._mRefedFolders = new List<string>();
+            this._mCopiedFiles = new Dictionary<string, DateTime>();
         }
 
 
         public void CopyGeneratedFilesBack()
         {
-            string[] files = Directory.GetFiles(this.m_tempFolder, "*.*", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(this._mTempFolder, "*.*", SearchOption.AllDirectories);
             foreach (string text in files)
             {
-                if (this.m_copiedFiles.ContainsKey(text))
+                if (this._mCopiedFiles.ContainsKey(text))
                 {
-                    DateTime t = this.m_copiedFiles[text];
+                    DateTime t = this._mCopiedFiles[text];
                     FileInfo fileInfo = new FileInfo(text);
                     if (fileInfo.LastWriteTime > t)
                     {
-                        string str = text.Remove(0, this.m_tempFolder.Length);
-                        string destinationFilename = this.m_originalFolder + str;
+                        string str = text.Remove(0, this._mTempFolder.Length);
+                        string destinationFilename = this._mOriginalFolder + str;
                         FileUtils.CopyFile(text, destinationFilename);
                     }
                 }
                 else
                 {
-                    string str2 = text.Remove(0, this.m_tempFolder.Length);
-                    string destinationFilename2 = this.m_originalFolder + str2;
+                    string str2 = text.Remove(0, this._mTempFolder.Length);
+                    string destinationFilename2 = this._mOriginalFolder + str2;
                     FileUtils.CopyFile(text, destinationFilename2);
                 }
             }
@@ -69,8 +69,8 @@ namespace AddinManager.Model
             {
                 return null;
             }
-            this.m_parsingOnly = parsingOnly;
-            this.m_originalFolder = Path.GetDirectoryName(originalFilePath);
+            this._mParsingOnly = parsingOnly;
+            this._mOriginalFolder = Path.GetDirectoryName(originalFilePath);
             StringBuilder stringBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(originalFilePath));
             if (parsingOnly)
             {
@@ -80,7 +80,7 @@ namespace AddinManager.Model
             {
                 stringBuilder.Append("-Executing-");
             }
-            this.m_tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
+            this._mTempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
             Assembly assembly = this.CopyAndLoadAddin(originalFilePath, parsingOnly);
 
             if (null == assembly || !this.IsAPIReferenced(assembly))
@@ -95,22 +95,22 @@ namespace AddinManager.Model
         private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
         {
             string text = string.Empty;
-            if (!FileUtils.FileExistsInFolder(srcFilePath, this.m_tempFolder))
+            if (!FileUtils.FileExistsInFolder(srcFilePath, this._mTempFolder))
             {
                 string directoryName = Path.GetDirectoryName(srcFilePath);
-                if (!this.m_refedFolders.Contains(directoryName))
+                if (!this._mRefedFolders.Contains(directoryName))
                 {
-                    this.m_refedFolders.Add(directoryName);
+                    this._mRefedFolders.Add(directoryName);
                 }
                 List<FileInfo> list = new List<FileInfo>();
-                text = FileUtils.CopyFileToFolder(srcFilePath, this.m_tempFolder, onlyCopyRelated, list);
+                text = FileUtils.CopyFileToFolder(srcFilePath, this._mTempFolder, onlyCopyRelated, list);
                 if (string.IsNullOrEmpty(text))
                 {
                     return null;
                 }
                 foreach (FileInfo fileInfo in list)
                 {
-                    this.m_copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTime);
+                    this._mCopiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTime);
                 }
             }
             return this.LoadAddin(text);
@@ -189,7 +189,7 @@ namespace AddinManager.Model
                 string str = assemName.Substring(0, assemName.IndexOf(','));
                 foreach (string str2 in array)
                 {
-                    text = this.m_tempFolder + "\\" + str + str2;
+                    text = this._mTempFolder + "\\" + str + str2;
 
                     if (File.Exists(text))
                     {
@@ -216,7 +216,7 @@ namespace AddinManager.Model
             string text2 = assemName.Substring(0, assemName.IndexOf(','));
             foreach (string str in array)
             {
-                text = AssemLoader.m_dotnetDir + "\\" + text2 + str;
+                text = AssemLoader._mDotnetDir + "\\" + text2 + str;
                 if (File.Exists(text))
                 {
                     return text;
@@ -224,7 +224,7 @@ namespace AddinManager.Model
             }
             foreach (string str2 in array)
             {
-                foreach (string str3 in this.m_refedFolders)
+                foreach (string str3 in this._mRefedFolders)
                 {
                     text = str3 + "\\" + text2 + str2;
                     if (File.Exists(text))
@@ -271,20 +271,20 @@ namespace AddinManager.Model
 
         private bool IsAPIReferenced(Assembly assembly)
         {
-            if (string.IsNullOrEmpty(this.m_revitAPIAssemblyFullName))
+            if (string.IsNullOrEmpty(this._mRevitApiAssemblyFullName))
             {
                 foreach (Assembly assembly2 in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     if (string.Compare(assembly2.GetName().Name, "RevitAPI", true) == 0)
                     {
-                        this.m_revitAPIAssemblyFullName = assembly2.GetName().Name;
+                        this._mRevitApiAssemblyFullName = assembly2.GetName().Name;
                         break;
                     }
                 }
             }
             foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
             {
-                if (this.m_revitAPIAssemblyFullName == assemblyName.Name)
+                if (this._mRevitApiAssemblyFullName == assemblyName.Name)
                 {
                     return true;
                 }
@@ -292,20 +292,20 @@ namespace AddinManager.Model
             return false;
         }
 
-        private List<string> m_refedFolders;
+        private List<string> _mRefedFolders;
 
-        private Dictionary<string, DateTime> m_copiedFiles;
+        private Dictionary<string, DateTime> _mCopiedFiles;
 
-        private bool m_parsingOnly;
+        private bool _mParsingOnly;
 
-        private string m_originalFolder;
+        private string _mOriginalFolder;
 
-        private string m_tempFolder;
+        private string _mTempFolder;
 
-        private static string m_dotnetDir = Environment.GetEnvironmentVariable("windir") + "\\Microsoft.NET\\Framework\\v2.0.50727";
+        private static string _mDotnetDir = Environment.GetEnvironmentVariable("windir") + "\\Microsoft.NET\\Framework\\v2.0.50727";
 
-        public static string m_resolvedAssemPath = string.Empty;
+        public static string MResolvedAssemPath = string.Empty;
 
-        private string m_revitAPIAssemblyFullName;
+        private string _mRevitApiAssemblyFullName;
     }
 }
