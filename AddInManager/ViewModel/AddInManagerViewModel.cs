@@ -219,6 +219,9 @@ namespace AddinManager.ViewModel
 
         void ExecuteAddinAppClick()
         {
+            //TODO: Whether we need support load app or not,
+            // May be need create a new feature with console
+            return;
             try
             {
                 foreach (AddinModel parent in ApplicationItems)

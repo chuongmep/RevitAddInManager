@@ -368,7 +368,8 @@
                 Margin="1,1,1,1"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
-                Foreground="SteelBlue" />
+                Foreground="SteelBlue"
+                ToolTip="Execute Addin Selected" />
         </StackPanel>
     </Grid>
 </Window>
