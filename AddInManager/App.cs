@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing.Imaging;
+using System.IO;
 using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -25,8 +26,9 @@ namespace AddinManager
             RibbonPanel ribbonPanel = application.CreateRibbonPanel("External Tools");
             PulldownButtonData pulldownButtonData = new PulldownButtonData("Options", "Add-in Manager");
             PulldownButton pulldownButton = (PulldownButton)ribbonPanel.AddItem(pulldownButtonData);
-            pulldownButton.Image = SetImage(Resource.dev1);
-            pulldownButton.LargeImage = SetLargeImage(Resource.dev1);
+            pulldownButton.Image =
+                BitmapSourceConverter.ToImageSource(Resource.dev1, BitmapSourceConverter.ImageType.Small);
+            pulldownButton.LargeImage = BitmapSourceConverter.ToImageSource(Resource.dev1, BitmapSourceConverter.ImageType.Large);
             AddPushButton(pulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
             AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
             AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
@@ -38,13 +40,6 @@ namespace AddinManager
             return pullDownButton.AddPushButton(buttonData);
         }
 
-        private static ImageSource SetImage(Bitmap bitmap)
-        {
-            return BitmapSourceConverter.ConvertFromImage(bitmap).Resize(16);
-        }
-        private static ImageSource SetLargeImage(Bitmap bitmap)
-        {
-            return BitmapSourceConverter.ConvertFromImage(bitmap).Resize(32);
-        }
+      
     }
 }

@@ -1,3 +1,5 @@
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -7,57 +9,35 @@ namespace AddinManager.Model
 {
     public static class BitmapSourceConverter
     {
-        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        private static extern bool DeleteObject(IntPtr hObject);
-
-        /// <summary>
-        /// Convert a bitmap image to bit map source
-        /// </summary>
-        /// <param name="image"></param>
-        /// <returns></returns>
-        public static BitmapSource ConvertFromImage(Bitmap image)
+        public enum ImageType
         {
-            IntPtr hBitmap = image.GetHbitmap();
-
-            try
-            {
-                var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    hBitmap,
-                    IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-
-                return bs;
-
-            }
-            finally
-            {
-                DeleteObject(hBitmap);
-            }
-
-        }
-        /// <summary>
-        /// Convert icon to bit map source
-        /// </summary>
-        /// <param name="icon"></param>
-        /// <returns></returns>
-        public static BitmapSource ConvertFromIcon(Icon icon)
-        {
-
-            try
-            {
-                var bs = Imaging
-                    .CreateBitmapSourceFromHIcon(icon.Handle,
-                                                 new Int32Rect(0, 0, icon.Width, icon.Height),
-                                                 BitmapSizeOptions.FromWidthAndHeight(icon.Width, icon.Height));
-                return bs;
-            }
-            finally
-            {
-                DeleteObject(icon.Handle);
-            }
+            Small,
+            Large
         }
 
+        public static ImageSource ToImageSource(Bitmap bitmap, ImageType imageType)
+        {
+            switch (imageType)
+            {
+                case ImageType.Small:
+                    return ToImageSource(bitmap).Resize(16);
+                case ImageType.Large:
+                    return ToImageSource(bitmap).Resize(32);
+                default:
+                    throw new System.ArgumentOutOfRangeException(nameof(imageType), imageType, null);
+            }
+        }
+        public static BitmapImage ToImageSource(Bitmap bitmap)
+        {
+            var ms = new MemoryStream();
+            bitmap.Save(ms, ImageFormat.Png);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+            return image;
+        }
         /// <summary>
         /// Resize ImageResource
         /// </summary>
