@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Installer
 {
-    public class BuildVersions
+    public static class BuildVersions
     {
         public enum RevitVersion
         {

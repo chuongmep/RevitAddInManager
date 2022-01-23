@@ -1,6 +1,6 @@
 ﻿namespace AddinManager.Model
 {
-    public class ProductType
+    public static class ProductType
     {
         /// <summary>
         /// Use for feature develop mix flaform support multiple software autodesk

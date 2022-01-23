@@ -298,6 +298,7 @@ namespace AddinManager.ViewModel
             }
             this.MAddinManagerBase.AddinManager.SaveToAimIni();
             CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+            ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
 
         }
         private void RemoveAddinClick()
@@ -319,7 +320,6 @@ namespace AddinManager.ViewModel
                             }
                             this.MAddinManagerBase.ActiveCmd = null;
                             this.MAddinManagerBase.ActiveCmdItem = null;
-                            this.MAddinManagerBase.AddinManager.SaveToAimIni();
                             CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                             return;
                         }
@@ -342,10 +342,43 @@ namespace AddinManager.ViewModel
                     }
                     CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                 }
-                
-                //TODO : Remove Support Application
+                if (SelectedTab == 1)
+                {
+                    foreach (AddinModel parent in ApplicationItems)
+                    {
+                        if (parent.IsInitiallySelected)
+                        {
+                            this.MAddinManagerBase.ActiveApp = parent.Addin;
+                            this.MAddinManagerBase.ActiveAppItem = parent.AddinItem;
+                            if (this.MAddinManagerBase.ActiveApp != null)
+                            {
+                                this.MAddinManagerBase.AddinManager.Applications.RemoveAddIn(this.MAddinManagerBase.ActiveApp);
+                            }
+                            this.MAddinManagerBase.ActiveApp = null;
+                            this.MAddinManagerBase.ActiveAppItem = null;
+                            ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
+                            return;
+                        }
+                        foreach (AddinModel addinChild in parent.Children)
+                        {
+                            if (addinChild.IsInitiallySelected)
+                            {
+                                //Set Value to run for add-in app
+                                this.MAddinManagerBase.ActiveApp = parent.Addin;
+                                this.MAddinManagerBase.ActiveAppItem = addinChild.AddinItem;
+                            }
+                        }
+                    }
 
-               
+                    if (this.MAddinManagerBase.ActiveAppItem != null)
+                    {
+                        this.MAddinManagerBase.ActiveApp.RemoveItem(this.MAddinManagerBase.ActiveAppItem);
+                        this.MAddinManagerBase.ActiveApp = null;
+                        this.MAddinManagerBase.ActiveAppItem = null;
+                    }
+                    ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
+                }
+                //Save All SetTings
                 this.MAddinManagerBase.AddinManager.SaveToAimIni();
 
             }

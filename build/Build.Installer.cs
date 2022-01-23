@@ -9,7 +9,6 @@ using Serilog;
 partial class Build
 {
     readonly Regex StreamRegex = new("'(.+?)'", RegexOptions.Compiled);
-    readonly string AssemblyProject = "" ;
     Target CreateInstaller => _ => _
         .TriggeredBy(Compile)
         .OnlyWhenStatic(() => IsLocalBuild || GitRepository.IsOnMasterBranch())
