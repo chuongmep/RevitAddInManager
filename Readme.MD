@@ -18,7 +18,6 @@
 
 - [ ] Console
 - [ ] Add-in Extend for **Autocad** And **Naviswork**
-- [x] Startup add-in enable and disable
 
 ## Summary
 
@@ -80,9 +79,9 @@ Creating a package:
 
 For more information on building, see the [**RevitTemplates**](https://github.com/Nice3point/RevitTemplates) Wiki page.
 
-**Note:** The project currently supports the version Revit from 2014 to 2023.
+**Note:** The project currently supports the version Revit from **2014** to **2023**.
 
-Please refer to the [changelog](Changelog.md) for details.
+Please refer to the [CHANGELOG](CHANGELOG.md) for details.
 
 ---
 
