@@ -40,7 +40,7 @@ Some feature include:
 
 ## Add-In Manager
 
-![](pic/_Image_9044512f-8ec0-4f18-a18f-4ec98ead1974.png)
+![](pic/AddinManager.png)
 
 ### Command
 
@@ -51,7 +51,7 @@ Some feature include:
 
 ### Startup
 
-![](pic/_Image_fd36c982-f8dd-4961-af2c-61301ee6eb4a.png)
+![](pic/AddinManagerStartup.png)
 
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk
 - [x] Enable or Disable Add-in with right click
