@@ -1,5 +1,10 @@
 # Changelog
 
+- 2022-01-23 **2022.0.0.2** 
+  - Remove gdi32 import in image source
+  - Fix Selected Tab null
+  - Fix load app and remove app
+  - Remove Complex Interactivity And Interactions Library WPF
 
 - 2022-01-22 **2022.0.0.1** 
   - Support installer all in one from Revit 2014 to Revit 2023
