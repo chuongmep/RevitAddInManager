@@ -93,6 +93,7 @@
                         SelectedItem_="{Binding SelectedCommandItem, Mode=TwoWay}">
                         <TreeView.ContextMenu>
                             <ContextMenu>
+                                <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
                                 <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                 <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                 <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
@@ -143,6 +144,7 @@
                             SelectedItem_="{Binding SelectedAppItem, Mode=TwoWay}">
                             <TreeView.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Command="{Binding OpenLcAssemblyApp}" Header="Open Location Assembly" />
                                     <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                     <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                     <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
@@ -273,10 +275,12 @@
                 Orientation="Vertical">
                 <GroupBox Margin="1,1,1,1" Header="Vendor Description:">
                     <TextBox
+                        x:Name="TbxDescription"
                         Width="Auto"
                         Height="90"
                         Margin="1,1,1,1"
-                        Text="{Binding VendorDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        LostKeyboardFocus="TbxDescription_OnLostKeyboardFocus"
+                        Text="{Binding VendorDescription, Mode=Default, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap"
                         ToolTip="Default Autodesk, www.autodesk.com" />
                 </GroupBox>

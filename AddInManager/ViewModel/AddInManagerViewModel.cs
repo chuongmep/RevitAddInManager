@@ -19,7 +19,7 @@ namespace AddinManager.ViewModel
         public View.FrmAddInManager FrmAddInManager { get; set; }
         public AssemLoader AssemLoader { get; set; }
 
-        private AddinManagerBase MAddinManagerBase { get; set; }
+        public AddinManagerBase MAddinManagerBase { get; set; }
 
         private ObservableCollection<AddinModel> _commandItems;
 
@@ -103,6 +103,11 @@ namespace AddinManager.ViewModel
 
 
         public ICommand ExecuteAddinCommand => new RelayCommand(ExecuteAddinCommandClick);
+        public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
+        public ICommand OpenLcAssemblyApp => new RelayCommand(OpenLcAssemblyAppClick);
+
+       
+
         public ICommand ExecuteAddinApp => new RelayCommand(ExecuteAddinAppClick);
 
 
@@ -151,19 +156,7 @@ namespace AddinManager.ViewModel
         private string _vendorDescription = string.Empty;
         public string VendorDescription
         {
-            get
-            {
-                if (MAddinManagerBase.ActiveCmdItem != null && SelectedTab==0)
-                {
-                    MAddinManagerBase.ActiveCmdItem.Description = _vendorDescription;
-                }
-                if (MAddinManagerBase.ActiveAppItem != null && SelectedTab==1)
-                {
-                    MAddinManagerBase.ActiveAppItem.Description = _vendorDescription;
-                }
-                MAddinManagerBase.AddinManager.SaveToAimIni();
-                return _vendorDescription;
-            }
+            get => _vendorDescription;
             set => OnPropertyChanged(ref _vendorDescription, value);
         }
 
@@ -174,6 +167,7 @@ namespace AddinManager.ViewModel
             set => OnPropertyChanged(ref _selectedTab, value);
         }
 
+        public ICommand MouseLeave => new RelayCommand(() => MessageBox.Show("dsds"));
         private void HelpCommandClick()
         {
             Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
@@ -271,7 +265,18 @@ namespace AddinManager.ViewModel
                 MessageBox.Show(e.ToString());
             }
         }
-
+        private void OpenLcAssemblyCommandClick()
+        {
+            if(SelectedCommandItem==null) return;
+            string FilePath = SelectedCommandItem.AddinItem.AssemblyPath;
+            if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
+        }
+        private void OpenLcAssemblyAppClick()
+        {
+            if(SelectedAppItem==null) return;
+            string FilePath = SelectedAppItem.AddinItem.AssemblyPath;
+            if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
+        }
         void ExecuteAddinAppClick()
         {
             //TODO: Whether we need support load app or not,
