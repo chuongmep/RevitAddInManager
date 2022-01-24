@@ -120,9 +120,6 @@
                                 <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
                             </Style>
                         </TreeView.ItemContainerStyle>
-                        <!--<b:Interaction.Behaviors>
-                            <control:BindableSelectedItemBehavior SelectedItem="{Binding SelectedCommandItem, Mode=TwoWay}" />
-                        </b:Interaction.Behaviors>-->
                     </control:ExtendedTreeView>
 
                 </TabItem>
