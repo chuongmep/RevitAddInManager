@@ -1,5 +1,10 @@
 # Changelog
 
+
+- 2022-01-24 **2022.0.0.3** 
+  - Update Remind Description Selected #b62a4b8
+  - Fix Conflict button run with event exit form main #8a3a5c3
+
 - 2022-01-23 **2022.0.0.2** 
   - Remove gdi32 import in image source
   - Fix Selected Tab null
