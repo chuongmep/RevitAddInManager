@@ -2,10 +2,8 @@
     x:Class="AddinManager.View.FrmAddInManager"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:control="clr-namespace:AddinManager.View.Control"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:AddinManager.Model"
     xmlns:viewModel="clr-namespace:AddinManager.ViewModel"
@@ -144,8 +142,8 @@
                             Grid.ColumnSpan="2"
                             FontSize="12"
                             ItemsSource="{Binding ApplicationItems, Mode=TwoWay}"
-                            SelectedItem_="{Binding SelectedAppItem, Mode=TwoWay}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            SelectedItem_="{Binding SelectedAppItem, Mode=TwoWay}">
                             <TreeView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
