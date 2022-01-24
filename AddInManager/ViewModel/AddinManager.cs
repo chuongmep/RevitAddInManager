@@ -188,7 +188,7 @@ namespace AddinManager.ViewModel
             }
 
             ManifestFile manifestFile = new ManifestFile(false){VendorDescription = vm.VendorDescription};
-            if (vm.SelectedTab == 0)
+            if (vm.IsTabCmdSelected)
             {
                 foreach (AddinModel parrent in vm.CommandItems)
                 {
@@ -198,7 +198,7 @@ namespace AddinManager.ViewModel
                     }
                 }
             }
-            else if(vm.SelectedTab==1)
+            else if(vm.IsTabAppSelected)
             {
                 foreach (AddinModel parrent in vm.ApplicationItems)
                 {

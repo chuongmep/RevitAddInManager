@@ -43,11 +43,16 @@ namespace AddinManager.ViewModel
             get
             {
 
-                if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && SelectedTab==0)
+                if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
                 {
+                    RunRemoveIsEnable = true;
                     MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
                     MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
                     VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
+                }
+                else
+                {
+                    RunRemoveIsEnable = false;
                 }
                 return _selectedCommandItem;
             }
@@ -75,9 +80,8 @@ namespace AddinManager.ViewModel
             get
             {
                 
-                if (_selectedAppItem != null &&_selectedAppItem.IsParentTree == false && SelectedTab==1)
+                if (_selectedAppItem != null &&_selectedAppItem.IsParentTree == false && IsTabAppSelected)
                 {
-                   
                     MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
                     MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
                     VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
@@ -88,7 +92,7 @@ namespace AddinManager.ViewModel
         }
 
         public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
-        public ICommand ManagerCommand => new RelayCommand(() => FreshItemStartupClick(false));
+        public ICommand ManagerCommand => new RelayCommand(ManagerCommandClick);
         public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
 
@@ -127,6 +131,13 @@ namespace AddinManager.ViewModel
             set => OnPropertyChanged(ref _searchText, value);
         }
 
+        private bool _runRemoveIsEnable;
+        public bool RunRemoveIsEnable
+        {
+            get => _runRemoveIsEnable;
+            set => OnPropertyChanged(ref _runRemoveIsEnable, value);
+        }
+
         private bool _IsCurrentVersion = true;
         public bool IsCurrentVersion
         {
@@ -160,14 +171,39 @@ namespace AddinManager.ViewModel
             set => OnPropertyChanged(ref _vendorDescription, value);
         }
 
-        private int _selectedTab;
-        public int SelectedTab
+        private bool _issTabCmdSelected;
+        public bool IsTabCmdSelected
         {
-            get => _selectedTab;
-            set => OnPropertyChanged(ref _selectedTab, value);
+            get
+            {
+                return _issTabCmdSelected;
+            }
+            set => OnPropertyChanged(ref _issTabCmdSelected, value);
         }
 
-        public ICommand MouseLeave => new RelayCommand(() => MessageBox.Show("dsds"));
+        private bool _issTabAppSelected;
+        public bool IsTabAppSelected
+        {
+            get
+            {
+                RunRemoveIsEnable = false;
+                return _issTabAppSelected;
+            }
+            set => OnPropertyChanged(ref _issTabAppSelected, value);
+        }
+        private bool _isTabStartSelected;
+        public bool IsTabStartSelected
+        {
+            get
+            {
+                RunRemoveIsEnable = false;
+                return _isTabStartSelected;
+            }
+            set => OnPropertyChanged(ref _isTabStartSelected, value);
+        }
+
+        
+
         private void HelpCommandClick()
         {
             Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
@@ -315,11 +351,11 @@ namespace AddinManager.ViewModel
             switch (addinType)
             {
                 case AddinType.Command:
-                    this.SelectedTab = 0;
+                    this.IsTabCmdSelected = true;
                     this.FrmAddInManager.TabCommand.Focus();
                     break;
                 case AddinType.Application:
-                    this.SelectedTab = 1;
+                    this.IsTabAppSelected = true;
                     this.FrmAddInManager.TabApp.Focus();
                     break;
                 case AddinType.Mixed:
@@ -337,7 +373,7 @@ namespace AddinManager.ViewModel
             try
             {
                 //TODO: Check null Selected
-                if (SelectedTab == 0)
+                if (IsTabCmdSelected)
                 {
                     foreach (AddinModel parent in CommandItems)
                     {
@@ -373,7 +409,7 @@ namespace AddinManager.ViewModel
                     }
                     CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                 }
-                if (SelectedTab == 1)
+                if (IsTabAppSelected)
                 {
                     foreach (AddinModel parent in ApplicationItems)
                     {
@@ -439,7 +475,7 @@ namespace AddinManager.ViewModel
         private void FreshSearchClick()
         {
             bool flag = string.IsNullOrEmpty(_searchText);
-            if (SelectedTab == 0)
+            if (IsTabCmdSelected)
             {
                 if (flag)
                 {
@@ -448,7 +484,7 @@ namespace AddinManager.ViewModel
                 }
                 CommandItems = FreshTreeItems(true, MAddinManagerBase.AddinManager.Commands);
             }
-            else if (SelectedTab == 1)
+            else if (IsTabAppSelected)
             {
                 if (flag)
                 {
@@ -463,6 +499,12 @@ namespace AddinManager.ViewModel
                 else FreshItemStartupClick(true);
             }
 
+        }
+
+        void ManagerCommandClick()
+        {
+            IsTabStartSelected = true;
+            FreshItemStartupClick(false);
         }
         private void FreshItemStartupClick(bool isSearch)
         {
@@ -482,7 +524,6 @@ namespace AddinManager.ViewModel
             List<RevitAddin> revitAddins = GetAddinFromFolder(Folder1);
             List<RevitAddin> addinsProgramData = GetAddinFromFolder(Folder2);
             List<RevitAddin> addinsPlugins = GetAddinFromFolder(Folder3);
-            if (FrmAddInManager != null) { SelectedTab = 2; }
             revitAddins.ForEach(x => _addinStartup.Add(x));
             addinsProgramData.ForEach(x => _addinStartup.Add(x));
             addinsPlugins.ForEach(x => _addinStartup.Add(x));

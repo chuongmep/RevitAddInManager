@@ -83,6 +83,7 @@
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
+                    IsSelected="{Binding IsTabCmdSelected}"
                     Foreground="SteelBlue"
                     Header="Load Command">
                     <control:ExtendedTreeView
@@ -127,14 +128,11 @@
                 <TabItem
                     x:Name="TabApp"
                     FontSize="14"
+                    IsSelected="{Binding IsTabAppSelected}"
                     Foreground="SteelBlue"
                     Header="Load App"
                     IsEnabled="True">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*" />
-                            <ColumnDefinition Width="339*" />
-                        </Grid.ColumnDefinitions>
                         <control:ExtendedTreeView
                             x:Name="TreeViewApp"
                             Grid.ColumnSpan="2"
@@ -178,6 +176,7 @@
                 <TabItem
                     x:Name="tabStartUp"
                     FontSize="14"
+                    IsSelected="{Binding IsTabStartSelected}"
                     Foreground="SteelBlue"
                     Header="Load StartUp"
                     IsEnabled="True">
@@ -346,6 +345,7 @@
                 <Button
                     Width="80"
                     Margin="1,5,1,1"
+                    IsEnabled="{Binding RunRemoveIsEnable}"
                     Command="{Binding RemoveCommand}"
                     Content="Remove"
                     Foreground="SteelBlue"
@@ -371,6 +371,7 @@
                 Margin="1,1,1,1"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
+                IsEnabled="{Binding RunRemoveIsEnable}"
                 Foreground="SteelBlue"
                 ToolTip="Execute Addin Selected" />
         </StackPanel>
