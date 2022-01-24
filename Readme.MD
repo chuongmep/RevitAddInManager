@@ -20,8 +20,7 @@
 - [ ] Add-in Extend for **Autocad** And **Naviswork**
 
 ## Summary
-
-The Plugin support developer improve developer to increase job performance with some feature. Frequent need to open and close **assembly** is very difficult for .NET Framework , recent improvement with .NET Core has some improved API to make it easier. So this project helps make these jobs easier through copy-and-reload tricks can use for .NET Framework and .NET Core in feature.
+Usually, when developing and debugging an addin with RevitAPI, user has to close & re-open Revit each time he/she modifies the addin code and wants to re-compile. But with Add-In Manager, user can modify and run the addin directly without closing & re-opening Revit again and again.
 
 In addition, I open a project to attract talents from all over the world to support development, I'm a person, who loves open source very much and writes code every day as a pleasure.
 
