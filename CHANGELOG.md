@@ -1,6 +1,9 @@
 # Changelog
 
-
+- 2022-01-25 **2022.0.0.4** 
+  - Fix input Description slow
+  - Add Feature Right Context Menu Open Location Assembly
+  
 - 2022-01-24 **2022.0.0.3** 
   - Update Remind Description Selected #b62a4b8
   - Fix Conflict button run with event exit form main #8a3a5c3
