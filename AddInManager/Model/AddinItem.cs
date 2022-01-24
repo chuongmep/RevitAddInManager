@@ -111,7 +111,7 @@ namespace AddinManager.Model
             {
                 if (string.IsNullOrEmpty(this.m_description))
                 {
-                    return "\"\"";
+                    return String.Empty;
                 }
                 return this.m_description;
             }
@@ -119,7 +119,7 @@ namespace AddinManager.Model
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.m_description = "\"\"";
+                    this.m_description = String.Empty;
                     return;
                 }
                 this.m_description = value;

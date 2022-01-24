@@ -34,6 +34,25 @@ namespace AddinManager.ViewModel
             }
             set => OnPropertyChanged(ref _commandItems, value);
         }
+
+        private AddinModel _selectedCommandItem;
+
+        public AddinModel SelectedCommandItem
+        {
+            get
+            {
+
+                if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && SelectedTab==0)
+                {
+                    MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
+                    MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
+                    VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
+                }
+                return _selectedCommandItem;
+            }
+            set => OnPropertyChanged(ref _selectedCommandItem, value);
+        }
+
         private ObservableCollection<AddinModel> _applicationItems;
         public ObservableCollection<AddinModel> ApplicationItems
         {
@@ -47,9 +66,28 @@ namespace AddinManager.ViewModel
             }
             set => OnPropertyChanged(ref _applicationItems, value);
         }
-        
+
+        private AddinModel _selectedAppItem;
+
+        public AddinModel SelectedAppItem
+        {
+            get
+            {
+                
+                if (_selectedAppItem != null &&_selectedAppItem.IsParentTree == false && SelectedTab==1)
+                {
+                   
+                    MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
+                    MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
+                    VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
+                }
+                return _selectedAppItem;
+            }
+            set => OnPropertyChanged(ref _selectedAppItem, value);
+        }
+
         public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
-        public ICommand ManagerCommand => new RelayCommand(()=>FreshItemStartupClick(false));
+        public ICommand ManagerCommand => new RelayCommand(() => FreshItemStartupClick(false));
         public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
 
@@ -112,8 +150,20 @@ namespace AddinManager.ViewModel
         private string _vendorDescription = string.Empty;
         public string VendorDescription
         {
-            get => _vendorDescription;
-            set=> _vendorDescription = value;
+            get
+            {
+                if (MAddinManagerBase.ActiveCmdItem != null && SelectedTab==0)
+                {
+                    MAddinManagerBase.ActiveCmdItem.Description = _vendorDescription;
+                }
+                if (MAddinManagerBase.ActiveAppItem != null && SelectedTab==1)
+                {
+                    MAddinManagerBase.ActiveAppItem.Description = _vendorDescription;
+                }
+                MAddinManagerBase.AddinManager.SaveToAimIni();
+                return _vendorDescription;
+            }
+            set => OnPropertyChanged(ref _vendorDescription, value);
         }
 
         private int _selectedTab;
@@ -137,7 +187,7 @@ namespace AddinManager.ViewModel
             this.ExternalCommandData = data;
             FreshItemStartupClick(false);
         }
-        
+
         public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
         {
             //Addins addins = this.MAddinManagerBase.AddinManager.Commands;
@@ -402,11 +452,11 @@ namespace AddinManager.ViewModel
                 if (flag) FreshItemStartupClick(false);
                 else FreshItemStartupClick(true);
             }
-          
+
         }
         private void FreshItemStartupClick(bool isSearch)
         {
-            
+
             //Get All AddIn
             if (_addinStartup == null) _addinStartup = new ObservableCollection<RevitAddin>();
             _addinStartup.Clear();
@@ -428,7 +478,7 @@ namespace AddinManager.ViewModel
             addinsPlugins.ForEach(x => _addinStartup.Add(x));
             if (isSearch)
             {
-                _addinStartup = _addinStartup.Where(x=>x.Name.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                _addinStartup = _addinStartup.Where(x => x.Name.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                     .OrderBy(x => x.Name).ToObservableCollection();
                 OnPropertyChanged(nameof(AddInStartUps));
                 return;
@@ -446,7 +496,7 @@ namespace AddinManager.ViewModel
                 revitAddin.FilePath = AddinFilePath;
                 revitAddin.Name = Path.GetFileName(AddinFilePath);
                 revitAddin.NameNotEx =
-                    revitAddin.Name.Replace(DefaultSetting.FormatExAddin,String.Empty);
+                    revitAddin.Name.Replace(DefaultSetting.FormatExAddin, String.Empty);
                 revitAddin.State = VisibleModel.Enable;
                 revitAddins.Add(revitAddin);
             }
@@ -519,7 +569,7 @@ namespace AddinManager.ViewModel
                 }
             }
         }
-        
+
         private void SetToggleVisible()
         {
             foreach (RevitAddin revitAddin in FrmAddInManager.DataGridStartup.SelectedItems)
@@ -527,7 +577,7 @@ namespace AddinManager.ViewModel
                 revitAddin.SetToggleState();
             }
             FrmAddInManager.Close();
-            MessageBox.Show(Resource.Successfully,Resource.AppName);
+            MessageBox.Show(Resource.Successfully, Resource.AppName);
         }
         private void ClearCommandClick()
         {
