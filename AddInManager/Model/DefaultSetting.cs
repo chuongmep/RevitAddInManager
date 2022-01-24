@@ -1,5 +1,8 @@
 ﻿namespace AddinManager.Model
 {
+    /// <summary>
+    /// All setting name default for addin
+    /// </summary>
     public static class DefaultSetting
     {
         public static string FileName = "ExternalTool";

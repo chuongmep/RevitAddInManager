@@ -51,8 +51,8 @@ namespace AddinManager.View.Control
         // and calls the CanExecute method when it deems it necessary
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
         #endregion
 
@@ -66,14 +66,14 @@ namespace AddinManager.View.Control
 
             public event EventHandler CanExecuteChanged
             {
-                add { CommandManager.RequerySuggested += value; }
-                remove { CommandManager.RequerySuggested -= value; }
+                add => CommandManager.RequerySuggested += value;
+                remove => CommandManager.RequerySuggested -= value;
             }
 
             public void Execute(object parameter)
             {
                 Window myWin = parameter as Window;
-                myWin.Close();
+                if (myWin != null) myWin.Close();
             }
         }
         #endregion

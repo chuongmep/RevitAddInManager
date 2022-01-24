@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace AddinManager.View.Control
 {
+    /// <summary>
+    /// Event check double click in tree view item
+    /// </summary>
     public class MouseDoubleClick
     {
         public static DependencyProperty CommandProperty =

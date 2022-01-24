@@ -151,7 +151,6 @@
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
                                     <StackPanel Orientation="Horizontal">
-                                        <!--  These elements are bound to a FooViewModel object.  -->
                                         <CheckBox
                                             VerticalAlignment="Center"
                                             Focusable="False"

@@ -221,35 +221,6 @@ namespace AddinManager.ViewModel
         {
             //TODO: Whether we need support load app or not,
             // May be need create a new feature with console
-            return;
-            try
-            {
-                foreach (AddinModel parent in ApplicationItems)
-                {
-                    if (parent.IsInitiallySelected)
-                    {
-                        //TODO : Auto Run All App Selected Children
-                        return;
-                    }
-                    foreach (AddinModel addinChild in parent.Children)
-                    {
-                        if (addinChild.IsInitiallySelected)
-                        {
-                            //Set Value to run for add-in command
-                            this.MAddinManagerBase.ActiveApp = parent.Addin;
-                            this.MAddinManagerBase.ActiveAppItem = addinChild.AddinItem;
-                        }
-                    }
-                }
-
-                CheckCountSelected(ApplicationItems, out int result);
-                if (result > 0) FrmAddInManager.Close();
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
         }
 
         void CheckCountSelected(ObservableCollection<AddinModel> addinModels, out int result)
