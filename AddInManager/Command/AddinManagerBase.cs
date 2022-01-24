@@ -25,7 +25,7 @@ namespace AddinManager.Command
             Process process = Process.GetCurrentProcess();
             new WindowInteropHelper(frmAddInManager).Owner = process.MainWindowHandle;
             bool? showDialog = frmAddInManager.ShowDialog();
-            if (showDialog == false && this.ActiveCmd != null)
+            if (showDialog == false && this.ActiveCmd != null&& vm.IsRun)
             {
                 return this.RunActiveCommand(vm, data, ref message, elements);
             }

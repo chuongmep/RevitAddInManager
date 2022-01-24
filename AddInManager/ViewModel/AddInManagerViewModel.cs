@@ -14,6 +14,7 @@ namespace AddinManager.ViewModel
 {
     public class AddInManagerViewModel : ViewModelBase
     {
+        public bool IsRun { get; set; }
         public ExternalCommandData ExternalCommandData { get; set; }
         public View.FrmAddInManager FrmAddInManager { get; set; }
         public AssemLoader AssemLoader { get; set; }
@@ -258,7 +259,11 @@ namespace AddinManager.ViewModel
                 }
 
                 CheckCountSelected(CommandItems, out int result);
-                if (result > 0) FrmAddInManager.Close();
+                if (result > 0)
+                {
+                    IsRun = true;
+                    FrmAddInManager.Close();
+                }
             }
 
             catch (Exception e)
