@@ -43,12 +43,14 @@ namespace RevitAddinManager.ViewModel
             get
             {
 
-                if (_selectedCommandItem != null && IsTabCmdSelected)
+                if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
                 {
+                    IsCanRun = true;
                     MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
                     MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
                     VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
                 }
+                else IsCanRun = false;
                 return _selectedCommandItem;
             }
             set => OnPropertyChanged(ref _selectedCommandItem, value);
@@ -74,6 +76,12 @@ namespace RevitAddinManager.ViewModel
         {
             get
             {
+                if (_selectedAppItem != null && _selectedAppItem.IsParentTree == false && IsTabAppSelected)
+                {
+                    MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
+                    MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
+                    VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
+                }
                 return _selectedAppItem;
             }
             set => OnPropertyChanged(ref _selectedAppItem, value);
@@ -98,7 +106,7 @@ namespace RevitAddinManager.ViewModel
         public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
         public ICommand OpenLcAssemblyApp => new RelayCommand(OpenLcAssemblyAppClick);
 
-       
+
 
         public ICommand ExecuteAddinApp => new RelayCommand(ExecuteAddinAppClick);
 
@@ -166,8 +174,20 @@ namespace RevitAddinManager.ViewModel
         private bool _issTabAppSelected;
         public bool IsTabAppSelected
         {
-            get => _issTabAppSelected;
+            get
+            {
+                if (_issTabAppSelected) IsCanRun = false;
+                return _issTabAppSelected;
+            }
             set => OnPropertyChanged(ref _issTabAppSelected, value);
+        }
+
+        private bool _isCanRun;
+
+        public bool IsCanRun
+        {
+            get => _isCanRun;
+            set => OnPropertyChanged(ref _isCanRun, value);
         }
         private bool _isTabStartSelected;
         public bool IsTabStartSelected
@@ -246,13 +266,14 @@ namespace RevitAddinManager.ViewModel
                 {
                     this.MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
                     this.MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
+                    CheckCountSelected(CommandItems, out int result);
+                    if (result > 0)
+                    {
+                        IsRun = true;
+                        FrmAddInManager.Close();
+                    }
                 }
-                CheckCountSelected(CommandItems, out int result);
-                if (result > 0)
-                {
-                    IsRun = true;
-                    FrmAddInManager.Close();
-                }
+
             }
 
             catch (Exception e)
@@ -262,13 +283,13 @@ namespace RevitAddinManager.ViewModel
         }
         private void OpenLcAssemblyCommandClick()
         {
-            if(SelectedCommandItem==null) return;
+            if (SelectedCommandItem == null) return;
             string FilePath = SelectedCommandItem.AddinItem.AssemblyPath;
             if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
         }
         private void OpenLcAssemblyAppClick()
         {
-            if(SelectedAppItem==null) return;
+            if (SelectedAppItem == null) return;
             string FilePath = SelectedAppItem.AddinItem.AssemblyPath;
             if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
         }

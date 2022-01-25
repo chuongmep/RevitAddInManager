@@ -130,8 +130,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load App"
-                    IsEnabled="True"
-                    IsSelected="{Binding IsTabAppSelected}">
+                    IsSelected="{Binding IsTabAppSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
                         <control:ExtendedTreeView
                             x:Name="TreeViewApp"
@@ -370,6 +369,7 @@
                 Margin="1,1,1,1"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
+                IsEnabled="{Binding IsCanRun,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                 Foreground="SteelBlue"
                 ToolTip="Execute Addin Selected" />
         </StackPanel>
