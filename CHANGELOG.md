@@ -1,4 +1,8 @@
 # Changelog
+- 2022-01-25 **2022.0.0.7**
+  - Improve startup tab toggle add-in
+  - Fix addin is readonly request admin to change
+  - Stable version
 
 - 2022-01-25 **2022.0.0.6** 
   - Improve selection tools
