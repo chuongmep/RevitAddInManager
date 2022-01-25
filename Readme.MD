@@ -1,6 +1,6 @@
 
 # Revit Add-in Manager
-![Revit API](https://img.shields.io/badge/Revit%20API-2021-blue.svg)
+![Revit API](https://img.shields.io/badge/Revit%20API%20Preview-2023-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgray.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <a href="https://twitter.com/intent/follow?screen_name=chuongmep">
@@ -9,7 +9,7 @@
 
 ![ReSharper](https://img.shields.io/badge/ReSharper-2021.3.2-yellow)
 ![Rider](https://img.shields.io/badge/Rider-2021.3.2-yellow)
-![Visual Studio 2022](https://img.shields.io/badge/Visual_Studio_2022-17.1.0-yellow)
+![Visual Studio 2022](https://img.shields.io/badge/Visual_Studio_2022_Preview_2.0-17.1.0-yellow)
 ![.NET Framework](https://img.shields.io/badge/.NET_Framework-4.8-yellow)
 
 [![Publish](../../actions/workflows/Workflow.yml/badge.svg)](../../actions)
