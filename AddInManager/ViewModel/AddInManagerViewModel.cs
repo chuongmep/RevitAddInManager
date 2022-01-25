@@ -43,7 +43,7 @@ namespace AddinManager.ViewModel
             get
             {
 
-                if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
+                if (_selectedCommandItem != null && IsTabCmdSelected)
                 {
                     RunRemoveIsEnable = true;
                     MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
@@ -80,7 +80,7 @@ namespace AddinManager.ViewModel
             get
             {
                 
-                if (_selectedAppItem != null &&_selectedAppItem.IsParentTree == false && IsTabAppSelected)
+                if (_selectedAppItem != null && IsTabAppSelected)
                 {
                     MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
                     MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;

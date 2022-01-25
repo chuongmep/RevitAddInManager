@@ -2,6 +2,9 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows;
+using AddinManager.View;
+using MessageBox = System.Windows.MessageBox;
 
 namespace AddinManager.Model
 {
@@ -85,7 +88,6 @@ namespace AddinManager.Model
 
             if (null == assembly || !this.IsAPIReferenced(assembly))
             {
-                //TODO : Assembly Can not load because some problem, need check again
                 return null;
             }
             return assembly;
@@ -168,7 +170,13 @@ namespace AddinManager.Model
                 }
                 if (string.IsNullOrEmpty(text))
                 {
-                    return null;
+                    AssemblyLoader loader = new AssemblyLoader(args.Name);
+                    loader.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    if (loader.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+                    text = loader.resultPath;
                 }
                 result = this.CopyAndLoadAddin(text, true);
             }
@@ -180,6 +188,7 @@ namespace AddinManager.Model
         {
             try
             {
+               
                 string[] array = new string[]
                 {
                     ".dll",
@@ -271,11 +280,12 @@ namespace AddinManager.Model
 
         private bool IsAPIReferenced(Assembly assembly)
         {
+            string AssRevitName = "RevitAPI";
             if (string.IsNullOrEmpty(this._mRevitApiAssemblyFullName))
             {
                 foreach (Assembly assembly2 in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    if (string.Compare(assembly2.GetName().Name, "RevitAPI", true) == 0)
+                    if (String.Compare(assembly2.GetName().Name,AssRevitName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         this._mRevitApiAssemblyFullName = assembly2.GetName().Name;
                         break;
