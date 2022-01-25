@@ -1,12 +1,17 @@
 # Changelog
+- 2022-01-25 **2022.0.0.5** 
+  - Fix assembly not load [#5](https://github.com/chuongmep/RevitAddInManager/issues/5)
+  - Fix uri load form WPF [#6](https://github.com/chuongmep/RevitAddInManager/issues/6)
+  - Fix conflict between Add-in Manager use winform olf with Assembly Add-in manager WPF
+  - Rename NameSpace repair for support **Autocad** and **Naviswork**
 
 - 2022-01-25 **2022.0.0.4** 
   - Fix input Description slow
   - Add Feature Right Context Menu Open Location Assembly
   
 - 2022-01-24 **2022.0.0.3** 
-  - Update Remind Description Selected #b62a4b8
-  - Fix Conflict button run with event exit form main #8a3a5c3
+  - Update Remind Description Selected [#b62a4b8](https://github.com/chuongmep/RevitAddInManager/commit/04163a0ac977341a0d24df8dca99417325d2c0b6)
+  - Fix Conflict button run with event exit form main [#8a3a5c3](https://github.com/chuongmep/RevitAddInManager/commit/8a3a5c330bdd20f81384c5d679d759d25c69c9bf)
 
 - 2022-01-23 **2022.0.0.2** 
   - Remove gdi32 import in image source
