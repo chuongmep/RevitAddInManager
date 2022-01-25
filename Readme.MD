@@ -30,12 +30,11 @@ Some feature include:
     - AddInManagerFaceless
     - AddInManagerManual
     - AddInManagerReadOnly
+    - Application
 - Startup manager
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
 - Quick remove an Add-in not used in working process
-
-![](pic/Revit_3h2Yrkpc0h.png)
 
 ## Add-In Manager
 
@@ -46,7 +45,11 @@ Some feature include:
 - [x] AddInManagerManual
 - [x] AddInManagerFaceless
 - [x] AddInManagerReadOnly
-- [x] Application
+
+### Application
+
+- [x] Preview
+- [x] Save Application .Addin
 
 ### Startup
 
