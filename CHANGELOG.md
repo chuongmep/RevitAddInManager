@@ -1,4 +1,9 @@
 # Changelog
+
+- 2022-01-25 **2022.0.0.6** 
+  - Improve selection tools
+  - Fix some small bug
+
 - 2022-01-25 **2022.0.0.5** 
   - Fix assembly not load [#5](https://github.com/chuongmep/RevitAddInManager/issues/5)
   - Fix uri load form WPF [#6](https://github.com/chuongmep/RevitAddInManager/issues/6)
