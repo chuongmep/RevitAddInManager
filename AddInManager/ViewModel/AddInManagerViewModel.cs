@@ -74,13 +74,6 @@ namespace RevitAddinManager.ViewModel
         {
             get
             {
-                
-                if (_selectedAppItem != null && IsTabAppSelected)
-                {
-                    MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
-                    MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
-                    VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
-                }
                 return _selectedAppItem;
             }
             set => OnPropertyChanged(ref _selectedAppItem, value);
@@ -249,24 +242,11 @@ namespace RevitAddinManager.ViewModel
         {
             try
             {
-                foreach (AddinModel parent in CommandItems)
+                if (SelectedCommandItem?.IsParentTree == false)
                 {
-                    if (parent.IsInitiallySelected)
-                    {
-                        //TODO : Auto Run All Command Selected Children
-                        return;
-                    }
-                    foreach (AddinModel addinChild in parent.Children)
-                    {
-                        if (addinChild.IsInitiallySelected)
-                        {
-                            //Set Value to run for add-in command
-                            this.MAddinManagerBase.ActiveCmd = parent.Addin;
-                            this.MAddinManagerBase.ActiveCmdItem = addinChild.AddinItem;
-                        }
-                    }
+                    this.MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
+                    this.MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
                 }
-
                 CheckCountSelected(CommandItems, out int result);
                 if (result > 0)
                 {

@@ -2,9 +2,10 @@
     x:Class="RevitAddinManager.View.FrmAddInManager"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
+    xmlns:model="clr-namespace:RevitAddinManager.Model"
     xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
     Title="Revit Add In Manager"
     Width="400"
@@ -82,9 +83,9 @@
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
-                    IsSelected="{Binding IsTabCmdSelected}"
                     Foreground="SteelBlue"
-                    Header="Load Command">
+                    Header="Load Command"
+                    IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
                         FontSize="12"
@@ -127,10 +128,10 @@
                 <TabItem
                     x:Name="TabApp"
                     FontSize="14"
-                    IsSelected="{Binding IsTabAppSelected}"
                     Foreground="SteelBlue"
                     Header="Load App"
-                    IsEnabled="True">
+                    IsEnabled="True"
+                    IsSelected="{Binding IsTabAppSelected}">
                     <Grid>
                         <control:ExtendedTreeView
                             x:Name="TreeViewApp"
@@ -175,10 +176,10 @@
                 <TabItem
                     x:Name="tabStartUp"
                     FontSize="14"
-                    IsSelected="{Binding IsTabStartSelected}"
                     Foreground="SteelBlue"
                     Header="Load StartUp"
-                    IsEnabled="True">
+                    IsEnabled="True"
+                    IsSelected="{Binding IsTabStartSelected}">
                     <Grid>
                         <DataGrid
                             x:Name="DataGridStartup"
