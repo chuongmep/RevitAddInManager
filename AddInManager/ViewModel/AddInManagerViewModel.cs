@@ -45,14 +45,9 @@ namespace RevitAddinManager.ViewModel
 
                 if (_selectedCommandItem != null && IsTabCmdSelected)
                 {
-                    RunRemoveIsEnable = true;
                     MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
                     MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
                     VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
-                }
-                else
-                {
-                    RunRemoveIsEnable = false;
                 }
                 return _selectedCommandItem;
             }
@@ -131,12 +126,6 @@ namespace RevitAddinManager.ViewModel
             set => OnPropertyChanged(ref _searchText, value);
         }
 
-        private bool _runRemoveIsEnable;
-        public bool RunRemoveIsEnable
-        {
-            get => _runRemoveIsEnable;
-            set => OnPropertyChanged(ref _runRemoveIsEnable, value);
-        }
 
         private bool _IsCurrentVersion = true;
         public bool IsCurrentVersion
@@ -184,25 +173,15 @@ namespace RevitAddinManager.ViewModel
         private bool _issTabAppSelected;
         public bool IsTabAppSelected
         {
-            get
-            {
-                RunRemoveIsEnable = false;
-                return _issTabAppSelected;
-            }
+            get => _issTabAppSelected;
             set => OnPropertyChanged(ref _issTabAppSelected, value);
         }
         private bool _isTabStartSelected;
         public bool IsTabStartSelected
         {
-            get
-            {
-                RunRemoveIsEnable = false;
-                return _isTabStartSelected;
-            }
+            get => _isTabStartSelected;
             set => OnPropertyChanged(ref _isTabStartSelected, value);
         }
-
-        
 
         private void HelpCommandClick()
         {

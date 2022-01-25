@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:control="clr-namespace:RevitAddinManager.View.Control"
+    xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
     Title="Revit Add In Manager"
     Width="400"
     Height="600"
@@ -343,7 +344,6 @@
                 <Button
                     Width="80"
                     Margin="1,5,1,1"
-                    IsEnabled="{Binding RunRemoveIsEnable}"
                     Command="{Binding RemoveCommand}"
                     Content="Remove"
                     Foreground="SteelBlue"
@@ -369,7 +369,6 @@
                 Margin="1,1,1,1"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
-                IsEnabled="{Binding RunRemoveIsEnable}"
                 Foreground="SteelBlue"
                 ToolTip="Execute Addin Selected" />
         </StackPanel>
