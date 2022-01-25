@@ -3,10 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows;
-using AddinManager.View;
-using MessageBox = System.Windows.MessageBox;
+using RevitAddinManager.View;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class AssemLoader
     {

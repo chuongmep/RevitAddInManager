@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Autodesk.Revit.Attributes;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class AddinItem : IAddinNode
     {

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class IniFile
     {

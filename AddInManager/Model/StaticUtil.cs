@@ -1,7 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public static class StaticUtil
     {

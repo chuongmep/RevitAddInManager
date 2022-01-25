@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
-namespace AddinManager.View.Control
+namespace RevitAddinManager.View.Control
 {
     public class ExtendedTreeView : System.Windows.Controls.TreeView
     {

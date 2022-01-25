@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     /// <summary>
     /// Quick convert collection

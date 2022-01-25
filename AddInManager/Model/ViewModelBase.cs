@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

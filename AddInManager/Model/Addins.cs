@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text;
 using Autodesk.Revit.Attributes;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public abstract class Addins
     {

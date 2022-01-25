@@ -1,13 +1,9 @@
-﻿using System.Drawing.Imaging;
-using System.IO;
-using System.Reflection;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using AddinManager.Command;
+﻿using System.Reflection;
 using Autodesk.Revit.UI;
-using static AddinManager.Model.BitmapSourceConverter;
+using RevitAddinManager.Command;
+using static RevitAddinManager.Model.BitmapSourceConverter;
 
-namespace AddinManager
+namespace RevitAddinManager
 {
     public class App : IExternalApplication
     {

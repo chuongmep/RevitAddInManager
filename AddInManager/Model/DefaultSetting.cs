@@ -1,4 +1,4 @@
-﻿namespace AddinManager.Model
+﻿namespace RevitAddinManager.Model
 {
     /// <summary>
     /// All setting name default for addin

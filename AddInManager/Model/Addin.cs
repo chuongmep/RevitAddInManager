@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using AddinManager.Command;
+using RevitAddinManager.Command;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class Addin : IAddinNode
     {

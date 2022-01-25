@@ -1,10 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using AddinManager.ViewModel;
-using MessageBox = System.Windows.MessageBox;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using RevitAddinManager.ViewModel;
 
-namespace AddinManager.View
+namespace RevitAddinManager.View
 {
     /// <summary>
     /// Interaction logic for FrmAddInManager.xaml

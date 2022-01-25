@@ -1,9 +1,9 @@
-﻿using AddinManager.Model;
-using Autodesk.Revit.Attributes;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using RevitAddinManager.Model;
 
-namespace AddinManager.Command
+namespace RevitAddinManager.Command
 {
     [Transaction(TransactionMode.Manual)]
     public class AddInManagerManual : IExternalCommand

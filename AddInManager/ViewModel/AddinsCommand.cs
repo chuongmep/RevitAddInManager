@@ -1,6 +1,6 @@
-﻿using AddinManager.Model;
+﻿using RevitAddinManager.Model;
 
-namespace AddinManager.ViewModel
+namespace RevitAddinManager.ViewModel
 {
     public class AddinsCommand : Addins
     {

@@ -1,4 +1,4 @@
-﻿namespace AddinManager.Model
+﻿namespace RevitAddinManager.Model
 {
     [Flags]
     public enum VisibilityMode

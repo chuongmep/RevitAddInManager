@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitTest", "RevitTest\Revi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{A8C653F0-9815-4238-A744-600D90EB1DD5}"
 	ProjectSection(SolutionItems) = preProject
-		..\CHANGELOG.md = ..\CHANGELOG.md
-		..\Readme.MD = ..\Readme.MD
+		CHANGELOG.md = CHANGELOG.md
+		Readme.MD = Readme.MD
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddinManager", "AddInManager\AddinManager.csproj", "{C872CDA2-93F5-4681-BD2F-207EACF83D2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevitAddinManager", "AddInManager\RevitAddinManager.csproj", "{C872CDA2-93F5-4681-BD2F-207EACF83D2E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Installer", "Installer\Installer.csproj", "{E3C87D34-638C-47A0-A73A-D967B119458D}"
 EndProject

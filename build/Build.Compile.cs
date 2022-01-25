@@ -3,6 +3,8 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.MSBuild;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 
+namespace Build;
+
 partial class Build
 {
     Target Compile => _ => _

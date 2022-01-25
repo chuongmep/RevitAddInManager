@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using AddinManager.Model;
+using RevitAddinManager.Model;
 
-namespace AddinManager.ViewModel
+namespace RevitAddinManager.ViewModel
 {
     public class AddinManager
     {

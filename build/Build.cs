@@ -5,6 +5,8 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.VSWhere;
 
+namespace Build;
+
 /// <summary>
 ///     Documentation:
 ///     https://github.com/Nice3point/RevitTemplates/wiki

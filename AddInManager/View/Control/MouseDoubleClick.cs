@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace AddinManager.View.Control
+namespace RevitAddinManager.View.Control
 {
     /// <summary>
     /// Event check double click in tree view item

@@ -2,6 +2,8 @@ using System.Text.RegularExpressions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 
+namespace Build;
+
 static class BuilderExtensions
 {
     public static Project GetProject(this Solution solution, string projectName) =>

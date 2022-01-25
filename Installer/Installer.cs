@@ -12,8 +12,8 @@ using WixSharp.Controls;
 
 
 const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
-const string projectName = "AddinManager";
-const string outputName = "AddinManager";
+const string projectName = "RevitAddinManager";
+const string outputName = "RevitAddinManager";
 const string outputDir = "output";
 
 var version = GetAssemblyVersion(out var dllVersion);
@@ -80,7 +80,7 @@ WixEntity[] GenerateWixEntities()
 
 string GetAssemblyVersion(out string originalVersion)
 {
-    string AssemblyName = @"AddinManager.dll";
+    string AssemblyName = @"RevitAddinManager.dll";
     foreach (var directory in args)
     {
         var assemblies = Directory.GetFiles(directory,AssemblyName, SearchOption.AllDirectories);

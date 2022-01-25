@@ -1,4 +1,4 @@
-﻿namespace AddinManager.Model
+﻿namespace RevitAddinManager.Model
 {
     /// <summary>
     /// Compare Sort By Full Class Name Method

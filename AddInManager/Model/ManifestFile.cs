@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class ManifestFile
     {

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace AddinManager.View.Control
+namespace RevitAddinManager.View.Control
 {
     /// <summary>
     /// A general relay command that takes its parameter as an object

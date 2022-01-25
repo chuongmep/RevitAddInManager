@@ -4,13 +4,13 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
-using AddinManager.Command;
-using AddinManager.Model;
-using AddinManager.View.Control;
 using Autodesk.Revit.UI;
+using RevitAddinManager.Command;
+using RevitAddinManager.Model;
+using RevitAddinManager.View.Control;
 using MessageBox = System.Windows.Forms.MessageBox;
 
-namespace AddinManager.ViewModel
+namespace RevitAddinManager.ViewModel
 {
     public class AddInManagerViewModel : ViewModelBase
     {

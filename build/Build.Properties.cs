@@ -1,3 +1,5 @@
+namespace Build;
+
 partial class Build
 {
     const string InstallerProject = "Installer";
@@ -13,6 +15,6 @@ partial class Build
 
     readonly string[] Projects =
     {
-        "AddinManager"
+        "RevitAddinManager"
     };
 }

@@ -2,7 +2,7 @@
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace AddinManager.View.Control
+namespace RevitAddinManager.View.Control
 {
     public static class VirtualToggleButton
     {

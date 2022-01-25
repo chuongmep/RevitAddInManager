@@ -6,6 +6,8 @@ using Nuke.Common;
 using Nuke.Common.Git;
 using Serilog;
 
+namespace Build;
+
 partial class Build
 {
     readonly Regex StreamRegex = new("'(.+?)'", RegexOptions.Compiled);
@@ -18,7 +20,7 @@ partial class Build
             var buildDirectories = GetBuildDirectories();
             var configurations = GetConfigurations(InstallerConfiguration);
 
-            var releasesDirectory = Solution.Directory/"AddInManager"/"bin"/"Release";
+            var releasesDirectory = Solution.Directory/"AddinManager"/"bin"/"Release";
             var releasesInfos = new DirectoryInfo(releasesDirectory).EnumerateDirectories().Select(info => info.FullName).ToList();
 
             foreach (var directoryGroup in buildDirectories)

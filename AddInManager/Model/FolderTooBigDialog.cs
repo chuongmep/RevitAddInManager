@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     internal static class FolderTooBigDialog
     {

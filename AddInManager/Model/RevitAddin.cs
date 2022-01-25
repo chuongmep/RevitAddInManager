@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AddinManager.Model
+namespace RevitAddinManager.Model
 {
     public class RevitAddin : ViewModelBase
     {
