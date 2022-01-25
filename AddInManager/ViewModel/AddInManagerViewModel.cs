@@ -113,7 +113,7 @@ namespace RevitAddinManager.ViewModel
 
         public ICommand FreshSearch => new RelayCommand(FreshSearchClick);
 
-        public ICommand VisableToggle => new RelayCommand(SetToggleVisible);
+        public ICommand VisibleToggle => new RelayCommand(SetToggleVisible);
 
         private string _searchText;
 
@@ -504,7 +504,11 @@ namespace RevitAddinManager.ViewModel
             List<RevitAddin> revitAddins = GetAddinFromFolder(Folder1);
             List<RevitAddin> addinsProgramData = GetAddinFromFolder(Folder2);
             List<RevitAddin> addinsPlugins = GetAddinFromFolder(Folder3);
-            revitAddins.ForEach(x => _addinStartup.Add(x));
+            revitAddins.ForEach(delegate (RevitAddin x)
+            {
+                _addinStartup.Add(x);
+                x.IsReadOnly = true;
+            });
             addinsProgramData.ForEach(x => _addinStartup.Add(x));
             addinsPlugins.ForEach(x => _addinStartup.Add(x));
             if (isSearch)

@@ -197,7 +197,6 @@
                                 <ContextMenu>
                                     <MenuItem Command="{Binding OpenLocalAddinCommand}" Header="Open Location Addin" />
                                     <MenuItem Command="{Binding EditAddinCommand}" Header="Edit Addin" />
-                                    <MenuItem Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisableToggle}" Header="Toggle" />
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.Resources>
@@ -240,9 +239,11 @@
                                         <DataTemplate DataType="model:RevitAddin">
                                             <Button
                                                 Height="25"
+                                                ToolTip="Toggle To Convert State"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisableToggle}"
+                                                IsEnabled="{Binding IsReadOnly}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisibleToggle}"
                                                 Content="{Binding State}"
                                                 FontSize="10" />
                                         </DataTemplate>

@@ -4,6 +4,7 @@ namespace RevitAddinManager.Model
 {
     public class RevitAddin : ViewModelBase
     {
+        public bool IsReadOnly { get; set; }
         public VisibleModel State { get; set; }
         public string FilePath { get; set; }
         public string Assembly { get; set; }
