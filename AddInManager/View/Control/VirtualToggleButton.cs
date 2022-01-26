@@ -17,7 +17,7 @@ namespace RevitAddinManager.View.Control
             DependencyProperty.RegisterAttached("IsChecked", typeof(Nullable<bool>), typeof(VirtualToggleButton),
                 new FrameworkPropertyMetadata((Nullable<bool>)false,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.Journal,
-                    new PropertyChangedCallback(OnIsCheckedChanged)));
+                    OnIsCheckedChanged));
 
         /// <summary>
         /// Gets the IsChecked property.  This dependency property 
@@ -101,7 +101,7 @@ namespace RevitAddinManager.View.Control
         public static readonly DependencyProperty IsVirtualToggleButtonProperty =
             DependencyProperty.RegisterAttached("IsVirtualToggleButton", typeof(bool), typeof(VirtualToggleButton),
                 new FrameworkPropertyMetadata((bool)false,
-                    new PropertyChangedCallback(OnIsVirtualToggleButtonChanged)));
+                    OnIsVirtualToggleButtonChanged));
 
         /// <summary>
         /// Gets the IsVirtualToggleButton property.  This dependency property 
