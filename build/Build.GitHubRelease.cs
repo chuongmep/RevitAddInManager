@@ -7,8 +7,6 @@ using Nuke.Common.Tools.GitVersion;
 using Octokit;
 using Serilog;
 
-namespace Build;
-
 partial class Build
 {
     [GitVersion(NoFetch = true)] readonly GitVersion GitVersion;

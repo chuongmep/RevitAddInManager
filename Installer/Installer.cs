@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Installer;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
@@ -15,9 +13,9 @@ const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "RevitAddinManager";
 const string outputName = "RevitAddinManager";
 const string outputDir = "output";
+const string version = "1.0.7";
 
-var version = GetAssemblyVersion(out var dllVersion);
-var fileName = new StringBuilder().Append(outputName).Append("-").Append(dllVersion);
+var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project
 {
     Name = projectName,
@@ -57,43 +55,18 @@ WixEntity[] GenerateWixEntities()
 
     foreach (var directory in args)
     {
-        Console.WriteLine($"Find dll in  directory: {directory}");
-        //DirectoryInfo directoryInfo = new DirectoryInfo(directory);
-        //string fileVersion = versionRegex.Match(directoryInfo.Name).Value;
-        Files files = new Files($@"{directory}\*.*");
-        foreach (int version in Enum.GetValues(typeof(BuildVersions.RevitVersion)))
-        {
-            Console.WriteLine($"Start addd file to folder {directory}/{version}");
-            if (versionStorages.ContainsKey(version.ToString()))
-                versionStorages[version.ToString()].Add(files);
-            else
-                versionStorages.Add(version.ToString(), new List<WixEntity> { files });
-            Console.WriteLine($"Added '{version}' version files: ");
-        }
+        var directoryInfo = new DirectoryInfo(directory);
+        var fileVersion = versionRegex.Match(directoryInfo.Name).Value;
+        var files = new Files($@"{directory}\*.*");
+        if (versionStorages.ContainsKey(fileVersion))
+            versionStorages[fileVersion].Add(files);
+        else
+            versionStorages.Add(fileVersion, new List<WixEntity> {files});
 
         var assemblies = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+        Console.WriteLine($"Added '{fileVersion}' version files: ");
         foreach (var assembly in assemblies) Console.WriteLine($"'{assembly}'");
     }
 
     return versionStorages.Select(storage => new Dir(storage.Key, storage.Value.ToArray())).Cast<WixEntity>().ToArray();
-}
-
-string GetAssemblyVersion(out string originalVersion)
-{
-    string AssemblyName = @"RevitAddinManager.dll";
-    foreach (var directory in args)
-    {
-        var assemblies = Directory.GetFiles(directory,AssemblyName, SearchOption.AllDirectories);
-        if (assemblies.Length == 0) continue;
-        var fileVersionInfo = FileVersionInfo.GetVersionInfo(assemblies[0]);
-        var versionGroups = fileVersionInfo.ProductVersion.Split('.');
-        var majorVersion = versionGroups[0];
-        if (int.Parse(majorVersion) > 255) versionGroups[0] = majorVersion.Substring(majorVersion.Length - 2);
-        originalVersion = fileVersionInfo.ProductVersion;
-        var wixVersion = string.Join(".", versionGroups);
-        if (!originalVersion.Equals(wixVersion)) Console.WriteLine($"Installer version trimmed from '{originalVersion}' to '{wixVersion}'");
-        return wixVersion;
-    }
-
-    throw new Exception($"Cant find {AssemblyName} file");
 }
