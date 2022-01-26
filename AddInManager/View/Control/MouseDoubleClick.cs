@@ -36,8 +36,7 @@ namespace RevitAddinManager.View.Control
 
         private static void CommandChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            var control = target as System.Windows.Controls.Control;
-            if (control != null)
+            if (target is System.Windows.Controls.Control control)
             {
                 if (e.NewValue != null && e.OldValue == null)
                 {

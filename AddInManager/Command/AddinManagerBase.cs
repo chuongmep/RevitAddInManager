@@ -54,8 +54,7 @@ namespace RevitAddinManager.Command
                 else
                 {
                     _mActiveTempFolder = vm.AssemLoader.TempFolder;
-                    var externalCommand = assembly.CreateInstance(_mActiveCmdItem.FullClassName) as IExternalCommand;
-                    if (externalCommand == null)
+                    if (assembly.CreateInstance(_mActiveCmdItem.FullClassName) is not IExternalCommand externalCommand)
                     {
                         result = Result.Failed;
                     }

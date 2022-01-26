@@ -654,8 +654,7 @@ namespace RevitAddinManager.ViewModel
 
         void EditAddinCommandClick()
         {
-            var revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
-            if (revitAddin != null && File.Exists(revitAddin.FilePath))
+            if (FrmAddInManager.DataGridStartup.SelectedItem is RevitAddin revitAddin && File.Exists(revitAddin.FilePath))
             {
                 Process.Start(revitAddin.FilePath);
             }
@@ -666,8 +665,7 @@ namespace RevitAddinManager.ViewModel
         }
         private void OpenLocalAddinCommandClick()
         {
-            var revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
-            if (revitAddin != null && File.Exists(revitAddin.FilePath))
+            if (FrmAddInManager.DataGridStartup.SelectedItem is RevitAddin revitAddin && File.Exists(revitAddin.FilePath))
             {
                 Process.Start("explorer.exe", "/select, " + revitAddin.FilePath);
             }

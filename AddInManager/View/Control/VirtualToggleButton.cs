@@ -42,8 +42,7 @@ namespace RevitAddinManager.View.Control
         /// </summary>
         private static void OnIsCheckedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var pseudobutton = d as UIElement;
-            if (pseudobutton != null)
+            if (d is UIElement pseudobutton)
             {
                 var newValue = (Nullable<bool>)e.NewValue;
                 if (newValue == true)
@@ -129,8 +128,7 @@ namespace RevitAddinManager.View.Control
         /// </summary>
         private static void OnIsVirtualToggleButtonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var element = d as IInputElement;
-            if (element != null)
+            if (d is IInputElement element)
             {
                 if ((bool)e.NewValue)
                 {
