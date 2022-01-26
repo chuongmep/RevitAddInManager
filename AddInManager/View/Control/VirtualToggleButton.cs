@@ -69,7 +69,7 @@ namespace RevitAddinManager.View.Control
         /// </summary>
         public static readonly DependencyProperty IsThreeStateProperty =
             DependencyProperty.RegisterAttached("IsThreeState", typeof(bool), typeof(VirtualToggleButton),
-                new FrameworkPropertyMetadata((bool)false));
+                new FrameworkPropertyMetadata(false));
 
         /// <summary>
         /// Gets the IsThreeState property.  This dependency property 
@@ -100,7 +100,7 @@ namespace RevitAddinManager.View.Control
         /// </summary>
         public static readonly DependencyProperty IsVirtualToggleButtonProperty =
             DependencyProperty.RegisterAttached("IsVirtualToggleButton", typeof(bool), typeof(VirtualToggleButton),
-                new FrameworkPropertyMetadata((bool)false,
+                new FrameworkPropertyMetadata(false,
                     OnIsVirtualToggleButtonChanged));
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace RevitAddinManager.View.Control
             var isChecked = GetIsChecked(d);
             if (isChecked == true)
             {
-                SetIsChecked(d, GetIsThreeState(d) ? (Nullable<bool>)null : (Nullable<bool>)false);
+                SetIsChecked(d, GetIsThreeState(d) ? null : false);
             }
             else
             {
