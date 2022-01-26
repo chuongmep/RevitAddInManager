@@ -7,8 +7,6 @@ using Nuke.Common.Tools.GitVersion;
 using Octokit;
 using Serilog;
 
-namespace Build;
-
 partial class Build
 {
     [GitVersion(NoFetch = true)] readonly GitVersion GitVersion;
@@ -62,13 +60,11 @@ partial class Build
 
         var logBuilder = new StringBuilder();
         var changelogLineRegex = new Regex($@"^.*({version})\S*\s");
-        const string nextRecordSymbol = "- ";
 
         foreach (var line in File.ReadLines(ChangeLogPath))
         {
             if (logBuilder.Length > 0)
             {
-                if (line.StartsWith(nextRecordSymbol)) break;
                 logBuilder.AppendLine(line);
                 continue;
             }

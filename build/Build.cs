@@ -5,18 +5,12 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.VSWhere;
 
-namespace Build;
-
-/// <summary>
-///     Documentation:
-///     https://github.com/Nice3point/RevitTemplates/wiki
-/// </summary>
 partial class Build : NukeBuild
 {
-    [Solution] public readonly Solution Solution;
-    [GitRepository] readonly GitRepository GitRepository;
     readonly AbsolutePath ArtifactsDirectory = RootDirectory / ArtifactsFolder;
     readonly AbsolutePath ChangeLogPath = RootDirectory / "Changelog.md";
+    [GitRepository] readonly GitRepository GitRepository;
+    [Solution] readonly Solution Solution;
 
     static readonly Lazy<string> MsBuildPath = new(() =>
     {

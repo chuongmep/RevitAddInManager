@@ -6,27 +6,23 @@ using Nuke.Common;
 using Nuke.Common.Git;
 using Serilog;
 
-namespace Build;
-
 partial class Build
 {
     readonly Regex StreamRegex = new("'(.+?)'", RegexOptions.Compiled);
+
     Target CreateInstaller => _ => _
         .TriggeredBy(Compile)
-        .OnlyWhenStatic(() => IsLocalBuild || GitRepository.IsOnMasterBranch())
+        .OnlyWhenStatic(() => IsLocalBuild || GitRepository.IsOnMainOrMasterBranch())
         .Executes(() =>
         {
             var installerProject = BuilderExtensions.GetProject(Solution, InstallerProject);
             var buildDirectories = GetBuildDirectories();
             var configurations = GetConfigurations(InstallerConfiguration);
 
-            var releasesDirectory = Solution.Directory/"AddinManager"/"bin"/"Release";
-            var releasesInfos = new DirectoryInfo(releasesDirectory).EnumerateDirectories().Select(info => info.FullName).ToList();
-
             foreach (var directoryGroup in buildDirectories)
             {
                 var directories = directoryGroup.ToList();
-                var exeArguments = BuildExeArguments(directories.Select(info => info.FullName).Concat(releasesInfos).ToList());
+                var exeArguments = BuildExeArguments(directories.Select(info => info.FullName).ToList());
                 var exeFile = installerProject.GetExecutableFile(configurations, directories);
                 if (string.IsNullOrEmpty(exeFile))
                 {
