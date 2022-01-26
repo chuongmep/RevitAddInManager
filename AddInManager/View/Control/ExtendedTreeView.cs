@@ -5,7 +5,6 @@ namespace RevitAddinManager.View.Control
     public class ExtendedTreeView : System.Windows.Controls.TreeView
     {
         public ExtendedTreeView()
-            : base()
         {
             SelectedItemChanged += ItemChange;
         }
