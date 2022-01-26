@@ -25,15 +25,13 @@ namespace RevitAddinManager.ViewModel
 
         public ObservableCollection<AddinModel> CommandItems
         {
-            get
+            get => _commandItems;
+            set
             {
-                if (_commandItems == null)
-                {
-                    _commandItems = new ObservableCollection<AddinModel>();
-                }
-                return _commandItems;
+                if (value == _commandItems) return;
+                _commandItems = value;
+                OnPropertyChanged();
             }
-            set => OnPropertyChanged(ref _commandItems, value);
         }
 
         private AddinModel _selectedCommandItem;
@@ -59,15 +57,13 @@ namespace RevitAddinManager.ViewModel
         private ObservableCollection<AddinModel> _applicationItems;
         public ObservableCollection<AddinModel> ApplicationItems
         {
-            get
+            get => _applicationItems;
+            set
             {
-                if (_applicationItems == null)
-                {
-                    _applicationItems = new ObservableCollection<AddinModel>();
-                }
-                return _applicationItems;
+                if (value == _applicationItems) return;
+                _applicationItems = value;
+                OnPropertyChanged();
             }
-            set => OnPropertyChanged(ref _applicationItems, value);
         }
 
         private AddinModel _selectedAppItem;
