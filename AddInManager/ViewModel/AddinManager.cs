@@ -293,7 +293,7 @@ namespace RevitAddinManager.ViewModel
             do
             {
                 num++;
-                var path = (num <= 0) ? (fileNameWithoutExt + ext) : (fileNameWithoutExt + num + ext);
+                var path = num <= 0 ? fileNameWithoutExt + ext : fileNameWithoutExt + num + ext;
                 text = Path.Combine(folder, path);
             }
             while (File.Exists(text));

@@ -39,11 +39,11 @@ namespace RevitAddinManager.View.Control
             var control = target as System.Windows.Controls.Control;
             if (control != null)
             {
-                if ((e.NewValue != null) && (e.OldValue == null))
+                if (e.NewValue != null && e.OldValue == null)
                 {
                     control.MouseDoubleClick += OnMouseDoubleClick;
                 }
-                else if ((e.NewValue == null) && (e.OldValue != null))
+                else if (e.NewValue == null && e.OldValue != null)
                 {
                     control.MouseDoubleClick -= OnMouseDoubleClick;
                 }
