@@ -160,10 +160,7 @@ namespace RevitAddinManager.ViewModel
         private bool _issTabCmdSelected;
         public bool IsTabCmdSelected
         {
-            get
-            {
-                return _issTabCmdSelected;
-            }
+            get => _issTabCmdSelected;
             set => OnPropertyChanged(ref _issTabCmdSelected, value);
         }
 
