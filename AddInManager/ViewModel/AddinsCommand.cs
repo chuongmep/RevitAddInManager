@@ -10,9 +10,9 @@ namespace RevitAddinManager.ViewModel
             int i = 1;
             while (i <= num)
             {
-                this.ReadExternalCommand(file, i++);
+                ReadExternalCommand(file, i++);
             }
-            base.SortAddin();
+            SortAddin();
         }
 
         private bool ReadExternalCommand(IniFile file, int nodeNumber)
@@ -25,7 +25,7 @@ namespace RevitAddinManager.ViewModel
             {
                 return false;
             }
-            base.AddItem(new AddinItem(AddinType.Command)
+            AddItem(new AddinItem(AddinType.Command)
             {
                 Name = name,
                 AssemblyPath = text,
@@ -38,19 +38,19 @@ namespace RevitAddinManager.ViewModel
         public void Save(IniFile file)
         {
             file.WriteSection("ExternalCommands");
-            file.Write("ExternalCommands", "ECCount", this.m_maxCount);
+            file.Write("ExternalCommands", "ECCount", m_maxCount);
             int num = 0;
-            foreach (Addin addin in this.m_addinDict.Values)
+            foreach (Addin addin in m_addinDict.Values)
             {
                 foreach (AddinItem addinItem in addin.ItemList)
                 {
-                    if (num >= this.m_maxCount)
+                    if (num >= m_maxCount)
                     {
                         break;
                     }
                     if (addinItem.Save)
                     {
-                        this.WriteExternalCommand(file, addinItem, ++num);
+                        WriteExternalCommand(file, addinItem, ++num);
                     }
                 }
             }

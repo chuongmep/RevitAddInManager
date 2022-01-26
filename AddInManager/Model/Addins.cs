@@ -9,20 +9,20 @@ namespace RevitAddinManager.Model
     {
         public SortedDictionary<string, Addin> AddinDict
         {
-            get => this.m_addinDict;
-            set => this.m_addinDict = value;
+            get => m_addinDict;
+            set => m_addinDict = value;
         }
 
-        public int Count => this.m_addinDict.Count;
+        public int Count => m_addinDict.Count;
 
         public Addins()
         {
-            this.m_addinDict = new SortedDictionary<string, Addin>();
+            m_addinDict = new SortedDictionary<string, Addin>();
         }
 
         public void SortAddin()
         {
-            foreach (Addin addin in this.m_addinDict.Values)
+            foreach (Addin addin in m_addinDict.Values)
             {
                 addin.SortAddinItem();
             }
@@ -32,19 +32,19 @@ namespace RevitAddinManager.Model
         public void AddAddIn(Addin addin)
         {
             string fileName = Path.GetFileName(addin.FilePath);
-            if (this.m_addinDict.ContainsKey(fileName))
+            if (m_addinDict.ContainsKey(fileName))
             {
-                this.m_addinDict.Remove(fileName);
+                m_addinDict.Remove(fileName);
             }
-            this.m_addinDict[fileName] = addin;
+            m_addinDict[fileName] = addin;
         }
 
         public bool RemoveAddIn(Addin addin)
         {
             string fileName = Path.GetFileName(addin.FilePath);
-            if (this.m_addinDict.ContainsKey(fileName))
+            if (m_addinDict.ContainsKey(fileName))
             {
-                this.m_addinDict.Remove(fileName);
+                m_addinDict.Remove(fileName);
                 return true;
             }
             return false;
@@ -54,11 +54,11 @@ namespace RevitAddinManager.Model
         {
 
             string assemblyName = item.AssemblyName;
-            if (!this.m_addinDict.ContainsKey(assemblyName))
+            if (!m_addinDict.ContainsKey(assemblyName))
             {
-                this.m_addinDict[assemblyName] = new Addin(item.AssemblyPath);
+                m_addinDict[assemblyName] = new Addin(item.AssemblyPath);
             }
-            this.m_addinDict[assemblyName].ItemList.Add(item);
+            m_addinDict[assemblyName].ItemList.Add(item);
 
         }
 
@@ -135,7 +135,7 @@ namespace RevitAddinManager.Model
                 }
                 catch (Exception e)
                 {
-                    throw new System.ArgumentException(e.ToString());
+                    throw new ArgumentException(e.ToString());
                 }
                 IL_1A7:;
             }

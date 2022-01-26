@@ -200,10 +200,10 @@ namespace RevitAddinManager.ViewModel
         public AddInManagerViewModel(ExternalCommandData data)
         {
             AssemLoader = new AssemLoader();
-            this.MAddinManagerBase = AddinManagerBase.Instance;
-            CommandItems = FreshTreeItems(false, this.MAddinManagerBase.AddinManager.Commands);
-            ApplicationItems = FreshTreeItems(false, this.MAddinManagerBase.AddinManager.Applications);
-            this.ExternalCommandData = data;
+            MAddinManagerBase = AddinManagerBase.Instance;
+            CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+            ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
+            ExternalCommandData = data;
             FreshItemStartupClick(false);
         }
 
@@ -260,8 +260,8 @@ namespace RevitAddinManager.ViewModel
             {
                 if (SelectedCommandItem?.IsParentTree == false)
                 {
-                    this.MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
-                    this.MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
+                    MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
+                    MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
                     CheckCountSelected(CommandItems, out int result);
                     if (result > 0)
                     {
@@ -327,19 +327,19 @@ namespace RevitAddinManager.ViewModel
             switch (addinType)
             {
                 case AddinType.Command:
-                    this.IsTabCmdSelected = true;
-                    this.FrmAddInManager.TabCommand.Focus();
+                    IsTabCmdSelected = true;
+                    FrmAddInManager.TabCommand.Focus();
                     break;
                 case AddinType.Application:
-                    this.IsTabAppSelected = true;
-                    this.FrmAddInManager.TabApp.Focus();
+                    IsTabAppSelected = true;
+                    FrmAddInManager.TabApp.Focus();
                     break;
                 case AddinType.Mixed:
                     break;
                 default:
-                    throw new System.ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
             }
-            this.MAddinManagerBase.AddinManager.SaveToAimIni();
+            MAddinManagerBase.AddinManager.SaveToAimIni();
             CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
             ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
 
@@ -355,14 +355,14 @@ namespace RevitAddinManager.ViewModel
                     {
                         if (parent.IsInitiallySelected)
                         {
-                            this.MAddinManagerBase.ActiveCmd = parent.Addin;
-                            this.MAddinManagerBase.ActiveCmdItem = parent.AddinItem;
-                            if (this.MAddinManagerBase.ActiveCmd != null)
+                            MAddinManagerBase.ActiveCmd = parent.Addin;
+                            MAddinManagerBase.ActiveCmdItem = parent.AddinItem;
+                            if (MAddinManagerBase.ActiveCmd != null)
                             {
-                                this.MAddinManagerBase.AddinManager.Commands.RemoveAddIn(this.MAddinManagerBase.ActiveCmd);
+                                MAddinManagerBase.AddinManager.Commands.RemoveAddIn(MAddinManagerBase.ActiveCmd);
                             }
-                            this.MAddinManagerBase.ActiveCmd = null;
-                            this.MAddinManagerBase.ActiveCmdItem = null;
+                            MAddinManagerBase.ActiveCmd = null;
+                            MAddinManagerBase.ActiveCmdItem = null;
                             CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                             return;
                         }
@@ -371,17 +371,17 @@ namespace RevitAddinManager.ViewModel
                             if (addinChild.IsInitiallySelected)
                             {
                                 //Set Value to run for add-in command
-                                this.MAddinManagerBase.ActiveCmd = parent.Addin;
-                                this.MAddinManagerBase.ActiveCmdItem = addinChild.AddinItem;
+                                MAddinManagerBase.ActiveCmd = parent.Addin;
+                                MAddinManagerBase.ActiveCmdItem = addinChild.AddinItem;
                             }
                         }
                     }
 
-                    if (this.MAddinManagerBase.ActiveCmdItem != null)
+                    if (MAddinManagerBase.ActiveCmdItem != null)
                     {
-                        this.MAddinManagerBase.ActiveCmd.RemoveItem(this.MAddinManagerBase.ActiveCmdItem);
-                        this.MAddinManagerBase.ActiveCmd = null;
-                        this.MAddinManagerBase.ActiveCmdItem = null;
+                        MAddinManagerBase.ActiveCmd.RemoveItem(MAddinManagerBase.ActiveCmdItem);
+                        MAddinManagerBase.ActiveCmd = null;
+                        MAddinManagerBase.ActiveCmdItem = null;
                     }
                     CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                 }
@@ -391,14 +391,14 @@ namespace RevitAddinManager.ViewModel
                     {
                         if (parent.IsInitiallySelected)
                         {
-                            this.MAddinManagerBase.ActiveApp = parent.Addin;
-                            this.MAddinManagerBase.ActiveAppItem = parent.AddinItem;
-                            if (this.MAddinManagerBase.ActiveApp != null)
+                            MAddinManagerBase.ActiveApp = parent.Addin;
+                            MAddinManagerBase.ActiveAppItem = parent.AddinItem;
+                            if (MAddinManagerBase.ActiveApp != null)
                             {
-                                this.MAddinManagerBase.AddinManager.Applications.RemoveAddIn(this.MAddinManagerBase.ActiveApp);
+                                MAddinManagerBase.AddinManager.Applications.RemoveAddIn(MAddinManagerBase.ActiveApp);
                             }
-                            this.MAddinManagerBase.ActiveApp = null;
-                            this.MAddinManagerBase.ActiveAppItem = null;
+                            MAddinManagerBase.ActiveApp = null;
+                            MAddinManagerBase.ActiveAppItem = null;
                             ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
                             return;
                         }
@@ -407,22 +407,22 @@ namespace RevitAddinManager.ViewModel
                             if (addinChild.IsInitiallySelected)
                             {
                                 //Set Value to run for add-in app
-                                this.MAddinManagerBase.ActiveApp = parent.Addin;
-                                this.MAddinManagerBase.ActiveAppItem = addinChild.AddinItem;
+                                MAddinManagerBase.ActiveApp = parent.Addin;
+                                MAddinManagerBase.ActiveAppItem = addinChild.AddinItem;
                             }
                         }
                     }
 
-                    if (this.MAddinManagerBase.ActiveAppItem != null)
+                    if (MAddinManagerBase.ActiveAppItem != null)
                     {
-                        this.MAddinManagerBase.ActiveApp.RemoveItem(this.MAddinManagerBase.ActiveAppItem);
-                        this.MAddinManagerBase.ActiveApp = null;
-                        this.MAddinManagerBase.ActiveAppItem = null;
+                        MAddinManagerBase.ActiveApp.RemoveItem(MAddinManagerBase.ActiveAppItem);
+                        MAddinManagerBase.ActiveApp = null;
+                        MAddinManagerBase.ActiveAppItem = null;
                     }
                     ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
                 }
                 //Save All SetTings
-                this.MAddinManagerBase.AddinManager.SaveToAimIni();
+                MAddinManagerBase.AddinManager.SaveToAimIni();
 
             }
             catch (Exception e)
@@ -437,7 +437,7 @@ namespace RevitAddinManager.ViewModel
             if (DialogResult == DialogResult.Yes)
             {
 
-                if (!this.MAddinManagerBase.AddinManager.HasItemsToSave())
+                if (!MAddinManagerBase.AddinManager.HasItemsToSave())
                 {
                     MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
@@ -638,7 +638,7 @@ namespace RevitAddinManager.ViewModel
                         return;
                     }
                     foreach (string s in filePaths)
-                        System.Diagnostics.Process.Start("explorer.exe", "/select, " + s);
+                        Process.Start("explorer.exe", "/select, " + s);
                 }
             }
             else
@@ -669,7 +669,7 @@ namespace RevitAddinManager.ViewModel
             RevitAddin revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
             if (revitAddin != null && File.Exists(revitAddin.FilePath))
             {
-                System.Diagnostics.Process.Start("explorer.exe", "/select, " + revitAddin.FilePath);
+                Process.Start("explorer.exe", "/select, " + revitAddin.FilePath);
             }
             else
             {

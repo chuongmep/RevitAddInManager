@@ -35,7 +35,7 @@ namespace RevitAddinManager.Model
             catch (UnauthorizedAccessException e)
             {
                 //TODO : Resource.NeedAdmin : Access Denied
-                throw new System.ArgumentException(Resource.NeedAdmin, e);
+                throw new ArgumentException(Resource.NeedAdmin, e);
             }
         }
         private bool RenamePath()
@@ -56,7 +56,7 @@ namespace RevitAddinManager.Model
                     newFilePath = Path.Combine(dir, newName);
                     break;
                 default:
-                    throw new System.ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
             }
             if(File.Exists(newFilePath))File.Delete(newFilePath);
             if (FilePath != null)

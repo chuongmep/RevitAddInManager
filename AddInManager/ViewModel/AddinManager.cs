@@ -7,31 +7,31 @@ namespace RevitAddinManager.ViewModel
 {
     public class AddinManager
     {
-        public AddinsApplication Applications => this._mApplications;
-        public int AppCount => this._mApplications.Count;
-        public AddinsCommand Commands => this._mCommands;
-        public int CmdCount => this._mCommands.Count;
+        public AddinsApplication Applications => _mApplications;
+        public int AppCount => _mApplications.Count;
+        public AddinsCommand Commands => _mCommands;
+        public int CmdCount => _mCommands.Count;
 
 
         public AddinManager()
         {
-            this._mCommands = new AddinsCommand();
-            this._mApplications = new AddinsApplication();
-            this.GetIniFilePaths();
-            this.ReadAddinsFromAimIni();
+            _mCommands = new AddinsCommand();
+            _mApplications = new AddinsApplication();
+            GetIniFilePaths();
+            ReadAddinsFromAimIni();
         }
 
 
         public IniFile AimIniFile
         {
-            get => this._mAimIniFile;
-            set => this._mAimIniFile = value;
+            get => _mAimIniFile;
+            set => _mAimIniFile = value;
         }
 
         public IniFile RevitIniFile
         {
-            get => this._mRevitIniFile;
-            set => this._mRevitIniFile = value;
+            get => _mRevitIniFile;
+            set => _mRevitIniFile = value;
         }
 
         private void GetIniFilePaths()
@@ -39,24 +39,24 @@ namespace RevitAddinManager.ViewModel
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string path = Path.Combine(folderPath, Resource.AppName);
             string filePath = Path.Combine(path, DefaultSetting.AimInternalName);
-            this._mAimIniFile = new IniFile(filePath);
+            _mAimIniFile = new IniFile(filePath);
             Process currentProcess = Process.GetCurrentProcess();
             string fileName = currentProcess.MainModule.FileName;
             string filePath2 = fileName.Replace(".exe", ".ini");
-            this._mRevitIniFile = new IniFile(filePath2);
+            _mRevitIniFile = new IniFile(filePath2);
         }
 
         public void ReadAddinsFromAimIni()
         {
-            this._mCommands.ReadItems(this._mAimIniFile);
-            this._mApplications.ReadItems(this._mAimIniFile);
+            _mCommands.ReadItems(_mAimIniFile);
+            _mApplications.ReadItems(_mAimIniFile);
         }
 
         public void RemoveAddin(Addin addin)
         {
-            if (!this._mCommands.RemoveAddIn(addin))
+            if (!_mCommands.RemoveAddIn(addin))
             {
-                this._mApplications.RemoveAddIn(addin);
+                _mApplications.RemoveAddIn(addin);
             }
         }
 
@@ -76,8 +76,8 @@ namespace RevitAddinManager.ViewModel
                 assemLoader.HookAssemblyResolve();
 
                 Assembly assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
-                list = this._mCommands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
-                list2 = this._mApplications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
+                list = _mCommands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
+                list2 = _mApplications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
             }
             catch (Exception e)
             {
@@ -90,13 +90,13 @@ namespace RevitAddinManager.ViewModel
             if (list != null && list.Count > 0)
             {
                 Addin addin = new Addin(filePath, list);
-                this._mCommands.AddAddIn(addin);
+                _mCommands.AddAddIn(addin);
                 addinType |= AddinType.Command;
             }
             if (list2 != null && list2.Count > 0)
             {
                 Addin addin2 = new Addin(filePath, list2);
-                this._mApplications.AddAddIn(addin2);
+                _mApplications.AddAddIn(addin2);
                 addinType |= AddinType.Application;
             }
             return addinType;
@@ -104,22 +104,22 @@ namespace RevitAddinManager.ViewModel
 
         public void SaveToRevitIni()
         {
-            if (!File.Exists(this._mRevitIniFile.FilePath))
+            if (!File.Exists(_mRevitIniFile.FilePath))
             {
-                throw new System.IO.FileNotFoundException("can't find the revit.ini file from: " + this._mRevitIniFile.FilePath);
+                throw new FileNotFoundException("can't find the revit.ini file from: " + _mRevitIniFile.FilePath);
             }
-            this._mCommands.Save(this._mRevitIniFile);
-            this._mApplications.Save(this._mRevitIniFile);
+            _mCommands.Save(_mRevitIniFile);
+            _mApplications.Save(_mRevitIniFile);
         }
 
         public void SaveToLocal()
         {
-            this.SaveToLocalManifest();
+            SaveToLocalManifest();
         }
 
         public void SaveToLocalRevitIni()
         {
-            foreach (KeyValuePair<string, Addin> keyValuePair in this._mCommands.AddinDict)
+            foreach (KeyValuePair<string, Addin> keyValuePair in _mCommands.AddinDict)
             {
                 string key = keyValuePair.Key;
                 Addin value = keyValuePair.Value;
@@ -131,9 +131,9 @@ namespace RevitAddinManager.ViewModel
                 }
                 IniFile file = new IniFile(Path.Combine(directoryName, DefaultSetting.IniName));
                 value.SaveToLocalIni(file);
-                if (this._mApplications.AddinDict.ContainsKey(key))
+                if (_mApplications.AddinDict.ContainsKey(key))
                 {
-                    Addin addin = this._mApplications.AddinDict[key];
+                    Addin addin = _mApplications.AddinDict[key];
                     addin.SaveToLocalIni(file);
                 }
             }
@@ -141,25 +141,25 @@ namespace RevitAddinManager.ViewModel
 
         public void SaveToAimIni()
         {
-            if (!File.Exists(this.AimIniFile.FilePath))
+            if (!File.Exists(AimIniFile.FilePath))
             {
-                new FileInfo(this.AimIniFile.FilePath).Create();
-                FileUtils.SetWriteable(this.AimIniFile.FilePath);
+                new FileInfo(AimIniFile.FilePath).Create();
+                FileUtils.SetWriteable(AimIniFile.FilePath);
             }
-            this._mCommands.Save(this._mAimIniFile);
-            this._mApplications.Save(this._mAimIniFile);
+            _mCommands.Save(_mAimIniFile);
+            _mApplications.Save(_mAimIniFile);
         }
 
         public bool HasItemsToSave()
         {
-            foreach (Addin addin in this._mCommands.AddinDict.Values)
+            foreach (Addin addin in _mCommands.AddinDict.Values)
             {
                 if (addin.Save)
                 {
                     return true;
                 }
             }
-            foreach (Addin addin2 in this._mApplications.AddinDict.Values)
+            foreach (Addin addin2 in _mApplications.AddinDict.Values)
             {
                 if (addin2.Save)
                 {
@@ -211,7 +211,7 @@ namespace RevitAddinManager.ViewModel
             }
             foreach (string folder in folders)
             {
-                string filePath = this.GetProperFilePath(folder, DefaultSetting.FileName, DefaultSetting.FormatExAddin);
+                string filePath = GetProperFilePath(folder, DefaultSetting.FileName, DefaultSetting.FormatExAddin);
                 manifestFile.SaveAs(filePath);
                 filePaths.Add(filePath);
             }
@@ -223,7 +223,7 @@ namespace RevitAddinManager.ViewModel
         {
             Dictionary<string, Addin> dictionary = new Dictionary<string, Addin>();
             Dictionary<string, Addin> dictionary2 = new Dictionary<string, Addin>();
-            foreach (KeyValuePair<string, Addin> keyValuePair in this._mCommands.AddinDict)
+            foreach (KeyValuePair<string, Addin> keyValuePair in _mCommands.AddinDict)
             {
                 string key = keyValuePair.Key;
                 Addin value = keyValuePair.Value;
@@ -238,9 +238,9 @@ namespace RevitAddinManager.ViewModel
                         manifestFile.Commands.Add(addinItem);
                     }
                 }
-                if (this._mApplications.AddinDict.ContainsKey(key))
+                if (_mApplications.AddinDict.ContainsKey(key))
                 {
-                    Addin addin = this._mApplications.AddinDict[key];
+                    Addin addin = _mApplications.AddinDict[key];
                     foreach (AddinItem addinItem2 in addin.ItemList)
                     {
                         if (addinItem2.Save)
@@ -248,11 +248,11 @@ namespace RevitAddinManager.ViewModel
                             manifestFile.Applications.Add(addinItem2);
                         }
                     }
-                    dictionary.Add(key, this._mApplications.AddinDict[key]);
+                    dictionary.Add(key, _mApplications.AddinDict[key]);
                 }
                 manifestFile.SaveAs(filePath);
             }
-            foreach (KeyValuePair<string, Addin> keyValuePair2 in this._mApplications.AddinDict)
+            foreach (KeyValuePair<string, Addin> keyValuePair2 in _mApplications.AddinDict)
             {
                 string key2 = keyValuePair2.Key;
                 Addin value2 = keyValuePair2.Value;
@@ -269,9 +269,9 @@ namespace RevitAddinManager.ViewModel
                             manifestFile2.Applications.Add(addinItem3);
                         }
                     }
-                    if (this._mCommands.AddinDict.ContainsKey(key2))
+                    if (_mCommands.AddinDict.ContainsKey(key2))
                     {
-                        Addin addin2 = this._mCommands.AddinDict[key2];
+                        Addin addin2 = _mCommands.AddinDict[key2];
                         foreach (AddinItem addinItem4 in addin2.ItemList)
                         {
                             if (addinItem4.Save)
@@ -279,7 +279,7 @@ namespace RevitAddinManager.ViewModel
                                 manifestFile2.Commands.Add(addinItem4);
                             }
                         }
-                        dictionary2.Add(key2, this._mCommands.AddinDict[key2]);
+                        dictionary2.Add(key2, _mCommands.AddinDict[key2]);
                     }
                     manifestFile2.SaveAs(filePath2);
                 }

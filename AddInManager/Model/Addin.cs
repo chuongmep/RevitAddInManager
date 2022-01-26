@@ -7,51 +7,51 @@ namespace RevitAddinManager.Model
     {
         public List<AddinItem> ItemList
         {
-            get => this._mItemList;
-            set => this._mItemList = value;
+            get => _mItemList;
+            set => _mItemList = value;
         }
 
         public string FilePath
         {
-            get => this._FilePath;
-            set => this._FilePath = value;
+            get => _FilePath;
+            set => _FilePath = value;
         }
 
         public bool Save
         {
-            get => this._mSave;
-            set => this._mSave = value;
+            get => _mSave;
+            set => _mSave = value;
         }
 
         public bool Hidden
         {
-            get => this._mHidden;
-            set => this._mHidden = value;
+            get => _mHidden;
+            set => _mHidden = value;
         }
 
         public Addin(string filePath)
         {
-            this._mItemList = new List<AddinItem>();
-            this._FilePath = filePath;
-            this._mSave = true;
+            _mItemList = new List<AddinItem>();
+            _FilePath = filePath;
+            _mSave = true;
         }
 
         public Addin(string filePath, List<AddinItem> itemList)
         {
-            this._mItemList = itemList;
-            this._FilePath = filePath;
-            this.SortAddinItem();
-            this._mSave = true;
+            _mItemList = itemList;
+            _FilePath = filePath;
+            SortAddinItem();
+            _mSave = true;
         }
 
         public void SortAddinItem()
         {
-            this._mItemList.Sort(new AddinItemComparer());
+            _mItemList.Sort(new AddinItemComparer());
         }
         public void RemoveItem(AddinItem item)
         {
-            this._mItemList.Remove(item);
-            if (this._mItemList.Count == 0)
+            _mItemList.Remove(item);
+            if (_mItemList.Count == 0)
             {
                 AddinManagerBase.Instance.AddinManager.RemoveAddin(this);
             }
@@ -59,21 +59,21 @@ namespace RevitAddinManager.Model
 
         public void SaveToLocalIni(IniFile file)
         {
-            if (this._mItemList == null || this._mItemList.Count == 0)
+            if (_mItemList == null || _mItemList.Count == 0)
             {
                 return;
             }
-            AddinType addinType = this._mItemList[0].AddinType;
+            AddinType addinType = _mItemList[0].AddinType;
             if (addinType == AddinType.Command)
             {
                 file.WriteSection("ExternalCommands");
                 file.Write("ExternalCommands", "ECCount", 0);
                 int num = 0;
-                foreach (AddinItem addinItem in this._mItemList)
+                foreach (AddinItem addinItem in _mItemList)
                 {
                     if (addinItem.Save)
                     {
-                        this.WriteExternalCommand(file, addinItem, ++num);
+                        WriteExternalCommand(file, addinItem, ++num);
                     }
                 }
                 file.Write("ExternalCommands", "ECCount", num);
@@ -82,9 +82,9 @@ namespace RevitAddinManager.Model
             file.WriteSection("ExternalApplications");
             file.Write("ExternalApplications", "EACount", 0);
             int num2 = 0;
-            foreach (AddinItem item in this._mItemList)
+            foreach (AddinItem item in _mItemList)
             {
-                this.WriteExternalApplication(file, item, ++num2);
+                WriteExternalApplication(file, item, ++num2);
             }
             file.Write("ExternalApplications", "EACount", num2);
         }
@@ -105,20 +105,20 @@ namespace RevitAddinManager.Model
 
         public void SaveToLocalManifest()
         {
-            if (this._mItemList == null || this._mItemList.Count == 0)
+            if (_mItemList == null || _mItemList.Count == 0)
             {
                 return;
             }
-            AddinType addinType = this._mItemList[0].AddinType;
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(this._FilePath);
+            AddinType addinType = _mItemList[0].AddinType;
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_FilePath);
             ManifestFile manifestFile = new ManifestFile(fileNameWithoutExtension + DefaultSetting.FormatExAddin);
             if (addinType == AddinType.Application)
             {
-                manifestFile.Applications = this._mItemList;
+                manifestFile.Applications = _mItemList;
             }
             else if (addinType == AddinType.Command)
             {
-                manifestFile.Commands = this._mItemList;
+                manifestFile.Commands = _mItemList;
             }
             manifestFile.Save();
         }

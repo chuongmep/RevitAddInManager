@@ -7,7 +7,7 @@ namespace RevitAddinManager.View.Control
         public ExtendedTreeView()
             : base()
         {
-            this.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(ItemChange);
+            SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(ItemChange);
         }
 
         void ItemChange(object sender, RoutedPropertyChangedEventArgs<object> e)

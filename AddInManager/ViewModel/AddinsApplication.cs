@@ -10,10 +10,10 @@ namespace RevitAddinManager.ViewModel
             int i = 1;
             while (i <= num)
             {
-                this.ReadExternalApplication(file, i++);
+                ReadExternalApplication(file, i++);
             }
 
-            base.SortAddin();
+            SortAddin();
         }
 
         private bool ReadExternalApplication(IniFile file, int nodeNumber)
@@ -25,7 +25,7 @@ namespace RevitAddinManager.ViewModel
                 return false;
             }
 
-            base.AddItem(new AddinItem(AddinType.Application)
+            AddItem(new AddinItem(AddinType.Application)
             {
                 Name = string.Empty,
                 AssemblyPath = text2,
@@ -37,20 +37,20 @@ namespace RevitAddinManager.ViewModel
         public void Save(IniFile file)
         {
             file.WriteSection("ExternalApplications");
-            file.Write("ExternalApplications", "EACount", this.m_maxCount);
+            file.Write("ExternalApplications", "EACount", m_maxCount);
             int num = 0;
-            foreach (Addin addin in this.m_addinDict.Values)
+            foreach (Addin addin in m_addinDict.Values)
             {
                 foreach (AddinItem addinItem in addin.ItemList)
                 {
-                    if (num >= this.m_maxCount)
+                    if (num >= m_maxCount)
                     {
                         break;
                     }
 
                     if (addinItem.Save)
                     {
-                        this.WriteExternalApplication(file, addinItem, ++num);
+                        WriteExternalApplication(file, addinItem, ++num);
                     }
                 }
             }

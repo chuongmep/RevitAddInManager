@@ -11,7 +11,7 @@ namespace RevitAddinManager.Model
 
         public static string CreateTempFolder(string prefix)
         {
-            string folderPath = Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string tempPath = Path.Combine(folderPath, "Temp");
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(tempPath, DefaultSetting.TempFolderName));
             if (!directoryInfo.Exists)
@@ -66,7 +66,7 @@ namespace RevitAddinManager.Model
                 }
                 using (new FileInfo(filePath).Create())
                 {
-                    FileUtils.SetWriteable(filePath);
+                    SetWriteable(filePath);
                 }
             }
             catch (Exception)
@@ -115,7 +115,7 @@ namespace RevitAddinManager.Model
                 {
                     string fileName = Path.GetFileName(text);
                     string text2 = Path.Combine(destFolder, fileName);
-                    bool flag = FileUtils.CopyFile(text, text2);
+                    bool flag = CopyFile(text, text2);
                     if (flag)
                     {
                         FileInfo item = new FileInfo(text2);
@@ -125,16 +125,16 @@ namespace RevitAddinManager.Model
             }
             else
             {
-                long folderSize = FileUtils.GetFolderSize(directoryName);
+                long folderSize = GetFolderSize(directoryName);
                 if (folderSize > 50L)
                 {
                     switch (FolderTooBigDialog.Show(directoryName, folderSize))
                     {
                         case DialogResult.Yes:
-                            FileUtils.CopyDirectory(directoryName, destFolder, allCopiedFiles);
+                            CopyDirectory(directoryName, destFolder, allCopiedFiles);
                             break;
                         case DialogResult.No:
-                            FileUtils.CopyFileToFolder(sourceFilePath, destFolder, true, allCopiedFiles);
+                            CopyFileToFolder(sourceFilePath, destFolder, true, allCopiedFiles);
                             break;
                         default:
                             return null;
@@ -142,7 +142,7 @@ namespace RevitAddinManager.Model
                 }
                 else
                 {
-                    FileUtils.CopyDirectory(directoryName, destFolder, allCopiedFiles);
+                    CopyDirectory(directoryName, destFolder, allCopiedFiles);
                 }
             }
             string text3 = Path.Combine(destFolder, Path.GetFileName(sourceFilePath));
@@ -205,7 +205,7 @@ namespace RevitAddinManager.Model
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(text3));
                     }
-                    if (FileUtils.CopyFile(text2, text3))
+                    if (CopyFile(text2, text3))
                     {
                         allCopiedFiles.Add(new FileInfo(text3));
                     }
@@ -229,7 +229,7 @@ namespace RevitAddinManager.Model
                 }
                 else
                 {
-                    num += FileUtils.GetFolderSize(fileSystemInfo.FullName);
+                    num += GetFolderSize(fileSystemInfo.FullName);
                 }
             }
             return num / 1024L / 1024L;

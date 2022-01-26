@@ -13,8 +13,8 @@ namespace RevitAddinManager.View
         public FrmAddInManager(AddInManagerViewModel vm)
         {
             InitializeComponent();
-            this.DataContext = vm;
-            this.viewModel = vm;
+            DataContext = vm;
+            viewModel = vm;
             vm.FrmAddInManager = this;
         }
 

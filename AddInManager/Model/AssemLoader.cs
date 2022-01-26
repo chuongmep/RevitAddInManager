@@ -11,45 +11,45 @@ namespace RevitAddinManager.Model
     {
         public string OriginalFolder
         {
-            get => this._mOriginalFolder;
-            set => this._mOriginalFolder = value;
+            get => _mOriginalFolder;
+            set => _mOriginalFolder = value;
         }
 
         public string TempFolder
         {
-            get => this._mTempFolder;
-            set => this._mTempFolder = value;
+            get => _mTempFolder;
+            set => _mTempFolder = value;
         }
 
 
         public AssemLoader()
         {
-            this._mTempFolder = string.Empty;
-            this._mRefedFolders = new List<string>();
-            this._mCopiedFiles = new Dictionary<string, DateTime>();
+            _mTempFolder = string.Empty;
+            _mRefedFolders = new List<string>();
+            _mCopiedFiles = new Dictionary<string, DateTime>();
         }
 
 
         public void CopyGeneratedFilesBack()
         {
-            string[] files = Directory.GetFiles(this._mTempFolder, "*.*", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(_mTempFolder, "*.*", SearchOption.AllDirectories);
             foreach (string text in files)
             {
-                if (this._mCopiedFiles.ContainsKey(text))
+                if (_mCopiedFiles.ContainsKey(text))
                 {
-                    DateTime t = this._mCopiedFiles[text];
+                    DateTime t = _mCopiedFiles[text];
                     FileInfo fileInfo = new FileInfo(text);
                     if (fileInfo.LastWriteTime > t)
                     {
-                        string str = text.Remove(0, this._mTempFolder.Length);
-                        string destinationFilename = this._mOriginalFolder + str;
+                        string str = text.Remove(0, _mTempFolder.Length);
+                        string destinationFilename = _mOriginalFolder + str;
                         FileUtils.CopyFile(text, destinationFilename);
                     }
                 }
                 else
                 {
-                    string str2 = text.Remove(0, this._mTempFolder.Length);
-                    string destinationFilename2 = this._mOriginalFolder + str2;
+                    string str2 = text.Remove(0, _mTempFolder.Length);
+                    string destinationFilename2 = _mOriginalFolder + str2;
                     FileUtils.CopyFile(text, destinationFilename2);
                 }
             }
@@ -57,12 +57,12 @@ namespace RevitAddinManager.Model
 
         public void HookAssemblyResolve()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += this.CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         public void UnhookAssemblyResolve()
         {
-            AppDomain.CurrentDomain.AssemblyResolve -= this.CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
         }
 
         public Assembly LoadAddinsToTempFolder(string originalFilePath, bool parsingOnly)
@@ -71,8 +71,8 @@ namespace RevitAddinManager.Model
             {
                 return null;
             }
-            this._mParsingOnly = parsingOnly;
-            this._mOriginalFolder = Path.GetDirectoryName(originalFilePath);
+            _mParsingOnly = parsingOnly;
+            _mOriginalFolder = Path.GetDirectoryName(originalFilePath);
             StringBuilder stringBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(originalFilePath));
             if (parsingOnly)
             {
@@ -82,10 +82,10 @@ namespace RevitAddinManager.Model
             {
                 stringBuilder.Append("-Executing-");
             }
-            this._mTempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
-            Assembly assembly = this.CopyAndLoadAddin(originalFilePath, parsingOnly);
+            _mTempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
+            Assembly assembly = CopyAndLoadAddin(originalFilePath, parsingOnly);
 
-            if (null == assembly || !this.IsAPIReferenced(assembly))
+            if (null == assembly || !IsAPIReferenced(assembly))
             {
                 return null;
             }
@@ -96,25 +96,25 @@ namespace RevitAddinManager.Model
         private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
         {
             string text = string.Empty;
-            if (!FileUtils.FileExistsInFolder(srcFilePath, this._mTempFolder))
+            if (!FileUtils.FileExistsInFolder(srcFilePath, _mTempFolder))
             {
                 string directoryName = Path.GetDirectoryName(srcFilePath);
-                if (!this._mRefedFolders.Contains(directoryName))
+                if (!_mRefedFolders.Contains(directoryName))
                 {
-                    this._mRefedFolders.Add(directoryName);
+                    _mRefedFolders.Add(directoryName);
                 }
                 List<FileInfo> list = new List<FileInfo>();
-                text = FileUtils.CopyFileToFolder(srcFilePath, this._mTempFolder, onlyCopyRelated, list);
+                text = FileUtils.CopyFileToFolder(srcFilePath, _mTempFolder, onlyCopyRelated, list);
                 if (string.IsNullOrEmpty(text))
                 {
                     return null;
                 }
                 foreach (FileInfo fileInfo in list)
                 {
-                    this._mCopiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTime);
+                    _mCopiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTime);
                 }
             }
-            return this.LoadAddin(text);
+            return LoadAddin(text);
         }
 
         private Assembly LoadAddin(string filePath)
@@ -137,14 +137,14 @@ namespace RevitAddinManager.Model
         {
             Assembly result;
             new AssemblyName(args.Name);
-            string text = this.SearchAssemblyFileInTempFolder(args.Name);
+            string text = SearchAssemblyFileInTempFolder(args.Name);
             if (File.Exists(text))
             {
-                result = this.LoadAddin(text);
+                result = LoadAddin(text);
             }
             else
             {
-                text = this.SearchAssemblyFileInOriginalFolders(args.Name);
+                text = SearchAssemblyFileInOriginalFolders(args.Name);
                 if (string.IsNullOrEmpty(text))
                 {
                     string[] array = args.Name.Split(new char[]
@@ -159,12 +159,12 @@ namespace RevitAddinManager.Model
                         {
                             text2 = text2.Substring(0, text2.Length - ".resources".Length);
                         }
-                        text = this.SearchAssemblyFileInTempFolder(text2);
+                        text = SearchAssemblyFileInTempFolder(text2);
                         if (File.Exists(text))
                         {
-                            return this.LoadAddin(text);
+                            return LoadAddin(text);
                         }
-                        text = this.SearchAssemblyFileInOriginalFolders(text2);
+                        text = SearchAssemblyFileInOriginalFolders(text2);
                     }
                 }
                 if (string.IsNullOrEmpty(text))
@@ -177,7 +177,7 @@ namespace RevitAddinManager.Model
                     }
                     text = loader.resultPath;
                 }
-                result = this.CopyAndLoadAddin(text, true);
+                result = CopyAndLoadAddin(text, true);
             }
 
             return result;
@@ -197,7 +197,7 @@ namespace RevitAddinManager.Model
                 string str = assemName.Substring(0, assemName.IndexOf(','));
                 foreach (string str2 in array)
                 {
-                    text = this._mTempFolder + "\\" + str + str2;
+                    text = _mTempFolder + "\\" + str + str2;
 
                     if (File.Exists(text))
                     {
@@ -207,7 +207,7 @@ namespace RevitAddinManager.Model
             }
             catch (Exception e)
             {
-                throw new System.ArgumentException(e.ToString());
+                throw new ArgumentException(e.ToString());
             }
             return String.Empty;
         }
@@ -224,7 +224,7 @@ namespace RevitAddinManager.Model
             string text2 = assemName.Substring(0, assemName.IndexOf(','));
             foreach (string str in array)
             {
-                text = AssemLoader._mDotnetDir + "\\" + text2 + str;
+                text = _mDotnetDir + "\\" + text2 + str;
                 if (File.Exists(text))
                 {
                     return text;
@@ -232,7 +232,7 @@ namespace RevitAddinManager.Model
             }
             foreach (string str2 in array)
             {
-                foreach (string str3 in this._mRefedFolders)
+                foreach (string str3 in _mRefedFolders)
                 {
                     text = str3 + "\\" + text2 + str2;
                     if (File.Exists(text))
@@ -258,7 +258,7 @@ namespace RevitAddinManager.Model
             }
             catch (Exception e)
             {
-                throw new System.ArgumentException(e.ToString());
+                throw new ArgumentException(e.ToString());
             }
 
             try
@@ -267,12 +267,12 @@ namespace RevitAddinManager.Model
                 if (num != -1)
                 {
                     assemName = "System.XML" + assemName.Substring(num + "XMLSerializers".Length);
-                    return this.SearchAssemblyFileInOriginalFolders(assemName);
+                    return SearchAssemblyFileInOriginalFolders(assemName);
                 }
             }
             catch (Exception e)
             {
-                throw new System.ArgumentException(e.ToString());
+                throw new ArgumentException(e.ToString());
             }
             return null;
         }
@@ -280,20 +280,20 @@ namespace RevitAddinManager.Model
         private bool IsAPIReferenced(Assembly assembly)
         {
             string AssRevitName = "RevitAPI";
-            if (string.IsNullOrEmpty(this._mRevitApiAssemblyFullName))
+            if (string.IsNullOrEmpty(_mRevitApiAssemblyFullName))
             {
                 foreach (Assembly assembly2 in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     if (String.Compare(assembly2.GetName().Name,AssRevitName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        this._mRevitApiAssemblyFullName = assembly2.GetName().Name;
+                        _mRevitApiAssemblyFullName = assembly2.GetName().Name;
                         break;
                     }
                 }
             }
             foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
             {
-                if (this._mRevitApiAssemblyFullName == assemblyName.Name)
+                if (_mRevitApiAssemblyFullName == assemblyName.Name)
                 {
                     return true;
                 }

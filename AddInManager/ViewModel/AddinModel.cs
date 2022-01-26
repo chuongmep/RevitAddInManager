@@ -10,13 +10,13 @@ namespace RevitAddinManager.ViewModel
 
         public AddinModel(string name)
         {
-            this.Name = name;
-            this.Children = new List<AddinModel>();
+            Name = name;
+            Children = new List<AddinModel>();
         }
 
         public void Initialize()
         {
-            foreach (AddinModel child in this.Children)
+            foreach (AddinModel child in Children)
             {
                 child._parent = this;
                 child.Initialize();
@@ -33,7 +33,7 @@ namespace RevitAddinManager.ViewModel
         public bool? IsChecked
         {
             get => _isChecked;
-            set => this.SetIsChecked(value, true, true);
+            set => SetIsChecked(value, true, true);
         }
 
         public bool? IsParentTree { get; set; } = false;
@@ -46,20 +46,20 @@ namespace RevitAddinManager.ViewModel
             _isChecked = value;
 
             if (updateChildren && _isChecked.HasValue)
-                this.Children.ForEach(c => c.SetIsChecked(_isChecked, true, false));
+                Children.ForEach(c => c.SetIsChecked(_isChecked, true, false));
 
             if (updateParent && _parent != null)
                 _parent.VerifyCheckState();
 
-            this.OnPropertyChanged(nameof(IsChecked));
+            OnPropertyChanged(nameof(IsChecked));
         }
 
         void VerifyCheckState()
         {
             bool? state = null;
-            for (int i = 0; i < this.Children.Count; ++i)
+            for (int i = 0; i < Children.Count; ++i)
             {
-                bool? current = this.Children[i].IsChecked;
+                bool? current = Children[i].IsChecked;
                 if (i == 0)
                 {
                     state = current;
@@ -70,7 +70,7 @@ namespace RevitAddinManager.ViewModel
                     break;
                 }
             }
-            this.SetIsChecked(state, false, true);
+            SetIsChecked(state, false, true);
         }
     }
 }

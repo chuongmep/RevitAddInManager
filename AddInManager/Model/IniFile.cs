@@ -6,40 +6,40 @@ namespace RevitAddinManager.Model
 {
     public class IniFile
     {
-        public string FilePath => this._mFilePath;
+        public string FilePath => _mFilePath;
 
         public IniFile(string filePath)
         {
-            this._mFilePath = filePath;
-            if (!File.Exists(this._mFilePath))
+            _mFilePath = filePath;
+            if (!File.Exists(_mFilePath))
             {
-                FileUtils.CreateFile(this._mFilePath);
-                FileUtils.SetWriteable(this._mFilePath);
+                FileUtils.CreateFile(_mFilePath);
+                FileUtils.SetWriteable(_mFilePath);
             }
         }
 
         public void WriteSection(string iniSection)
         {
-            IniFile.WritePrivateProfileSection(iniSection, null, this._mFilePath);
+            WritePrivateProfileSection(iniSection, null, _mFilePath);
         }
 
 
         public void Write(string iniSection, string iniKey, object iniValue)
         {
-            IniFile.WritePrivateProfileString(iniSection, iniKey, iniValue.ToString(), this._mFilePath);
+            WritePrivateProfileString(iniSection, iniKey, iniValue.ToString(), _mFilePath);
         }
 
 
         public string ReadString(string iniSection, string iniKey)
         {
             StringBuilder stringBuilder = new StringBuilder(255);
-            IniFile.GetPrivateProfileString(iniSection, iniKey, "", stringBuilder, 255, this._mFilePath);
+            GetPrivateProfileString(iniSection, iniKey, "", stringBuilder, 255, _mFilePath);
             return stringBuilder.ToString();
         }
 
         public int ReadInt(string iniSection, string iniKey)
         {
-            return IniFile.GetPrivateProfileInt(iniSection, iniKey, 0, this._mFilePath);
+            return GetPrivateProfileInt(iniSection, iniKey, 0, _mFilePath);
         }
 
 

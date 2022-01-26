@@ -23,7 +23,7 @@ namespace RevitAddinManager.Model
                 case ImageType.Large:
                     return ToImageSource(bitmap).Resize(32);
                 default:
-                    throw new System.ArgumentOutOfRangeException(nameof(imageType), imageType, null);
+                    throw new ArgumentOutOfRangeException(nameof(imageType), imageType, null);
             }
         }
         public static BitmapImage ToImageSource(Bitmap bitmap)

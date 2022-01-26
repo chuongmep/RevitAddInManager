@@ -7,42 +7,42 @@ namespace RevitAddinManager.Model
     {
         public AddinItem(AddinType type)
         {
-            this.AddinType = type;
-            this.m_clientId = Guid.NewGuid();
-            this.ClientIdString = this.m_clientId.ToString();
-            this.m_assemblyPath = string.Empty;
-            this.AssemblyName = string.Empty;
-            this.FullClassName = string.Empty;
-            this.m_name = string.Empty;
-            this.Save = true;
-            this.VisibilityMode = VisibilityMode.AlwaysVisible;
+            AddinType = type;
+            m_clientId = Guid.NewGuid();
+            ClientIdString = m_clientId.ToString();
+            m_assemblyPath = string.Empty;
+            AssemblyName = string.Empty;
+            FullClassName = string.Empty;
+            m_name = string.Empty;
+            Save = true;
+            VisibilityMode = VisibilityMode.AlwaysVisible;
         }
 
         public AddinItem(string assemblyPath, Guid clientId, string fullClassName, AddinType type, TransactionMode? transactionMode, RegenerationOption? regenerationOption, JournalingMode? journalingMode)
         {
-            this.TransactionMode = transactionMode;
-            this.RegenerationMode = regenerationOption;
-            this.JournalingMode = journalingMode;
-            this.AddinType = type;
-            this.m_assemblyPath = assemblyPath;
-            this.AssemblyName = Path.GetFileName(this.m_assemblyPath);
-            this.m_clientId = clientId;
-            this.ClientIdString = clientId.ToString();
-            this.FullClassName = fullClassName;
+            TransactionMode = transactionMode;
+            RegenerationMode = regenerationOption;
+            JournalingMode = journalingMode;
+            AddinType = type;
+            m_assemblyPath = assemblyPath;
+            AssemblyName = Path.GetFileName(m_assemblyPath);
+            m_clientId = clientId;
+            ClientIdString = clientId.ToString();
+            FullClassName = fullClassName;
             int num = fullClassName.LastIndexOf(".");
-            this.m_name = fullClassName.Substring(num + 1);
-            this.Save = true;
-            this.VisibilityMode = VisibilityMode.AlwaysVisible;
+            m_name = fullClassName.Substring(num + 1);
+            Save = true;
+            VisibilityMode = VisibilityMode.AlwaysVisible;
         }
 
         public void SaveToManifest()
         {
-            ManifestFile manifestFile = new ManifestFile(this.m_name + DefaultSetting.FormatExAddin);
-            if (this.AddinType == AddinType.Application)
+            ManifestFile manifestFile = new ManifestFile(m_name + DefaultSetting.FormatExAddin);
+            if (AddinType == AddinType.Application)
             {
                 manifestFile.Applications.Add(this);
             }
-            else if (this.AddinType == AddinType.Command)
+            else if (AddinType == AddinType.Command)
             {
                 manifestFile.Commands.Add(this);
             }
@@ -55,11 +55,11 @@ namespace RevitAddinManager.Model
 
         public string AssemblyPath
         {
-            get => this.m_assemblyPath;
+            get => m_assemblyPath;
             set
             {
-                this.m_assemblyPath = value;
-                this.AssemblyName = Path.GetFileName(this.m_assemblyPath);
+                m_assemblyPath = value;
+                AssemblyName = Path.GetFileName(m_assemblyPath);
             }
         }
 
@@ -69,11 +69,11 @@ namespace RevitAddinManager.Model
 
         public Guid ClientId
         {
-            get => this.m_clientId;
+            get => m_clientId;
             set
             {
-                this.m_clientId = value;
-                this.ClientIdString = this.m_clientId.ToString();
+                m_clientId = value;
+                ClientIdString = m_clientId.ToString();
             }
         }
 
@@ -88,20 +88,20 @@ namespace RevitAddinManager.Model
         {
             get
             {
-                if (string.IsNullOrEmpty(this.m_name))
+                if (string.IsNullOrEmpty(m_name))
                 {
                     return "External Tool";
                 }
-                return this.m_name;
+                return m_name;
             }
             set
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    this.m_name = value;
+                    m_name = value;
                     return;
                 }
-                this.m_name = "External Tool";
+                m_name = "External Tool";
             }
         }
 
@@ -109,20 +109,20 @@ namespace RevitAddinManager.Model
         {
             get
             {
-                if (string.IsNullOrEmpty(this.m_description))
+                if (string.IsNullOrEmpty(m_description))
                 {
                     return String.Empty;
                 }
-                return this.m_description;
+                return m_description;
             }
             set
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.m_description = String.Empty;
+                    m_description = String.Empty;
                     return;
                 }
-                this.m_description = value;
+                m_description = value;
             }
         }
 
@@ -146,7 +146,7 @@ namespace RevitAddinManager.Model
 
         public override string ToString()
         {
-            return this.m_name;
+            return m_name;
         }
 
 

@@ -18,7 +18,7 @@ namespace RevitAddinManager.Model
 
         protected virtual void OnPropertyChanged(string propertyName, object oldValue, object newValue)
         {
-            this.OnPropertyChanged(propertyName);
+            OnPropertyChanged(propertyName);
         }
 
         #region Can Optimize
@@ -46,18 +46,18 @@ namespace RevitAddinManager.Model
         /// True if the property was set.
         /// </returns>
         /// <remarks>This method uses the CallerMemberNameAttribute to determine the property name.</remarks>
-        protected bool SetValue<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = "")
+        protected bool SetValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             // ReSharper disable once RedundantNameQualifier
             if (object.Equals(field, value))
             {
                 return false;
             }
-            this.VerifyProperty(propertyName);
+            VerifyProperty(propertyName);
             //// this.OnPropertyChanging(propertyName, field, value);
             T oldValue = field;
             field = value;
-            this.OnPropertyChanged(propertyName, oldValue, value);
+            OnPropertyChanged(propertyName, oldValue, value);
             return true;
         }
 
@@ -68,7 +68,7 @@ namespace RevitAddinManager.Model
         [Conditional("DEBUG")]
         private void VerifyProperty(string propertyName)
         {
-            var type = this.GetType();
+            var type = GetType();
 
             // Look for a public property with the specified name.
             var propertyInfo = type.GetTypeInfo().GetDeclaredProperty(propertyName);

@@ -25,7 +25,7 @@ namespace RevitAddinManager.View.Control
         {
             if (execute == null)
             {
-                throw new System.ArgumentNullException("Execute");
+                throw new ArgumentNullException("Execute");
             }
             m_execute = execute;
             m_canExecute = canExecute;
