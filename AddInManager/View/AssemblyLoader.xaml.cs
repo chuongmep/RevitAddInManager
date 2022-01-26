@@ -4,71 +4,70 @@ using System.Text;
 using System.Windows;
 using MessageBox = System.Windows.Forms.MessageBox;
 
-namespace RevitAddinManager.View
+namespace RevitAddinManager.View;
+
+/// <summary>
+/// Interaction logic for AssemblyLoader.xaml
+/// </summary>
+public partial class AssemblyLoader : Window
 {
-    /// <summary>
-    /// Interaction logic for AssemblyLoader.xaml
-    /// </summary>
-    public partial class AssemblyLoader : Window
+    private string m_assemName;
+    public string resultPath;
+    private bool isFound;
+    public AssemblyLoader(string assemName)
     {
-        private string m_assemName;
-        public string resultPath;
-        private bool isFound;
-        public AssemblyLoader(string assemName)
+        InitializeComponent();
+        m_assemName = assemName;
+        tbxAssembly.Content = assemName;
+    }
+    private void ShowWarning()
+    {
+        var text = new StringBuilder("The dependent assembly can't be loaded: \"").Append(m_assemName).AppendFormat("\".", new object[0]).ToString();
+        MessageBox.Show(text, "Add-in Manager Internal", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+    }
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(m_assemName))
         {
-            InitializeComponent();
-            m_assemName = assemName;
-            tbxAssembly.Content = assemName;
+            MessageBox.Show("Assembly null",Resource.AppName);
+            return;
         }
-        private void ShowWarning()
+        using (var openFileDialog = new OpenFileDialog())
         {
-            var text = new StringBuilder("The dependent assembly can't be loaded: \"").Append(m_assemName).AppendFormat("\".", new object[0]).ToString();
-            MessageBox.Show(text, "Add-in Manager Internal", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(m_assemName))
-            {
-                MessageBox.Show("Assembly null",Resource.AppName);
-                return;
-            }
-            using (var openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Assembly files (*.dll;*.exe,*.mcl)|*.dll;*.exe;*.mcl|All files|*.*||";
-                var str = m_assemName.Substring(0, m_assemName.IndexOf(','));
-                openFileDialog.FileName = str + ".*";
-                if (openFileDialog.ShowDialog()==System.Windows.Forms.DialogResult.OK)
-                {
-                    ShowWarning();
-                }
-                TbxAssemPath.Text = openFileDialog.FileName;
-            }
-        }
-
-        private void OKButtonClick(object sender, RoutedEventArgs e)
-        {
-            if (File.Exists(TbxAssemPath.Text))
-            {
-                resultPath = TbxAssemPath.Text;
-                isFound = true;
-            }
-            else
+            openFileDialog.Filter = "Assembly files (*.dll;*.exe,*.mcl)|*.dll;*.exe;*.mcl|All files|*.*||";
+            var str = m_assemName.Substring(0, m_assemName.IndexOf(','));
+            openFileDialog.FileName = str + ".*";
+            if (openFileDialog.ShowDialog()==System.Windows.Forms.DialogResult.OK)
             {
                 ShowWarning();
             }
-            Close();
+            TbxAssemPath.Text = openFileDialog.FileName;
         }
+    }
 
-        private void AssemblyLoader_OnClosing(object sender, CancelEventArgs e)
+    private void OKButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (File.Exists(TbxAssemPath.Text))
         {
-            if (!isFound)
-            {
-                ShowWarning();
-            }
+            resultPath = TbxAssemPath.Text;
+            isFound = true;
         }
-        private void Close_OnClick(object sender, RoutedEventArgs e)
+        else
         {
-            Close();
+            ShowWarning();
         }
+        Close();
+    }
+
+    private void AssemblyLoader_OnClosing(object sender, CancelEventArgs e)
+    {
+        if (!isFound)
+        {
+            ShowWarning();
+        }
+    }
+    private void Close_OnClick(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }
