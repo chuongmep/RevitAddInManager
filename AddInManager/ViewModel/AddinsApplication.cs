@@ -6,8 +6,8 @@ namespace RevitAddinManager.ViewModel
     {
         public void ReadItems(IniFile file)
         {
-            int num = file.ReadInt("ExternalApplications", "EACount");
-            int i = 1;
+            var num = file.ReadInt("ExternalApplications", "EACount");
+            var i = 1;
             while (i <= num)
             {
                 ReadExternalApplication(file, i++);
@@ -18,8 +18,8 @@ namespace RevitAddinManager.ViewModel
 
         private bool ReadExternalApplication(IniFile file, int nodeNumber)
         {
-            string text = file.ReadString("ExternalApplications", "EAClassName" + nodeNumber);
-            string text2 = file.ReadString("ExternalApplications", "EAAssembly" + nodeNumber);
+            var text = file.ReadString("ExternalApplications", "EAClassName" + nodeNumber);
+            var text2 = file.ReadString("ExternalApplications", "EAAssembly" + nodeNumber);
             if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(text2))
             {
                 return false;
@@ -38,10 +38,10 @@ namespace RevitAddinManager.ViewModel
         {
             file.WriteSection("ExternalApplications");
             file.Write("ExternalApplications", "EACount", m_maxCount);
-            int num = 0;
-            foreach (Addin addin in m_addinDict.Values)
+            var num = 0;
+            foreach (var addin in m_addinDict.Values)
             {
-                foreach (AddinItem addinItem in addin.ItemList)
+                foreach (var addinItem in addin.ItemList)
                 {
                     if (num >= m_maxCount)
                     {

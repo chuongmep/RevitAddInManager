@@ -63,13 +63,13 @@ namespace RevitAddinManager.Model
             {
                 return;
             }
-            AddinType addinType = _mItemList[0].AddinType;
+            var addinType = _mItemList[0].AddinType;
             if (addinType == AddinType.Command)
             {
                 file.WriteSection("ExternalCommands");
                 file.Write("ExternalCommands", "ECCount", 0);
-                int num = 0;
-                foreach (AddinItem addinItem in _mItemList)
+                var num = 0;
+                foreach (var addinItem in _mItemList)
                 {
                     if (addinItem.Save)
                     {
@@ -81,8 +81,8 @@ namespace RevitAddinManager.Model
             }
             file.WriteSection("ExternalApplications");
             file.Write("ExternalApplications", "EACount", 0);
-            int num2 = 0;
-            foreach (AddinItem item in _mItemList)
+            var num2 = 0;
+            foreach (var item in _mItemList)
             {
                 WriteExternalApplication(file, item, ++num2);
             }
@@ -109,9 +109,9 @@ namespace RevitAddinManager.Model
             {
                 return;
             }
-            AddinType addinType = _mItemList[0].AddinType;
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_FilePath);
-            ManifestFile manifestFile = new ManifestFile(fileNameWithoutExtension + DefaultSetting.FormatExAddin);
+            var addinType = _mItemList[0].AddinType;
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_FilePath);
+            var manifestFile = new ManifestFile(fileNameWithoutExtension + DefaultSetting.FormatExAddin);
             if (addinType == AddinType.Application)
             {
                 manifestFile.Applications = _mItemList;

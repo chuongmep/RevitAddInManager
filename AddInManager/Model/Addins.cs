@@ -22,7 +22,7 @@ namespace RevitAddinManager.Model
 
         public void SortAddin()
         {
-            foreach (Addin addin in m_addinDict.Values)
+            foreach (var addin in m_addinDict.Values)
             {
                 addin.SortAddinItem();
             }
@@ -31,7 +31,7 @@ namespace RevitAddinManager.Model
 
         public void AddAddIn(Addin addin)
         {
-            string fileName = Path.GetFileName(addin.FilePath);
+            var fileName = Path.GetFileName(addin.FilePath);
             if (m_addinDict.ContainsKey(fileName))
             {
                 m_addinDict.Remove(fileName);
@@ -41,7 +41,7 @@ namespace RevitAddinManager.Model
 
         public bool RemoveAddIn(Addin addin)
         {
-            string fileName = Path.GetFileName(addin.FilePath);
+            var fileName = Path.GetFileName(addin.FilePath);
             if (m_addinDict.ContainsKey(fileName))
             {
                 m_addinDict.Remove(fileName);
@@ -53,7 +53,7 @@ namespace RevitAddinManager.Model
         public void AddItem(AddinItem item)
         {
 
-            string assemblyName = item.AssemblyName;
+            var assemblyName = item.AssemblyName;
             if (!m_addinDict.ContainsKey(assemblyName))
             {
                 m_addinDict[assemblyName] = new Addin(item.AssemblyPath);
@@ -64,7 +64,7 @@ namespace RevitAddinManager.Model
 
         public List<AddinItem> LoadItems(Assembly assembly, string fullName, string originalAssemblyFilePath, AddinType type)
         {
-            List<AddinItem> list = new List<AddinItem>();
+            var list = new List<AddinItem>();
             Type[] array = null;
             try
             {
@@ -78,15 +78,15 @@ namespace RevitAddinManager.Model
                     return list;
                 }
             }
-            List<string> list2 = new List<string>();
-            List<string> list3 = new List<string>();
-            foreach (Type type2 in array)
+            var list2 = new List<string>();
+            var list3 = new List<string>();
+            foreach (var type2 in array)
             {
                 try
                 {
                     if (!(null == type2) && !type2.IsAbstract)
                     {
-                        Type @interface = type2.GetInterface(fullName);
+                        var @interface = type2.GetInterface(fullName);
                         if (null != @interface)
                         {
                             TransactionMode? transactionMode = null;
@@ -94,22 +94,22 @@ namespace RevitAddinManager.Model
                             JournalingMode? journalingMode = null;
                             if (type != AddinType.Application)
                             {
-                                Attribute[] customAttributes = Attribute.GetCustomAttributes(type2, false);
-                                foreach (Attribute attribute in customAttributes)
+                                var customAttributes = Attribute.GetCustomAttributes(type2, false);
+                                foreach (var attribute in customAttributes)
                                 {
                                     if (attribute is RegenerationAttribute)
                                     {
-                                        RegenerationAttribute regenerationAttribute = (RegenerationAttribute)attribute;
+                                        var regenerationAttribute = (RegenerationAttribute)attribute;
                                         regenerationOption = new RegenerationOption?(regenerationAttribute.Option);
                                     }
                                     if (attribute is TransactionAttribute)
                                     {
-                                        TransactionAttribute transactionAttribute = (TransactionAttribute)attribute;
+                                        var transactionAttribute = (TransactionAttribute)attribute;
                                         transactionMode = new TransactionMode?(transactionAttribute.Mode);
                                     }
                                     if (attribute is JournalingAttribute)
                                     {
-                                        JournalingAttribute journalingAttribute = (JournalingAttribute)attribute;
+                                        var journalingAttribute = (JournalingAttribute)attribute;
                                         journalingMode = new JournalingMode?(journalingAttribute.Mode);
                                     }
                                     if (transactionMode != null && regenerationOption != null)
@@ -128,7 +128,7 @@ namespace RevitAddinManager.Model
                                     goto IL_1A7;
                                 }
                             }
-                            AddinItem item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), type2.FullName, type, transactionMode, regenerationOption, journalingMode);
+                            var item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), type2.FullName, type, transactionMode, regenerationOption, journalingMode);
                             list.Add(item);
                         }
                     }
@@ -141,9 +141,9 @@ namespace RevitAddinManager.Model
             }
             if (list2.Count > 0)
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine("The following Classes: ");
-                foreach (string value in list2)
+                foreach (var value in list2)
                 {
                     stringBuilder.AppendLine(value);
                 }
@@ -152,9 +152,9 @@ namespace RevitAddinManager.Model
             }
             if (list3.Count > 0)
             {
-                StringBuilder stringBuilder2 = new StringBuilder();
+                var stringBuilder2 = new StringBuilder();
                 stringBuilder2.AppendLine("The TransactionMode set to Classes: ");
-                foreach (string value2 in list3)
+                foreach (var value2 in list3)
                 {
                     stringBuilder2.AppendLine(value2);
                 }

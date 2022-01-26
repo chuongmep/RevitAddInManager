@@ -15,16 +15,16 @@ namespace RevitAddinManager.Command
     {
         public Result ExecuteCommand(ExternalCommandData data, ref string message, ElementSet elements, bool faceless)
         {
-            AddInManagerViewModel vm = new AddInManagerViewModel(data);
+            var vm = new AddInManagerViewModel(data);
             if (_mActiveCmd != null && faceless)
             {
                 return RunActiveCommand(vm, data, ref message, elements);
             }
-            View.FrmAddInManager frmAddInManager = new View.FrmAddInManager(vm);
+            var frmAddInManager = new View.FrmAddInManager(vm);
             frmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            Process process = Process.GetCurrentProcess();
+            var process = Process.GetCurrentProcess();
             new WindowInteropHelper(frmAddInManager).Owner = process.MainWindowHandle;
-            bool? showDialog = frmAddInManager.ShowDialog();
+            var showDialog = frmAddInManager.ShowDialog();
             if (showDialog == false && ActiveCmd != null&& vm.IsRun)
             {
                 return RunActiveCommand(vm, data, ref message, elements);
@@ -41,12 +41,12 @@ namespace RevitAddinManager.Command
 
         private Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
         {
-            string filePath = _mActiveCmd.FilePath;
+            var filePath = _mActiveCmd.FilePath;
             Result result;
             try
             {
                 vm.AssemLoader.HookAssemblyResolve();
-                Assembly assembly = vm.AssemLoader.LoadAddinsToTempFolder(filePath, false);
+                var assembly = vm.AssemLoader.LoadAddinsToTempFolder(filePath, false);
                 if (null == assembly)
                 {
                     result = Result.Failed;
@@ -54,7 +54,7 @@ namespace RevitAddinManager.Command
                 else
                 {
                     _mActiveTempFolder = vm.AssemLoader.TempFolder;
-                    IExternalCommand externalCommand = assembly.CreateInstance(_mActiveCmdItem.FullClassName) as IExternalCommand;
+                    var externalCommand = assembly.CreateInstance(_mActiveCmdItem.FullClassName) as IExternalCommand;
                     if (externalCommand == null)
                     {
                         result = Result.Failed;

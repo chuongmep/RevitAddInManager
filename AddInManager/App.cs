@@ -19,9 +19,9 @@ namespace RevitAddinManager
         }
         private static void CreateRibbonPanel(UIControlledApplication application)
         {
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel("External Tools");
-            PulldownButtonData pulldownButtonData = new PulldownButtonData("Options", "Add-in Manager");
-            PulldownButton pulldownButton = (PulldownButton)ribbonPanel.AddItem(pulldownButtonData);
+            var ribbonPanel = application.CreateRibbonPanel("External Tools");
+            var pulldownButtonData = new PulldownButtonData("Options", "Add-in Manager");
+            var pulldownButton = (PulldownButton)ribbonPanel.AddItem(pulldownButtonData);
             pulldownButton.Image = ToImageSource(Resource.dev1, ImageType.Small);
             pulldownButton.LargeImage = ToImageSource(Resource.dev1, ImageType.Large);
             AddPushButton(pulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
@@ -31,7 +31,7 @@ namespace RevitAddinManager
 
         private static PushButton AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
         {
-            PushButtonData buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
+            var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
             return pullDownButton.AddPushButton(buttonData);
         }
 

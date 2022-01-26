@@ -55,7 +55,7 @@ namespace RevitAddinManager.Model
             }
             VerifyProperty(propertyName);
             //// this.OnPropertyChanging(propertyName, field, value);
-            T oldValue = field;
+            var oldValue = field;
             field = value;
             OnPropertyChanged(propertyName, oldValue, value);
             return true;

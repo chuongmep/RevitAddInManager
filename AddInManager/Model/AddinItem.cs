@@ -29,7 +29,7 @@ namespace RevitAddinManager.Model
             m_clientId = clientId;
             ClientIdString = clientId.ToString();
             FullClassName = fullClassName;
-            int num = fullClassName.LastIndexOf(".");
+            var num = fullClassName.LastIndexOf(".");
             m_name = fullClassName.Substring(num + 1);
             Save = true;
             VisibilityMode = VisibilityMode.AlwaysVisible;
@@ -37,7 +37,7 @@ namespace RevitAddinManager.Model
 
         public void SaveToManifest()
         {
-            ManifestFile manifestFile = new ManifestFile(m_name + DefaultSetting.FormatExAddin);
+            var manifestFile = new ManifestFile(m_name + DefaultSetting.FormatExAddin);
             if (AddinType == AddinType.Application)
             {
                 manifestFile.Applications.Add(this);

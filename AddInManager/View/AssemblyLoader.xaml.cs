@@ -22,7 +22,7 @@ namespace RevitAddinManager.View
         }
         private void ShowWarning()
         {
-            string text = new StringBuilder("The dependent assembly can't be loaded: \"").Append(m_assemName).AppendFormat("\".", new object[0]).ToString();
+            var text = new StringBuilder("The dependent assembly can't be loaded: \"").Append(m_assemName).AppendFormat("\".", new object[0]).ToString();
             MessageBox.Show(text, "Add-in Manager Internal", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -32,10 +32,10 @@ namespace RevitAddinManager.View
                 MessageBox.Show("Assembly null",Resource.AppName);
                 return;
             }
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "Assembly files (*.dll;*.exe,*.mcl)|*.dll;*.exe;*.mcl|All files|*.*||";
-                string str = m_assemName.Substring(0, m_assemName.IndexOf(','));
+                var str = m_assemName.Substring(0, m_assemName.IndexOf(','));
                 openFileDialog.FileName = str + ".*";
                 if (openFileDialog.ShowDialog()==System.Windows.Forms.DialogResult.OK)
                 {

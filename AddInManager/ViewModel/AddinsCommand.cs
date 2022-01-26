@@ -6,8 +6,8 @@ namespace RevitAddinManager.ViewModel
     {
         public void ReadItems(IniFile file)
         {
-            int num = file.ReadInt("ExternalCommands", "ECCount");
-            int i = 1;
+            var num = file.ReadInt("ExternalCommands", "ECCount");
+            var i = 1;
             while (i <= num)
             {
                 ReadExternalCommand(file, i++);
@@ -17,10 +17,10 @@ namespace RevitAddinManager.ViewModel
 
         private bool ReadExternalCommand(IniFile file, int nodeNumber)
         {
-            string name = file.ReadString("ExternalCommands", "ECName" + nodeNumber);
-            string text = file.ReadString("ExternalCommands", "ECAssembly" + nodeNumber);
-            string text2 = file.ReadString("ExternalCommands", "ECClassName" + nodeNumber);
-            string description = file.ReadString("ExternalCommands", "ECDescription" + nodeNumber);
+            var name = file.ReadString("ExternalCommands", "ECName" + nodeNumber);
+            var text = file.ReadString("ExternalCommands", "ECAssembly" + nodeNumber);
+            var text2 = file.ReadString("ExternalCommands", "ECClassName" + nodeNumber);
+            var description = file.ReadString("ExternalCommands", "ECDescription" + nodeNumber);
             if (string.IsNullOrEmpty(text2) || string.IsNullOrEmpty(text))
             {
                 return false;
@@ -39,10 +39,10 @@ namespace RevitAddinManager.ViewModel
         {
             file.WriteSection("ExternalCommands");
             file.Write("ExternalCommands", "ECCount", m_maxCount);
-            int num = 0;
-            foreach (Addin addin in m_addinDict.Values)
+            var num = 0;
+            foreach (var addin in m_addinDict.Values)
             {
-                foreach (AddinItem addinItem in addin.ItemList)
+                foreach (var addinItem in addin.ItemList)
                 {
                     if (num >= m_maxCount)
                     {

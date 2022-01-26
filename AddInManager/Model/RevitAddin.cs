@@ -41,8 +41,8 @@ namespace RevitAddinManager.Model
         private bool RenamePath()
         {
             if (!File.Exists(FilePath)) return false;
-            string dir = Path.GetDirectoryName(FilePath);
-            string FileName = Path.GetFileName(FilePath);
+            var dir = Path.GetDirectoryName(FilePath);
+            var FileName = Path.GetFileName(FilePath);
             string newFilePath;
             string newName;
             switch (State)

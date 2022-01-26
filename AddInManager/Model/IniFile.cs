@@ -32,7 +32,7 @@ namespace RevitAddinManager.Model
 
         public string ReadString(string iniSection, string iniKey)
         {
-            StringBuilder stringBuilder = new StringBuilder(255);
+            var stringBuilder = new StringBuilder(255);
             GetPrivateProfileString(iniSection, iniKey, "", stringBuilder, 255, _mFilePath);
             return stringBuilder.ToString();
         }

@@ -15,8 +15,8 @@ namespace RevitAddinManager.Model
         /// <returns></returns>
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
         {
-            ObservableCollection<T> newSource = new ObservableCollection<T>();
-            foreach (T t in source)
+            var newSource = new ObservableCollection<T>();
+            foreach (var t in source)
             {
                 newSource.Add(t);
             }

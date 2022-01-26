@@ -72,7 +72,7 @@ namespace RevitAddinManager.View.Control
 
             public void Execute(object parameter)
             {
-                Window myWin = parameter as Window;
+                var myWin = parameter as Window;
                 if (myWin != null) myWin.Close();
             }
         }

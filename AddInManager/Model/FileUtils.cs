@@ -11,14 +11,14 @@ namespace RevitAddinManager.Model
 
         public static string CreateTempFolder(string prefix)
         {
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string tempPath = Path.Combine(folderPath, "Temp");
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(tempPath, DefaultSetting.TempFolderName));
+            var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var tempPath = Path.Combine(folderPath, "Temp");
+            var directoryInfo = new DirectoryInfo(Path.Combine(tempPath, DefaultSetting.TempFolderName));
             if (!directoryInfo.Exists)
             {
                 directoryInfo.Create();
             }
-            foreach (DirectoryInfo directoryInfo2 in directoryInfo.GetDirectories())
+            foreach (var directoryInfo2 in directoryInfo.GetDirectories())
             {
                 try
                 {
@@ -29,9 +29,9 @@ namespace RevitAddinManager.Model
                     // ignored
                 }
             }
-            string str = $"{DateTime.Now:yyyyMMdd_HHmmss_ffff}";
-            string path = Path.Combine(directoryInfo.FullName, prefix + str);
-            DirectoryInfo directoryInfo3 = new DirectoryInfo(path);
+            var str = $"{DateTime.Now:yyyyMMdd_HHmmss_ffff}";
+            var path = Path.Combine(directoryInfo.FullName, prefix + str);
+            var directoryInfo3 = new DirectoryInfo(path);
             directoryInfo3.Create();
             return directoryInfo3.FullName;
         }
@@ -41,7 +41,7 @@ namespace RevitAddinManager.Model
         {
             if (File.Exists(fileName))
             {
-                FileAttributes fileAttributes = File.GetAttributes(fileName) & ~FileAttributes.ReadOnly;
+                var fileAttributes = File.GetAttributes(fileName) & ~FileAttributes.ReadOnly;
                 File.SetAttributes(fileName, fileAttributes);
             }
         }
@@ -59,7 +59,7 @@ namespace RevitAddinManager.Model
             }
             try
             {
-                string directoryName = Path.GetDirectoryName(filePath);
+                var directoryName = Path.GetDirectoryName(filePath);
                 if (!Directory.Exists(directoryName))
                 {
                     Directory.CreateDirectory(directoryName);
@@ -80,7 +80,7 @@ namespace RevitAddinManager.Model
         {
             if (File.Exists(fileName))
             {
-                FileAttributes fileAttributes = File.GetAttributes(fileName) & ~FileAttributes.ReadOnly;
+                var fileAttributes = File.GetAttributes(fileName) & ~FileAttributes.ReadOnly;
                 File.SetAttributes(fileName, fileAttributes);
                 try
                 {
@@ -95,7 +95,7 @@ namespace RevitAddinManager.Model
 
         public static bool FileExistsInFolder(string filePath, string destFolder)
         {
-            string path = Path.Combine(destFolder, Path.GetFileName(filePath));
+            var path = Path.Combine(destFolder, Path.GetFileName(filePath));
             return File.Exists(path);
         }
 
@@ -105,27 +105,27 @@ namespace RevitAddinManager.Model
             {
                 return null;
             }
-            string directoryName = Path.GetDirectoryName(sourceFilePath);
+            var directoryName = Path.GetDirectoryName(sourceFilePath);
             if (onlyCopyRelated)
             {
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFilePath);
-                string searchPattern = fileNameWithoutExtension + ".*";
-                string[] files = Directory.GetFiles(directoryName, searchPattern, SearchOption.TopDirectoryOnly);
-                foreach (string text in files)
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFilePath);
+                var searchPattern = fileNameWithoutExtension + ".*";
+                var files = Directory.GetFiles(directoryName, searchPattern, SearchOption.TopDirectoryOnly);
+                foreach (var text in files)
                 {
-                    string fileName = Path.GetFileName(text);
-                    string text2 = Path.Combine(destFolder, fileName);
-                    bool flag = CopyFile(text, text2);
+                    var fileName = Path.GetFileName(text);
+                    var text2 = Path.Combine(destFolder, fileName);
+                    var flag = CopyFile(text, text2);
                     if (flag)
                     {
-                        FileInfo item = new FileInfo(text2);
+                        var item = new FileInfo(text2);
                         allCopiedFiles.Add(item);
                     }
                 }
             }
             else
             {
-                long folderSize = GetFolderSize(directoryName);
+                var folderSize = GetFolderSize(directoryName);
                 if (folderSize > 50L)
                 {
                     switch (FolderTooBigDialog.Show(directoryName, folderSize))
@@ -145,7 +145,7 @@ namespace RevitAddinManager.Model
                     CopyDirectory(directoryName, destFolder, allCopiedFiles);
                 }
             }
-            string text3 = Path.Combine(destFolder, Path.GetFileName(sourceFilePath));
+            var text3 = Path.Combine(destFolder, Path.GetFileName(sourceFilePath));
             if (File.Exists(text3))
             {
                 return text3;
@@ -159,11 +159,11 @@ namespace RevitAddinManager.Model
             {
                 return false;
             }
-            FileAttributes fileAttributes = File.GetAttributes(sourceFilename) & ~FileAttributes.ReadOnly;
+            var fileAttributes = File.GetAttributes(sourceFilename) & ~FileAttributes.ReadOnly;
             File.SetAttributes(sourceFilename, fileAttributes);
             if (File.Exists(destinationFilename))
             {
-                FileAttributes fileAttributes2 = File.GetAttributes(destinationFilename) & ~FileAttributes.ReadOnly;
+                var fileAttributes2 = File.GetAttributes(destinationFilename) & ~FileAttributes.ReadOnly;
                 File.SetAttributes(destinationFilename, fileAttributes2);
                 File.Delete(destinationFilename);
             }
@@ -186,21 +186,21 @@ namespace RevitAddinManager.Model
         {
             try
             {
-                string[] directories = Directory.GetDirectories(sourceDir, "*.*", SearchOption.AllDirectories);
-                foreach (string text in directories)
+                var directories = Directory.GetDirectories(sourceDir, "*.*", SearchOption.AllDirectories);
+                foreach (var text in directories)
                 {
-                    string str = text.Replace(sourceDir, "");
-                    string path = desDir + str;
+                    var str = text.Replace(sourceDir, "");
+                    var path = desDir + str;
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
                     }
                 }
-                string[] files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories);
-                foreach (string text2 in files)
+                var files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories);
+                foreach (var text2 in files)
                 {
-                    string str2 = text2.Replace(sourceDir, "");
-                    string text3 = desDir + str2;
+                    var str2 = text2.Replace(sourceDir, "");
+                    var text3 = desDir + str2;
                     if (!Directory.Exists(Path.GetDirectoryName(text3)))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(text3));
@@ -219,9 +219,9 @@ namespace RevitAddinManager.Model
 
         public static long GetFolderSize(string folderPath)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
-            long num = 0L;
-            foreach (FileSystemInfo fileSystemInfo in directoryInfo.GetFileSystemInfos())
+            var directoryInfo = new DirectoryInfo(folderPath);
+            var num = 0L;
+            foreach (var fileSystemInfo in directoryInfo.GetFileSystemInfos())
             {
                 if (fileSystemInfo is FileInfo)
                 {

@@ -36,7 +36,7 @@ namespace RevitAddinManager.View.Control
 
         private static void CommandChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            System.Windows.Controls.Control control = target as System.Windows.Controls.Control;
+            var control = target as System.Windows.Controls.Control;
             if (control != null)
             {
                 if ((e.NewValue != null) && (e.OldValue == null))
@@ -52,9 +52,9 @@ namespace RevitAddinManager.View.Control
 
         private static void OnMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.Control control = sender as System.Windows.Controls.Control;
-            ICommand command = (ICommand)control.GetValue(CommandProperty);
-            object commandParameter = control.GetValue(CommandParameterProperty);
+            var control = sender as System.Windows.Controls.Control;
+            var command = (ICommand)control.GetValue(CommandProperty);
+            var commandParameter = control.GetValue(CommandParameterProperty);
             command.Execute(commandParameter);
         }
     }

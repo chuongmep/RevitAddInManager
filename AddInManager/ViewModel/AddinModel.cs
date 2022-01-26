@@ -16,7 +16,7 @@ namespace RevitAddinManager.ViewModel
 
         public void Initialize()
         {
-            foreach (AddinModel child in Children)
+            foreach (var child in Children)
             {
                 child._parent = this;
                 child.Initialize();
@@ -57,9 +57,9 @@ namespace RevitAddinManager.ViewModel
         void VerifyCheckState()
         {
             bool? state = null;
-            for (int i = 0; i < Children.Count; ++i)
+            for (var i = 0; i < Children.Count; ++i)
             {
-                bool? current = Children[i].IsChecked;
+                var current = Children[i].IsChecked;
                 if (i == 0)
                 {
                     state = current;

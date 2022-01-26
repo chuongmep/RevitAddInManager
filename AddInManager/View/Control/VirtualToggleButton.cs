@@ -42,10 +42,10 @@ namespace RevitAddinManager.View.Control
         /// </summary>
         private static void OnIsCheckedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            UIElement pseudobutton = d as UIElement;
+            var pseudobutton = d as UIElement;
             if (pseudobutton != null)
             {
-                Nullable<bool> newValue = (Nullable<bool>)e.NewValue;
+                var newValue = (Nullable<bool>)e.NewValue;
                 if (newValue == true)
                 {
                     RaiseCheckedEvent(pseudobutton);
@@ -129,7 +129,7 @@ namespace RevitAddinManager.View.Control
         /// </summary>
         private static void OnIsVirtualToggleButtonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            IInputElement element = d as IInputElement;
+            var element = d as IInputElement;
             if (element != null)
             {
                 if ((bool)e.NewValue)
@@ -161,7 +161,7 @@ namespace RevitAddinManager.View.Control
         {
             if (target == null) return null;
 
-            RoutedEventArgs args = new RoutedEventArgs();
+            var args = new RoutedEventArgs();
             args.RoutedEvent = ToggleButton.CheckedEvent;
             RaiseEvent(target, args);
             return args;
@@ -179,7 +179,7 @@ namespace RevitAddinManager.View.Control
         {
             if (target == null) return null;
 
-            RoutedEventArgs args = new RoutedEventArgs();
+            var args = new RoutedEventArgs();
             args.RoutedEvent = ToggleButton.UncheckedEvent;
             RaiseEvent(target, args);
             return args;
@@ -197,7 +197,7 @@ namespace RevitAddinManager.View.Control
         {
             if (target == null) return null;
 
-            RoutedEventArgs args = new RoutedEventArgs();
+            var args = new RoutedEventArgs();
             args.RoutedEvent = ToggleButton.IndeterminateEvent;
             RaiseEvent(target, args);
             return args;
@@ -238,7 +238,7 @@ namespace RevitAddinManager.View.Control
 
         private static void UpdateIsChecked(DependencyObject d)
         {
-            Nullable<bool> isChecked = GetIsChecked(d);
+            var isChecked = GetIsChecked(d);
             if (isChecked == true)
             {
                 SetIsChecked(d, GetIsThreeState(d) ? (Nullable<bool>)null : (Nullable<bool>)false);

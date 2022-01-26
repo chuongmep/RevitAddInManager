@@ -210,14 +210,14 @@ namespace RevitAddinManager.ViewModel
         public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
         {
             //Addins addins = this.MAddinManagerBase.AddinManager.Commands;
-            ObservableCollection<AddinModel> MainTrees = new ObservableCollection<AddinModel>();
-            foreach (KeyValuePair<string, Addin> keyValuePair in addins.AddinDict)
+            var MainTrees = new ObservableCollection<AddinModel>();
+            foreach (var keyValuePair in addins.AddinDict)
             {
-                Addin addin = keyValuePair.Value;
-                string title = keyValuePair.Key;
-                List<AddinItem> addinItemList = addin.ItemList;
-                List<AddinModel> addinModels = new List<AddinModel>();
-                foreach (AddinItem addinItem in addinItemList)
+                var addin = keyValuePair.Value;
+                var title = keyValuePair.Key;
+                var addinItemList = addin.ItemList;
+                var addinModels = new List<AddinModel>();
+                foreach (var addinItem in addinItemList)
                 {
                     if (isSearchText)
                     {
@@ -241,7 +241,7 @@ namespace RevitAddinManager.ViewModel
                         });
                     }
                 }
-                AddinModel root = new AddinModel(title)
+                var root = new AddinModel(title)
                 {
                     IsChecked = true,
                     Children = addinModels,
@@ -262,7 +262,7 @@ namespace RevitAddinManager.ViewModel
                 {
                     MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
                     MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
-                    CheckCountSelected(CommandItems, out int result);
+                    CheckCountSelected(CommandItems, out var result);
                     if (result > 0)
                     {
                         IsRun = true;
@@ -280,13 +280,13 @@ namespace RevitAddinManager.ViewModel
         private void OpenLcAssemblyCommandClick()
         {
             if (SelectedCommandItem == null) return;
-            string FilePath = SelectedCommandItem.AddinItem.AssemblyPath;
+            var FilePath = SelectedCommandItem.AddinItem.AssemblyPath;
             if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
         }
         private void OpenLcAssemblyAppClick()
         {
             if (SelectedAppItem == null) return;
-            string FilePath = SelectedAppItem.AddinItem.AssemblyPath;
+            var FilePath = SelectedAppItem.AddinItem.AssemblyPath;
             if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
         }
         void ExecuteAddinAppClick()
@@ -298,10 +298,10 @@ namespace RevitAddinManager.ViewModel
         void CheckCountSelected(ObservableCollection<AddinModel> addinModels, out int result)
         {
             result = 0;
-            foreach (AddinModel addinModel in addinModels)
+            foreach (var addinModel in addinModels)
             {
                 if (addinModel.IsInitiallySelected) result++;
-                foreach (AddinModel modelChild in addinModel.Children)
+                foreach (var modelChild in addinModel.Children)
                 {
                     if (modelChild.IsInitiallySelected) result++;
                 }
@@ -310,14 +310,14 @@ namespace RevitAddinManager.ViewModel
 
         void LoadCommandClick()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = @"assembly files (*.dll)|*.dll|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
-            string fileName = openFileDialog.FileName;
-            AddinType addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
+            var fileName = openFileDialog.FileName;
+            var addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
             if (addinType == AddinType.Invalid)
             {
                 MessageBox.Show(Resource.LoadInvalid);
@@ -351,7 +351,7 @@ namespace RevitAddinManager.ViewModel
                 //TODO: Check null Selected
                 if (IsTabCmdSelected)
                 {
-                    foreach (AddinModel parent in CommandItems)
+                    foreach (var parent in CommandItems)
                     {
                         if (parent.IsInitiallySelected)
                         {
@@ -366,7 +366,7 @@ namespace RevitAddinManager.ViewModel
                             CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
                             return;
                         }
-                        foreach (AddinModel addinChild in parent.Children)
+                        foreach (var addinChild in parent.Children)
                         {
                             if (addinChild.IsInitiallySelected)
                             {
@@ -387,7 +387,7 @@ namespace RevitAddinManager.ViewModel
                 }
                 if (IsTabAppSelected)
                 {
-                    foreach (AddinModel parent in ApplicationItems)
+                    foreach (var parent in ApplicationItems)
                     {
                         if (parent.IsInitiallySelected)
                         {
@@ -402,7 +402,7 @@ namespace RevitAddinManager.ViewModel
                             ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
                             return;
                         }
-                        foreach (AddinModel addinChild in parent.Children)
+                        foreach (var addinChild in parent.Children)
                         {
                             if (addinChild.IsInitiallySelected)
                             {
@@ -432,7 +432,7 @@ namespace RevitAddinManager.ViewModel
         }
         private void SaveCommandClick()
         {
-            DialogResult DialogResult = MessageBox.Show($@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
+            var DialogResult = MessageBox.Show($@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (DialogResult == DialogResult.Yes)
             {
@@ -450,7 +450,7 @@ namespace RevitAddinManager.ViewModel
         }
         private void FreshSearchClick()
         {
-            bool flag = string.IsNullOrEmpty(_searchText);
+            var flag = string.IsNullOrEmpty(_searchText);
             if (IsTabCmdSelected)
             {
                 if (flag)
@@ -488,18 +488,18 @@ namespace RevitAddinManager.ViewModel
             //Get All AddIn
             if (_addinStartup == null) _addinStartup = new ObservableCollection<RevitAddin>();
             _addinStartup.Clear();
-            string autodeskPath = "Autodesk\\Revit\\Addins";
-            string AdskPluginPath = "Autodesk\\ApplicationPlugins\\";
-            string version = ExternalCommandData.Application.Application.VersionNumber;
-            string roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string Folder1 = Path.Combine(roaming, autodeskPath, version);
-            string programdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string Folder2 = Path.Combine(programdata, autodeskPath, version);
-            string Folder3 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            var autodeskPath = "Autodesk\\Revit\\Addins";
+            var AdskPluginPath = "Autodesk\\ApplicationPlugins\\";
+            var version = ExternalCommandData.Application.Application.VersionNumber;
+            var roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var Folder1 = Path.Combine(roaming, autodeskPath, version);
+            var programdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            var Folder2 = Path.Combine(programdata, autodeskPath, version);
+            var Folder3 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 AdskPluginPath);
-            List<RevitAddin> revitAddins = GetAddinFromFolder(Folder1);
-            List<RevitAddin> addinsProgramData = GetAddinFromFolder(Folder2);
-            List<RevitAddin> addinsPlugins = GetAddinFromFolder(Folder3);
+            var revitAddins = GetAddinFromFolder(Folder1);
+            var addinsProgramData = GetAddinFromFolder(Folder2);
+            var addinsPlugins = GetAddinFromFolder(Folder3);
             revitAddins.ForEach(delegate (RevitAddin x)
             {
                 _addinStartup.Add(x);
@@ -519,11 +519,11 @@ namespace RevitAddinManager.ViewModel
 
         List<RevitAddin> GetAddinFromFolder(string folder)
         {
-            List<RevitAddin> revitAddins = new List<RevitAddin>();
-            string[] AddinFilePathsVisiable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
-            foreach (string AddinFilePath in AddinFilePathsVisiable)
+            var revitAddins = new List<RevitAddin>();
+            var AddinFilePathsVisiable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
+            foreach (var AddinFilePath in AddinFilePathsVisiable)
             {
-                RevitAddin revitAddin = new RevitAddin();
+                var revitAddin = new RevitAddin();
                 revitAddin.FilePath = AddinFilePath;
                 revitAddin.Name = Path.GetFileName(AddinFilePath);
                 revitAddin.NameNotEx =
@@ -531,12 +531,12 @@ namespace RevitAddinManager.ViewModel
                 revitAddin.State = VisibleModel.Enable;
                 revitAddins.Add(revitAddin);
             }
-            string[] AddinFilePathsDisable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatDisable)).ToArray();
-            foreach (string AddinFilePath in AddinFilePathsDisable)
+            var AddinFilePathsDisable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatDisable)).ToArray();
+            foreach (var AddinFilePath in AddinFilePathsDisable)
             {
                 //string checkFile = Path.GetFileName(AddinFilePath).Replace(DefaultSetting.FormatDisable, String.Empty);
                 //if(File.Exists(checkFile)) continue;
-                RevitAddin revitAddin = new RevitAddin();
+                var revitAddin = new RevitAddin();
                 revitAddin.FilePath = AddinFilePath;
                 revitAddin.Name = Path.GetFileName(AddinFilePath);
                 revitAddin.NameNotEx =
@@ -551,9 +551,9 @@ namespace RevitAddinManager.ViewModel
         [Obsolete("Remove In Feature")]
         void GetCommandAppInside(string AddinFilePath)
         {
-            List<RevitAddin> revitAddins = new List<RevitAddin>();
-            string XmlTagParent = "RevitAddIns";
-            XmlDocument doc = new XmlDocument();
+            var revitAddins = new List<RevitAddin>();
+            var XmlTagParent = "RevitAddIns";
+            var doc = new XmlDocument();
             doc.Load(AddinFilePath);
             foreach (XmlNode node in doc.ChildNodes)
             {
@@ -561,7 +561,7 @@ namespace RevitAddinManager.ViewModel
                 {
                     foreach (XmlNode addiNode in node.ChildNodes)
                     {
-                        RevitAddin revitAddin = new RevitAddin();
+                        var revitAddin = new RevitAddin();
                         foreach (XmlNode addin in addiNode.ChildNodes)
                         {
                             switch (addin.Name)
@@ -612,7 +612,7 @@ namespace RevitAddinManager.ViewModel
         }
         private void ClearCommandClick()
         {
-            string tempFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            var tempFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Temp", DefaultSetting.TempFolderName);
             if (Directory.Exists(tempFolder))
             {
@@ -622,28 +622,28 @@ namespace RevitAddinManager.ViewModel
         }
         private void ExploreCommandClick()
         {
-            string AdskPath = "Autodesk\\Revit\\Addins";
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            var AdskPath = "Autodesk\\Revit\\Addins";
+            var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             if (IsCurrentVersion)
             {
 
-                string folder = Path.Combine(folderPath, AdskPath,
+                var folder = Path.Combine(folderPath, AdskPath,
                     ExternalCommandData.Application.Application.VersionNumber);
                 if (Directory.Exists(folder))
                 {
-                    string[] filePaths = Directory.GetFiles(folder).Where(x => x.Contains(DefaultSetting.FileName)).ToArray();
+                    var filePaths = Directory.GetFiles(folder).Where(x => x.Contains(DefaultSetting.FileName)).ToArray();
                     if (filePaths.Length == 0)
                     {
                         System.Windows.MessageBox.Show(FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         return;
                     }
-                    foreach (string s in filePaths)
+                    foreach (var s in filePaths)
                         Process.Start("explorer.exe", "/select, " + s);
                 }
             }
             else
             {
-                string folder = Path.Combine(folderPath, AdskPath);
+                var folder = Path.Combine(folderPath, AdskPath);
                 if (Directory.Exists(folder))
                 {
                     Process.Start(folder);
@@ -654,7 +654,7 @@ namespace RevitAddinManager.ViewModel
 
         void EditAddinCommandClick()
         {
-            RevitAddin revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
+            var revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
             if (revitAddin != null && File.Exists(revitAddin.FilePath))
             {
                 Process.Start(revitAddin.FilePath);
@@ -666,7 +666,7 @@ namespace RevitAddinManager.ViewModel
         }
         private void OpenLocalAddinCommandClick()
         {
-            RevitAddin revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
+            var revitAddin = FrmAddInManager.DataGridStartup.SelectedItem as RevitAddin;
             if (revitAddin != null && File.Exists(revitAddin.FilePath))
             {
                 Process.Start("explorer.exe", "/select, " + revitAddin.FilePath);

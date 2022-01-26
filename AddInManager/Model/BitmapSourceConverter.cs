@@ -30,7 +30,7 @@ namespace RevitAddinManager.Model
         {
             var ms = new MemoryStream();
             bitmap.Save(ms, ImageFormat.Png);
-            BitmapImage image = new BitmapImage();
+            var image = new BitmapImage();
             image.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
             image.StreamSource = ms;
@@ -50,13 +50,13 @@ namespace RevitAddinManager.Model
 
         private static ImageSource Thumbnail(ImageSource source, int size)
         {
-            Rect rect = new Rect(0, 0, size, size);
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            var rect = new Rect(0, 0, size, size);
+            var drawingVisual = new DrawingVisual();
+            using (var drawingContext = drawingVisual.RenderOpen())
             {
                 drawingContext.DrawImage(source, rect);
             }
-            RenderTargetBitmap resizedImage = new RenderTargetBitmap((int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
+            var resizedImage = new RenderTargetBitmap((int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
             resizedImage.Render(drawingVisual);
 
             return resizedImage;

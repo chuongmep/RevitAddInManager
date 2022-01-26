@@ -19,7 +19,7 @@ namespace RevitAddinManager.Model
             m_fileName = fileName;
             if (string.IsNullOrEmpty(m_filePath))
             {
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
+                var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
                 m_filePath = Path.Combine(path, m_fileName);
             }
         }
@@ -33,7 +33,7 @@ namespace RevitAddinManager.Model
         {
             m_xmlDoc = new XmlDocument();
             m_xmlDoc.Load(m_filePath);
-            XmlElement documentElement = m_xmlDoc.DocumentElement;
+            var documentElement = m_xmlDoc.DocumentElement;
             if (!documentElement.Name.Equals(ROOT_NODE))
             {
 
@@ -45,14 +45,14 @@ namespace RevitAddinManager.Model
             }
             m_applications.Clear();
             m_commands.Clear();
-            foreach (object obj in documentElement.ChildNodes)
+            foreach (var obj in documentElement.ChildNodes)
             {
-                XmlNode xmlNode = (XmlNode)obj;
+                var xmlNode = (XmlNode)obj;
                 if (!xmlNode.Name.Equals(ADDIN_NODE) || xmlNode.Attributes.Count != 1)
                 {
                     throw new ArgumentException(INCORRECT_NODE);
                 }
-                XmlAttribute xmlAttribute = xmlNode.Attributes[0];
+                var xmlAttribute = xmlNode.Attributes[0];
                 if (xmlAttribute.Value.Equals(APPLICATION_NODE))
                 {
                     ParseExternalApplications(xmlNode);
@@ -83,12 +83,12 @@ namespace RevitAddinManager.Model
             {
                 throw new ArgumentException(FILENAME_INCORRECT_WARNING + filePath);
             }
-            string directoryName = Path.GetDirectoryName(filePath);
+            var directoryName = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directoryName))
             {
                 Directory.CreateDirectory(directoryName);
             }
-            FileInfo fileInfo = new FileInfo(filePath);
+            var fileInfo = new FileInfo(filePath);
             m_xmlDoc = new XmlDocument();
             CreateXmlForManifest();
             if (File.Exists(filePath))
@@ -96,7 +96,7 @@ namespace RevitAddinManager.Model
                 File.SetAttributes(filePath, FileAttributes.Normal);
             }
             TextWriter w = new StreamWriter(filePath, false, Encoding.UTF8);
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(w);
+            var xmlTextWriter = new XmlTextWriter(w);
             xmlTextWriter.Formatting = Formatting.Indented;
             m_xmlDoc.Save(xmlTextWriter);
             xmlTextWriter.Close();
@@ -128,7 +128,7 @@ namespace RevitAddinManager.Model
             {
                 if (string.IsNullOrEmpty(m_filePath))
                 {
-                    string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
+                    var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
                     m_filePath = Path.Combine(path, DefaultSetting.AimInternalName);
                 }
                 return m_filePath;
@@ -151,27 +151,27 @@ namespace RevitAddinManager.Model
 
         private XmlDocument CreateXmlForManifest()
         {
-            XmlNode xmlNode = m_xmlDoc.AppendChild(m_xmlDoc.CreateElement(ROOT_NODE));
-            foreach (AddinItem currentApp in m_applications)
+            var xmlNode = m_xmlDoc.AppendChild(m_xmlDoc.CreateElement(ROOT_NODE));
+            foreach (var currentApp in m_applications)
             {
-                XmlElement xmlElement = m_xmlDoc.CreateElement(ADDIN_NODE);
+                var xmlElement = m_xmlDoc.CreateElement(ADDIN_NODE);
                 xmlElement.SetAttribute(TYPE_ATTRIBUTE, APPLICATION_NODE);
                 xmlNode.AppendChild(xmlElement);
                 AddApplicationToXmlElement(xmlElement, currentApp);
-                XmlElement xmlElement2 = m_xmlDoc.CreateElement(VENDORID);
+                var xmlElement2 = m_xmlDoc.CreateElement(VENDORID);
                 xmlElement2.InnerText = "ADSK";
                 xmlElement.AppendChild(xmlElement2);
                 xmlElement2 = m_xmlDoc.CreateElement(VENDORDESCRIPTION);
                 xmlElement2.InnerText = "Autodesk, www.autodesk.com";
                 xmlElement.AppendChild(xmlElement2);
             }
-            foreach (AddinItem command in m_commands)
+            foreach (var command in m_commands)
             {
-                XmlElement xmlElement3 = m_xmlDoc.CreateElement(ADDIN_NODE);
+                var xmlElement3 = m_xmlDoc.CreateElement(ADDIN_NODE);
                 xmlElement3.SetAttribute(TYPE_ATTRIBUTE, COMMAND_NODE);
                 xmlNode.AppendChild(xmlElement3);
                 AddCommandToXmlElement(xmlElement3, command);
-                XmlElement xmlElement4 = m_xmlDoc.CreateElement(VENDORID);
+                var xmlElement4 = m_xmlDoc.CreateElement(VENDORID);
                 xmlElement4.InnerText = "ADSK";
                 xmlElement3.AppendChild(xmlElement4);
                 xmlElement4 = m_xmlDoc.CreateElement(VENDORDESCRIPTION);
@@ -186,7 +186,7 @@ namespace RevitAddinManager.Model
         {
             if (!string.IsNullOrEmpty(addinItem.AssemblyPath))
             {
-                XmlElement xmlElement = m_xmlDoc.CreateElement(ASSEMBLY);
+                var xmlElement = m_xmlDoc.CreateElement(ASSEMBLY);
                 if (m_local)
                 {
                     xmlElement.InnerText = addinItem.AssemblyName;
@@ -199,13 +199,13 @@ namespace RevitAddinManager.Model
             }
             if (!string.IsNullOrEmpty(addinItem.ClientIdString))
             {
-                XmlElement xmlElement2 = m_xmlDoc.CreateElement(CLIENTID);
+                var xmlElement2 = m_xmlDoc.CreateElement(CLIENTID);
                 xmlElement2.InnerText = addinItem.ClientIdString;
                 xmlEle.AppendChild(xmlElement2);
             }
             if (!string.IsNullOrEmpty(addinItem.FullClassName))
             {
-                XmlElement xmlElement3 = m_xmlDoc.CreateElement(FULLCLASSNAME);
+                var xmlElement3 = m_xmlDoc.CreateElement(FULLCLASSNAME);
                 xmlElement3.InnerText = addinItem.FullClassName;
                 xmlEle.AppendChild(xmlElement3);
             }
@@ -215,7 +215,7 @@ namespace RevitAddinManager.Model
         {
             if (!string.IsNullOrEmpty(currentApp.Name))
             {
-                XmlElement xmlElement = m_xmlDoc.CreateElement(NAME_NODE);
+                var xmlElement = m_xmlDoc.CreateElement(NAME_NODE);
                 xmlElement.InnerText = currentApp.Name;
                 appEle.AppendChild(xmlElement);
             }
@@ -238,7 +238,7 @@ namespace RevitAddinManager.Model
                 xmlElement.InnerText = command.Description;
                 commandEle.AppendChild(xmlElement);
             }
-            string text = command.VisibilityMode.ToString();
+            var text = command.VisibilityMode.ToString();
             if (!string.IsNullOrEmpty(text))
             {
                 text = text.Replace(",", " |");
@@ -250,14 +250,14 @@ namespace RevitAddinManager.Model
 
         private void ParseExternalApplications(XmlNode nodeApplication)
         {
-            AddinItem addinItem = new AddinItem(AddinType.Application);
+            var addinItem = new AddinItem(AddinType.Application);
             ParseApplicationItems(addinItem, nodeApplication);
             m_applications.Add(addinItem);
         }
 
         private void ParseExternalCommands(XmlNode nodeCommand)
         {
-            AddinItem addinItem = new AddinItem(AddinType.Command);
+            var addinItem = new AddinItem(AddinType.Command);
             ParseCommandItems(addinItem, nodeCommand);
             m_commands.Add(addinItem);
         }
@@ -265,7 +265,7 @@ namespace RevitAddinManager.Model
         private void ParseApplicationItems(AddinItem addinApp, XmlNode nodeAddIn)
         {
             ParseAddInItem(addinApp, nodeAddIn);
-            XmlElement xmlElement = nodeAddIn[NAME_NODE];
+            var xmlElement = nodeAddIn[NAME_NODE];
             if (xmlElement != null && !string.IsNullOrEmpty(xmlElement.InnerText))
             {
                 addinApp.Name = xmlElement.InnerText;
@@ -275,7 +275,7 @@ namespace RevitAddinManager.Model
         private void ParseCommandItems(AddinItem command, XmlNode nodeAddIn)
         {
             ParseAddInItem(command, nodeAddIn);
-            XmlElement xmlElement = nodeAddIn[TEXT];
+            var xmlElement = nodeAddIn[TEXT];
             if (xmlElement != null)
             {
                 command.Name = xmlElement.InnerText;
@@ -294,7 +294,7 @@ namespace RevitAddinManager.Model
 
         private void ParseAddInItem(AddinItem addinItem, XmlNode nodeAddIn)
         {
-            XmlElement xmlElement = nodeAddIn[ASSEMBLY];
+            var xmlElement = nodeAddIn[ASSEMBLY];
             if (xmlElement != null)
             {
                 if (m_local)
@@ -335,16 +335,16 @@ namespace RevitAddinManager.Model
 
         private VisibilityMode ParseVisibilityMode(string visibilityModeString)
         {
-            VisibilityMode visibilityMode = VisibilityMode.AlwaysVisible;
+            var visibilityMode = VisibilityMode.AlwaysVisible;
             VisibilityMode result;
             try
             {
-                string text = "|";
-                char[] separator = text.ToCharArray();
-                string[] array = visibilityModeString.Replace(" | ", "|").Split(separator);
-                foreach (string value in array)
+                var text = "|";
+                var separator = text.ToCharArray();
+                var array = visibilityModeString.Replace(" | ", "|").Split(separator);
+                foreach (var value in array)
                 {
-                    VisibilityMode visibilityMode2 = (VisibilityMode)Enum.Parse(typeof(VisibilityMode), value);
+                    var visibilityMode2 = (VisibilityMode)Enum.Parse(typeof(VisibilityMode), value);
                     visibilityMode |= visibilityMode2;
                 }
                 result = visibilityMode;
