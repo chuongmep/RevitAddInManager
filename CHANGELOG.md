@@ -1,4 +1,13 @@
 # Changelog
+
+- 2022-01-27 **1.0.7**
+  - Improve multiple version config support from R14-R23
+  - Improve INotifyPropertyChanged Correct use with Commands and Applications
+  - Improve cached objects
+  - Refactor code base project : Change to style var, remove redundant this
+  - File-scoped namespace
+  - Change format build release new version
+
 - 2022-01-25 **2022.0.0.7**
   - Improve startup tab toggle add-in
   - Fix addin is readonly request admin to change
