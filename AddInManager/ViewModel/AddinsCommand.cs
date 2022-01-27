@@ -1,69 +1,68 @@
 ﻿using RevitAddinManager.Model;
 
-namespace RevitAddinManager.ViewModel
+namespace RevitAddinManager.ViewModel;
+
+public class AddinsCommand : Addins
 {
-    public class AddinsCommand : Addins
+    public void ReadItems(IniFile file)
     {
-        public void ReadItems(IniFile file)
+        var num = file.ReadInt("ExternalCommands", "ECCount");
+        var i = 1;
+        while (i <= num)
         {
-            int num = file.ReadInt("ExternalCommands", "ECCount");
-            int i = 1;
-            while (i <= num)
-            {
-                this.ReadExternalCommand(file, i++);
-            }
-            base.SortAddin();
+            ReadExternalCommand(file, i++);
         }
+        SortAddin();
+    }
 
-        private bool ReadExternalCommand(IniFile file, int nodeNumber)
+    private bool ReadExternalCommand(IniFile file, int nodeNumber)
+    {
+        var name = file.ReadString("ExternalCommands", "ECName" + nodeNumber);
+        var text = file.ReadString("ExternalCommands", "ECAssembly" + nodeNumber);
+        var text2 = file.ReadString("ExternalCommands", "ECClassName" + nodeNumber);
+        var description = file.ReadString("ExternalCommands", "ECDescription" + nodeNumber);
+        if (string.IsNullOrEmpty(text2) || string.IsNullOrEmpty(text))
         {
-            string name = file.ReadString("ExternalCommands", "ECName" + nodeNumber);
-            string text = file.ReadString("ExternalCommands", "ECAssembly" + nodeNumber);
-            string text2 = file.ReadString("ExternalCommands", "ECClassName" + nodeNumber);
-            string description = file.ReadString("ExternalCommands", "ECDescription" + nodeNumber);
-            if (string.IsNullOrEmpty(text2) || string.IsNullOrEmpty(text))
-            {
-                return false;
-            }
-            base.AddItem(new AddinItem(AddinType.Command)
-            {
-                Name = name,
-                AssemblyPath = text,
-                FullClassName = text2,
-                Description = description
-            });
-            return true;
+            return false;
         }
-
-        public void Save(IniFile file)
+        AddItem(new AddinItem(AddinType.Command)
         {
-            file.WriteSection("ExternalCommands");
-            file.Write("ExternalCommands", "ECCount", this.m_maxCount);
-            int num = 0;
-            foreach (Addin addin in this.m_addinDict.Values)
+            Name = name,
+            AssemblyPath = text,
+            FullClassName = text2,
+            Description = description
+        });
+        return true;
+    }
+
+    public void Save(IniFile file)
+    {
+        file.WriteSection("ExternalCommands");
+        file.Write("ExternalCommands", "ECCount", m_maxCount);
+        var num = 0;
+        foreach (var addin in m_addinDict.Values)
+        {
+            foreach (var addinItem in addin.ItemList)
             {
-                foreach (AddinItem addinItem in addin.ItemList)
+                if (num >= m_maxCount)
                 {
-                    if (num >= this.m_maxCount)
-                    {
-                        break;
-                    }
-                    if (addinItem.Save)
-                    {
-                        this.WriteExternalCommand(file, addinItem, ++num);
-                    }
+                    break;
+                }
+                if (addinItem.Save)
+                {
+                    WriteExternalCommand(file, addinItem, ++num);
                 }
             }
-            file.Write("ExternalCommands", "ECCount", num);
         }
+        file.Write("ExternalCommands", "ECCount", num);
+    }
 
-        private bool WriteExternalCommand(IniFile file, AddinItem item, int number)
-        {
-            file.Write("ExternalCommands", "ECName" + number, item.Name);
-            file.Write("ExternalCommands", "ECClassName" + number, item.FullClassName);
-            file.Write("ExternalCommands", "ECAssembly" + number, item.AssemblyPath);
-            file.Write("ExternalCommands", "ECDescription" + number, item.Description);
-            return true;
-        }
+    private bool WriteExternalCommand(IniFile file, AddinItem item, int number)
+    {
+        file.Write("ExternalCommands", "ECName" + number, item.Name);
+        file.Write("ExternalCommands", "ECClassName" + number, item.FullClassName);
+        file.Write("ExternalCommands", "ECAssembly" + number, item.AssemblyPath);
+        file.Write("ExternalCommands", "ECDescription" + number, item.Description);
+        return true;
     }
 }

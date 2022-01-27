@@ -1,9 +1,8 @@
-﻿namespace RevitAddinManager.Model
-{
-    public interface IAddinNode
-    {
-        bool Save { get; set; }
+﻿namespace RevitAddinManager.Model;
 
-        bool Hidden { get; set; }
-    }
+public interface IAddinNode
+{
+    bool Save { get; set; }
+
+    bool Hidden { get; set; }
 }
