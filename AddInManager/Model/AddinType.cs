@@ -1,10 +1,11 @@
-﻿namespace RevitAddinManager.Model;
-
-[Flags]
-public enum AddinType
+﻿namespace RevitAddinManager.Model
 {
-    Invalid = 0,
-    Command = 1,
-    Application = 2,
-    Mixed = 3
+    [Flags]
+    public enum AddinType
+    {
+        Invalid = 0,
+        Command = 1,
+        Application = 2,
+        Mixed = 3
+    }
 }

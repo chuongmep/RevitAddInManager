@@ -1,12 +1,13 @@
-﻿namespace RevitAddinManager.Model;
-
-/// <summary>
-/// Compare Sort By Full Class Name Method
-/// </summary>
-public class AddinItemComparer : IComparer<AddinItem>
+﻿namespace RevitAddinManager.Model
 {
-    public int Compare(AddinItem x, AddinItem y)
+    /// <summary>
+    /// Compare Sort By Full Class Name Method
+    /// </summary>
+    public class AddinItemComparer : IComparer<AddinItem>
     {
-        return string.Compare(x.FullClassName, y.FullClassName, StringComparison.Ordinal);
+        public int Compare(AddinItem x, AddinItem y)
+        {
+            return string.Compare(x.FullClassName, y.FullClassName, StringComparison.Ordinal);
+        }
     }
 }

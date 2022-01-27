@@ -1,26 +1,28 @@
 ﻿using System.Windows;
 
-namespace RevitAddinManager.View.Control;
-
-public class ExtendedTreeView : System.Windows.Controls.TreeView
+namespace RevitAddinManager.View.Control
 {
-    public ExtendedTreeView()
+    public class ExtendedTreeView : System.Windows.Controls.TreeView
     {
-        SelectedItemChanged += ItemChange;
-    }
-
-    void ItemChange(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-        if (SelectedItem != null)
+        public ExtendedTreeView()
+            : base()
         {
-            SetValue(SelectedItem_Property, SelectedItem);
+            this.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(ItemChange);
         }
-    }
 
-    public object SelectedItem_
-    {
-        get => GetValue(SelectedItem_Property);
-        set => SetValue(SelectedItem_Property, value);
+        void ItemChange(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (SelectedItem != null)
+            {
+                SetValue(SelectedItem_Property, SelectedItem);
+            }
+        }
+
+        public object SelectedItem_
+        {
+            get { return (object)GetValue(SelectedItem_Property); }
+            set { SetValue(SelectedItem_Property, value); }
+        }
+        public static readonly DependencyProperty SelectedItem_Property = DependencyProperty.Register("SelectedItem_", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
     }
-    public static readonly DependencyProperty SelectedItem_Property = DependencyProperty.Register("SelectedItem_", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
 }

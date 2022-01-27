@@ -1,15 +1,16 @@
-﻿namespace RevitAddinManager.Model;
-
-public static class ProductType
+﻿namespace RevitAddinManager.Model
 {
-    /// <summary>
-    /// Use for feature develop mix flaform support multiple software autodesk
-    /// </summary>
-    public enum MyEnum
+    public static class ProductType
     {
-        Revit = 1,
-        Autocad = 2,
-        Naviswork = 3,
-        Unknown = -1
+        /// <summary>
+        /// Use for feature develop mix flaform support multiple software autodesk
+        /// </summary>
+        public enum MyEnum
+        {
+            Revit = 1,
+            Autocad = 2,
+            Naviswork = 3,
+            Unknown = -1
+        }
     }
 }

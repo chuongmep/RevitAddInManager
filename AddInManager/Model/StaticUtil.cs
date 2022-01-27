@@ -1,21 +1,22 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
 
-namespace RevitAddinManager.Model;
-
-public static class StaticUtil
+namespace RevitAddinManager.Model
 {
-    public static void ShowWarning(string msg)
+    public static class StaticUtil
     {
-        MessageBox.Show(msg, Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        public static void ShowWarning(string msg)
+        {
+            MessageBox.Show(msg, Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        public static string CommandFullName = typeof(IExternalCommand).FullName;
+
+
+        public static string AppFullName = typeof(IExternalApplication).FullName;
+
+        public static RegenerationOption RegenOption;
+
+        public static TransactionMode TransactMode;
     }
-
-    public static string CommandFullName = typeof(IExternalCommand).FullName;
-
-
-    public static string AppFullName = typeof(IExternalApplication).FullName;
-
-    public static RegenerationOption RegenOption;
-
-    public static TransactionMode TransactMode;
 }
