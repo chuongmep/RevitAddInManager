@@ -4,61 +4,62 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace RevitAddinManager.Model;
-
-public static class BitmapSourceConverter
+namespace RevitAddinManager.Model
 {
-    public enum ImageType
+    public static class BitmapSourceConverter
     {
-        Small,
-        Large
-    }
-
-    public static ImageSource ToImageSource(Bitmap bitmap, ImageType imageType)
-    {
-        switch (imageType)
+        public enum ImageType
         {
-            case ImageType.Small:
-                return ToImageSource(bitmap).Resize(16);
-            case ImageType.Large:
-                return ToImageSource(bitmap).Resize(32);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(imageType), imageType, null);
+            Small,
+            Large
         }
-    }
-    public static BitmapImage ToImageSource(Bitmap bitmap)
-    {
-        var ms = new MemoryStream();
-        bitmap.Save(ms, ImageFormat.Png);
-        var image = new BitmapImage();
-        image.BeginInit();
-        ms.Seek(0, SeekOrigin.Begin);
-        image.StreamSource = ms;
-        image.EndInit();
-        return image;
-    }
-    /// <summary>
-    /// Resize ImageResource
-    /// </summary>
-    /// <param name="imageSource"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
-    public static ImageSource Resize(this ImageSource imageSource, int size)
-    {
-        return Thumbnail(imageSource, size);
-    }
 
-    private static ImageSource Thumbnail(ImageSource source, int size)
-    {
-        var rect = new Rect(0, 0, size, size);
-        var drawingVisual = new DrawingVisual();
-        using (var drawingContext = drawingVisual.RenderOpen())
+        public static ImageSource ToImageSource(Bitmap bitmap, ImageType imageType)
         {
-            drawingContext.DrawImage(source, rect);
+            switch (imageType)
+            {
+                case ImageType.Small:
+                    return ToImageSource(bitmap).Resize(16);
+                case ImageType.Large:
+                    return ToImageSource(bitmap).Resize(32);
+                default:
+                    throw new System.ArgumentOutOfRangeException(nameof(imageType), imageType, null);
+            }
         }
-        var resizedImage = new RenderTargetBitmap((int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
-        resizedImage.Render(drawingVisual);
+        public static BitmapImage ToImageSource(Bitmap bitmap)
+        {
+            var ms = new MemoryStream();
+            bitmap.Save(ms, ImageFormat.Png);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+            return image;
+        }
+        /// <summary>
+        /// Resize ImageResource
+        /// </summary>
+        /// <param name="imageSource"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static ImageSource Resize(this ImageSource imageSource, int size)
+        {
+            return Thumbnail(imageSource, size);
+        }
 
-        return resizedImage;
+        private static ImageSource Thumbnail(ImageSource source, int size)
+        {
+            Rect rect = new Rect(0, 0, size, size);
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(source, rect);
+            }
+            RenderTargetBitmap resizedImage = new RenderTargetBitmap((int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
+            resizedImage.Render(drawingVisual);
+
+            return resizedImage;
+        }
     }
 }
