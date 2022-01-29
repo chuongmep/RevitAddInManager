@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Autodesk.Revit.Attributes;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-namespace RevitTest
+namespace Test
 {
     [Transaction(TransactionMode.Manual)]
     public class TestCommand:  IExternalCommand
@@ -24,7 +18,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show(@"Class2");
+            TaskDialog.Show("Commnad",@"Class2");
             return Result.Succeeded;
         }
     }
@@ -33,7 +27,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show(@"Class3");
+            TaskDialog.Show("Command",@"Class3");
             return Result.Succeeded;
         }
     }
@@ -42,7 +36,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show(@"Class4");
+            TaskDialog.Show("Command", @"Class4");
             return Result.Succeeded;
         }
     }
@@ -51,7 +45,7 @@ namespace RevitTest
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            MessageBox.Show(@"Class5");
+            TaskDialog.Show("Command",@"Class5");
             return Result.Succeeded;
         }
     }
