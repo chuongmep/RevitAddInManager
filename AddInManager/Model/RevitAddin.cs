@@ -32,10 +32,9 @@ public class RevitAddin : ViewModelBase
         {
             RenamePath();
         }
-        catch (UnauthorizedAccessException e)
+        catch (UnauthorizedAccessException)
         {
-            //TODO : Resource.NeedAdmin : Access Denied
-            throw new ArgumentException(Resource.NeedAdmin, e);
+            //Ignore if file is readonly
         }
     }
     private bool RenamePath()
@@ -68,9 +67,5 @@ public class RevitAddin : ViewModelBase
         return true;
     }
 
-    public void GetRelativePath()
-    {
-
-    }
 
 }
