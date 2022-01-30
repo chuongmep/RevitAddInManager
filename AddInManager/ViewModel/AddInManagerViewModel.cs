@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
 using RevitAddinManager.Model;
@@ -16,8 +15,8 @@ namespace RevitAddinManager.ViewModel;
 
 public class AddInManagerViewModel : ViewModelBase
 {
+    public bool IsRun { get; set; }
     public ExternalCommandData ExternalCommandData { get; set; }
-    private ElementSet Elements { get; set; }
     public View.FrmAddInManager FrmAddInManager { get; set; }
     public AssemLoader AssemLoader { get; set; }
 
@@ -166,7 +165,7 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref _vendorDescription, value);
     }
 
-    private bool _issTabCmdSelected = true;
+    private bool _issTabCmdSelected;
     public bool IsTabCmdSelected
     {
         get => _issTabCmdSelected;
@@ -203,19 +202,15 @@ public class AddInManagerViewModel : ViewModelBase
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
     }
 
-    public AddInManagerViewModel(ExternalCommandData data, ref string message, ElementSet elements)
+    public AddInManagerViewModel(ExternalCommandData data)
     {
         AssemLoader = new AssemLoader();
         MAddinManagerBase = AddinManagerBase.Instance;
         CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
         ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
         ExternalCommandData = data;
-        Messages = message;
-        Elements = elements;
         FreshItemStartupClick(false);
     }
-
-    public string Messages { get; set; }
 
     public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
     {
@@ -268,7 +263,6 @@ public class AddInManagerViewModel : ViewModelBase
     {
         try
         {
-            if (FrmAddInManager == null) return;
             if (SelectedCommandItem?.IsParentTree == false)
             {
                 MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
@@ -276,15 +270,8 @@ public class AddInManagerViewModel : ViewModelBase
                 CheckCountSelected(CommandItems, out var result);
                 if (result > 0)
                 {
-
-                    if (MAddinManagerBase.ActiveCmd != null)
-                    {
-                        FrmAddInManager.Close();
-                        FrmAddInManager = null;
-                        string messages = Messages;
-                        MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref messages, Elements);
-                    }
-
+                    IsRun = true;
+                    FrmAddInManager.Close();
                 }
             }
 

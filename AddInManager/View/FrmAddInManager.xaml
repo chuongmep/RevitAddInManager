@@ -130,7 +130,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load App"
-                    IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    IsSelected="{Binding IsTabAppSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
                         <control:ExtendedTreeView
                             x:Name="TreeViewApp"
@@ -239,13 +239,13 @@
                                         <DataTemplate DataType="model:RevitAddin">
                                             <Button
                                                 Height="25"
+                                                ToolTip="Toggle To Convert State"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
+                                                IsEnabled="{Binding IsReadOnly}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisibleToggle}"
                                                 Content="{Binding State}"
-                                                FontSize="10"
-                                                IsEnabled="{Binding IsReadOnly}"
-                                                ToolTip="Toggle To Convert State" />
+                                                FontSize="10" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -370,8 +370,8 @@
                 Margin="1,1,1,1"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
+                IsEnabled="{Binding IsCanRun,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                 Foreground="SteelBlue"
-                IsEnabled="{Binding IsCanRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="Execute Addin Selected" />
         </StackPanel>
     </Grid>

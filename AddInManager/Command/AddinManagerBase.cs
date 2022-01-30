@@ -14,7 +14,7 @@ public sealed class AddinManagerBase
 {
     public Result ExecuteCommand(ExternalCommandData data, ref string message, ElementSet elements, bool faceless)
     {
-        var vm = new AddInManagerViewModel(data,ref message,elements);
+        var vm = new AddInManagerViewModel(data);
         if (_mActiveCmd != null && faceless)
         {
             return RunActiveCommand(vm, data, ref message, elements);
@@ -23,7 +23,11 @@ public sealed class AddinManagerBase
         frmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterOwner;
         var process = Process.GetCurrentProcess();
         new WindowInteropHelper(frmAddInManager).Owner = process.MainWindowHandle;
-        frmAddInManager.Show();
+        var showDialog = frmAddInManager.ShowDialog();
+        if (showDialog == false && ActiveCmd != null&& vm.IsRun)
+        {
+            return RunActiveCommand(vm, data, ref message, elements);
+        }
         return Result.Failed;
     }
 
@@ -34,7 +38,7 @@ public sealed class AddinManagerBase
     }
 
 
-    public Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
+    private Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
     {
         var filePath = _mActiveCmd.FilePath;
         Result result;
