@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
 
 namespace Test
 {
@@ -10,6 +11,27 @@ namespace Test
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             TaskDialog.Show("Command","Hello Word");
+            return Result.Succeeded;
+        }
+    }
+    [Transaction(TransactionMode.Manual)]
+    public class TestCommandTransaction : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Document document = uidoc.Document;
+            using (Transaction tran = new Transaction(document, "tran"))
+            {
+                tran.Start();
+                TaskDialog.Show("Add-in Manager", document.Title);
+                Reference r = uidoc.Selection.PickObject(ObjectType.Element);
+                Element element = document.GetElement(r);
+                Parameter p = element.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS);
+                p.Set("Hello Word");
+                TaskDialog.Show("Add-in Manager", "Assigned Value");
+                tran.Commit();
+            }
             return Result.Succeeded;
         }
     }
@@ -41,7 +63,7 @@ namespace Test
         }
     }
     [Transaction(TransactionMode.ReadOnly)]
-    public class Class5 : IExternalCommand
+    public class TestReadOnly : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
