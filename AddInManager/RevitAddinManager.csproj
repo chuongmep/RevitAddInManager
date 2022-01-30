@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
     <Configurations>Debug R22</Configurations>
-    <Configurations>$(Configurations);Release R14;Release R15;Release R16;Release R17;Release R18;Release R19;Release R20;Release R21;Release R22</Configurations>
+    <Configurations>$(Configurations);Release R14;Release R15;Release R16;Release R17;Release R18;Release R19;Release R20;Release R21;Release R22;Release R23</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +54,10 @@
   <PropertyGroup Condition="$(Configuration.Contains('R22'))">
     <RevitVersion>2022</RevitVersion>
     <DefineConstants>$(DefineConstants);R22</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R23'))">
+    <RevitVersion>2023</RevitVersion>
+    <DefineConstants>$(DefineConstants);R23</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <Version>$(RevitVersion)</Version>

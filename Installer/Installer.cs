@@ -13,7 +13,7 @@ const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "RevitAddinManager";
 const string outputName = "RevitAddinManager";
 const string outputDir = "output";
-const string version = "1.0.7";
+const string version = "1.0.8";
 
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project
@@ -23,7 +23,6 @@ var project = new Project
     Platform = Platform.x64,
     Description = "Project Support Developer Work With Revit API",
     UI = WUI.WixUI_InstallDir,
-    ReinstallMode = "e",
     Version = new Version(version),
     OutFileName = fileName.ToString(),
     InstallScope = InstallScope.perUser,
