@@ -1,5 +1,8 @@
 # Changelog
-- 2022-01-27 **1.0.8**
+- 2022-01-31 **1.0.9**
+  - Fix problem menucontext show assembly location
+
+- 2022-01-30 **1.0.8**
   - Support Revit 2023
   - Improve Some code base
 
