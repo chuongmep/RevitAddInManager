@@ -1,6 +1,7 @@
 # Changelog
 - 2022-01-31 **1.0.9**
   - Fix problem menucontext show assembly location
+  - Fix The component does not have a resource identified by the URI [#7](https://github.com/chuongmep/RevitAddInManager/issues/7)
 
 - 2022-01-30 **1.0.8**
   - Support Revit 2023
