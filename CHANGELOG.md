@@ -1,4 +1,7 @@
 # Changelog
+- 2022-01-27 **1.0.8**
+  - Support Revit 2023
+  - Improve Some code base
 
 - 2022-01-27 **1.0.7**
   - Improve multiple version config support from R14-R23
