@@ -90,6 +90,15 @@ namespace RevitAddinManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Not Exit, Please Check !.
+        /// </summary>
+        public static string FileNotExit {
+            get {
+                return ResourceManager.GetString("FileNotExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Not Found, Please Check File Again.
         /// </summary>
         public static string FileNotFound {

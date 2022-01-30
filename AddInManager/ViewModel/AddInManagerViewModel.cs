@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
@@ -41,8 +42,12 @@ public class AddInManagerViewModel : ViewModelBase
     {
         get
         {
-
-            if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
+            if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == true && IsTabCmdSelected)
+            {
+                IsCanRun = false;
+                MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
+            }
+            else if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
             {
                 IsCanRun = true;
                 MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
@@ -73,7 +78,11 @@ public class AddInManagerViewModel : ViewModelBase
     {
         get
         {
-            if (_selectedAppItem != null && _selectedAppItem.IsParentTree == false && IsTabAppSelected)
+            if (_selectedAppItem != null && _selectedAppItem.IsParentTree == true && IsTabAppSelected)
+            {
+                MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
+            }
+            else if (_selectedAppItem != null && _selectedAppItem.IsParentTree == false && IsTabAppSelected)
             {
                 MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
                 MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
@@ -98,7 +107,7 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand EditAddinCommand => new RelayCommand(EditAddinCommandClick);
 
     private readonly ICommand _executeAddinCommand = null;
-    public ICommand ExecuteAddinCommand => _executeAddinCommand ??  new RelayCommand(ExecuteAddinCommandClick);
+    public ICommand ExecuteAddinCommand => _executeAddinCommand ?? new RelayCommand(ExecuteAddinCommandClick);
     public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
     public ICommand OpenLcAssemblyApp => new RelayCommand(OpenLcAssemblyAppClick);
 
@@ -194,7 +203,7 @@ public class AddInManagerViewModel : ViewModelBase
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
     }
 
-    public AddInManagerViewModel(ExternalCommandData data,ref string message,ElementSet elements)
+    public AddInManagerViewModel(ExternalCommandData data, ref string message, ElementSet elements)
     {
         AssemLoader = new AssemLoader();
         MAddinManagerBase = AddinManagerBase.Instance;
@@ -259,7 +268,7 @@ public class AddInManagerViewModel : ViewModelBase
     {
         try
         {
-            if(FrmAddInManager==null) return;
+            if (FrmAddInManager == null) return;
             if (SelectedCommandItem?.IsParentTree == false)
             {
                 MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
@@ -267,15 +276,15 @@ public class AddInManagerViewModel : ViewModelBase
                 CheckCountSelected(CommandItems, out var result);
                 if (result > 0)
                 {
-                    
-                    if (MAddinManagerBase.ActiveCmd!=null)
+
+                    if (MAddinManagerBase.ActiveCmd != null)
                     {
                         FrmAddInManager.Close();
                         FrmAddInManager = null;
                         string messages = Messages;
-                        MAddinManagerBase.RunActiveCommand(this, ExternalCommandData,ref messages, Elements);
+                        MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref messages, Elements);
                     }
-                   
+
                 }
             }
 
@@ -288,15 +297,36 @@ public class AddInManagerViewModel : ViewModelBase
     }
     private void OpenLcAssemblyCommandClick()
     {
-        if (SelectedCommandItem == null) return;
-        var FilePath = SelectedCommandItem.AddinItem.AssemblyPath;
-        if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
+        bool flag = MAddinManagerBase.ActiveCmd == null;
+        if (flag) return;
+        string path = MAddinManagerBase.ActiveCmd.FilePath;
+        if (!File.Exists(path))
+        {
+            ShowFileNotExit(path);
+            return;
+        }
+        Process.Start("explorer.exe", "/select, " + path);
     }
     private void OpenLcAssemblyAppClick()
     {
-        if (SelectedAppItem == null) return;
-        var FilePath = SelectedAppItem.AddinItem.AssemblyPath;
-        if (FilePath != null) Process.Start("explorer.exe", "/select, " + FilePath);
+        bool flag = MAddinManagerBase.ActiveApp == null;
+        if (flag) return;
+        string path = MAddinManagerBase.ActiveApp.FilePath;
+        if (!File.Exists(path))
+        {
+            ShowFileNotExit(path);
+            return;
+        }
+        Process.Start("explorer.exe", "/select, " + path);
+    }
+
+    void ShowFileNotExit(string path)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine(Resource.FileNotExit);
+        sb.AppendLine("Path :");
+        sb.AppendLine(path);
+        MessageBox.Show(sb.ToString(), Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
     }
     void ExecuteAddinAppClick()
     {
