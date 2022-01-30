@@ -1,4 +1,8 @@
 # Changelog
+
+- 2022-01-27 **1.0.9**
+  - Support Interactive with revit project when opening Addin Manager
+
 - 2022-01-27 **1.0.8**
   - Support Revit 2023
   - Improve Some code base
