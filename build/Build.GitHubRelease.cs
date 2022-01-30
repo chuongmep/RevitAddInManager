@@ -59,7 +59,7 @@ partial class Build
         Log.Information("Detected Changelog: {Path}", ChangeLogPath);
 
         var logBuilder = new StringBuilder();
-        var changelogLineRegex = new Regex($@"^.*({version})\S*\s");
+        var changelogLineRegex = new Regex($@"^.*({version})\S*\s?");
         const string nextRecordSymbol = "- ";
 
         foreach (var line in File.ReadLines(ChangeLogPath))
