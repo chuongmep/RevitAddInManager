@@ -96,7 +96,7 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand OpenLocalAddinCommand => new RelayCommand(OpenLocalAddinCommandClick);
     public ICommand EditAddinCommand => new RelayCommand(EditAddinCommandClick);
 
-    private ICommand _executeAddinCommand;
+    private readonly ICommand _executeAddinCommand = null;
     public ICommand ExecuteAddinCommand => _executeAddinCommand ??  new RelayCommand(ExecuteAddinCommandClick);
     public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
     public ICommand OpenLcAssemblyApp => new RelayCommand(OpenLcAssemblyAppClick);

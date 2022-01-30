@@ -8,7 +8,7 @@ using Nuke.Common.Tools.VSWhere;
 partial class Build : NukeBuild
 {
     readonly AbsolutePath ArtifactsDirectory = RootDirectory / ArtifactsFolder;
-    readonly AbsolutePath ChangeLogPath = RootDirectory / "Changelog.md";
+    readonly AbsolutePath ChangeLogPath = RootDirectory / "CHANGELOG.md";
     [GitRepository] readonly GitRepository GitRepository;
     [Solution] readonly Solution Solution;
 
