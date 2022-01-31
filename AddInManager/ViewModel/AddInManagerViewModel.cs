@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
 using RevitAddinManager.Model;
@@ -15,8 +16,10 @@ namespace RevitAddinManager.ViewModel;
 
 public class AddInManagerViewModel : ViewModelBase
 {
-    public bool IsRun { get; set; }
     public ExternalCommandData ExternalCommandData { get; set; }
+    private string Message { get; set; }
+    private ElementSet Elements { get; set; }
+    public RevitEvent RevitEvent = new RevitEvent();
     public View.FrmAddInManager FrmAddInManager { get; set; }
     public AssemLoader AssemLoader { get; set; }
 
@@ -165,7 +168,7 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref _vendorDescription, value);
     }
 
-    private bool _issTabCmdSelected;
+    private bool _issTabCmdSelected = true;
     public bool IsTabCmdSelected
     {
         get => _issTabCmdSelected;
@@ -202,19 +205,20 @@ public class AddInManagerViewModel : ViewModelBase
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
     }
 
-    public AddInManagerViewModel(ExternalCommandData data)
+    public AddInManagerViewModel(ExternalCommandData data,ref string message,ElementSet elements)
     {
         AssemLoader = new AssemLoader();
         MAddinManagerBase = AddinManagerBase.Instance;
         CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
         ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
         ExternalCommandData = data;
+        Message = message;
+        Elements = elements;
         FreshItemStartupClick(false);
     }
 
     public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
     {
-        //Addins addins = this.MAddinManagerBase.AddinManager.Commands;
         var MainTrees = new ObservableCollection<AddinModel>();
         foreach (var keyValuePair in addins.AddinDict)
         {
@@ -270,8 +274,8 @@ public class AddInManagerViewModel : ViewModelBase
                 CheckCountSelected(CommandItems, out var result);
                 if (result > 0)
                 {
-                    IsRun = true;
                     FrmAddInManager.Close();
+                    RevitEvent.Run(Execute,false,null,null,false);
                 }
             }
 
@@ -281,6 +285,12 @@ public class AddInManagerViewModel : ViewModelBase
         {
             MessageBox.Show(e.ToString());
         }
+    }
+
+    void Execute()
+    {
+        string message = Message;
+        MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref message, Elements);
     }
     private void OpenLcAssemblyCommandClick()
     {
@@ -560,8 +570,6 @@ public class AddInManagerViewModel : ViewModelBase
         var AddinFilePathsDisable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(x => x.EndsWith(DefaultSetting.FormatDisable)).ToArray();
         foreach (var AddinFilePath in AddinFilePathsDisable)
         {
-            //string checkFile = Path.GetFileName(AddinFilePath).Replace(DefaultSetting.FormatDisable, String.Empty);
-            //if(File.Exists(checkFile)) continue;
             var revitAddin = new RevitAddin();
             revitAddin.FilePath = AddinFilePath;
             revitAddin.Name = Path.GetFileName(AddinFilePath);
