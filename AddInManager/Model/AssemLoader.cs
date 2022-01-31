@@ -123,7 +123,8 @@ public class AssemLoader
         try
         {
             Monitor.Enter(this);
-            result = Assembly.LoadFile(filePath);
+            //Do not use method LoadFile, See https://github.com/chuongmep/RevitAddInManager/issues/7
+            result = Assembly.LoadFrom(filePath);
         }
         finally
         {
