@@ -1,4 +1,7 @@
 # Changelog
+- 2022-01-31 **1.1.1**
+  - Support inteactive with revit project when openning Addin Manager
+
 - 2022-01-31 **1.1.0**
   - Fix The component does not have a resource identified by the URI from assembly loader [#7](https://github.com/chuongmep/RevitAddInManager/issues/7)
 
