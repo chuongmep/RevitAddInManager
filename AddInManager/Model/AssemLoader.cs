@@ -123,8 +123,8 @@ public class AssemLoader
         try
         {
             Monitor.Enter(this);
-            //Do not use method LoadFile, See https://github.com/chuongmep/RevitAddInManager/issues/7
-            result = Assembly.LoadFrom(filePath);
+            //Agree this error to load depend event assembly, see https://github.com/chuongmep/RevitAddInManager/issues/7
+            result = Assembly.LoadFile(filePath);
         }
         finally
         {
