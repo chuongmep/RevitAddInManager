@@ -1,4 +1,8 @@
 # Changelog
+
+- 2022-02-02 **1.1.3**
+  - Fix load duplicate assembly
+
 - 2022-02-02 **1.1.2**
   - Fix Open readonly mistake with faceless
 
