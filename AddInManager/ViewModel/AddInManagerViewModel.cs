@@ -196,7 +196,7 @@ public class AddInManagerViewModel : ViewModelBase
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
     }
 
-    public AddInManagerViewModel(ExternalCommandData data,ref string message,ElementSet elements)
+    public AddInManagerViewModel(ExternalCommandData data, ref string message, ElementSet elements)
     {
         AssemLoader = new AssemLoader();
         MAddinManagerBase = AddinManagerBase.Instance;
@@ -266,7 +266,7 @@ public class AddInManagerViewModel : ViewModelBase
                 if (result > 0)
                 {
                     FrmAddInManager.Close();
-                    RevitEvent.Run(Execute,false,null,null,false);
+                    RevitEvent.Run(Execute, false, null, null, false);
                 }
             }
         }
@@ -544,9 +544,11 @@ public class AddInManagerViewModel : ViewModelBase
 
     List<RevitAddin> GetAddinFromFolder(string folder)
     {
+
         var revitAddins = new List<RevitAddin>();
+        if (!Directory.Exists(folder)) return revitAddins;
         var AddinFilePathsVisiable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)
-            .Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
+        .Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
         foreach (var AddinFilePath in AddinFilePathsVisiable)
         {
             var revitAddin = new RevitAddin();
