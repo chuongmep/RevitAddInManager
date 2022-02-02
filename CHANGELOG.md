@@ -1,4 +1,6 @@
 # Changelog
+- 2022-02-03 **1.1.4**
+  - Fix Command Failure for External Command 
 
 - 2022-02-02 **1.1.3**
   - Fix load duplicate assembly
