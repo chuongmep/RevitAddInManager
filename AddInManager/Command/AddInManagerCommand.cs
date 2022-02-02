@@ -31,6 +31,6 @@ public class AddInManagerReadOnly : IExternalCommand
     {
         StaticUtil.RegenOption = RegenerationOption.Manual;
         StaticUtil.TransactMode = TransactionMode.ReadOnly;
-        return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, true);
+        return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
     }
 }

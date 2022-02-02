@@ -1,4 +1,7 @@
 # Changelog
+- 2022-02-02 **1.1.2**
+  - Fix Open readonly mistake with faceless
+
 - 2022-01-31 **1.1.1**
   - Support inteactive with revit project when openning Addin Manager
 
