@@ -7,16 +7,16 @@ namespace RevitAddinManager.ViewModel;
 
 public class AddinManager
 {
-    public AddinsApplication Applications => _mApplications;
-    public int AppCount => _mApplications.Count;
-    public AddinsCommand Commands => _mCommands;
-    public int CmdCount => _mCommands.Count;
+    public AddinsApplication Applications => _applications;
+    public int AppCount => _applications.Count;
+    public AddinsCommand Commands => _commands;
+    public int CmdCount => _commands.Count;
 
 
     public AddinManager()
     {
-        _mCommands = new AddinsCommand();
-        _mApplications = new AddinsApplication();
+        _commands = new AddinsCommand();
+        _applications = new AddinsApplication();
         GetIniFilePaths();
         ReadAddinsFromAimIni();
     }
@@ -24,14 +24,14 @@ public class AddinManager
 
     public IniFile AimIniFile
     {
-        get => _mAimIniFile;
-        set => _mAimIniFile = value;
+        get => _aimIniFile;
+        set => _aimIniFile = value;
     }
 
     public IniFile RevitIniFile
     {
-        get => _mRevitIniFile;
-        set => _mRevitIniFile = value;
+        get => _revitIniFile;
+        set => _revitIniFile = value;
     }
 
     private void GetIniFilePaths()
@@ -39,24 +39,24 @@ public class AddinManager
         var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var path = Path.Combine(folderPath, Resource.AppName);
         var filePath = Path.Combine(path, DefaultSetting.AimInternalName);
-        _mAimIniFile = new IniFile(filePath);
+        _aimIniFile = new IniFile(filePath);
         var currentProcess = Process.GetCurrentProcess();
-        var fileName = currentProcess.MainModule.FileName;
-        var filePath2 = fileName.Replace(".exe", ".ini");
-        _mRevitIniFile = new IniFile(filePath2);
+        var fileName = currentProcess.MainModule?.FileName;
+        var filePath2 = fileName?.Replace(".exe", ".ini");
+        _revitIniFile = new IniFile(filePath2);
     }
 
     public void ReadAddinsFromAimIni()
     {
-        _mCommands.ReadItems(_mAimIniFile);
-        _mApplications.ReadItems(_mAimIniFile);
+        _commands.ReadItems(_aimIniFile);
+        _applications.ReadItems(_aimIniFile);
     }
 
     public void RemoveAddin(Addin addin)
     {
-        if (!_mCommands.RemoveAddIn(addin))
+        if (!_commands.RemoveAddIn(addin))
         {
-            _mApplications.RemoveAddIn(addin);
+            _applications.RemoveAddIn(addin);
         }
     }
 
@@ -67,8 +67,6 @@ public class AddinManager
         {
             return addinType;
         }
-        //TODO : Need Quick Check why assembly it not load in some case
-        //AssemLoader assemLoader = new AssemLoader();
         List<AddinItem> list = null;
         List<AddinItem> list2 = null;
         try
@@ -76,8 +74,8 @@ public class AddinManager
             assemLoader.HookAssemblyResolve();
 
             var assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
-            list = _mCommands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
-            list2 = _mApplications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
+            list = _commands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
+            list2 = _applications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
         }
         catch (Exception e)
         {
@@ -90,13 +88,13 @@ public class AddinManager
         if (list != null && list.Count > 0)
         {
             var addin = new Addin(filePath, list);
-            _mCommands.AddAddIn(addin);
+            _commands.AddAddIn(addin);
             addinType |= AddinType.Command;
         }
         if (list2 != null && list2.Count > 0)
         {
             var addin2 = new Addin(filePath, list2);
-            _mApplications.AddAddIn(addin2);
+            _applications.AddAddIn(addin2);
             addinType |= AddinType.Application;
         }
         return addinType;
@@ -104,12 +102,12 @@ public class AddinManager
 
     public void SaveToRevitIni()
     {
-        if (!File.Exists(_mRevitIniFile.FilePath))
+        if (!File.Exists(_revitIniFile.FilePath))
         {
-            throw new FileNotFoundException("can't find the revit.ini file from: " + _mRevitIniFile.FilePath);
+            throw new FileNotFoundException("can't find the revit.ini file from: " + _revitIniFile.FilePath);
         }
-        _mCommands.Save(_mRevitIniFile);
-        _mApplications.Save(_mRevitIniFile);
+        _commands.Save(_revitIniFile);
+        _applications.Save(_revitIniFile);
     }
 
     public void SaveToLocal()
@@ -119,7 +117,7 @@ public class AddinManager
 
     public void SaveToLocalRevitIni()
     {
-        foreach (var keyValuePair in _mCommands.AddinDict)
+        foreach (var keyValuePair in _commands.AddinDict)
         {
             var key = keyValuePair.Key;
             var value = keyValuePair.Value;
@@ -131,9 +129,9 @@ public class AddinManager
             }
             var file = new IniFile(Path.Combine(directoryName, DefaultSetting.IniName));
             value.SaveToLocalIni(file);
-            if (_mApplications.AddinDict.ContainsKey(key))
+            if (_applications.AddinDict.ContainsKey(key))
             {
-                var addin = _mApplications.AddinDict[key];
+                var addin = _applications.AddinDict[key];
                 addin.SaveToLocalIni(file);
             }
         }
@@ -146,20 +144,20 @@ public class AddinManager
             new FileInfo(AimIniFile.FilePath).Create();
             FileUtils.SetWriteable(AimIniFile.FilePath);
         }
-        _mCommands.Save(_mAimIniFile);
-        _mApplications.Save(_mAimIniFile);
+        _commands.Save(_aimIniFile);
+        _applications.Save(_aimIniFile);
     }
 
     public bool HasItemsToSave()
     {
-        foreach (var addin in _mCommands.AddinDict.Values)
+        foreach (var addin in _commands.AddinDict.Values)
         {
             if (addin.Save)
             {
                 return true;
             }
         }
-        foreach (var addin2 in _mApplications.AddinDict.Values)
+        foreach (var addin2 in _applications.AddinDict.Values)
         {
             if (addin2.Save)
             {
@@ -190,21 +188,21 @@ public class AddinManager
         var manifestFile = new ManifestFile(false){VendorDescription = vm.VendorDescription};
         if (vm.IsTabCmdSelected)
         {
-            foreach (var parrent in vm.CommandItems)
+            foreach (var parent in vm.CommandItems)
             {
-                foreach (var chidrent in parrent.Children)
+                foreach (var children in parent.Children)
                 {
-                    if (chidrent.IsChecked == true) manifestFile.Commands.Add(chidrent.AddinItem);
+                    if (children.IsChecked == true) manifestFile.Commands.Add(children.AddinItem);
                 }
             }
         }
         else if(vm.IsTabAppSelected)
         {
-            foreach (var parrent in vm.ApplicationItems)
+            foreach (var parent in vm.ApplicationItems)
             {
-                foreach (var chidrent in parrent.Children)
+                foreach (var children in parent.Children)
                 {
-                    if (chidrent.IsChecked == true) manifestFile.Applications.Add(chidrent.AddinItem);
+                    if (children.IsChecked == true) manifestFile.Applications.Add(children.AddinItem);
                 }
             }
 
@@ -223,7 +221,7 @@ public class AddinManager
     {
         var dictionary = new Dictionary<string, Addin>();
         var dictionary2 = new Dictionary<string, Addin>();
-        foreach (var keyValuePair in _mCommands.AddinDict)
+        foreach (var keyValuePair in _commands.AddinDict)
         {
             var key = keyValuePair.Key;
             var value = keyValuePair.Value;
@@ -238,9 +236,9 @@ public class AddinManager
                     manifestFile.Commands.Add(addinItem);
                 }
             }
-            if (_mApplications.AddinDict.ContainsKey(key))
+            if (_applications.AddinDict.ContainsKey(key))
             {
-                var addin = _mApplications.AddinDict[key];
+                var addin = _applications.AddinDict[key];
                 foreach (var addinItem2 in addin.ItemList)
                 {
                     if (addinItem2.Save)
@@ -248,11 +246,11 @@ public class AddinManager
                         manifestFile.Applications.Add(addinItem2);
                     }
                 }
-                dictionary.Add(key, _mApplications.AddinDict[key]);
+                dictionary.Add(key, _applications.AddinDict[key]);
             }
             manifestFile.SaveAs(filePath);
         }
-        foreach (var keyValuePair2 in _mApplications.AddinDict)
+        foreach (var keyValuePair2 in _applications.AddinDict)
         {
             var key2 = keyValuePair2.Key;
             var value2 = keyValuePair2.Value;
@@ -269,9 +267,9 @@ public class AddinManager
                         manifestFile2.Applications.Add(addinItem3);
                     }
                 }
-                if (_mCommands.AddinDict.ContainsKey(key2))
+                if (_commands.AddinDict.ContainsKey(key2))
                 {
-                    var addin2 = _mCommands.AddinDict[key2];
+                    var addin2 = _commands.AddinDict[key2];
                     foreach (var addinItem4 in addin2.ItemList)
                     {
                         if (addinItem4.Save)
@@ -279,7 +277,7 @@ public class AddinManager
                             manifestFile2.Commands.Add(addinItem4);
                         }
                     }
-                    dictionary2.Add(key2, _mCommands.AddinDict[key2]);
+                    dictionary2.Add(key2, _commands.AddinDict[key2]);
                 }
                 manifestFile2.SaveAs(filePath2);
             }
@@ -300,11 +298,11 @@ public class AddinManager
         return text;
     }
 
-    private readonly AddinsApplication _mApplications;
+    private readonly AddinsApplication _applications;
 
-    private readonly AddinsCommand _mCommands;
+    private readonly AddinsCommand _commands;
 
-    private IniFile _mAimIniFile;
+    private IniFile _aimIniFile;
 
-    private IniFile _mRevitIniFile;
+    private IniFile _revitIniFile;
 }

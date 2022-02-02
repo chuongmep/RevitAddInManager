@@ -15,7 +15,7 @@ public sealed class AddinManagerBase
     public Result ExecuteCommand(ExternalCommandData data, ref string message, ElementSet elements, bool faceless)
     {
         var vm = new AddInManagerViewModel(data,ref message,elements);
-        if (_mActiveCmd != null && faceless)
+        if (_activeCmd != null && faceless)
         {
             return RunActiveCommand(vm, data, ref message, elements);
         }
@@ -24,23 +24,19 @@ public sealed class AddinManagerBase
         var process = Process.GetCurrentProcess();
         new WindowInteropHelper(frmAddInManager).Owner = process.MainWindowHandle;
         frmAddInManager.Show();
-        //if (showDialog == false && ActiveCmd != null&& vm.IsRun)
-        //{
-        //    return RunActiveCommand(vm, data, ref message, elements);
-        //}
         return Result.Failed;
     }
 
     public string ActiveTempFolder
     {
-        get => _mActiveTempFolder;
-        set => _mActiveTempFolder = value;
+        get => _activeTempFolder;
+        set => _activeTempFolder = value;
     }
 
 
     public Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
     {
-        var filePath = _mActiveCmd.FilePath;
+        var filePath = _activeCmd.FilePath;
         Result result;
         try
         {
@@ -52,15 +48,15 @@ public sealed class AddinManagerBase
             }
             else
             {
-                _mActiveTempFolder = vm.AssemLoader.TempFolder;
-                if (assembly.CreateInstance(_mActiveCmdItem.FullClassName) is not IExternalCommand externalCommand)
+                _activeTempFolder = vm.AssemLoader.TempFolder;
+                if (assembly.CreateInstance(_activeCmdItem.FullClassName) is not IExternalCommand externalCommand)
                 {
                     result = Result.Failed;
                 }
                 else
                 {
-                    _mActiveEc = externalCommand;
-                    result = _mActiveEc.Execute(data, ref message, elements);
+                    _activeEc = externalCommand;
+                    result = _activeEc.Execute(data, ref message, elements);
                 }
             }
         }
@@ -82,82 +78,82 @@ public sealed class AddinManagerBase
     {
         get
         {
-            if (_mInst == null)
+            if (_instance == null)
             {
 #pragma warning disable RCS1059 // Avoid locking on publicly accessible instance.
                 lock (typeof(AddinManagerBase))
                 {
-                    if (_mInst == null)
+                    if (_instance == null)
                     {
-                        _mInst = new AddinManagerBase();
+                        _instance = new AddinManagerBase();
                     }
                 }
 #pragma warning restore RCS1059 // Avoid locking on publicly accessible instance.
             }
-            return _mInst;
+            return _instance;
         }
     }
 
     private AddinManagerBase()
     {
-        _mAddinManager = new AddinManager();
-        _mActiveCmd = null;
-        _mActiveCmdItem = null;
-        _mActiveApp = null;
-        _mActiveAppItem = null;
+        _addinManager = new AddinManager();
+        _activeCmd = null;
+        _activeCmdItem = null;
+        _activeApp = null;
+        _activeAppItem = null;
     }
 
 
     public IExternalCommand ActiveEC
     {
-        get => _mActiveEc;
-        set => _mActiveEc = value;
+        get => _activeEc;
+        set => _activeEc = value;
     }
 
 
     public Addin ActiveCmd
     {
-        get => _mActiveCmd;
-        set => _mActiveCmd = value;
+        get => _activeCmd;
+        set => _activeCmd = value;
     }
 
     public AddinItem ActiveCmdItem
     {
-        get => _mActiveCmdItem;
-        set => _mActiveCmdItem = value;
+        get => _activeCmdItem;
+        set => _activeCmdItem = value;
     }
 
 
     public Addin ActiveApp
     {
-        get => _mActiveApp;
-        set => _mActiveApp = value;
+        get => _activeApp;
+        set => _activeApp = value;
     }
     public AddinItem ActiveAppItem
     {
-        get => _mActiveAppItem;
-        set => _mActiveAppItem = value;
+        get => _activeAppItem;
+        set => _activeAppItem = value;
     }
 
     public AddinManager AddinManager
     {
-        get => _mAddinManager;
-        set => _mAddinManager = value;
+        get => _addinManager;
+        set => _addinManager = value;
     }
 
-    private string _mActiveTempFolder = string.Empty;
+    private string _activeTempFolder = string.Empty;
 
-    private static volatile AddinManagerBase _mInst;
+    private static volatile AddinManagerBase _instance;
 
-    private IExternalCommand _mActiveEc;
+    private IExternalCommand _activeEc;
 
-    private Addin _mActiveCmd;
+    private Addin _activeCmd;
 
-    private AddinItem _mActiveCmdItem;
+    private AddinItem _activeCmdItem;
 
-    private Addin _mActiveApp;
+    private Addin _activeApp;
 
-    private AddinItem _mActiveAppItem;
+    private AddinItem _activeAppItem;
 
-    private AddinManager _mAddinManager;
+    private AddinManager _addinManager;
 }

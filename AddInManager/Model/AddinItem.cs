@@ -8,12 +8,12 @@ public class AddinItem : IAddinNode
     public AddinItem(AddinType type)
     {
         AddinType = type;
-        m_clientId = Guid.NewGuid();
-        ClientIdString = m_clientId.ToString();
-        m_assemblyPath = string.Empty;
+        clientId = Guid.NewGuid();
+        ClientIdString = clientId.ToString();
+        _assemblyPath = string.Empty;
         AssemblyName = string.Empty;
         FullClassName = string.Empty;
-        m_name = string.Empty;
+        _name = string.Empty;
         Save = true;
         VisibilityMode = VisibilityMode.AlwaysVisible;
     }
@@ -24,20 +24,20 @@ public class AddinItem : IAddinNode
         RegenerationMode = regenerationOption;
         JournalingMode = journalingMode;
         AddinType = type;
-        m_assemblyPath = assemblyPath;
-        AssemblyName = Path.GetFileName(m_assemblyPath);
-        m_clientId = clientId;
+        _assemblyPath = assemblyPath;
+        AssemblyName = Path.GetFileName(_assemblyPath);
+        this.clientId = clientId;
         ClientIdString = clientId.ToString();
         FullClassName = fullClassName;
-        var num = fullClassName.LastIndexOf(".");
-        m_name = fullClassName.Substring(num + 1);
+        var num = fullClassName.LastIndexOf(".", StringComparison.Ordinal);
+        _name = fullClassName.Substring(num + 1);
         Save = true;
         VisibilityMode = VisibilityMode.AlwaysVisible;
     }
 
     public void SaveToManifest()
     {
-        var manifestFile = new ManifestFile(m_name + DefaultSetting.FormatExAddin);
+        var manifestFile = new ManifestFile(_name + DefaultSetting.FormatExAddin);
         if (AddinType == AddinType.Application)
         {
             manifestFile.Applications.Add(this);
@@ -55,11 +55,11 @@ public class AddinItem : IAddinNode
 
     public string AssemblyPath
     {
-        get => m_assemblyPath;
+        get => _assemblyPath;
         set
         {
-            m_assemblyPath = value;
-            AssemblyName = Path.GetFileName(m_assemblyPath);
+            _assemblyPath = value;
+            AssemblyName = Path.GetFileName(_assemblyPath);
         }
     }
 
@@ -69,11 +69,11 @@ public class AddinItem : IAddinNode
 
     public Guid ClientId
     {
-        get => m_clientId;
+        get => clientId;
         set
         {
-            m_clientId = value;
-            ClientIdString = m_clientId.ToString();
+            clientId = value;
+            ClientIdString = clientId.ToString();
         }
     }
 
@@ -88,20 +88,20 @@ public class AddinItem : IAddinNode
     {
         get
         {
-            if (string.IsNullOrEmpty(m_name))
+            if (string.IsNullOrEmpty(_name))
             {
                 return "External Tool";
             }
-            return m_name;
+            return _name;
         }
         set
         {
             if (!string.IsNullOrEmpty(value))
             {
-                m_name = value;
+                _name = value;
                 return;
             }
-            m_name = "External Tool";
+            _name = "External Tool";
         }
     }
 
@@ -109,20 +109,20 @@ public class AddinItem : IAddinNode
     {
         get
         {
-            if (string.IsNullOrEmpty(m_description))
+            if (string.IsNullOrEmpty(_description))
             {
-                return String.Empty;
+                return string.Empty;
             }
-            return m_description;
+            return _description;
         }
         set
         {
             if (string.IsNullOrEmpty(value))
             {
-                m_description = String.Empty;
+                _description = string.Empty;
                 return;
             }
-            m_description = value;
+            _description = value;
         }
     }
 
@@ -146,18 +146,18 @@ public class AddinItem : IAddinNode
 
     public override string ToString()
     {
-        return m_name;
+        return _name;
     }
 
 
-    protected string m_assemblyPath;
+    protected string _assemblyPath;
 
 
-    protected Guid m_clientId;
+    protected Guid clientId;
 
 
-    private string m_name;
+    private string _name;
 
 
-    private string m_description;
+    private string _description;
 }

@@ -23,11 +23,7 @@ public class RelayCommand : ICommand
 
     public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
     {
-        if (execute == null)
-        {
-            throw new ArgumentNullException("Execute");
-        }
-        m_execute = execute;
+        m_execute = execute ?? throw new ArgumentNullException("Execute");
         m_canExecute = canExecute;
     }
 

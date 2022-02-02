@@ -9,20 +9,20 @@ public abstract class Addins
 {
     public SortedDictionary<string, Addin> AddinDict
     {
-        get => m_addinDict;
-        set => m_addinDict = value;
+        get => addinDict;
+        set => addinDict = value;
     }
 
-    public int Count => m_addinDict.Count;
+    public int Count => addinDict.Count;
 
     public Addins()
     {
-        m_addinDict = new SortedDictionary<string, Addin>();
+        addinDict = new SortedDictionary<string, Addin>();
     }
 
     public void SortAddin()
     {
-        foreach (var addin in m_addinDict.Values)
+        foreach (var addin in addinDict.Values)
         {
             addin.SortAddinItem();
         }
@@ -32,19 +32,19 @@ public abstract class Addins
     public void AddAddIn(Addin addin)
     {
         var fileName = Path.GetFileName(addin.FilePath);
-        if (m_addinDict.ContainsKey(fileName))
+        if (addinDict.ContainsKey(fileName))
         {
-            m_addinDict.Remove(fileName);
+            addinDict.Remove(fileName);
         }
-        m_addinDict[fileName] = addin;
+        addinDict[fileName] = addin;
     }
 
     public bool RemoveAddIn(Addin addin)
     {
         var fileName = Path.GetFileName(addin.FilePath);
-        if (m_addinDict.ContainsKey(fileName))
+        if (addinDict.ContainsKey(fileName))
         {
-            m_addinDict.Remove(fileName);
+            addinDict.Remove(fileName);
             return true;
         }
         return false;
@@ -54,11 +54,11 @@ public abstract class Addins
     {
 
         var assemblyName = item.AssemblyName;
-        if (!m_addinDict.ContainsKey(assemblyName))
+        if (!addinDict.ContainsKey(assemblyName))
         {
-            m_addinDict[assemblyName] = new Addin(item.AssemblyPath);
+            addinDict[assemblyName] = new Addin(item.AssemblyPath);
         }
-        m_addinDict[assemblyName].ItemList.Add(item);
+        addinDict[assemblyName].ItemList.Add(item);
 
     }
 
@@ -97,20 +97,17 @@ public abstract class Addins
                             var customAttributes = Attribute.GetCustomAttributes(type2, false);
                             foreach (var attribute in customAttributes)
                             {
-                                if (attribute is RegenerationAttribute)
+                                if (attribute is RegenerationAttribute regenerationAttribute)
                                 {
-                                    var regenerationAttribute = (RegenerationAttribute)attribute;
-                                    regenerationOption = new RegenerationOption?(regenerationAttribute.Option);
+                                    regenerationOption = regenerationAttribute.Option;
                                 }
-                                if (attribute is TransactionAttribute)
+                                if (attribute is TransactionAttribute transactionAttribute)
                                 {
-                                    var transactionAttribute = (TransactionAttribute)attribute;
-                                    transactionMode = new TransactionMode?(transactionAttribute.Mode);
+                                    transactionMode = transactionAttribute.Mode;
                                 }
-                                if (attribute is JournalingAttribute)
+                                if (attribute is JournalingAttribute journalingAttribute)
                                 {
-                                    var journalingAttribute = (JournalingAttribute)attribute;
-                                    journalingMode = new JournalingMode?(journalingAttribute.Mode);
+                                    journalingMode = journalingAttribute.Mode;
                                 }
                                 if (transactionMode != null && regenerationOption != null)
                                 {
@@ -164,9 +161,9 @@ public abstract class Addins
         return list;
     }
 
-    protected SortedDictionary<string, Addin> m_addinDict;
+    protected SortedDictionary<string, Addin> addinDict;
 
-    protected int m_maxCount = 100;
+    protected int _maxCount = 100;
 
-    protected int m_count;
+    protected int _count;
 }

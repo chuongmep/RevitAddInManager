@@ -21,8 +21,6 @@ public class ViewModelBase : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
     }
 
-    #region Can Optimize
-
     public void OnPropertyChanged<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
     {
         property = value;
@@ -32,8 +30,6 @@ public class ViewModelBase : INotifyPropertyChanged
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Sets the property value.
