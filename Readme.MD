@@ -115,14 +115,6 @@ Credit to [icons8.com](https://icons8.com) for the Revit Add-in Manager icons.
 
 ---
 
-## Trademarks
-
-Autodesk and Revit  are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates, in the USA and/or other countries. 
-
-All other brand names, product names or trademarks belong to their respective holders.
-
----
-
 ## Contribute
 
 **Add-In Manager** is an open-source project and would be nothing without its community. You can make suggestions or track and submit bugs via Github [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue). You can submit your own code to the **Add-In Manager** project via a Github [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
