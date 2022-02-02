@@ -128,6 +128,7 @@ All other brand names, product names or trademarks belong to their respective ho
 **Add-In Manager** is an open-source project and would be nothing without its community. You can make suggestions or track and submit bugs via Github [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue). You can submit your own code to the **Add-In Manager** project via a Github [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
 
 Many Thanks all contributors for this repository. Feel free to contribute!
+Please refer to the [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 <a href = "https://github.com/chuongmep/RevitAddInManager/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=chuongmep/RevitAddInManager"/>
