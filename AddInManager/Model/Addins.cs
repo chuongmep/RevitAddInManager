@@ -163,7 +163,7 @@ public abstract class Addins
 
     protected SortedDictionary<string, Addin> addinDict;
 
-    protected int _maxCount = 100;
+    protected int maxCount = 100;
 
-    protected int _count;
+    protected int count;
 }

@@ -7,51 +7,51 @@ public class Addin : IAddinNode
 {
     public List<AddinItem> ItemList
     {
-        get => _itemList;
-        set => _itemList = value;
+        get => itemList;
+        set => itemList = value;
     }
 
     public string FilePath
     {
-        get => _filePath;
-        set => _filePath = value;
+        get => filePath;
+        set => filePath = value;
     }
 
     public bool Save
     {
-        get => _save;
-        set => _save = value;
+        get => save;
+        set => save = value;
     }
 
     public bool Hidden
     {
-        get => _hidden;
-        set => _hidden = value;
+        get => hidden;
+        set => hidden = value;
     }
 
     public Addin(string filePath)
     {
-        _itemList = new List<AddinItem>();
-        _filePath = filePath;
-        _save = true;
+        itemList = new List<AddinItem>();
+        this.filePath = filePath;
+        save = true;
     }
 
     public Addin(string filePath, List<AddinItem> itemList)
     {
-        _itemList = itemList;
-        _filePath = filePath;
+        this.itemList = itemList;
+        this.filePath = filePath;
         SortAddinItem();
-        _save = true;
+        save = true;
     }
 
     public void SortAddinItem()
     {
-        _itemList.Sort(new AddinItemComparer());
+        itemList.Sort(new AddinItemComparer());
     }
     public void RemoveItem(AddinItem item)
     {
-        _itemList.Remove(item);
-        if (_itemList.Count == 0)
+        itemList.Remove(item);
+        if (itemList.Count == 0)
         {
             AddinManagerBase.Instance.AddinManager.RemoveAddin(this);
         }
@@ -59,17 +59,17 @@ public class Addin : IAddinNode
 
     public void SaveToLocalIni(IniFile file)
     {
-        if (_itemList == null || _itemList.Count == 0)
+        if (itemList == null || itemList.Count == 0)
         {
             return;
         }
-        var addinType = _itemList[0].AddinType;
+        var addinType = itemList[0].AddinType;
         if (addinType == AddinType.Command)
         {
             file.WriteSection("ExternalCommands");
             file.Write("ExternalCommands", "ECCount", 0);
             var num = 0;
-            foreach (var addinItem in _itemList)
+            foreach (var addinItem in itemList)
             {
                 if (addinItem.Save)
                 {
@@ -82,7 +82,7 @@ public class Addin : IAddinNode
         file.WriteSection("ExternalApplications");
         file.Write("ExternalApplications", "EACount", 0);
         var num2 = 0;
-        foreach (var item in _itemList)
+        foreach (var item in itemList)
         {
             WriteExternalApplication(file, item, ++num2);
         }
@@ -105,29 +105,29 @@ public class Addin : IAddinNode
 
     public void SaveToLocalManifest()
     {
-        if (_itemList == null || _itemList.Count == 0)
+        if (itemList == null || itemList.Count == 0)
         {
             return;
         }
-        var addinType = _itemList[0].AddinType;
-        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_filePath);
+        var addinType = itemList[0].AddinType;
+        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
         var manifestFile = new ManifestFile(fileNameWithoutExtension + DefaultSetting.FormatExAddin);
         if (addinType == AddinType.Application)
         {
-            manifestFile.Applications = _itemList;
+            manifestFile.Applications = itemList;
         }
         else if (addinType == AddinType.Command)
         {
-            manifestFile.Commands = _itemList;
+            manifestFile.Commands = itemList;
         }
         manifestFile.Save();
     }
 
-    private List<AddinItem> _itemList;
+    private List<AddinItem> itemList;
 
-    private string _filePath;
+    private string filePath;
 
-    private bool _save;
+    private bool save;
 
-    private bool _hidden;
+    private bool hidden;
 }

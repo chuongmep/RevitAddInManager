@@ -25,74 +25,74 @@ public class AddInManagerViewModel : ViewModelBase
 
     public AddinManagerBase MAddinManagerBase { get; set; }
 
-    private ObservableCollection<AddinModel> _commandItems;
+    private ObservableCollection<AddinModel> commandItems;
 
     public ObservableCollection<AddinModel> CommandItems
     {
-        get => _commandItems;
+        get => commandItems;
         set
         {
-            if (value == _commandItems) return;
-            _commandItems = value;
+            if (value == commandItems) return;
+            commandItems = value;
             OnPropertyChanged();
         }
     }
 
-    private AddinModel _selectedCommandItem;
+    private AddinModel selectedCommandItem;
 
     public AddinModel SelectedCommandItem
     {
         get
         {
-            if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == true && IsTabCmdSelected)
+            if (selectedCommandItem != null && selectedCommandItem.IsParentTree == true && IsTabCmdSelected)
             {
                 IsCanRun = false;
-                MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
+                MAddinManagerBase.ActiveCmd = selectedCommandItem.Addin;
             }
-            else if (_selectedCommandItem != null && _selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
+            else if (selectedCommandItem != null && selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
             {
                 IsCanRun = true;
-                MAddinManagerBase.ActiveCmdItem = _selectedCommandItem.AddinItem;
-                MAddinManagerBase.ActiveCmd = _selectedCommandItem.Addin;
+                MAddinManagerBase.ActiveCmdItem = selectedCommandItem.AddinItem;
+                MAddinManagerBase.ActiveCmd = selectedCommandItem.Addin;
                 VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
             }
             else IsCanRun = false;
-            return _selectedCommandItem;
+            return selectedCommandItem;
         }
-        set => OnPropertyChanged(ref _selectedCommandItem, value);
+        set => OnPropertyChanged(ref selectedCommandItem, value);
     }
 
-    private ObservableCollection<AddinModel> _applicationItems;
+    private ObservableCollection<AddinModel> applicationItems;
     public ObservableCollection<AddinModel> ApplicationItems
     {
-        get => _applicationItems;
+        get => applicationItems;
         set
         {
-            if (value == _applicationItems) return;
-            _applicationItems = value;
+            if (value == applicationItems) return;
+            applicationItems = value;
             OnPropertyChanged();
         }
     }
 
-    private AddinModel _selectedAppItem;
+    private AddinModel selectedAppItem;
 
     public AddinModel SelectedAppItem
     {
         get
         {
-            if (_selectedAppItem != null && _selectedAppItem.IsParentTree == true && IsTabAppSelected)
+            if (selectedAppItem != null && selectedAppItem.IsParentTree == true && IsTabAppSelected)
             {
-                MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
+                MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
             }
-            else if (_selectedAppItem != null && _selectedAppItem.IsParentTree == false && IsTabAppSelected)
+            else if (selectedAppItem != null && selectedAppItem.IsParentTree == false && IsTabAppSelected)
             {
-                MAddinManagerBase.ActiveAppItem = _selectedAppItem.AddinItem;
-                MAddinManagerBase.ActiveApp = _selectedAppItem.Addin;
+                MAddinManagerBase.ActiveAppItem = selectedAppItem.AddinItem;
+                MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
                 VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
             }
-            return _selectedAppItem;
+            return selectedAppItem;
         }
-        set => OnPropertyChanged(ref _selectedAppItem, value);
+        set => OnPropertyChanged(ref selectedAppItem, value);
     }
 
     public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
@@ -117,78 +117,78 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand VisibleToggle => new RelayCommand(SetToggleVisible);
     public ICommand ExploreCommand => new RelayCommand(ExploreCommandClick);
 
-    private string _searchText;
+    private string searchText;
     public string SearchText
     {
         get
         {
             FreshSearchClick();
-            return _searchText;
+            return searchText;
         }
-        set => OnPropertyChanged(ref _searchText, value);
+        set => OnPropertyChanged(ref searchText, value);
     }
 
-    private bool _IsCurrentVersion = true;
+    private bool isCurrentVersion = true;
     public bool IsCurrentVersion
     {
-        get => _IsCurrentVersion;
-        set => OnPropertyChanged(ref _IsCurrentVersion, value);
+        get => isCurrentVersion;
+        set => OnPropertyChanged(ref isCurrentVersion, value);
     }
 
-    private ObservableCollection<RevitAddin> _addinStartup;
+    private ObservableCollection<RevitAddin> addinStartup;
     public ObservableCollection<RevitAddin> AddInStartUps
     {
         get
         {
-            if (_addinStartup == null)
+            if (addinStartup == null)
             {
-                _addinStartup = new ObservableCollection<RevitAddin>();
+                addinStartup = new ObservableCollection<RevitAddin>();
             }
 
-            return _addinStartup;
+            return addinStartup;
         }
-        set => OnPropertyChanged(ref _addinStartup, value);
+        set => OnPropertyChanged(ref addinStartup, value);
     }
     public ICommand HelpCommand => new RelayCommand(HelpCommandClick);
 
 
-    private string _vendorDescription = string.Empty;
+    private string vendorDescription = string.Empty;
     public string VendorDescription
     {
-        get => _vendorDescription;
-        set => OnPropertyChanged(ref _vendorDescription, value);
+        get => vendorDescription;
+        set => OnPropertyChanged(ref vendorDescription, value);
     }
 
-    private bool _issTabCmdSelected = true;
+    private bool isTabCmdSelected = true;
     public bool IsTabCmdSelected
     {
-        get => _issTabCmdSelected;
-        set => OnPropertyChanged(ref _issTabCmdSelected, value);
+        get => isTabCmdSelected;
+        set => OnPropertyChanged(ref isTabCmdSelected, value);
     }
 
-    private bool _issTabAppSelected;
+    private bool isTabAppSelected;
     public bool IsTabAppSelected
     {
         get
         {
-            if (_issTabAppSelected) IsCanRun = false;
-            return _issTabAppSelected;
+            if (isTabAppSelected) IsCanRun = false;
+            return isTabAppSelected;
         }
-        set => OnPropertyChanged(ref _issTabAppSelected, value);
+        set => OnPropertyChanged(ref isTabAppSelected, value);
     }
 
-    private bool _isCanRun;
+    private bool isCanRun;
 
     public bool IsCanRun
     {
-        get => _isCanRun;
-        set => OnPropertyChanged(ref _isCanRun, value);
+        get => isCanRun;
+        set => OnPropertyChanged(ref isCanRun, value);
     }
-    private bool _isTabStartSelected;
+    private bool isTabStartSelected;
     public bool IsTabStartSelected
     {
-        get => _isTabStartSelected;
-        set => OnPropertyChanged(ref _isTabStartSelected, value);
+        get => isTabStartSelected;
+        set => OnPropertyChanged(ref isTabStartSelected, value);
     }
 
     private void HelpCommandClick()
@@ -221,7 +221,7 @@ public class AddInManagerViewModel : ViewModelBase
             {
                 if (isSearchText)
                 {
-                    if (addinItem.FullClassName.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    if (addinItem.FullClassName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                     {
                         addinModels.Add(new AddinModel(addinItem.FullClassName)
                         {
@@ -475,7 +475,7 @@ public class AddInManagerViewModel : ViewModelBase
     }
     private void FreshSearchClick()
     {
-        var flag = string.IsNullOrEmpty(_searchText);
+        var flag = string.IsNullOrEmpty(searchText);
         if (IsTabCmdSelected)
         {
             if (flag)
@@ -511,8 +511,8 @@ public class AddInManagerViewModel : ViewModelBase
     {
 
         //Get All AddIn
-        if (_addinStartup == null) _addinStartup = new ObservableCollection<RevitAddin>();
-        _addinStartup.Clear();
+        if (addinStartup == null) addinStartup = new ObservableCollection<RevitAddin>();
+        addinStartup.Clear();
         var autodeskPath = "Autodesk\\Revit\\Addins";
         var AdskPluginPath = "Autodesk\\ApplicationPlugins\\";
         var version = ExternalCommandData.Application.Application.VersionNumber;
@@ -527,19 +527,19 @@ public class AddInManagerViewModel : ViewModelBase
         var addinsPlugins = GetAddinFromFolder(Folder3);
         revitAddins.ForEach(delegate (RevitAddin x)
         {
-            _addinStartup.Add(x);
+            addinStartup.Add(x);
             x.IsReadOnly = true;
         });
-        addinsProgramData.ForEach(x => _addinStartup.Add(x));
-        addinsPlugins.ForEach(x => _addinStartup.Add(x));
+        addinsProgramData.ForEach(x => addinStartup.Add(x));
+        addinsPlugins.ForEach(x => addinStartup.Add(x));
         if (isSearch)
         {
-            _addinStartup = _addinStartup.Where(x => x.Name.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+            addinStartup = addinStartup.Where(x => x.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                 .OrderBy(x => x.Name).ToObservableCollection();
             OnPropertyChanged(nameof(AddInStartUps));
             return;
         }
-        _addinStartup = _addinStartup.OrderBy(x => x.Name).ToObservableCollection();
+        addinStartup = addinStartup.OrderBy(x => x.Name).ToObservableCollection();
     }
 
     List<RevitAddin> GetAddinFromFolder(string folder)

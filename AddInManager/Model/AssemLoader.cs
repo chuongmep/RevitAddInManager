@@ -11,45 +11,45 @@ public class AssemLoader
 {
     public string OriginalFolder
     {
-        get => _originalFolder;
-        set => _originalFolder = value;
+        get => originalFolder;
+        set => originalFolder = value;
     }
 
     public string TempFolder
     {
-        get => _tempFolder;
-        set => _tempFolder = value;
+        get => tempFolder;
+        set => tempFolder = value;
     }
 
 
     public AssemLoader()
     {
-        _tempFolder = string.Empty;
-        _refedFolders = new List<string>();
-        _copiedFiles = new Dictionary<string, DateTime>();
+        tempFolder = string.Empty;
+        refedFolders = new List<string>();
+        copiedFiles = new Dictionary<string, DateTime>();
     }
 
 
     public void CopyGeneratedFilesBack()
     {
-        var files = Directory.GetFiles(_tempFolder, "*.*", SearchOption.AllDirectories);
+        var files = Directory.GetFiles(tempFolder, "*.*", SearchOption.AllDirectories);
         foreach (var text in files)
         {
-            if (_copiedFiles.ContainsKey(text))
+            if (copiedFiles.ContainsKey(text))
             {
-                var t = _copiedFiles[text];
+                var t = copiedFiles[text];
                 var fileInfo = new FileInfo(text);
                 if (fileInfo.LastWriteTime > t)
                 {
-                    var str = text.Remove(0, _tempFolder.Length);
-                    var destinationFilename = _originalFolder + str;
+                    var str = text.Remove(0, tempFolder.Length);
+                    var destinationFilename = originalFolder + str;
                     FileUtils.CopyFile(text, destinationFilename);
                 }
             }
             else
             {
-                var str2 = text.Remove(0, _tempFolder.Length);
-                var destinationFilename2 = _originalFolder + str2;
+                var str2 = text.Remove(0, tempFolder.Length);
+                var destinationFilename2 = originalFolder + str2;
                 FileUtils.CopyFile(text, destinationFilename2);
             }
         }
@@ -71,8 +71,8 @@ public class AssemLoader
         {
             return null;
         }
-        _mParsingOnly = parsingOnly;
-        _originalFolder = Path.GetDirectoryName(originalFilePath);
+        this.parsingOnly = parsingOnly;
+        originalFolder = Path.GetDirectoryName(originalFilePath);
         var stringBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(originalFilePath));
         if (parsingOnly)
         {
@@ -82,7 +82,7 @@ public class AssemLoader
         {
             stringBuilder.Append("-Executing-");
         }
-        _tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
+        tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
         var assembly = CopyAndLoadAddin(originalFilePath, parsingOnly);
 
         if (null == assembly || !IsAPIReferenced(assembly))
@@ -96,22 +96,22 @@ public class AssemLoader
     private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
     {
         var text = string.Empty;
-        if (!FileUtils.FileExistsInFolder(srcFilePath, _tempFolder))
+        if (!FileUtils.FileExistsInFolder(srcFilePath, tempFolder))
         {
             var directoryName = Path.GetDirectoryName(srcFilePath);
-            if (!_refedFolders.Contains(directoryName))
+            if (!refedFolders.Contains(directoryName))
             {
-                _refedFolders.Add(directoryName);
+                refedFolders.Add(directoryName);
             }
             var list = new List<FileInfo>();
-            text = FileUtils.CopyFileToFolder(srcFilePath, _tempFolder, onlyCopyRelated, list);
+            text = FileUtils.CopyFileToFolder(srcFilePath, tempFolder, onlyCopyRelated, list);
             if (string.IsNullOrEmpty(text))
             {
                 return null;
             }
             foreach (var fileInfo in list)
             {
-                _copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTime);
+                copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTime);
             }
         }
         return LoadAddin(text);
@@ -194,7 +194,7 @@ public class AssemLoader
             var str = assemName.Substring(0, assemName.IndexOf(','));
             foreach (var str2 in array)
             {
-                text = _tempFolder + "\\" + str + str2;
+                text = tempFolder + "\\" + str + str2;
 
                 if (File.Exists(text))
                 {
@@ -221,7 +221,7 @@ public class AssemLoader
         var text2 = assemName.Substring(0, assemName.IndexOf(','));
         foreach (var str in array)
         {
-            text = _dotnetDir + "\\" + text2 + str;
+            text = dotnetDir + "\\" + text2 + str;
             if (File.Exists(text))
             {
                 return text;
@@ -229,7 +229,7 @@ public class AssemLoader
         }
         foreach (var str2 in array)
         {
-            foreach (var str3 in _refedFolders)
+            foreach (var str3 in refedFolders)
             {
                 text = str3 + "\\" + text2 + str2;
                 if (File.Exists(text))
@@ -277,20 +277,20 @@ public class AssemLoader
     private bool IsAPIReferenced(Assembly assembly)
     {
         var AssRevitName = "RevitAPI";
-        if (string.IsNullOrEmpty(_RevitApiAssemblyFullName))
+        if (string.IsNullOrEmpty(revitApiAssemblyFullName))
         {
             foreach (var assembly2 in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (String.Compare(assembly2.GetName().Name,AssRevitName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    _RevitApiAssemblyFullName = assembly2.GetName().Name;
+                    revitApiAssemblyFullName = assembly2.GetName().Name;
                     break;
                 }
             }
         }
         foreach (var assemblyName in assembly.GetReferencedAssemblies())
         {
-            if (_RevitApiAssemblyFullName == assemblyName.Name)
+            if (revitApiAssemblyFullName == assemblyName.Name)
             {
                 return true;
             }
@@ -298,19 +298,19 @@ public class AssemLoader
         return false;
     }
 
-    private readonly List<string> _refedFolders;
+    private readonly List<string> refedFolders;
 
-    private readonly Dictionary<string, DateTime> _copiedFiles;
+    private readonly Dictionary<string, DateTime> copiedFiles;
 
-    private bool _mParsingOnly;
+    private bool parsingOnly;
 
-    private string _originalFolder;
+    private string originalFolder;
 
-    private string _tempFolder;
+    private string tempFolder;
 
-    private static string _dotnetDir = Environment.GetEnvironmentVariable("windir") + "\\Microsoft.NET\\Framework\\v2.0.50727";
+    private static string dotnetDir = Environment.GetEnvironmentVariable("windir") + "\\Microsoft.NET\\Framework\\v2.0.50727";
 
     public static string ResolvedAssemPath = string.Empty;
 
-    private string _RevitApiAssemblyFullName;
+    private string revitApiAssemblyFullName;
 }

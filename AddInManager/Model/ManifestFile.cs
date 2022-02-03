@@ -9,31 +9,31 @@ public class ManifestFile
 {
     public ManifestFile()
     {
-        _local = false;
-        _applications = new List<AddinItem>();
-        _commands = new List<AddinItem>();
+        local = false;
+        applications = new List<AddinItem>();
+        commands = new List<AddinItem>();
     }
 
     public ManifestFile(string fileName) : this()
     {
-        _fileName = fileName;
-        if (string.IsNullOrEmpty(_filePath))
+        this.fileName = fileName;
+        if (string.IsNullOrEmpty(filePath))
         {
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
-            _filePath = Path.Combine(path, _fileName);
+            filePath = Path.Combine(path, this.fileName);
         }
     }
 
     public ManifestFile(bool local) : this()
     {
-        _local = local;
+        this.local = local;
     }
 
     public void Load()
     {
-        _xmlDoc = new XmlDocument();
-        _xmlDoc.Load(_filePath);
-        var documentElement = _xmlDoc.DocumentElement;
+        xmlDoc = new XmlDocument();
+        xmlDoc.Load(filePath);
+        var documentElement = xmlDoc.DocumentElement;
         if (!documentElement.Name.Equals(ROOT_NODE))
         {
 
@@ -43,8 +43,8 @@ public class ManifestFile
         {
             throw new ArgumentException(EMPTY_ADDIN);
         }
-        _applications.Clear();
-        _commands.Clear();
+        applications.Clear();
+        commands.Clear();
         foreach (var obj in documentElement.ChildNodes)
         {
             var xmlNode = (XmlNode)obj;
@@ -70,7 +70,7 @@ public class ManifestFile
 
     public void Save()
     {
-        SaveAs(_filePath);
+        SaveAs(filePath);
     }
 
     public void SaveAs(string filePath)
@@ -89,7 +89,7 @@ public class ManifestFile
             Directory.CreateDirectory(directoryName);
         }
         var fileInfo = new FileInfo(filePath);
-        _xmlDoc = new XmlDocument();
+        xmlDoc = new XmlDocument();
         CreateXmlForManifest();
         if (File.Exists(filePath))
         {
@@ -98,22 +98,22 @@ public class ManifestFile
         TextWriter w = new StreamWriter(filePath, false, Encoding.UTF8);
         var xmlTextWriter = new XmlTextWriter(w);
         xmlTextWriter.Formatting = Formatting.Indented;
-        _xmlDoc.Save(xmlTextWriter);
+        xmlDoc.Save(xmlTextWriter);
         xmlTextWriter.Close();
-        _filePath = fileInfo.FullName;
-        _fileName = Path.GetFileName(fileInfo.FullName);
+        this.filePath = fileInfo.FullName;
+        fileName = Path.GetFileName(fileInfo.FullName);
     }
 
     public string FileName
     {
-        get => _fileName;
-        set => _fileName = value;
+        get => fileName;
+        set => fileName = value;
     }
 
     public bool Local
     {
-        get => _local;
-        set => _local = value;
+        get => local;
+        set => local = value;
     }
 
     private string _vendorDescription;
@@ -126,68 +126,68 @@ public class ManifestFile
     {
         get
         {
-            if (string.IsNullOrEmpty(_filePath))
+            if (string.IsNullOrEmpty(filePath))
             {
                 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
-                _filePath = Path.Combine(path, DefaultSetting.AimInternalName);
+                filePath = Path.Combine(path, DefaultSetting.AimInternalName);
             }
-            return _filePath;
+            return filePath;
         }
-        set => _filePath = value;
+        set => filePath = value;
     }
 
 
     public List<AddinItem> Applications
     {
-        get => _applications;
-        set => _applications = value;
+        get => applications;
+        set => applications = value;
     }
 
     public List<AddinItem> Commands
     {
-        get => _commands;
-        set => _commands = value;
+        get => commands;
+        set => commands = value;
     }
 
     private XmlDocument CreateXmlForManifest()
     {
-        var xmlNode = _xmlDoc.AppendChild(_xmlDoc.CreateElement(ROOT_NODE));
-        foreach (var currentApp in _applications)
+        var xmlNode = xmlDoc.AppendChild(xmlDoc.CreateElement(ROOT_NODE));
+        foreach (var currentApp in applications)
         {
-            var xmlElement = _xmlDoc.CreateElement(ADDIN_NODE);
+            var xmlElement = xmlDoc.CreateElement(ADDIN_NODE);
             xmlElement.SetAttribute(TYPE_ATTRIBUTE, APPLICATION_NODE);
             xmlNode.AppendChild(xmlElement);
             AddApplicationToXmlElement(xmlElement, currentApp);
-            var xmlElement2 = _xmlDoc.CreateElement(VENDORID);
+            var xmlElement2 = xmlDoc.CreateElement(VENDORID);
             xmlElement2.InnerText = "ADSK";
             xmlElement.AppendChild(xmlElement2);
-            xmlElement2 = _xmlDoc.CreateElement(VENDORDESCRIPTION);
+            xmlElement2 = xmlDoc.CreateElement(VENDORDESCRIPTION);
             xmlElement2.InnerText = "Autodesk, www.autodesk.com";
             xmlElement.AppendChild(xmlElement2);
         }
-        foreach (var command in _commands)
+        foreach (var command in commands)
         {
-            var xmlElement3 = _xmlDoc.CreateElement(ADDIN_NODE);
+            var xmlElement3 = xmlDoc.CreateElement(ADDIN_NODE);
             xmlElement3.SetAttribute(TYPE_ATTRIBUTE, COMMAND_NODE);
             xmlNode.AppendChild(xmlElement3);
             AddCommandToXmlElement(xmlElement3, command);
-            var xmlElement4 = _xmlDoc.CreateElement(VENDORID);
+            var xmlElement4 = xmlDoc.CreateElement(VENDORID);
             xmlElement4.InnerText = "ADSK";
             xmlElement3.AppendChild(xmlElement4);
-            xmlElement4 = _xmlDoc.CreateElement(VENDORDESCRIPTION);
+            xmlElement4 = xmlDoc.CreateElement(VENDORDESCRIPTION);
             if(VendorDescription==string.Empty) xmlElement4.InnerText = "Autodesk, www.autodesk.com";
             else xmlElement4.InnerText = VendorDescription;
             xmlElement3.AppendChild(xmlElement4);
         }
-        return _xmlDoc;
+        return xmlDoc;
     }
 
     private void AddAddInItemToXmlElement(XmlElement xmlEle, AddinItem addinItem)
     {
         if (!string.IsNullOrEmpty(addinItem.AssemblyPath))
         {
-            var xmlElement = _xmlDoc.CreateElement(ASSEMBLY);
-            if (_local)
+            var xmlElement = xmlDoc.CreateElement(ASSEMBLY);
+            if (local)
             {
                 xmlElement.InnerText = addinItem.AssemblyName;
             }
@@ -199,13 +199,13 @@ public class ManifestFile
         }
         if (!string.IsNullOrEmpty(addinItem.ClientIdString))
         {
-            var xmlElement2 = _xmlDoc.CreateElement(CLIENTID);
+            var xmlElement2 = xmlDoc.CreateElement(CLIENTID);
             xmlElement2.InnerText = addinItem.ClientIdString;
             xmlEle.AppendChild(xmlElement2);
         }
         if (!string.IsNullOrEmpty(addinItem.FullClassName))
         {
-            var xmlElement3 = _xmlDoc.CreateElement(FULLCLASSNAME);
+            var xmlElement3 = xmlDoc.CreateElement(FULLCLASSNAME);
             xmlElement3.InnerText = addinItem.FullClassName;
             xmlEle.AppendChild(xmlElement3);
         }
@@ -215,7 +215,7 @@ public class ManifestFile
     {
         if (!string.IsNullOrEmpty(currentApp.Name))
         {
-            var xmlElement = _xmlDoc.CreateElement(NAME_NODE);
+            var xmlElement = xmlDoc.CreateElement(NAME_NODE);
             xmlElement.InnerText = currentApp.Name;
             appEle.AppendChild(xmlElement);
         }
@@ -228,13 +228,13 @@ public class ManifestFile
         XmlElement xmlElement;
         if (!string.IsNullOrEmpty(command.Name))
         {
-            xmlElement = _xmlDoc.CreateElement(TEXT);
+            xmlElement = xmlDoc.CreateElement(TEXT);
             xmlElement.InnerText = command.Name;
             commandEle.AppendChild(xmlElement);
         }
         if (!string.IsNullOrEmpty(command.Description))
         {
-            xmlElement = _xmlDoc.CreateElement(DESCRIPTION);
+            xmlElement = xmlDoc.CreateElement(DESCRIPTION);
             xmlElement.InnerText = command.Description;
             commandEle.AppendChild(xmlElement);
         }
@@ -243,7 +243,7 @@ public class ManifestFile
         {
             text = text.Replace(",", " |");
         }
-        xmlElement = _xmlDoc.CreateElement(VISIBILITYMODE);
+        xmlElement = xmlDoc.CreateElement(VISIBILITYMODE);
         xmlElement.InnerText = text;
         commandEle.AppendChild(xmlElement);
     }
@@ -252,14 +252,14 @@ public class ManifestFile
     {
         var addinItem = new AddinItem(AddinType.Application);
         ParseApplicationItems(addinItem, nodeApplication);
-        _applications.Add(addinItem);
+        applications.Add(addinItem);
     }
 
     private void ParseExternalCommands(XmlNode nodeCommand)
     {
         var addinItem = new AddinItem(AddinType.Command);
         ParseCommandItems(addinItem, nodeCommand);
-        _commands.Add(addinItem);
+        commands.Add(addinItem);
     }
 
     private void ParseApplicationItems(AddinItem addinApp, XmlNode nodeAddIn)
@@ -297,7 +297,7 @@ public class ManifestFile
         var xmlElement = nodeAddIn[ASSEMBLY];
         if (xmlElement != null)
         {
-            if (_local)
+            if (local)
             {
                 addinItem.AssemblyName = xmlElement.InnerText;
             }
@@ -370,15 +370,15 @@ public class ManifestFile
         return fileInfo.FullName;
     }
 
-    private string _fileName;
+    private string fileName;
 
-    private bool _local;
+    private bool local;
 
-    private string _filePath;
+    private string filePath;
 
-    private List<AddinItem> _applications;
+    private List<AddinItem> applications;
 
-    private List<AddinItem> _commands;
+    private List<AddinItem> commands;
 
     private string ROOT_NODE = "RevitAddIns";
 
@@ -418,5 +418,5 @@ public class ManifestFile
 
     private string FILENAME_NULL_OR_EMPTY = "File name for RevitAddInManifest is null or empty";
 
-    private XmlDocument _xmlDoc;
+    private XmlDocument xmlDoc;
 }

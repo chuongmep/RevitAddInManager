@@ -5,57 +5,66 @@ namespace RevitAddinManager.Model
 {
     public class RevitEvent : IExternalEventHandler
     {
-        private Action _doAction;
-        private Document _doc;
-        private readonly ExternalEvent _exEvent;
-        private bool _skipFailures;
-        private string _transactionName;
-        private bool withTransaction;
+        private Action DoAction;
+        private Document Doc;
+        private readonly ExternalEvent ExEvent;
+        private bool SkipFailures;
+        private string TransactionName;
+        private bool WithTransaction;
         public RevitEvent()
         {
-            _exEvent = ExternalEvent.Create(this);
+            ExEvent = ExternalEvent.Create(this);
         }
+
+        /// <summary>
+        /// Execute A Command By IExternalEventHandler
+        /// </summary>
+        /// <param name="doAction">action to run</param>
+        /// <param name="skipFailures">ignore error</param>
+        /// <param name="doc">document</param>
+        /// <param name="transactionName">transaction name</param>
+        /// <param name="withTrans">is transaction</param>
         public void Run(Action doAction, bool skipFailures, Document doc = null, string transactionName = null, bool withTrans = true)
         {
-            _doAction = doAction;
-            _skipFailures = skipFailures;
-            _doc = doc;
-            withTransaction = withTrans;
-            _exEvent.Raise();
-            _transactionName = transactionName;
+            this.DoAction = doAction;
+            this.SkipFailures = skipFailures;
+            this.Doc = doc;
+            WithTransaction = withTrans;
+            ExEvent.Raise();
+            this.TransactionName = transactionName;
         }
         public void Execute(UIApplication app)
         {
             try
             {
-                if (_doAction != null)
+                if (DoAction != null)
                 {
-                    if (_doc == null) _doc = app.ActiveUIDocument.Document;
-                    if (_skipFailures)
+                    if (Doc == null) Doc = app.ActiveUIDocument.Document;
+                    if (SkipFailures)
                         app.Application.FailuresProcessing += Application_FailuresProcessing;
 
-                    if (withTransaction)
+                    if (WithTransaction)
                     {
-                        using (Transaction t = new Transaction(_doc, _transactionName ?? "RevitEvent"))
+                        using (Transaction t = new Transaction(Doc, TransactionName ?? "RevitEvent"))
                         {
                             t.Start();
-                            _doAction();
+                            DoAction();
                             t.Commit();
                         }
                     }
                     else
                     {
-                        _doAction();
+                        DoAction();
                     }
 
-                    if (_skipFailures)
+                    if (SkipFailures)
                         app.Application.FailuresProcessing -= Application_FailuresProcessing;
                 }
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
-                if (_skipFailures)
+                if (SkipFailures)
                     app.Application.FailuresProcessing -= Application_FailuresProcessing;
             }
         }

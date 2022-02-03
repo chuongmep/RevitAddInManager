@@ -10,10 +10,10 @@ public class AddinItem : IAddinNode
         AddinType = type;
         clientId = Guid.NewGuid();
         ClientIdString = clientId.ToString();
-        _assemblyPath = string.Empty;
+        assemblyPath = string.Empty;
         AssemblyName = string.Empty;
         FullClassName = string.Empty;
-        _name = string.Empty;
+        name = string.Empty;
         Save = true;
         VisibilityMode = VisibilityMode.AlwaysVisible;
     }
@@ -24,20 +24,20 @@ public class AddinItem : IAddinNode
         RegenerationMode = regenerationOption;
         JournalingMode = journalingMode;
         AddinType = type;
-        _assemblyPath = assemblyPath;
-        AssemblyName = Path.GetFileName(_assemblyPath);
+        this.assemblyPath = assemblyPath;
+        AssemblyName = Path.GetFileName(this.assemblyPath);
         this.clientId = clientId;
         ClientIdString = clientId.ToString();
         FullClassName = fullClassName;
         var num = fullClassName.LastIndexOf(".", StringComparison.Ordinal);
-        _name = fullClassName.Substring(num + 1);
+        name = fullClassName.Substring(num + 1);
         Save = true;
         VisibilityMode = VisibilityMode.AlwaysVisible;
     }
 
     public void SaveToManifest()
     {
-        var manifestFile = new ManifestFile(_name + DefaultSetting.FormatExAddin);
+        var manifestFile = new ManifestFile(name + DefaultSetting.FormatExAddin);
         if (AddinType == AddinType.Application)
         {
             manifestFile.Applications.Add(this);
@@ -55,11 +55,11 @@ public class AddinItem : IAddinNode
 
     public string AssemblyPath
     {
-        get => _assemblyPath;
+        get => assemblyPath;
         set
         {
-            _assemblyPath = value;
-            AssemblyName = Path.GetFileName(_assemblyPath);
+            assemblyPath = value;
+            AssemblyName = Path.GetFileName(assemblyPath);
         }
     }
 
@@ -88,20 +88,20 @@ public class AddinItem : IAddinNode
     {
         get
         {
-            if (string.IsNullOrEmpty(_name))
+            if (string.IsNullOrEmpty(name))
             {
                 return "External Tool";
             }
-            return _name;
+            return name;
         }
         set
         {
             if (!string.IsNullOrEmpty(value))
             {
-                _name = value;
+                name = value;
                 return;
             }
-            _name = "External Tool";
+            name = "External Tool";
         }
     }
 
@@ -109,20 +109,20 @@ public class AddinItem : IAddinNode
     {
         get
         {
-            if (string.IsNullOrEmpty(_description))
+            if (string.IsNullOrEmpty(description))
             {
                 return string.Empty;
             }
-            return _description;
+            return description;
         }
         set
         {
             if (string.IsNullOrEmpty(value))
             {
-                _description = string.Empty;
+                description = string.Empty;
                 return;
             }
-            _description = value;
+            description = value;
         }
     }
 
@@ -146,18 +146,18 @@ public class AddinItem : IAddinNode
 
     public override string ToString()
     {
-        return _name;
+        return name;
     }
 
 
-    protected string _assemblyPath;
+    protected string assemblyPath;
 
 
     protected Guid clientId;
 
 
-    private string _name;
+    private string name;
 
 
-    private string _description;
+    private string description;
 }
