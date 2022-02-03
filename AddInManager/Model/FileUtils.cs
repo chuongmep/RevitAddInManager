@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows;
 
 namespace RevitAddinManager.Model;
 
@@ -130,10 +131,10 @@ public static class FileUtils
             {
                 switch (FolderTooBigDialog.Show(directoryName, folderSize))
                 {
-                    case DialogResult.Yes:
+                    case MessageBoxResult.Yes:
                         CopyDirectory(directoryName, destFolder, allCopiedFiles);
                         break;
-                    case DialogResult.No:
+                    case MessageBoxResult.No:
                         CopyFileToFolder(sourceFilePath, destFolder, true, allCopiedFiles);
                         break;
                     default:

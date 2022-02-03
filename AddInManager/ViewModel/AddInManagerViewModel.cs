@@ -7,10 +7,10 @@ using System.Windows.Input;
 using System.Xml;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Microsoft.Win32;
 using RevitAddinManager.Command;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
-using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace RevitAddinManager.ViewModel;
 
@@ -273,7 +273,7 @@ public class AddInManagerViewModel : ViewModelBase
 
         catch (Exception e)
         {
-            MessageBox.Show(e.ToString());
+            System.Windows.MessageBox.Show(e.ToString());
         }
     }
 
@@ -313,7 +313,7 @@ public class AddInManagerViewModel : ViewModelBase
         sb.AppendLine(Resource.FileNotExit);
         sb.AppendLine("Path :");
         sb.AppendLine(path);
-        MessageBox.Show(sb.ToString(), Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        System.Windows.MessageBox.Show(sb.ToString(), Resource.AppName,MessageBoxButton.OK,MessageBoxImage.Exclamation);
     }
     void ExecuteAddinAppClick()
     {
@@ -336,9 +336,9 @@ public class AddInManagerViewModel : ViewModelBase
 
     void LoadCommandClick()
     {
-        var openFileDialog = new OpenFileDialog();
+        OpenFileDialog openFileDialog = new OpenFileDialog();
         openFileDialog.Filter = @"assembly files (*.dll)|*.dll|All files (*.*)|*.*";
-        if (openFileDialog.ShowDialog() != DialogResult.OK)
+        if (openFileDialog.ShowDialog() != true)
         {
             return;
         }
@@ -346,7 +346,7 @@ public class AddInManagerViewModel : ViewModelBase
         var addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
         if (addinType == AddinType.Invalid)
         {
-            MessageBox.Show(Resource.LoadInvalid);
+            System.Windows.MessageBox.Show(Resource.LoadInvalid);
             return;
         }
 
@@ -452,19 +452,19 @@ public class AddInManagerViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.ToString());
+            System.Windows.MessageBox.Show(e.ToString());
         }
     }
     private void SaveCommandClick()
     {
-        var DialogResult = MessageBox.Show($@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
-            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-        if (DialogResult == DialogResult.Yes)
+        var messageBoxResult = System.Windows.MessageBox.Show($@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
+            MessageBoxButton.YesNo,MessageBoxImage.Question);
+        if (messageBoxResult == MessageBoxResult.Yes)
         {
 
             if (!MAddinManagerBase.AddinManager.HasItemsToSave())
             {
-                MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                System.Windows.MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButton.OK,MessageBoxImage.Exclamation);
                 return;
             }
             MAddinManagerBase.AddinManager.SaveToAllUserManifest(this);
@@ -581,7 +581,7 @@ public class AddInManagerViewModel : ViewModelBase
             revitAddin.SetToggleState();
         }
         FrmAddInManager.Close();
-        MessageBox.Show(Resource.Successfully, Resource.AppName);
+        System.Windows.MessageBox.Show(Resource.Successfully, Resource.AppName);
     }
     private void ClearCommandClick()
     {
@@ -632,7 +632,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         else
         {
-            MessageBox.Show(Resource.FileNotFound, Resource.AppName);
+           System.Windows.MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
     private void OpenLocalAddinCommandClick()
@@ -643,7 +643,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         else
         {
-            MessageBox.Show(Resource.FileNotFound, Resource.AppName);
+            System.Windows.MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
 

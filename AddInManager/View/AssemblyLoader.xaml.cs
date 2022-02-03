@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Windows;
-using MessageBox = System.Windows.Forms.MessageBox;
+using Microsoft.Win32;
 
 namespace RevitAddinManager.View;
 
@@ -23,26 +23,25 @@ public partial class AssemblyLoader : Window
     private void ShowWarning()
     {
         var text = new StringBuilder("The dependent assembly can't be loaded: \"").Append(_assemName).AppendFormat("\".", new object[0]).ToString();
-        MessageBox.Show(text, "Add-in Manager Internal", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(text, "Add-in Manager Internal", MessageBoxButton.OK, MessageBoxImage.Exclamation);
     }
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrEmpty(_assemName))
         {
-            MessageBox.Show("Assembly null",Resource.AppName);
+            MessageBox.Show("Assembly null", Resource.AppName);
             return;
         }
-        using (var openFileDialog = new OpenFileDialog())
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "Assembly files (*.dll;*.exe,*.mcl)|*.dll;*.exe;*.mcl|All files|*.*||";
+        var str = _assemName.Substring(0, _assemName.IndexOf(','));
+        openFileDialog.FileName = str + ".*";
+        if (openFileDialog.ShowDialog() == true)
         {
-            openFileDialog.Filter = "Assembly files (*.dll;*.exe,*.mcl)|*.dll;*.exe;*.mcl|All files|*.*||";
-            var str = _assemName.Substring(0, _assemName.IndexOf(','));
-            openFileDialog.FileName = str + ".*";
-            if (openFileDialog.ShowDialog()==System.Windows.Forms.DialogResult.OK)
-            {
-                ShowWarning();
-            }
-            TbxAssemPath.Text = openFileDialog.FileName;
+            ShowWarning();
         }
+        TbxAssemPath.Text = openFileDialog.FileName;
+
     }
 
     private void OKButtonClick(object sender, RoutedEventArgs e)

@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.Attributes;
+﻿using System.Windows;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
 
 namespace RevitAddinManager.Model;
@@ -7,7 +8,7 @@ public static class StaticUtil
 {
     public static void ShowWarning(string msg)
     {
-        MessageBox.Show(msg, Resource.AppName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(msg, Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
     }
 
     public static string CommandFullName = typeof(IExternalCommand).FullName;

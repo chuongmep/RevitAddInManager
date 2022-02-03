@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Windows;
 
 namespace RevitAddinManager.Model;
 
@@ -10,7 +11,7 @@ internal static class FolderTooBigDialog
     /// <param name="folderPath">folder contains file resource</param>
     /// <param name="sizeInMB">limit of dll size</param>
     /// <returns></returns>
-    public static DialogResult Show(string folderPath, long sizeInMB)
+    public static MessageBoxResult Show(string folderPath, long sizeInMB)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("Folder [" + folderPath + "]");
@@ -19,6 +20,6 @@ internal static class FolderTooBigDialog
         stringBuilder.AppendLine("Select [Yes] to copy all the files to temp folder");
         stringBuilder.AppendLine("Select [No] to only copy test script DLL");
         var text = stringBuilder.ToString();
-        return MessageBox.Show(text, Resource.AppName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
+        return MessageBox.Show(text, Resource.AppName, MessageBoxButton.YesNoCancel,MessageBoxImage.Asterisk);
     }
 }

@@ -6,8 +6,6 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
-using MessageBox = System.Windows.Forms.MessageBox;
-
 namespace RevitAddinManager.Command;
 
 public sealed class AddinManagerBase

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 using RevitAddinManager.Model;
 
 namespace RevitAddinManager.ViewModel;
