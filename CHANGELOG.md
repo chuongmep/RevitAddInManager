@@ -1,4 +1,7 @@
 # Changelog
+- 2022-02-03 **1.1.5**
+  - Add feature right click context menu red color selected
+
 - 2022-02-03 **1.1.4**
   - Fix Command Failure for External Command 
 
