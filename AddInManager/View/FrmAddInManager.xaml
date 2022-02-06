@@ -120,8 +120,21 @@
                                 <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
                                 <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
                                 <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="true" />
+                                            <Condition Property="control:ExtendedTreeView.ContextMenuOpened" Value="true" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </MultiTrigger>
+                                </Style.Triggers>
                             </Style>
+
                         </TreeView.ItemContainerStyle>
+
                     </control:ExtendedTreeView>
 
                 </TabItem>
@@ -130,7 +143,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load App"
-                    IsSelected="{Binding IsTabAppSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
                         <control:ExtendedTreeView
                             x:Name="TreeViewApp"
@@ -239,13 +252,13 @@
                                         <DataTemplate DataType="model:RevitAddin">
                                             <Button
                                                 Height="25"
-                                                ToolTip="Toggle To Convert State"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
-                                                IsEnabled="{Binding IsReadOnly}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisibleToggle}"
                                                 Content="{Binding State}"
-                                                FontSize="10" />
+                                                FontSize="10"
+                                                IsEnabled="{Binding IsReadOnly}"
+                                                ToolTip="Toggle To Convert State" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -370,8 +383,8 @@
                 Margin="1,1,1,1"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
-                IsEnabled="{Binding IsCanRun,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                 Foreground="SteelBlue"
+                IsEnabled="{Binding IsCanRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="Execute Addin Selected" />
         </StackPanel>
     </Grid>

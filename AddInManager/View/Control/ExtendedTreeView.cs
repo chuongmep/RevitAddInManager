@@ -23,4 +23,11 @@ public class ExtendedTreeView : System.Windows.Controls.TreeView
         set => SetValue(SelectedItem_Property, value);
     }
     public static readonly DependencyProperty SelectedItem_Property = DependencyProperty.Register("SelectedItem_", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
+
+    public static readonly DependencyProperty ContextMenuOpenedProperty = DependencyProperty.RegisterAttached("ContextMenuOpened", typeof(bool), typeof(ExtendedTreeView));
+    
+    public static bool GetContextMenuOpened(DependencyObject obj) { return (bool)obj.GetValue(ContextMenuOpenedProperty); }
+   
+    public static void SetContextMenuOpened(DependencyObject obj, bool value) { obj.SetValue(ContextMenuOpenedProperty, value); }
+    
 }
