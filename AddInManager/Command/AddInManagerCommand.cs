@@ -11,7 +11,6 @@ public class AddInManagerManual : IExternalCommand
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
         StaticUtil.RegenOption = RegenerationOption.Manual;
-        StaticUtil.RegenOption = RegenerationOption.Manual;
         StaticUtil.TransactMode = TransactionMode.Manual;
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
     }
