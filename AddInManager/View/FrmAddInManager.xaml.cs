@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
+using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
 
 namespace RevitAddinManager.View;
@@ -29,5 +31,10 @@ public partial class FrmAddInManager : Window
             viewModel.MAddinManagerBase.ActiveAppItem.Description = TbxDescription.Text;
         }
         viewModel.MAddinManagerBase.AddinManager.SaveToAimIni();
+    }
+
+    private void FrmAddInManager_OnClosing(object sender, CancelEventArgs e)
+    {
+       ProcessManager.SetActivateWindow();
     }
 }

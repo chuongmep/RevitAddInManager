@@ -19,8 +19,7 @@ public sealed class AddinManagerBase
         }
         var frmAddInManager = new View.FrmAddInManager(vm);
         frmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        var process = Process.GetCurrentProcess();
-        new WindowInteropHelper(frmAddInManager).Owner = process.MainWindowHandle;
+        new WindowInteropHelper(frmAddInManager).Owner = ProcessManager.GetActivateWindow();
         frmAddInManager.Show();
         return Result.Failed;
     }
