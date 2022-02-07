@@ -1,4 +1,7 @@
 # Changelog
+- 2022-02-03 **1.1.6**
+  - Fix main process close form with Revit program 
+
 - 2022-02-03 **1.1.5**
   - Add feature right click context menu red color selected
 
