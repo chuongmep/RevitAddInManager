@@ -20,9 +20,8 @@
 - [ ] Add-in Extend for **Autocad** And **Naviswork**
 
 ## Summary
-Usually, when developing and debugging an addin with RevitAPI, user has to close & re-open Revit each time he/she modifies the addin code and wants to re-compile. But with Add-In Manager, user can modify and run the addin directly without closing & re-opening Revit again and again.
 
-In addition, I open a project to attract talents from all over the world to support development, I'm a person, who loves open source very much and writes code every day as a pleasure.
+Usually, when developing and debugging an addin with RevitAPI, user has to close & re-open Revit each time he/she modifies the addin code and wants to re-compile. But with Add-In Manager, user can modify and run the addin directly without closing & re-opening Revit again and again.
 
 Some feature include: 
 - Add-in tester
@@ -49,14 +48,14 @@ Some feature include:
 ### Application
 
 - [x] Preview
-- [x] Save Application .Addin
+- [x] Save And Load Application .Addin
 
 ### Startup
 
 ![](pic/AddinManagerStartup.png)
 
-- [x] Show info all add-in installed in computer include all Add-in from Autodesk
-- [x] Enable or Disable Add-in with right click
+- [x] Show info all add-in installed in computer include all Add-in from Autodesk.
+- [x] Enable or Disable Add-in.
 
 ---
 
@@ -69,8 +68,7 @@ Please follow last release at section [Release](https://github.com/chuongmep/Rev
 
 Debugging:
 
-- Run **Debug Profile** in Visual Studio or **Run Configuration** in JetBrains Rider. The required files have been added. All project files will be automatically copied to the
-  Revit plugins folder.
+- Run **Debug Profile** in Visual Studio or **Run Configuration** in JetBrains Rider. The required files have been added. All project files will be automatically copied to the Revit plugins folder.
 
 Creating a package:
 
