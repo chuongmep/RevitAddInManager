@@ -4,12 +4,12 @@ namespace RevitAddinManager.ViewModel;
 
 public class AddinsCommand : Addins
 {
-    public static string ExternalName = "ExternalCommands";
-    public static string ExternalCName = "ECName";
-    public static string ExternalCount = "ECCount";
-    public static string ExternalClassName = "ECClassName";
-    public static string ExternalAssembly = "ECAssembly";
-    public static string ExternalDescription = "ECDescription";
+    private static string ExternalName = "ExternalCommands";
+    private static string ExternalCName = "ECName";
+    private static string ExternalCount = "ECCount";
+    private static string ExternalClassName = "ECClassName";
+    private static string ExternalAssembly = "ECAssembly";
+    private static string ExternalDescription = "ECDescription";
     public void ReadItems(IniFile file)
     {
         var num = file.ReadInt(ExternalName, ExternalCount);

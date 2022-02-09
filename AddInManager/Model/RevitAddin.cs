@@ -41,6 +41,7 @@ public class RevitAddin : ViewModelBase
     {
         if (!File.Exists(FilePath)) return false;
         var dir = Path.GetDirectoryName(FilePath);
+        if (string.IsNullOrEmpty(dir)) throw new ArgumentNullException(nameof(dir));
         var FileName = Path.GetFileName(FilePath);
         string newFilePath;
         string newName;

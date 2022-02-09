@@ -4,12 +4,12 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.Win32;
 using RevitAddinManager.Command;
 using RevitAddinManager.Model;
+using RevitAddinManager.View;
 using RevitAddinManager.View.Control;
 
 namespace RevitAddinManager.ViewModel;
@@ -19,8 +19,8 @@ public class AddInManagerViewModel : ViewModelBase
     public ExternalCommandData ExternalCommandData { get; set; }
     private string Message { get; set; }
     private ElementSet Elements { get; set; }
-    public RevitEvent RevitEvent = new RevitEvent();
-    public View.FrmAddInManager FrmAddInManager { get; set; }
+    private RevitEvent RevitEvent = new RevitEvent();
+    public FrmAddInManager FrmAddInManager { get; set; }
     public AssemLoader AssemLoader { get; set; }
 
     public AddinManagerBase MAddinManagerBase { get; set; }
@@ -138,15 +138,7 @@ public class AddInManagerViewModel : ViewModelBase
     private ObservableCollection<RevitAddin> addinStartup;
     public ObservableCollection<RevitAddin> AddInStartUps
     {
-        get
-        {
-            if (addinStartup == null)
-            {
-                addinStartup = new ObservableCollection<RevitAddin>();
-            }
-
-            return addinStartup;
-        }
+        get { return addinStartup ??= new ObservableCollection<RevitAddin>(); }
         set => OnPropertyChanged(ref addinStartup, value);
     }
     public ICommand HelpCommand => new RelayCommand(HelpCommandClick);
@@ -208,7 +200,7 @@ public class AddInManagerViewModel : ViewModelBase
         FreshItemStartupClick(false);
     }
 
-    public ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
+    private ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
     {
         var MainTrees = new ObservableCollection<AddinModel>();
         foreach (var keyValuePair in addins.AddinDict)
@@ -273,7 +265,7 @@ public class AddInManagerViewModel : ViewModelBase
 
         catch (Exception e)
         {
-            System.Windows.MessageBox.Show(e.ToString());
+            MessageBox.Show(e.ToString());
         }
     }
 
@@ -313,7 +305,7 @@ public class AddInManagerViewModel : ViewModelBase
         sb.AppendLine(Resource.FileNotExit);
         sb.AppendLine("Path :");
         sb.AppendLine(path);
-        System.Windows.MessageBox.Show(sb.ToString(), Resource.AppName,MessageBoxButton.OK,MessageBoxImage.Exclamation);
+        MessageBox.Show(sb.ToString(), Resource.AppName,MessageBoxButton.OK,MessageBoxImage.Exclamation);
     }
     void ExecuteAddinAppClick()
     {
@@ -346,7 +338,7 @@ public class AddInManagerViewModel : ViewModelBase
         var addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
         if (addinType == AddinType.Invalid)
         {
-            System.Windows.MessageBox.Show(Resource.LoadInvalid);
+            MessageBox.Show(Resource.LoadInvalid);
             return;
         }
 
@@ -452,23 +444,23 @@ public class AddInManagerViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            System.Windows.MessageBox.Show(e.ToString());
+            MessageBox.Show(e.ToString());
         }
     }
     private void SaveCommandClick()
     {
-        var messageBoxResult = System.Windows.MessageBox.Show($@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
+        var messageBoxResult = MessageBox.Show(@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
             MessageBoxButton.YesNo,MessageBoxImage.Question);
         if (messageBoxResult == MessageBoxResult.Yes)
         {
 
             if (!MAddinManagerBase.AddinManager.HasItemsToSave())
             {
-                System.Windows.MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButton.OK,MessageBoxImage.Exclamation);
                 return;
             }
             MAddinManagerBase.AddinManager.SaveToAllUserManifest(this);
-            System.Windows.MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
             FrmAddInManager.Close();
         }
 
@@ -514,7 +506,7 @@ public class AddInManagerViewModel : ViewModelBase
         if (addinStartup == null) addinStartup = new ObservableCollection<RevitAddin>();
         addinStartup.Clear();
         var autodeskPath = "Autodesk\\Revit\\Addins";
-        var AdskPluginPath = "Autodesk\\ApplicationPlugins\\";
+        const string AdskPluginPath = "Autodesk\\ApplicationPlugins\\";
         var version = ExternalCommandData.Application.Application.VersionNumber;
         var roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var Folder1 = Path.Combine(roaming, autodeskPath, version);
@@ -547,9 +539,9 @@ public class AddInManagerViewModel : ViewModelBase
 
         var revitAddins = new List<RevitAddin>();
         if (!Directory.Exists(folder)) return revitAddins;
-        var AddinFilePathsVisiable = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)
+        var AddinFilePathsVisible = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)
         .Where(x => x.EndsWith(DefaultSetting.FormatExAddin)).ToArray();
-        foreach (var AddinFilePath in AddinFilePathsVisiable)
+        foreach (var AddinFilePath in AddinFilePathsVisible)
         {
             var revitAddin = new RevitAddin();
             revitAddin.FilePath = AddinFilePath;
@@ -571,7 +563,7 @@ public class AddInManagerViewModel : ViewModelBase
             revitAddin.State = VisibleModel.Disable;
             revitAddins.Add(revitAddin);
         }
-        if (AddinFilePathsVisiable.Length == 0) return new List<RevitAddin>();
+        if (AddinFilePathsVisible.Length == 0) return new List<RevitAddin>();
         return revitAddins;
     }
     private void SetToggleVisible()
@@ -581,7 +573,7 @@ public class AddInManagerViewModel : ViewModelBase
             revitAddin.SetToggleState();
         }
         FrmAddInManager.Close();
-        System.Windows.MessageBox.Show(Resource.Successfully, Resource.AppName);
+        MessageBox.Show(Resource.Successfully, Resource.AppName);
     }
     private void ClearCommandClick()
     {
@@ -595,7 +587,7 @@ public class AddInManagerViewModel : ViewModelBase
     }
     private void ExploreCommandClick()
     {
-        var AdskPath = "Autodesk\\Revit\\Addins";
+        const string AdskPath = "Autodesk\\Revit\\Addins";
         var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
         if (IsCurrentVersion)
         {
@@ -607,7 +599,7 @@ public class AddInManagerViewModel : ViewModelBase
                 var filePaths = Directory.GetFiles(folder).Where(x => x.Contains(DefaultSetting.FileName)).ToArray();
                 if (filePaths.Length == 0)
                 {
-                    System.Windows.MessageBox.Show(FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show(FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     return;
                 }
                 foreach (var s in filePaths)
@@ -632,7 +624,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         else
         {
-           System.Windows.MessageBox.Show(Resource.FileNotFound, Resource.AppName);
+           MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
     private void OpenLocalAddinCommandClick()
@@ -643,7 +635,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         else
         {
-            System.Windows.MessageBox.Show(Resource.FileNotFound, Resource.AppName);
+            MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
 

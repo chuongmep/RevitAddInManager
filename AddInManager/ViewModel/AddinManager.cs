@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using RevitAddinManager.Model;
 
@@ -23,11 +22,7 @@ public class AddinManager
     }
 
 
-    public IniFile AimIniFile
-    {
-        get => aimIniFile;
-        set => aimIniFile = value;
-    }
+    private IniFile AimIniFile => aimIniFile;
 
     public IniFile RevitIniFile
     {
@@ -47,7 +42,7 @@ public class AddinManager
         revitIniFile = new IniFile(filePath2);
     }
 
-    public void ReadAddinsFromAimIni()
+    private void ReadAddinsFromAimIni()
     {
         commands.ReadItems(aimIniFile);
         applications.ReadItems(aimIniFile);
@@ -218,7 +213,7 @@ public class AddinManager
         return filePaths;
     }
 
-    public void SaveToLocalManifest()
+    private void SaveToLocalManifest()
     {
         var dictionary = new Dictionary<string, Addin>();
         var dictionary2 = new Dictionary<string, Addin>();
@@ -228,6 +223,7 @@ public class AddinManager
             var value = keyValuePair.Value;
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(value.FilePath);
             var directoryName = Path.GetDirectoryName(value.FilePath);
+            if (string.IsNullOrEmpty(directoryName)) throw new ArgumentNullException(nameof(directoryName));
             var filePath = Path.Combine(directoryName, fileNameWithoutExtension + DefaultSetting.FormatExAddin);
             var manifestFile = new ManifestFile(true);
             foreach (var addinItem in value.ItemList)
@@ -259,6 +255,7 @@ public class AddinManager
             {
                 var fileNameWithoutExtension2 = Path.GetFileNameWithoutExtension(value2.FilePath);
                 var directoryName2 = Path.GetDirectoryName(value2.FilePath);
+                if (string.IsNullOrEmpty(directoryName2)) throw new ArgumentNullException(nameof(directoryName2));
                 var filePath2 = Path.Combine(directoryName2, fileNameWithoutExtension2 + DefaultSetting.FormatExAddin);
                 var manifestFile2 = new ManifestFile(true);
                 foreach (var addinItem3 in value2.ItemList)

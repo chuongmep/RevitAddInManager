@@ -4,10 +4,10 @@ namespace RevitAddinManager.ViewModel;
 
 public class AddinsApplication : Addins
 {
-    public static string ExternalName = "ExternalApplications";
-    public static string ExternalCount = "EACount";
-    public static string ExternalClassName = "EAClassName";
-    public static string ExternalAssembly = "EAAssembly";
+    private static string ExternalName = "ExternalApplications";
+    private static string ExternalCount = "EACount";
+    private static string ExternalClassName = "EAClassName";
+    private static string ExternalAssembly = "EAAssembly";
     public void ReadItems(IniFile file)
     {
         var num = file.ReadInt(ExternalName, ExternalCount);

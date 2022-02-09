@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Interop;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;

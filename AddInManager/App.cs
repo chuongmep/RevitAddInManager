@@ -29,10 +29,10 @@ public class App : IExternalApplication
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
     }
 
-    private static PushButton AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
+    private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
     {
         var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
-        return pullDownButton.AddPushButton(buttonData);
+        pullDownButton.AddPushButton(buttonData);
     }
 
       
