@@ -28,6 +28,7 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding RemoveCommand}" Gesture="Del" />
         <KeyBinding Command="{Binding ReloadCommand}" Gesture="F5" />
+        <KeyBinding Command="{Binding HelpCommand}" Gesture="F1" />
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
