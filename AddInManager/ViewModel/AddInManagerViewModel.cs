@@ -343,12 +343,25 @@ public class AddInManagerViewModel : ViewModelBase
 
     void ReloadCommandClick()
     {
+        if (SelectedCommandItem == null)
+        {
+            SortedDictionary<string, Addin> Commands = MAddinManagerBase.AddinManager.Commands.AddinDict;
+            SortedDictionary<string, Addin> OldCommands = new SortedDictionary<string, Addin>(Commands);
+            foreach (var Command in OldCommands.Values)
+            {
+                string fileName = Command.FilePath;
+                if (File.Exists(fileName)) MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
+            }
+            MAddinManagerBase.AddinManager.SaveToAimIni();
+            CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+            ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
+            return;
+        }
         bool flag = MAddinManagerBase.ActiveCmd == null;
         if (flag) return;
         string path = MAddinManagerBase.ActiveCmd.FilePath;
         if (!File.Exists(path)) return;
         LoadAssemblyCommand(path);
-
     }
     void LoadAssemblyCommand(string fileName)
     {
