@@ -1,4 +1,7 @@
 # Changelog
+- 2022-02-11 **1.1.8**
+  - Fix reload when user want reload all
+  - Support user press delete command addin or application addin from keyboard  
 - 2022-02-11 **1.1.7**
   - Support reload command by menu context right click 
 - 2022-02-03 **1.1.6**
