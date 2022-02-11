@@ -111,7 +111,7 @@ public class AddInManagerViewModel : ViewModelBase
     private readonly ICommand _executeAddinCommand = null;
     public ICommand ExecuteAddinCommand => _executeAddinCommand ?? new RelayCommand(ExecuteAddinCommandClick);
     public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
-    public ICommand ReloadCommand => new RelayCommand(()=>ReloadCommandClick());
+    public ICommand ReloadCommand => new RelayCommand(() => ReloadCommandClick());
     public ICommand OpenLcAssemblyApp => new RelayCommand(OpenLcAssemblyAppClick);
     public ICommand ExecuteAddinApp => new RelayCommand(ExecuteAddinAppClick);
     public ICommand FreshSearch => new RelayCommand(FreshSearchClick);
@@ -306,7 +306,7 @@ public class AddInManagerViewModel : ViewModelBase
         sb.AppendLine(Resource.FileNotExit);
         sb.AppendLine("Path :");
         sb.AppendLine(path);
-        MessageBox.Show(sb.ToString(), Resource.AppName,MessageBoxButton.OK,MessageBoxImage.Exclamation);
+        MessageBox.Show(sb.ToString(), Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
     }
     void ExecuteAddinAppClick()
     {
@@ -336,18 +336,22 @@ public class AddInManagerViewModel : ViewModelBase
             return;
         }
         var fileName = openFileDialog.FileName;
-        if(!File.Exists(fileName))return;
-        ReloadCommandClick(fileName);
+        if (!File.Exists(fileName)) return;
+        LoadAssemblyCommand(fileName);
 
     }
 
-    void ReloadCommandClick(string fileName =null)
+    void ReloadCommandClick()
     {
         bool flag = MAddinManagerBase.ActiveCmd == null;
         if (flag) return;
         string path = MAddinManagerBase.ActiveCmd.FilePath;
-        if(!File.Exists(path)) return;
-        if (fileName == null) fileName = path;
+        if (!File.Exists(path)) return;
+        LoadAssemblyCommand(path);
+
+    }
+    void LoadAssemblyCommand(string fileName)
+    {
         var addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
         if (addinType == AddinType.Invalid)
         {
@@ -462,13 +466,13 @@ public class AddInManagerViewModel : ViewModelBase
     private void SaveCommandClick()
     {
         var messageBoxResult = MessageBox.Show(@"It will create file addin and load to Revit, do you want continue?", Resource.AppName,
-            MessageBoxButton.YesNo,MessageBoxImage.Question);
+            MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (messageBoxResult == MessageBoxResult.Yes)
         {
 
             if (!MAddinManagerBase.AddinManager.HasItemsToSave())
             {
-                MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                MessageBox.Show(Resource.NoItemSelected, Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
             MAddinManagerBase.AddinManager.SaveToAllUserManifest(this);
@@ -636,7 +640,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         else
         {
-           MessageBox.Show(Resource.FileNotFound, Resource.AppName);
+            MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
     private void OpenLocalAddinCommandClick()
