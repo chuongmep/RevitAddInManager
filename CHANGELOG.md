@@ -1,4 +1,7 @@
 # Changelog
+- 2022-02-11 **1.1.9**
+  - Support F1 go to help from keyboard
+  - Support F5 to reload all commands and application or reload addin choosing in process
 - 2022-02-11 **1.1.8**
   - Fix reload when user want reload all
   - Support user press delete command addin or application addin from keyboard  
