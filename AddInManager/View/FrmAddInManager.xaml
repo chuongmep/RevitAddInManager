@@ -12,8 +12,8 @@
     Height="600"
     MinWidth="400"
     MinHeight="400"
-    Closing="FrmAddInManager_OnClosing"
     d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
+    Closing="FrmAddInManager_OnClosing"
     Icon="../Resources/dev.ico"
     mc:Ignorable="d">
     <Window.Resources>
@@ -95,10 +95,11 @@
                         SelectedItem_="{Binding SelectedCommandItem, Mode=TwoWay}">
                         <TreeView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
-                                <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                 <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                 <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
+                                <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
+                                <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
+                                <MenuItem Command="{Binding ReloadCommand}" Header="Reload" />
                             </ContextMenu>
                         </TreeView.ContextMenu>
                         <TreeView.ItemTemplate>
@@ -181,7 +182,7 @@
                                     <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
                                     <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
                                     <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinApp, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
-                                    <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}"/>
+                                    <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
                                     <Style.Triggers>
                                         <MultiTrigger>
                                             <MultiTrigger.Conditions>

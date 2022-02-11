@@ -1,4 +1,6 @@
 # Changelog
+- 2022-02-11 **1.1.7**
+  - Support reload command by menu context right click 
 - 2022-02-03 **1.1.6**
   - Fix main process close form with Revit program 
 

@@ -111,6 +111,7 @@ public class AddInManagerViewModel : ViewModelBase
     private readonly ICommand _executeAddinCommand = null;
     public ICommand ExecuteAddinCommand => _executeAddinCommand ?? new RelayCommand(ExecuteAddinCommandClick);
     public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
+    public ICommand ReloadCommand => new RelayCommand(()=>ReloadCommandClick());
     public ICommand OpenLcAssemblyApp => new RelayCommand(OpenLcAssemblyAppClick);
     public ICommand ExecuteAddinApp => new RelayCommand(ExecuteAddinAppClick);
     public ICommand FreshSearch => new RelayCommand(FreshSearchClick);
@@ -335,6 +336,18 @@ public class AddInManagerViewModel : ViewModelBase
             return;
         }
         var fileName = openFileDialog.FileName;
+        if(!File.Exists(fileName))return;
+        ReloadCommandClick(fileName);
+
+    }
+
+    void ReloadCommandClick(string fileName =null)
+    {
+        bool flag = MAddinManagerBase.ActiveCmd == null;
+        if (flag) return;
+        string path = MAddinManagerBase.ActiveCmd.FilePath;
+        if(!File.Exists(path)) return;
+        if (fileName == null) fileName = path;
         var addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
         if (addinType == AddinType.Invalid)
         {
@@ -360,7 +373,6 @@ public class AddInManagerViewModel : ViewModelBase
         MAddinManagerBase.AddinManager.SaveToAimIni();
         CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
         ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
-
     }
     private void RemoveAddinClick()
     {
