@@ -23,11 +23,11 @@
                 <!--<ResourceDictionary Source="/PresentationFramework.Luna;component/themes/Luna.NormalColor.xaml"/>-->
                 <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding RemoveCommand}" Gesture="Del" />
+        <KeyBinding Command="{Binding ReloadCommand}" Gesture="F5" />
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
