@@ -14,11 +14,6 @@
 
 [![Publish](../../actions/workflows/Workflow.yml/badge.svg)](../../actions)
 
-## WORK IN PROCESS
-
-- [ ] Console
-- [ ] Add-in Extend for **Autocad** And **Naviswork**
-
 ## Summary
 
 Usually, when developing and debugging an addin with RevitAPI, user has to close & re-open Revit each time he/she modifies the addin code and wants to re-compile. But with Add-In Manager, user can modify and run the addin directly without closing & re-opening Revit again and again.
