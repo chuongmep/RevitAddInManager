@@ -1,4 +1,8 @@
 # Changelog
+
+- 2022-02-25 **1.2.0**
+  - Change position button **Run** 
+  - Improved some small features
 - 2022-02-11 **1.1.9**
   - Support F1 go to help from keyboard
   - Support F5 to reload all commands and application or reload addin choosing in process
