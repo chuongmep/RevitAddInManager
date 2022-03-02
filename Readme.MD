@@ -133,7 +133,7 @@ I suggest you some of these projects, hope you will like it.
 
 - [RevitLookup](https://github.com/jeremytammik/RevitLookup)
 
-- [RevitLookupWpf](https://github.com/chuongmep/RevitLookupWpf)
+- [RevitLookupWpf](https://github.com/weianweigan/RevitLookupWpf)
 
 - [Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
 
