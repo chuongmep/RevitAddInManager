@@ -1,5 +1,6 @@
 # Changelog
-
+- 2022-03-04 **1.2.1**
+  - Add feature save as addin to new folder
 - 2022-02-25 **1.2.0**
   - Change position button **Run** 
   - Improved some small features
