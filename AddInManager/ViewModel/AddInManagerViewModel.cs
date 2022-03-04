@@ -102,6 +102,7 @@ public class AddInManagerViewModel : ViewModelBase
 
     public ICommand RemoveCommand => new RelayCommand(RemoveAddinClick);
     public ICommand SaveCommand => new RelayCommand(SaveCommandClick);
+    public ICommand SaveCommandFolder => new RelayCommand(SaveCommandLocalFolder);
 
     public ICommand OpenLocalAddinCommand => new RelayCommand(OpenLocalAddinCommandClick);
     public ICommand EditAddinCommand => new RelayCommand(EditAddinCommandClick);
@@ -505,11 +506,30 @@ public class AddInManagerViewModel : ViewModelBase
                 return;
             }
             MAddinManagerBase.AddinManager.SaveToAllUserManifest(this);
-            MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
-            FrmAddInManager.Close();
+            ShowSuccessfully();
         }
     }
 
+    private void SaveCommandLocalFolder()
+    {
+        SaveFileDialog dlg = new SaveFileDialog();
+        dlg.Filter = "Revit Addin (*.addin)|*.addin";
+        dlg.DefaultExt = "addin";
+        dlg.AddExtension = true;
+        dlg.Title = Resource.AppName;
+        dlg.ShowDialog();
+        if (!string.IsNullOrEmpty(dlg.FileName))
+        {
+            MAddinManagerBase.AddinManager.SaveAsLocal(this, dlg.FileName);
+            ShowSuccessfully();
+        }
+    }
+
+    private void ShowSuccessfully()
+    {
+        MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
+        FrmAddInManager.Close();
+    }
     private void FreshSearchClick()
     {
         var flag = string.IsNullOrEmpty(searchText);

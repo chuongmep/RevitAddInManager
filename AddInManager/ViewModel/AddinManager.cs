@@ -106,11 +106,15 @@ public class AddinManager
         applications.Save(revitIniFile);
     }
 
+    public void SaveAsLocal(AddInManagerViewModel vm,string filepath)
+    {
+        ManifestFile manifestFile = AddManifestFile(vm);
+        manifestFile.SaveAs(filepath);
+    }
     public void SaveToLocal()
     {
         SaveToLocalManifest();
     }
-
     public void SaveToLocalRevitIni()
     {
         foreach (var keyValuePair in commands.AddinDict)
@@ -162,7 +166,6 @@ public class AddinManager
         }
         return false;
     }
-
     public List<string> SaveToAllUserManifest(AddInManagerViewModel vm)
     {
         var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
@@ -181,28 +184,7 @@ public class AddinManager
             folders.Add(folder);
         }
 
-        var manifestFile = new ManifestFile(false){VendorDescription = vm.VendorDescription};
-        if (vm.IsTabCmdSelected)
-        {
-            foreach (var parent in vm.CommandItems)
-            {
-                foreach (var children in parent.Children)
-                {
-                    if (children.IsChecked == true) manifestFile.Commands.Add(children.AddinItem);
-                }
-            }
-        }
-        else if(vm.IsTabAppSelected)
-        {
-            foreach (var parent in vm.ApplicationItems)
-            {
-                foreach (var children in parent.Children)
-                {
-                    if (children.IsChecked == true) manifestFile.Applications.Add(children.AddinItem);
-                }
-            }
-
-        }
+        ManifestFile manifestFile = AddManifestFile(vm);
         foreach (var folder in folders)
         {
             var filePath = GetProperFilePath(folder, DefaultSetting.FileName, DefaultSetting.FormatExAddin);
@@ -213,6 +195,33 @@ public class AddinManager
         return filePaths;
     }
 
+    private ManifestFile AddManifestFile(AddInManagerViewModel vm)
+    {
+        var manifestFile = new ManifestFile(false) { VendorDescription = vm.VendorDescription };
+        if (vm.IsTabCmdSelected)
+        {
+            foreach (var parent in vm.CommandItems)
+            {
+                foreach (var children in parent.Children)
+                {
+                    if (children.IsChecked == true) manifestFile.Commands.Add(children.AddinItem);
+                }
+            }
+        }
+        else if (vm.IsTabAppSelected)
+        {
+            foreach (var parent in vm.ApplicationItems)
+            {
+                foreach (var children in parent.Children)
+                {
+                    if (children.IsChecked == true) manifestFile.Applications.Add(children.AddinItem);
+                }
+            }
+
+        }
+
+        return manifestFile;
+    }
     private void SaveToLocalManifest()
     {
         var dictionary = new Dictionary<string, Addin>();
