@@ -1,4 +1,6 @@
 # Changelog
+- 2022-03-05 **1.2.2**
+  - Fix problem with close document still opening addin [#21](https://github.com/chuongmep/RevitAddInManager/issues/21)
 - 2022-03-04 **1.2.1**
   - Add feature save as addin to new folder
 - 2022-02-25 **1.2.0**
