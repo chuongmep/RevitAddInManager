@@ -4,6 +4,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
+using static RevitAddinManager.App;
 namespace RevitAddinManager.Command;
 
 public sealed class AddinManagerBase
@@ -15,10 +16,10 @@ public sealed class AddinManagerBase
         {
             return RunActiveCommand(vm, data, ref message, elements);
         }
-        var frmAddInManager = new View.FrmAddInManager(vm);
-        frmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        new WindowInteropHelper(frmAddInManager).Owner = ProcessManager.GetActivateWindow();
-        frmAddInManager.Show();
+        FrmAddInManager = new View.FrmAddInManager(vm);
+        FrmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        new WindowInteropHelper(FrmAddInManager).Owner = ProcessManager.GetActivateWindow();
+        FrmAddInManager.Show();
         return Result.Failed;
     }
 

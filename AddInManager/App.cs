@@ -1,15 +1,19 @@
 ﻿using System.Reflection;
+using System.Windows;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
+using RevitAddinManager.View;
 using static RevitAddinManager.Model.BitmapSourceConverter;
 
 namespace RevitAddinManager;
 
 public class App : IExternalApplication
 {
+    public static FrmAddInManager FrmAddInManager { get; set; }
     public Result OnStartup(UIControlledApplication application)
     {
         CreateRibbonPanel(application);
+        application.ControlledApplication.DocumentClosed += DocumentClosed;
         return Result.Succeeded;
     }
 
@@ -34,6 +38,9 @@ public class App : IExternalApplication
         var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
         pullDownButton.AddPushButton(buttonData);
     }
+    private void DocumentClosed(object sender, Autodesk.Revit.DB.Events.DocumentClosedEventArgs e)
+    {
+        FrmAddInManager?.Close();
+    }
 
-      
 }
