@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace RevitAddinManager.Model
 {
@@ -9,6 +12,18 @@ namespace RevitAddinManager.Model
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        public static void SetRevitAsWindowOwner(this Window window)
+        {
+            if (null == window) { return; }
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            WindowInteropHelper helper = new WindowInteropHelper(window);
+            helper.Owner = GetActivateWindow();
+            window.Closing += SetActivateWindow;
+        }
+        private static void SetActivateWindow(object sender, CancelEventArgs e)
+        {
+            SetActivateWindow();
+        }
         /// <summary>
         /// Set process revert use revit
         /// </summary>

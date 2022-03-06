@@ -33,8 +33,5 @@ public partial class FrmAddInManager : Window
         viewModel.MAddinManagerBase.AddinManager.SaveToAimIni();
     }
 
-    private void FrmAddInManager_OnClosing(object sender, CancelEventArgs e)
-    {
-       ProcessManager.SetActivateWindow();
-    }
+    
 }
