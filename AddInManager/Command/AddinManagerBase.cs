@@ -11,6 +11,7 @@ public sealed class AddinManagerBase
 {
     public Result ExecuteCommand(ExternalCommandData data, ref string message, ElementSet elements, bool faceless)
     {
+        if (FormControl.Instance.IsOpened) return Result.Succeeded;
         var vm = new AddInManagerViewModel(data,ref message,elements);
         if (_activeCmd != null && faceless)
         {

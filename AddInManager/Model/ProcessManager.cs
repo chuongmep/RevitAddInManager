@@ -8,6 +8,7 @@ namespace RevitAddinManager.Model
 {
     public static class ProcessManager
     {
+        private static FormControl FrmControl => FormControl.Instance;
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -18,6 +19,8 @@ namespace RevitAddinManager.Model
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             WindowInteropHelper helper = new WindowInteropHelper(window);
             helper.Owner = GetActivateWindow();
+            window.Loaded += delegate { FrmControl.IsOpened = true; };
+            window.Closed += delegate { FrmControl.IsOpened = false; };
             window.Closing += SetActivateWindow;
         }
         private static void SetActivateWindow(object sender, CancelEventArgs e)
