@@ -1,5 +1,5 @@
-﻿using System.IO;
-using RevitAddinManager.Command;
+﻿using RevitAddinManager.Command;
+using System.IO;
 
 namespace RevitAddinManager.Model;
 
@@ -48,6 +48,7 @@ public class Addin : IAddinNode
     {
         itemList.Sort(new AddinItemComparer());
     }
+
     public void RemoveItem(AddinItem item)
     {
         itemList.Remove(item);

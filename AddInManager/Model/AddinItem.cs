@@ -1,5 +1,5 @@
-﻿using System.IO;
-using Autodesk.Revit.Attributes;
+﻿using Autodesk.Revit.Attributes;
+using System.IO;
 
 namespace RevitAddinManager.Model;
 
@@ -49,9 +49,7 @@ public class AddinItem : IAddinNode
         manifestFile.Save();
     }
 
-
     public AddinType AddinType { get; set; }
-
 
     public string AssemblyPath
     {
@@ -63,9 +61,7 @@ public class AddinItem : IAddinNode
         }
     }
 
-
     public string AssemblyName { get; set; }
-
 
     public Guid ClientId
     {
@@ -77,12 +73,9 @@ public class AddinItem : IAddinNode
         }
     }
 
-
     protected internal string ClientIdString { get; set; }
 
-
     public string FullClassName { get; set; }
-
 
     public string Name
     {
@@ -126,38 +119,28 @@ public class AddinItem : IAddinNode
         }
     }
 
-
     public VisibilityMode VisibilityMode { get; set; }
 
     public bool Save { get; set; }
 
-
     public bool Hidden { get; set; }
-
 
     public TransactionMode? TransactionMode { get; set; }
 
-
     public RegenerationOption? RegenerationMode { get; set; }
 
-
     public JournalingMode? JournalingMode { get; set; }
-
 
     public override string ToString()
     {
         return name;
     }
 
-
     protected string assemblyPath;
-
 
     protected Guid clientId;
 
-
     private string name;
-
 
     private string description;
 }

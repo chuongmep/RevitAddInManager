@@ -1,54 +1,54 @@
-using System.Text;
-using System.Text.RegularExpressions;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Tools.GitVersion;
 using Octokit;
 using Serilog;
+using System.Text;
+using System.Text.RegularExpressions;
 
-partial class Build
+internal partial class Build
 {
-    [GitVersion(NoFetch = true)] readonly GitVersion GitVersion;
-    [Parameter] string GitHubToken { get; set; }
-    readonly Regex VersionRegex = new(@"(\d+\.)+\d+", RegexOptions.Compiled);
+    [GitVersion(NoFetch = true)] private readonly GitVersion GitVersion;
+    [Parameter] private string GitHubToken { get; set; }
+    private readonly Regex VersionRegex = new(@"(\d+\.)+\d+", RegexOptions.Compiled);
 
-    Target PublishGitHubRelease => _ => _
-        .TriggeredBy(CreateInstaller)
-        .Requires(() => GitHubToken)
-        .Requires(() => GitRepository)
-        .Requires(() => GitVersion)
-        .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
-        .OnlyWhenStatic(() => IsServerBuild)
-        .Executes(() =>
-        {
-            GitHubTasks.GitHubClient = new GitHubClient(new ProductHeaderValue(Solution.Name))
-            {
-                Credentials = new Credentials(GitHubToken)
-            };
+    private Target PublishGitHubRelease => _ => _
+         .TriggeredBy(CreateInstaller)
+         .Requires(() => GitHubToken)
+         .Requires(() => GitRepository)
+         .Requires(() => GitVersion)
+         .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
+         .OnlyWhenStatic(() => IsServerBuild)
+         .Executes(() =>
+         {
+             GitHubTasks.GitHubClient = new GitHubClient(new ProductHeaderValue(Solution.Name))
+             {
+                 Credentials = new Credentials(GitHubToken)
+             };
 
-            var gitHubName = GitRepository.GetGitHubName();
-            var gitHubOwner = GitRepository.GetGitHubOwner();
-            var artifacts = Directory.GetFiles(ArtifactsDirectory, "*");
-            var version = GetProductVersion(artifacts);
+             var gitHubName = GitRepository.GetGitHubName();
+             var gitHubOwner = GitRepository.GetGitHubOwner();
+             var artifacts = Directory.GetFiles(ArtifactsDirectory, "*");
+             var version = GetProductVersion(artifacts);
 
-            CheckTags(gitHubOwner, gitHubName, version);
-            Log.Information("Detected Tag: {Version}", version);
+             CheckTags(gitHubOwner, gitHubName, version);
+             Log.Information("Detected Tag: {Version}", version);
 
-            var newRelease = new NewRelease(version)
-            {
-                Name = version,
-                Body = CreateChangelog(version),
-                Draft = true,
-                TargetCommitish = GitVersion.Sha
-            };
+             var newRelease = new NewRelease(version)
+             {
+                 Name = version,
+                 Body = CreateChangelog(version),
+                 Draft = true,
+                 TargetCommitish = GitVersion.Sha
+             };
 
-            var draft = CreatedDraft(gitHubOwner, gitHubName, newRelease);
-            UploadArtifacts(draft, artifacts);
-            ReleaseDraft(gitHubOwner, gitHubName, draft);
-        });
+             var draft = CreatedDraft(gitHubOwner, gitHubName, newRelease);
+             UploadArtifacts(draft, artifacts);
+             ReleaseDraft(gitHubOwner, gitHubName, draft);
+         });
 
-    string CreateChangelog(string version)
+    private string CreateChangelog(string version)
     {
         if (!File.Exists(ChangeLogPath))
         {
@@ -80,7 +80,7 @@ partial class Build
         return logBuilder.ToString();
     }
 
-    static void CheckTags(string gitHubOwner, string gitHubName, string version)
+    private static void CheckTags(string gitHubOwner, string gitHubName, string version)
     {
         var gitHubTags = GitHubTasks.GitHubClient.Repository
             .GetAllTags(gitHubOwner, gitHubName)
@@ -89,7 +89,7 @@ partial class Build
         if (gitHubTags.Select(tag => tag.Name).Contains(version)) throw new ArgumentException($"The repository already contains a Release with the tag: {version}");
     }
 
-    string GetProductVersion(IEnumerable<string> artifacts)
+    private string GetProductVersion(IEnumerable<string> artifacts)
     {
         var stringVersion = string.Empty;
         var doubleVersion = 0d;
@@ -112,7 +112,7 @@ partial class Build
         return stringVersion;
     }
 
-    static void UploadArtifacts(Release createdRelease, IEnumerable<string> artifacts)
+    private static void UploadArtifacts(Release createdRelease, IEnumerable<string> artifacts)
     {
         foreach (var file in artifacts)
         {
@@ -127,15 +127,15 @@ partial class Build
         }
     }
 
-    static Release CreatedDraft(string gitHubOwner, string gitHubName, NewRelease newRelease) =>
+    private static Release CreatedDraft(string gitHubOwner, string gitHubName, NewRelease newRelease) =>
         GitHubTasks.GitHubClient.Repository.Release
             .Create(gitHubOwner, gitHubName, newRelease)
             .Result;
 
-    static void ReleaseDraft(string gitHubOwner, string gitHubName, Release draft)
+    private static void ReleaseDraft(string gitHubOwner, string gitHubName, Release draft)
     {
         var _ = GitHubTasks.GitHubClient.Repository.Release
-            .Edit(gitHubOwner, gitHubName, draft.Id, new ReleaseUpdate {Draft = false})
+            .Edit(gitHubOwner, gitHubName, draft.Id, new ReleaseUpdate { Draft = false })
             .Result;
     }
 }

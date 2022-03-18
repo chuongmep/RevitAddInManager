@@ -1,15 +1,15 @@
-using System.Text.RegularExpressions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using System.Text.RegularExpressions;
 
-static class BuilderExtensions
+internal static class BuilderExtensions
 {
     public static Project GetProject(this Solution solution, string projectName) =>
         solution.GetProject(projectName) ?? throw new NullReferenceException($"Cannon find project \"{projectName}\"");
 
     public static AbsolutePath GetBinDirectory(this Project project) => project.Directory / "bin";
 
-    static AbsolutePath GetExePath(this Project project, string configuration) => project.GetBinDirectory() / configuration / $"{project.Name}.exe";
+    private static AbsolutePath GetExePath(this Project project, string configuration) => project.GetBinDirectory() / configuration / $"{project.Name}.exe";
 
     public static AbsolutePath GetExecutableFile(this Project project, IEnumerable<string> configurations, List<DirectoryInfo> directories)
     {

@@ -8,7 +8,6 @@ namespace RevitAddinManager.Model;
 
 public class ViewModelBase : INotifyPropertyChanged
 {
-
     public event PropertyChangedEventHandler PropertyChanged;
 
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

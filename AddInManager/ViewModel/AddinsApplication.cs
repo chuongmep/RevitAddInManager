@@ -8,6 +8,7 @@ public class AddinsApplication : Addins
     private static string ExternalCount = "EACount";
     private static string ExternalClassName = "EAClassName";
     private static string ExternalAssembly = "EAAssembly";
+
     public void ReadItems(IniFile file)
     {
         var num = file.ReadInt(ExternalName, ExternalCount);

@@ -23,12 +23,10 @@ public class IniFile
         WritePrivateProfileSection(iniSection, null, filePath);
     }
 
-
     public void Write(string iniSection, string iniKey, object iniValue)
     {
         WritePrivateProfileString(iniSection, iniKey, iniValue.ToString(), filePath);
     }
-
 
     public string ReadString(string iniSection, string iniKey)
     {
@@ -42,22 +40,17 @@ public class IniFile
         return GetPrivateProfileInt(iniSection, iniKey, 0, filePath);
     }
 
-
     [DllImport("kernel32.dll")]
     private static extern int WritePrivateProfileSection(string lpAppName, string lpString, string lpFileName);
-
 
     [DllImport("kernel32", CharSet = CharSet.Auto)]
     private static extern int WritePrivateProfileString(string section, string key, string val, string filePath);
 
-
     [DllImport("kernel32")]
     private static extern int GetPrivateProfileInt(string section, string key, int def, string filePath);
 
-
     [DllImport("kernel32", CharSet = CharSet.Auto)]
     private static extern int GetPrivateProfileString(string section, string key, string defaultValue, StringBuilder retVal, int size, string filePath);
-
 
     private readonly string filePath;
 }

@@ -1,10 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Interop;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
+using System.Windows;
 using static RevitAddinManager.App;
+
 namespace RevitAddinManager.Command;
 
 public sealed class AddinManagerBase
@@ -12,7 +12,7 @@ public sealed class AddinManagerBase
     public Result ExecuteCommand(ExternalCommandData data, ref string message, ElementSet elements, bool faceless)
     {
         if (FormControl.Instance.IsOpened) return Result.Succeeded;
-        var vm = new AddInManagerViewModel(data,ref message,elements);
+        var vm = new AddInManagerViewModel(data, ref message, elements);
         if (_activeCmd != null && faceless)
         {
             return RunActiveCommand(vm, data, ref message, elements);
@@ -28,7 +28,6 @@ public sealed class AddinManagerBase
         get => _activeTempFolder;
         set => _activeTempFolder = value;
     }
-
 
     public Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
     {
@@ -69,7 +68,6 @@ public sealed class AddinManagerBase
         return result;
     }
 
-
     public static AddinManagerBase Instance
     {
         get
@@ -99,13 +97,11 @@ public sealed class AddinManagerBase
         _activeAppItem = null;
     }
 
-
     public IExternalCommand ActiveEC
     {
         get => _activeEc;
         set => _activeEc = value;
     }
-
 
     public Addin ActiveCmd
     {
@@ -119,12 +115,12 @@ public sealed class AddinManagerBase
         set => _activeCmdItem = value;
     }
 
-
     public Addin ActiveApp
     {
         get => _activeApp;
         set => _activeApp = value;
     }
+
     public AddinItem ActiveAppItem
     {
         get => _activeAppItem;

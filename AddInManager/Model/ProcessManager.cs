@@ -9,9 +9,10 @@ namespace RevitAddinManager.Model
     public static class ProcessManager
     {
         private static FormControl FrmControl => FormControl.Instance;
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public static void SetRevitAsWindowOwner(this Window window)
         {
@@ -23,10 +24,12 @@ namespace RevitAddinManager.Model
             window.Closed += delegate { FrmControl.IsOpened = false; };
             window.Closing += SetActivateWindow;
         }
+
         private static void SetActivateWindow(object sender, CancelEventArgs e)
         {
             SetActivateWindow();
         }
+
         /// <summary>
         /// Set process revert use revit
         /// </summary>
@@ -50,5 +53,4 @@ namespace RevitAddinManager.Model
             return Process.GetCurrentProcess().MainWindowHandle;
         }
     }
-    
 }

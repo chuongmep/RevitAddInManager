@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using Autodesk.Revit.Attributes;
+using System.IO;
 using System.Reflection;
 using System.Text;
-using Autodesk.Revit.Attributes;
 
 namespace RevitAddinManager.Model;
 
@@ -28,7 +28,6 @@ public abstract class Addins
         }
     }
 
-
     public void AddAddIn(Addin addin)
     {
         var fileName = Path.GetFileName(addin.FilePath);
@@ -52,14 +51,12 @@ public abstract class Addins
 
     public void AddItem(AddinItem item)
     {
-
         var assemblyName = item.AssemblyName;
         if (!addinDict.ContainsKey(assemblyName))
         {
             addinDict[assemblyName] = new Addin(item.AssemblyPath);
         }
         addinDict[assemblyName].ItemList.Add(item);
-
     }
 
     public List<AddinItem> LoadItems(Assembly assembly, string fullName, string originalAssemblyFilePath, AddinType type)
@@ -134,7 +131,7 @@ public abstract class Addins
             {
                 throw new ArgumentException(e.ToString());
             }
-            IL_1A7:;
+        IL_1A7:;
         }
         if (list2.Count > 0)
         {

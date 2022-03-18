@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using System.Windows;
-using Autodesk.Revit.Exceptions;
-using ArgumentNullException = System.ArgumentNullException;
 
 namespace RevitAddinManager.Model;
 
@@ -38,7 +36,6 @@ public static class FileUtils
         directoryInfo3.Create();
         return directoryInfo3.FullName;
     }
-
 
     public static void SetWriteable(string fileName)
     {
@@ -136,9 +133,11 @@ public static class FileUtils
                     case MessageBoxResult.Yes:
                         CopyDirectory(directoryName, destFolder, allCopiedFiles);
                         break;
+
                     case MessageBoxResult.No:
                         CopyFileToFolder(sourceFilePath, destFolder, true, allCopiedFiles);
                         break;
+
                     default:
                         return null;
                 }
@@ -237,5 +236,4 @@ public static class FileUtils
         }
         return num / 1024L / 1024L;
     }
-
 }

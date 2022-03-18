@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Win32;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
-using Microsoft.Win32;
 
 namespace RevitAddinManager.View;
 
@@ -14,17 +14,20 @@ public partial class AssemblyLoader : Window
     private string _assemName;
     public string resultPath;
     private bool isFound;
+
     public AssemblyLoader(string assemName)
     {
         InitializeComponent();
         _assemName = assemName;
         tbxAssembly.Content = assemName;
     }
+
     private void ShowWarning()
     {
         var text = new StringBuilder("The dependent assembly can't be loaded: \"").Append(_assemName).AppendFormat("\".", new object[0]).ToString();
         MessageBox.Show(text, "Add-in Manager Internal", MessageBoxButton.OK, MessageBoxImage.Exclamation);
     }
+
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrEmpty(_assemName))
@@ -41,7 +44,6 @@ public partial class AssemblyLoader : Window
             ShowWarning();
         }
         TbxAssemPath.Text = openFileDialog.FileName;
-
     }
 
     private void OKButtonClick(object sender, RoutedEventArgs e)
@@ -65,6 +67,7 @@ public partial class AssemblyLoader : Window
             ShowWarning();
         }
     }
+
     private void Close_OnClick(object sender, RoutedEventArgs e)
     {
         Close();

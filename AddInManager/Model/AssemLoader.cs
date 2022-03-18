@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
+﻿using RevitAddinManager.View;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows;
-using RevitAddinManager.View;
 
 namespace RevitAddinManager.Model;
 
@@ -21,14 +21,12 @@ public class AssemLoader
         set => tempFolder = value;
     }
 
-
     public AssemLoader()
     {
         tempFolder = string.Empty;
         refedFolders = new List<string>();
         copiedFiles = new Dictionary<string, DateTime>();
     }
-
 
     public void CopyGeneratedFilesBack()
     {
@@ -92,7 +90,6 @@ public class AssemLoader
         return assembly;
     }
 
-
     private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
     {
         var text = string.Empty;
@@ -132,7 +129,6 @@ public class AssemLoader
         }
         return result;
     }
-
 
     private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
     {
@@ -188,8 +184,7 @@ public class AssemLoader
     {
         try
         {
-               
-            var array = new string[] {".dll", ".exe"};
+            var array = new string[] { ".dll", ".exe" };
             var text = string.Empty;
             var str = assemName.Substring(0, assemName.IndexOf(','));
             foreach (var str2 in array)
@@ -208,7 +203,6 @@ public class AssemLoader
         }
         return string.Empty;
     }
-
 
     private string SearchAssemblyFileInOriginalFolders(string assemName)
     {
@@ -281,7 +275,7 @@ public class AssemLoader
         {
             foreach (var assembly2 in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (String.Compare(assembly2.GetName().Name,AssRevitName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(assembly2.GetName().Name, AssRevitName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     revitApiAssemblyFullName = assembly2.GetName().Name;
                     break;

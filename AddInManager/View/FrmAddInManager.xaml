@@ -1,11 +1,11 @@
 ﻿<Window
     x:Class="RevitAddinManager.View.FrmAddInManager"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:RevitAddinManager.Model"
+    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
     xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
     Title="Revit Add In Manager"
     Width="400"

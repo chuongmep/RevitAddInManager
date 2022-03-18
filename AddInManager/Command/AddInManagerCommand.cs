@@ -15,6 +15,7 @@ public class AddInManagerManual : IExternalCommand
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
     }
 }
+
 [Transaction(TransactionMode.Manual)]
 public class AddInManagerFaceless : IExternalCommand
 {
@@ -23,6 +24,7 @@ public class AddInManagerFaceless : IExternalCommand
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, true);
     }
 }
+
 [Transaction(TransactionMode.Manual)]
 public class AddInManagerReadOnly : IExternalCommand
 {

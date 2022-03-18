@@ -8,7 +8,7 @@ namespace RevitAddinManager.Model;
 public static class IEConverter
 {
     /// <summary>
-    /// Convert IEnumerableUtils To ObservableCollection 
+    /// Convert IEnumerableUtils To ObservableCollection
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>

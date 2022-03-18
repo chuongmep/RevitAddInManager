@@ -9,13 +9,15 @@ namespace RevitAddinManager.View.Control;
 public class RelayCommand : ICommand
 {
     #region Variables
+
     private readonly Predicate<object> m_canExecute;
     private readonly Action<object> m_execute;
     private readonly Action _act;
 
-    #endregion
+    #endregion Variables
 
     #region Constructor
+
     public RelayCommand(Action act)
     {
         _act = act;
@@ -27,15 +29,17 @@ public class RelayCommand : ICommand
         m_canExecute = canExecute;
     }
 
-    #endregion
+    #endregion Constructor
 
-    #region Implementation 
+    #region Implementation
+
     // Evaluate the command if it is valid to execute
     public bool CanExecute(object parameter = null)
     {
         if (parameter == null || m_canExecute == null) return true;
         else return m_canExecute(parameter);
     }
+
     // Main execute method
     public void Execute(object parameter = null)
     {
@@ -43,16 +47,18 @@ public class RelayCommand : ICommand
         else m_execute(parameter);
     }
 
-    // In WPF CommandManager is a pre-defined class that take charge of observing the user interface 
+    // In WPF CommandManager is a pre-defined class that take charge of observing the user interface
     // and calls the CanExecute method when it deems it necessary
     public event EventHandler CanExecuteChanged
     {
         add => CommandManager.RequerySuggested += value;
         remove => CommandManager.RequerySuggested -= value;
     }
-    #endregion
+
+    #endregion Implementation
 
     #region Support
+
     public class CloseCommand : ICommand
     {
         public bool CanExecute(object parameter)
@@ -71,5 +77,6 @@ public class RelayCommand : ICommand
             if (parameter is Window myWin) myWin.Close();
         }
     }
-    #endregion
+
+    #endregion Support
 }

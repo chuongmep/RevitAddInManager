@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using Autodesk.Revit.Attributes;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
+using System.Windows;
 
 namespace RevitAddinManager.Model;
 
@@ -12,7 +12,6 @@ public static class StaticUtil
     }
 
     public static string CommandFullName = typeof(IExternalCommand).FullName;
-
 
     public static string AppFullName = typeof(IExternalApplication).FullName;
 

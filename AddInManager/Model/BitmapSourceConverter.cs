@@ -21,12 +21,15 @@ public static class BitmapSourceConverter
         {
             case ImageType.Small:
                 return ToImageSource(bitmap).Resize(16);
+
             case ImageType.Large:
                 return ToImageSource(bitmap).Resize(32);
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(imageType), imageType, null);
         }
     }
+
     public static BitmapImage ToImageSource(Bitmap bitmap)
     {
         var ms = new MemoryStream();
@@ -38,6 +41,7 @@ public static class BitmapSourceConverter
         image.EndInit();
         return image;
     }
+
     /// <summary>
     /// Resize ImageResource
     /// </summary>

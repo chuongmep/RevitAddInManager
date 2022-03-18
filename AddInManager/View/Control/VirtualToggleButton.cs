@@ -20,7 +20,7 @@ public static class VirtualToggleButton
                 OnIsCheckedChanged));
 
     /// <summary>
-    /// Gets the IsChecked property.  This dependency property 
+    /// Gets the IsChecked property.  This dependency property
     /// indicates whether the toggle button is checked.
     /// </summary>
     public static Nullable<bool> GetIsChecked(DependencyObject d)
@@ -29,7 +29,7 @@ public static class VirtualToggleButton
     }
 
     /// <summary>
-    /// Sets the IsChecked property.  This dependency property 
+    /// Sets the IsChecked property.  This dependency property
     /// indicates whether the toggle button is checked.
     /// </summary>
     public static void SetIsChecked(DependencyObject d, Nullable<bool> value)
@@ -60,7 +60,7 @@ public static class VirtualToggleButton
         }
     }
 
-    #endregion
+    #endregion IsChecked
 
     #region IsThreeState
 
@@ -72,8 +72,8 @@ public static class VirtualToggleButton
             new FrameworkPropertyMetadata(false));
 
     /// <summary>
-    /// Gets the IsThreeState property.  This dependency property 
-    /// indicates whether the control supports two or three states.  
+    /// Gets the IsThreeState property.  This dependency property
+    /// indicates whether the control supports two or three states.
     /// IsChecked can be set to null as a third state when IsThreeState is true.
     /// </summary>
     public static bool GetIsThreeState(DependencyObject d)
@@ -82,8 +82,8 @@ public static class VirtualToggleButton
     }
 
     /// <summary>
-    /// Sets the IsThreeState property.  This dependency property 
-    /// indicates whether the control supports two or three states. 
+    /// Sets the IsThreeState property.  This dependency property
+    /// indicates whether the control supports two or three states.
     /// IsChecked can be set to null as a third state when IsThreeState is true.
     /// </summary>
     public static void SetIsThreeState(DependencyObject d, bool value)
@@ -91,7 +91,7 @@ public static class VirtualToggleButton
         d.SetValue(IsThreeStateProperty, value);
     }
 
-    #endregion
+    #endregion IsThreeState
 
     #region IsVirtualToggleButton
 
@@ -104,8 +104,8 @@ public static class VirtualToggleButton
                 OnIsVirtualToggleButtonChanged));
 
     /// <summary>
-    /// Gets the IsVirtualToggleButton property.  This dependency property 
-    /// indicates whether the object to which the property is attached is treated as a VirtualToggleButton.  
+    /// Gets the IsVirtualToggleButton property.  This dependency property
+    /// indicates whether the object to which the property is attached is treated as a VirtualToggleButton.
     /// If true, the object will respond to keyboard and mouse input the same way a ToggleButton would.
     /// </summary>
     public static bool GetIsVirtualToggleButton(DependencyObject d)
@@ -114,8 +114,8 @@ public static class VirtualToggleButton
     }
 
     /// <summary>
-    /// Sets the IsVirtualToggleButton property.  This dependency property 
-    /// indicates whether the object to which the property is attached is treated as a VirtualToggleButton.  
+    /// Sets the IsVirtualToggleButton property.  This dependency property
+    /// indicates whether the object to which the property is attached is treated as a VirtualToggleButton.
     /// If true, the object will respond to keyboard and mouse input the same way a ToggleButton would.
     /// </summary>
     public static void SetIsVirtualToggleButton(DependencyObject d, bool value)
@@ -143,9 +143,9 @@ public static class VirtualToggleButton
         }
     }
 
-    #endregion
+    #endregion IsVirtualToggleButton
 
-    #endregion
+    #endregion attached properties
 
     #region routed events
 
@@ -165,7 +165,7 @@ public static class VirtualToggleButton
         return args;
     }
 
-    #endregion
+    #endregion Checked
 
     #region Unchecked
 
@@ -183,7 +183,7 @@ public static class VirtualToggleButton
         return args;
     }
 
-    #endregion
+    #endregion Unchecked
 
     #region Indeterminate
 
@@ -201,9 +201,9 @@ public static class VirtualToggleButton
         return args;
     }
 
-    #endregion
+    #endregion Indeterminate
 
-    #endregion
+    #endregion routed events
 
     #region private methods
 
@@ -224,7 +224,6 @@ public static class VirtualToggleButton
 
                 UpdateIsChecked(sender as DependencyObject);
                 e.Handled = true;
-
             }
             else if (e.Key == Key.Enter && (bool)(sender as DependencyObject).GetValue(KeyboardNavigation.AcceptsReturnProperty))
             {
@@ -259,5 +258,5 @@ public static class VirtualToggleButton
         }
     }
 
-    #endregion
+    #endregion private methods
 }

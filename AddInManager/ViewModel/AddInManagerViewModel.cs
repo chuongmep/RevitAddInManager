@@ -1,16 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Windows;
-using System.Windows.Input;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.Win32;
 using RevitAddinManager.Command;
 using RevitAddinManager.Model;
 using RevitAddinManager.View;
 using RevitAddinManager.View.Control;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Input;
 
 namespace RevitAddinManager.ViewModel;
 
@@ -530,6 +530,7 @@ public class AddInManagerViewModel : ViewModelBase
         MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
         FrmAddInManager.Close();
     }
+
     private void FreshSearchClick()
     {
         var flag = string.IsNullOrEmpty(searchText);

@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System.Windows;
 
 namespace RevitAddinManager.Model
 {
@@ -12,6 +12,7 @@ namespace RevitAddinManager.Model
         private bool SkipFailures;
         private string TransactionName;
         private bool WithTransaction;
+
         public RevitEvent()
         {
             ExEvent = ExternalEvent.Create(this);
@@ -34,6 +35,7 @@ namespace RevitAddinManager.Model
             ExEvent.Raise();
             this.TransactionName = transactionName;
         }
+
         public void Execute(UIApplication app)
         {
             try

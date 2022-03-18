@@ -4,9 +4,8 @@ namespace RevitAddinManager.ViewModel;
 
 public class AddinModel : ViewModelBase
 {
-
-    bool? isChecked = false;
-    AddinModel parent;
+    private bool? isChecked = false;
+    private AddinModel parent;
 
     public AddinModel(string name)
     {
@@ -22,6 +21,7 @@ public class AddinModel : ViewModelBase
             child.Initialize();
         }
     }
+
     public List<AddinModel> Children { get; set; }
 
     public Addin Addin { get; set; }
@@ -38,7 +38,7 @@ public class AddinModel : ViewModelBase
 
     public bool? IsParentTree { get; set; } = false;
 
-    void SetIsChecked(bool? value, bool updateChildren, bool updateParent)
+    private void SetIsChecked(bool? value, bool updateChildren, bool updateParent)
     {
         if (value == isChecked)
             return;
@@ -54,7 +54,7 @@ public class AddinModel : ViewModelBase
         OnPropertyChanged(nameof(IsChecked));
     }
 
-    void VerifyCheckState()
+    private void VerifyCheckState()
     {
         bool? state = null;
         for (var i = 0; i < Children.Count; ++i)

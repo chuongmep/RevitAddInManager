@@ -10,6 +10,7 @@ public class AddinsCommand : Addins
     private static string ExternalClassName = "ECClassName";
     private static string ExternalAssembly = "ECAssembly";
     private static string ExternalDescription = "ECDescription";
+
     public void ReadItems(IniFile file)
     {
         var num = file.ReadInt(ExternalName, ExternalCount);

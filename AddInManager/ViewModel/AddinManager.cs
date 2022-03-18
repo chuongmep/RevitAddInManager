@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+﻿using RevitAddinManager.Model;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using RevitAddinManager.Model;
 
 namespace RevitAddinManager.ViewModel;
 
@@ -12,7 +12,6 @@ public class AddinManager
     public AddinsCommand Commands => commands;
     public int CmdCount => commands.Count;
 
-
     public AddinManager()
     {
         commands = new AddinsCommand();
@@ -20,7 +19,6 @@ public class AddinManager
         GetIniFilePaths();
         ReadAddinsFromAimIni();
     }
-
 
     private IniFile AimIniFile => aimIniFile;
 
@@ -106,15 +104,17 @@ public class AddinManager
         applications.Save(revitIniFile);
     }
 
-    public void SaveAsLocal(AddInManagerViewModel vm,string filepath)
+    public void SaveAsLocal(AddInManagerViewModel vm, string filepath)
     {
         ManifestFile manifestFile = AddManifestFile(vm);
         manifestFile.SaveAs(filepath);
     }
+
     public void SaveToLocal()
     {
         SaveToLocalManifest();
     }
+
     public void SaveToLocalRevitIni()
     {
         foreach (var keyValuePair in commands.AddinDict)
@@ -166,6 +166,7 @@ public class AddinManager
         }
         return false;
     }
+
     public List<string> SaveToAllUserManifest(AddInManagerViewModel vm)
     {
         var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
@@ -217,11 +218,11 @@ public class AddinManager
                     if (children.IsChecked == true) manifestFile.Applications.Add(children.AddinItem);
                 }
             }
-
         }
 
         return manifestFile;
     }
+
     private void SaveToLocalManifest()
     {
         var dictionary = new Dictionary<string, Addin>();

@@ -20,6 +20,7 @@ public class RevitAddin : ViewModelBase
     public AddinType AddinType { get; set; }
 
     private bool _IsChecked;
+
     public bool IsChecked
     {
         get => _IsChecked;
@@ -37,6 +38,7 @@ public class RevitAddin : ViewModelBase
             //Ignore if file is readonly
         }
     }
+
     private bool RenamePath()
     {
         if (!File.Exists(FilePath)) return false;
@@ -51,14 +53,16 @@ public class RevitAddin : ViewModelBase
                 newName = FileName.Insert(FileName.Length, DefaultSetting.FormatDisable);
                 newFilePath = Path.Combine(dir, newName);
                 break;
+
             case VisibleModel.Disable:
-                newName = FileName.Replace(DefaultSetting.FormatDisable,"");
+                newName = FileName.Replace(DefaultSetting.FormatDisable, "");
                 newFilePath = Path.Combine(dir, newName);
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        if(File.Exists(newFilePath))File.Delete(newFilePath);
+        if (File.Exists(newFilePath)) File.Delete(newFilePath);
         if (FilePath != null)
         {
             File.Move(FilePath, newFilePath);
@@ -67,6 +71,4 @@ public class RevitAddin : ViewModelBase
 
         return true;
     }
-
-
 }

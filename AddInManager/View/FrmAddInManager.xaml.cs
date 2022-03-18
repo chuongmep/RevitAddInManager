@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
+﻿using RevitAddinManager.ViewModel;
 using System.Windows;
 using System.Windows.Input;
-using RevitAddinManager.Model;
-using RevitAddinManager.ViewModel;
 
 namespace RevitAddinManager.View;
 
@@ -12,6 +10,7 @@ namespace RevitAddinManager.View;
 public partial class FrmAddInManager : Window
 {
     private readonly AddInManagerViewModel viewModel;
+
     public FrmAddInManager(AddInManagerViewModel vm)
     {
         InitializeComponent();
@@ -22,16 +21,14 @@ public partial class FrmAddInManager : Window
 
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
-        if (viewModel.MAddinManagerBase.ActiveCmdItem != null && TabControl.SelectedIndex==0)
+        if (viewModel.MAddinManagerBase.ActiveCmdItem != null && TabControl.SelectedIndex == 0)
         {
             viewModel.MAddinManagerBase.ActiveCmdItem.Description = TbxDescription.Text;
         }
-        if (viewModel.MAddinManagerBase.ActiveAppItem != null && TabControl.SelectedIndex==1)
+        if (viewModel.MAddinManagerBase.ActiveAppItem != null && TabControl.SelectedIndex == 1)
         {
             viewModel.MAddinManagerBase.ActiveAppItem.Description = TbxDescription.Text;
         }
         viewModel.MAddinManagerBase.AddinManager.SaveToAimIni();
     }
-
-    
 }

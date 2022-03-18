@@ -20,6 +20,6 @@ internal static class FolderTooBigDialog
         stringBuilder.AppendLine("Select [Yes] to copy all the files to temp folder");
         stringBuilder.AppendLine("Select [No] to only copy test script DLL");
         var text = stringBuilder.ToString();
-        return MessageBox.Show(text, Resource.AppName, MessageBoxButton.YesNoCancel,MessageBoxImage.Asterisk);
+        return MessageBox.Show(text, Resource.AppName, MessageBoxButton.YesNoCancel, MessageBoxImage.Asterisk);
     }
 }

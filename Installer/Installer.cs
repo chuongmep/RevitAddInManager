@@ -8,7 +8,6 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
 
-
 const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "RevitAddinManager";
 const string outputName = "RevitAddinManager";
@@ -60,7 +59,7 @@ WixEntity[] GenerateWixEntities()
         if (versionStorages.ContainsKey(fileVersion))
             versionStorages[fileVersion].Add(files);
         else
-            versionStorages.Add(fileVersion, new List<WixEntity> {files});
+            versionStorages.Add(fileVersion, new List<WixEntity> { files });
 
         var assemblies = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
         Console.WriteLine($"Added '{fileVersion}' version files: ");

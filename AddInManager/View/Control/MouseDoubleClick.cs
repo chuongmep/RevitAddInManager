@@ -29,6 +29,7 @@ public class MouseDoubleClick
     {
         target.SetValue(CommandParameterProperty, value);
     }
+
     public static object GetCommandParameter(DependencyObject target)
     {
         return target.GetValue(CommandParameterProperty);

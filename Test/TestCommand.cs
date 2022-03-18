@@ -6,14 +6,15 @@ using Autodesk.Revit.UI.Selection;
 namespace Test
 {
     [Transaction(TransactionMode.Manual)]
-    public class TestCommand:  IExternalCommand
+    public class TestCommand : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("Command","Hello Word");
+            TaskDialog.Show("Command", "Hello Word");
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class TestCommandTransaction : IExternalCommand
     {
@@ -35,24 +36,27 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class Class2 : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("Commnad",@"Class2");
+            TaskDialog.Show("Commnad", @"Class2");
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class Class3 : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("Command",@"Class3");
+            TaskDialog.Show("Command", @"Class3");
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class Class4 : IExternalCommand
     {
@@ -62,12 +66,13 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.ReadOnly)]
     public class TestReadOnly : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("Command",@"Class5");
+            TaskDialog.Show("Command", @"Class5");
             return Result.Succeeded;
         }
     }

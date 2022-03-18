@@ -36,7 +36,6 @@ public class ManifestFile
         var documentElement = xmlDoc.DocumentElement;
         if (!documentElement.Name.Equals(ROOT_NODE))
         {
-
             throw new ArgumentException(INCORRECT_NODE);
         }
         if (documentElement.ChildNodes.Count == 0)
@@ -117,11 +116,13 @@ public class ManifestFile
     }
 
     private string _vendorDescription;
+
     public string VendorDescription
     {
         get => _vendorDescription;
         set => _vendorDescription = value;
     }
+
     public string FilePath
     {
         get
@@ -135,7 +136,6 @@ public class ManifestFile
         }
         set => filePath = value;
     }
-
 
     public List<AddinItem> Applications
     {
@@ -175,7 +175,7 @@ public class ManifestFile
             xmlElement4.InnerText = "ADSK";
             xmlElement3.AppendChild(xmlElement4);
             xmlElement4 = xmlDoc.CreateElement(VENDORDESCRIPTION);
-            if(VendorDescription==string.Empty) xmlElement4.InnerText = "Autodesk, www.autodesk.com";
+            if (VendorDescription == string.Empty) xmlElement4.InnerText = "Autodesk, www.autodesk.com";
             else xmlElement4.InnerText = VendorDescription;
             xmlElement3.AppendChild(xmlElement4);
         }
