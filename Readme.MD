@@ -125,6 +125,8 @@ Please refer to the [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 Thanks to [JetBrains](https://www.jetbrains.com/) for providing licenses for [Rider](https://www.jetbrains.com/rider/) and [dotUltimate](https://www.jetbrains.com/dotnet/) tools, which both make open-source development a real pleasure!
 
+![](pic/jetbrains.png)
+
 ---
 
 ## Open Resource Recommend
