@@ -18,6 +18,15 @@
 
 Usually, when developing and debugging an addin with RevitAPI, user has to close & re-open Revit each time he/she modifies the addin code and wants to re-compile. But with Add-In Manager, user can modify and run the addin directly without closing & re-opening Revit again and again.
 
+The product will be expanded in the future in process to support mutiple platform : 
+
+- [x] [Revit Add-In Manager](https://github.com/chuongmep/RevitAddInManager)
+
+- [x] [Navis Add-In Manager](https://github.com/chuongmep/NavisAddInManager)
+
+- [x] More...
+
+
 Some feature include: 
 - Add-in tester
 - Add-in manager
