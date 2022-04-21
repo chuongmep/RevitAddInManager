@@ -38,7 +38,11 @@ Some feature include:
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
 - Quick remove an Add-in not used in working process
-
+- No depend on any library from outside **RevitAPI**.
+- <kbd>F5</kbd> - Load fresh plugin don't need load again.
+- <kbd>F1</kbd> - Go link open source report some error,bug or feature request.
+- <kbd>Delete</kbd> - Quick remove by use right click or use from keyboard.
+- <kbd>Crt + MouseWheel</kbd> - Zoom in/out by use mouse wheel in command plugin.
 ## Add-In Manager
 
 ![](pic/AddinManager.png)
