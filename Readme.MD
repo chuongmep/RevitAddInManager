@@ -27,7 +27,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] More...
 
 
-Some feature include: 
+### Some feature include: 
 - Add-in tester
 - Add-in manager
     - AddInManagerFaceless
@@ -39,6 +39,7 @@ Some feature include:
 - Clear Cache saved in temp folder
 - Quick remove an Add-in not used in working process
 - No depend on any library from outside **RevitAPI**.
+- A newbie can create new Add-in in a few minutes and easily explore Revit API.
 - <kbd>F5</kbd> - Load fresh plugin don't need load again.
 - <kbd>F1</kbd> - Go link open source report some error,bug or feature request.
 - <kbd>Delete</kbd> - Quick remove by use right click or use from keyboard.
