@@ -24,6 +24,8 @@ The product will be expanded in the future in process to support mutiple platfor
 
 - [x] [Navis Add-In Manager](https://github.com/chuongmep/NavisAddInManager)
 
+- [x] [Cad Add-In Manager](https://github.com/chuongmep/CadAddInManager)
+
 - [x] More...
 
 
