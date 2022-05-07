@@ -103,6 +103,7 @@
                                 <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                 <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
                                 <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
+                                <MenuItem Command="{Binding OpenRefsAssemblyCommand}" Header="Assembly Info..." />
                                 <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                 <MenuItem Command="{Binding ReloadCommand}" Header="Reload" />
                             </ContextMenu>
