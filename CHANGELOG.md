@@ -1,4 +1,6 @@
 # Changelog
+- 2022-05-07 **1.2.5**
+  - Support show detail assembly referenced to load manually.
 - 2022-04-21 **1.2.4**
   - Support `Crt + Mouse Wheel` to zoomIn ZoomOut command
 - 2022-03-07 **1.2.3**
