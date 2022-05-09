@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
@@ -43,6 +44,15 @@ public class LogControlViewModel
                 stopWatching = value;
             }
         }
+    }
+
+    private ICommand clearLogCommand; 
+    public ICommand ClearLogCommand => clearLogCommand ??= new RelayCommand(ClearLogClick);
+
+    private void ClearLogClick()
+    {
+        File.WriteAllText(LongFileName, String.Empty);
+        MessageList.Clear();
     }
 
     public LogControlViewModel()
@@ -86,6 +96,7 @@ public class LogControlViewModel
                 _watcher = new System.IO.FileSystemWatcher(path, baseName);
                 FileSystemEventHandler handler = new FileSystemEventHandler(FileWatcherChanged);
                 _watcher.Changed += handler;
+                _watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
                 _watcher.EnableRaisingEvents = true;
             });
 
@@ -137,7 +148,6 @@ public class LogControlViewModel
                         using (StreamReader reader = new StreamReader(stream))
                         {
                             newFileLines = reader.ReadToEnd();
-
                             string[] stringSeparators = new string[] { "\r\n" };
                             string[] lines = newFileLines.Split(stringSeparators, StringSplitOptions.None);
                             foreach (string s in lines)

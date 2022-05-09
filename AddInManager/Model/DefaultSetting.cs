@@ -16,13 +16,19 @@ public static class DefaultSetting
     public static string AdskPath = "Autodesk\\Revit\\Addins";
     public static string IniName = "revit.ini";
     public static string TempFolderName = "RevitAddins";
-    public static string DirLogFile = Path.Combine(Path.GetTempPath(), TempFolderName);
+
+    //fix from revit 2020 over with Path.GetTempPath() auto create guid temp
+    public static string DirLogFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+        "AppData",
+        "Local",
+        "Temp",TempFolderName);
 
     private static string pathLogFile;
     public static string PathLogFile
     {
         get
         {
+            
             bool flag = Directory.Exists(DirLogFile);
             if (!flag) Directory.CreateDirectory(DirLogFile);
             DirectoryInfo directoryInfo = new DirectoryInfo(DirLogFile);
@@ -32,6 +38,10 @@ public static class DefaultSetting
                 pathLogFile = Path.Combine(DirLogFile, $"{Guid.NewGuid()}.txt");
                 File.Create(pathLogFile).Close();
                 return pathLogFile;
+            }
+            else
+            {
+                pathLogFile = fileInfo.FullName;
             }
             return fileInfo.FullName;
         }

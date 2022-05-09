@@ -4,9 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
     d:DesignHeight="350"
     d:DesignWidth="350"
     Background="White"
+    d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="ListViewItem">
@@ -23,7 +25,7 @@
     <Grid Margin="5,5,5,5" x:Name="ctlList">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <ListBox
             x:Name="listBox_LogMessages"
@@ -52,16 +54,6 @@
                 <!--     Content="Revit Events" -->
                 <!--     IsEnabled="False" -->
                 <!--     IsChecked="{Binding WatchRevitEventCommand}" /> -->
-                <CheckBox
-                    Margin="5,0,5,0"
-                    IsChecked="True"
-                    VerticalAlignment="Center"
-                    Content="Debug" />
-                <CheckBox
-                    Margin="5,0,5,0"
-                    IsChecked="True"
-                    VerticalAlignment="Center"
-                    Content="Trace" />
             </DockPanel>
             <Button
                 Grid.Column="1"
@@ -69,6 +61,7 @@
                 Background="Azure"
                 VerticalAlignment="Center"
                 Content="Clear Output"
+                Command="{Binding ClearLogCommand}"
                 Foreground="SteelBlue"
                 Style="{x:Null}"
                 ToolTip="Clear all result listener" />

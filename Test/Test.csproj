@@ -16,4 +16,8 @@
     <PackageReference Include="Chuongmep.RevitAPI" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+
 </Project>

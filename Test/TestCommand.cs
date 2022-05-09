@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -11,7 +14,8 @@ namespace Test
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("Command", "Hello Word");
+            string tempPath = Path.GetTempPath();
+            MessageBox.Show(tempPath);
             return Result.Succeeded;
         }
     }
@@ -78,16 +82,69 @@ namespace Test
         }
     }
     [Transaction(TransactionMode.Manual)]
-    public class TestDebugTrace : IExternalCommand
+    public class DebugTrace : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+
+            Debug.WriteLine($"This is a test debug Test");
+            Trace.WriteLine("This is a test trace writeline");
+            return Result.Succeeded;
+        }
+    }
+    [Transaction(TransactionMode.Manual)]
+    public class DebugWrite : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
           
-            Debug.WriteLine("This is a test debug writeline");
-            Trace.WriteLine("This is a test trace writeline");
-            Debug.WriteLine("Downline\n");
-            Trace.Write("This is a test trace write");
-            Debug.Write("This is a test debug write");
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.Write($"This is a test DebugWrite Test {i}");
+            }
+
+            return Result.Succeeded;
+        }
+    }
+    [Transaction(TransactionMode.Manual)]
+    public class DebugWriteLine : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+          
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.WriteLine($"This is a test DebugWriteLine Test {i}");
+            }
+
+            return Result.Succeeded;
+        }
+    }
+    [Transaction(TransactionMode.Manual)]
+    public class TraceWrite : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+          
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.Write($"This is a test TraceWrite Test {i}");
+            }
+
+            return Result.Succeeded;
+        }
+    }
+    [Transaction(TransactionMode.Manual)]
+    public class TraceWriteLine : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+          
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.WriteLine($"This is a test TraceWriteLine Test {i}");
+            }
+
             return Result.Succeeded;
         }
     }
