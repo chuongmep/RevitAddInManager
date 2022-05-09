@@ -299,6 +299,8 @@
                         <control:LogControl Grid.Row="0" />
                         <DockPanel Grid.Row="1">
                             <CheckBox VerticalAlignment="Bottom" Content="Watch Events" />
+                            <CheckBox VerticalAlignment="Bottom" Content="Watch Debug" />
+                            <CheckBox VerticalAlignment="Bottom" Content="Watch Trace" />
                         </DockPanel>
                     </Grid>
                 </TabItem>
