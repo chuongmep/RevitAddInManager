@@ -22,7 +22,7 @@ public class App : IExternalApplication
     {
         CreateRibbonPanel(application);
         application.ControlledApplication.DocumentClosed += DocumentClosed;
-        EventWatcher eventWatcher = new EventWatcher(application);
+        //EventWatcher eventWatcher = new EventWatcher(application);
         
         DockPanelProvider = new FrmDockablePanel() {DataContext = new DockableViewModel(application)};
         if (!DockablePane.PaneIsRegistered(PaneId))

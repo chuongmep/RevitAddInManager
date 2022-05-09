@@ -1,4 +1,11 @@
 # Changelog
+- 2022-05-10 **1.2.6**
+  - Add tab support show result trace/debug
+  - Add DockPanel Support Show/Hide Debug/Trace result.
+  - Support use Trace.Write() output in RevitAddinManager and DockPanel **Debug/Trace Output** 
+  - Support use Trace.WriteLine() output in RevitAddinManager and DockPanel **Debug/Trace Output**
+  - Support use Debug.WriteLine() output in RevitAddinManager and DockPanel **Debug/Trace Output**
+  - Support use Debug.WriteLine() output in RevitAddinManager and DockPanel **Debug/Trace Output**
 - 2022-05-07 **1.2.5**
   - Support show detail assembly referenced to load manually.
 - 2022-04-21 **1.2.4**
