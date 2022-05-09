@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.Attributes;
+﻿using System.Diagnostics;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
@@ -73,6 +74,17 @@ namespace Test
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             TaskDialog.Show("Command", @"Class5");
+            return Result.Succeeded;
+        }
+    }
+    [Transaction(TransactionMode.Manual)]
+    public class TestDebugTrace : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+          
+            Debug.WriteLine("This is a test debug");
+            Trace.WriteLine("This is a test trace");
             return Result.Succeeded;
         }
     }

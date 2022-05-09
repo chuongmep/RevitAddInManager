@@ -6,6 +6,8 @@ using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using RevitAddinManager.Model;
+using RevitAddinManager.View.Control;
+using RevitAddinManager.ViewModel;
 using static RevitAddinManager.Model.BitmapSourceConverter;
 
 namespace RevitAddinManager;
@@ -13,12 +15,21 @@ namespace RevitAddinManager;
 public class App : IExternalApplication
 {
     public static FrmAddInManager FrmAddInManager { get; set; }
-
+    public static FrmDockablePanel DockPanelProvider;
+    public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));
+    public static string PaneName => "AddinManagerDocPanel";
     public Result OnStartup(UIControlledApplication application)
     {
         CreateRibbonPanel(application);
         application.ControlledApplication.DocumentClosed += DocumentClosed;
         EventWatcher eventWatcher = new EventWatcher(application);
+        
+        DockPanelProvider = new FrmDockablePanel() {DataContext = new DockableViewModel(application)};
+            
+        if (!DockablePane.PaneIsRegistered(PaneId))
+        {
+            application.RegisterDockablePane(PaneId,PaneName, DockPanelProvider);
+        }
         return Result.Succeeded;
     }
 
@@ -39,6 +50,7 @@ public class App : IExternalApplication
         AddPushButton(pulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
         AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
+        AddPushButton(pulldownButton, typeof(DockableCommand), "Show/Hide Panel(Debug-Trace-Events)");
     }
 
     private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)

@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.Attributes;
+﻿using System.Diagnostics;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
@@ -10,6 +11,9 @@ public class AddInManagerManual : IExternalCommand
 {
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
+        CodeListener codeListener = new CodeListener();
+        Debug.Listeners.Add(codeListener);
+        Trace.Listeners.Add(codeListener);
         StaticUtil.RegenOption = RegenerationOption.Manual;
         StaticUtil.TransactMode = TransactionMode.Manual;
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
@@ -21,6 +25,9 @@ public class AddInManagerFaceless : IExternalCommand
 {
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
+        CodeListener codeListener = new CodeListener();
+        Debug.Listeners.Add(codeListener);
+        Trace.Listeners.Add(codeListener);
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, true);
     }
 }
@@ -30,6 +37,9 @@ public class AddInManagerReadOnly : IExternalCommand
 {
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
+        CodeListener codeListener = new CodeListener();
+        Debug.Listeners.Add(codeListener);
+        Trace.Listeners.Add(codeListener);
         StaticUtil.RegenOption = RegenerationOption.Manual;
         StaticUtil.TransactMode = TransactionMode.ReadOnly;
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
