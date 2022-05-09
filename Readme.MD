@@ -32,6 +32,7 @@ The product will be expanded in the future in process to support mutiple platfor
     - AddInManagerReadOnly
     - Application
 - Startup manager
+- Debug / Trace : Support Show result use Debug.Write(), Debug.WriteLine(), Trace.Write(), Trace.WriteLine()
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
 - Quick remove an Add-in not used in working process
@@ -63,6 +64,13 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk.
 - [x] Enable or Disable Add-in.
 
+### Trace/Debug
+
+![](pic/debug-trace.png)
+
+- Show/Hide result inside Dockpanel
+- Show Result history inside **Revit Addin Manager**
+- Clear Result
 ---
 
 ## Installation
@@ -73,6 +81,35 @@ Please follow last release at section [Release](https://github.com/chuongmep/Rev
 
 ## Guideline
 
+- Quick Example to Execute a Command : 
+``` cs
+[Transaction(TransactionMode.Manual)]
+    public class TestCommand : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            //Code Something 
+            return Result.Succeeded;
+        }
+    }
+```
+- Quick Example to Debug or Trace result output :
+
+```cs
+[Transaction(TransactionMode.Manual)]
+    public class TraceWriteLine : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            //Trace or Debug Something
+            Debug.Write($"Message output");
+            Debug.WriteLine($"Message output");
+            Trace.Write($"Message output");
+            Trace.WriteLine($"Message output");
+            return Result.Succeeded;
+        }
+    }
+```
 You can visit to wiki and read document or access by this [link](https://github.com/chuongmep/RevitAddInManager/wiki).
 
 Some topic common:
