@@ -83,8 +83,11 @@ namespace Test
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
           
-            Debug.WriteLine("This is a test debug");
-            Trace.WriteLine("This is a test trace");
+            Debug.WriteLine("This is a test debug writeline");
+            Trace.WriteLine("This is a test trace writeline");
+            Debug.WriteLine("Downline\n");
+            Trace.Write("This is a test trace write");
+            Debug.Write("This is a test debug write");
             return Result.Succeeded;
         }
     }

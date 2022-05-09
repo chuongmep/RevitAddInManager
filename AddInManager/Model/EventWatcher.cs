@@ -22,7 +22,7 @@ namespace RevitAddinManager.Model
 
         void TraceLog()
         {
-            App.ControlledApplication.DocumentChanged += WatchDocumentChange;
+           // App.ControlledApplication.DocumentChanged += WatchDocumentChange;
         }
 
         /// <summary>

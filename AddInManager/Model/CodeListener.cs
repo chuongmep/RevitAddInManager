@@ -1,25 +1,34 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace RevitAddinManager.Model;
 
 public class CodeListener  : TraceListener
 {
+    private bool IsExecuting { get; set; }
     public override void Write(string message)
     {
-        using (StreamWriter st = new StreamWriter(DefaultSetting.PathLogFile, true))
-        {
-            st.Write(message);
-            st.Close();
-        }
+        WriteMessage(message);
+        
     }
-
     public override void WriteLine(string message)
     {
-        using (StreamWriter st = new StreamWriter(DefaultSetting.PathLogFile, true))
+        WriteMessage(message);
+    }
+
+    void WriteMessage(string message)
+    {
+        if (!IsExecuting) 
         {
-            st.Write(message);
-            st.Close();
+            IsExecuting = true;
+            using (StreamWriter st = new StreamWriter(DefaultSetting.PathLogFile, true))
+            {
+                string join = String.Join(": ",$"{DateTime.Now}", message);
+                st.WriteLine(join);
+                st.Close();
+            }
+            IsExecuting = false;
         }
     }
 }

@@ -150,7 +150,7 @@ public class LogControlViewModel
                                     else if (s.CaseInsensitiveContains("Add"))
                                         ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Blue);
                                     else
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.LightSkyBlue);
+                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Black);
                                 }
                             _lastFileSize = newLength;
                         }

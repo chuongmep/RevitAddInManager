@@ -46,12 +46,12 @@
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Row="0">
-                <CheckBox
-                    Margin="5,0,5,0"
-                    VerticalAlignment="Center"
-                    Content="Revit Events"
-                    IsEnabled="False"
-                    IsChecked="{Binding WatchRevitEventCommand}" />
+                <!-- <CheckBox -->
+                <!--     Margin="5,0,5,0" -->
+                <!--     VerticalAlignment="Center" -->
+                <!--     Content="Revit Events" -->
+                <!--     IsEnabled="False" -->
+                <!--     IsChecked="{Binding WatchRevitEventCommand}" /> -->
                 <CheckBox
                     Margin="5,0,5,0"
                     IsChecked="True"
