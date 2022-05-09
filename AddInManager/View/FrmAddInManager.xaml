@@ -45,6 +45,7 @@
             <TextBox
                 x:Name="tbxSearch"
                 Grid.Row="0"
+                Height="25"
                 Margin="5,0,5,0"
                 VerticalAlignment="Center"
                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -318,7 +319,7 @@
                                 Height="18"
                                 Margin="10,0,0,0"
                                 Background="Azure"
-                                VerticalAlignment="Bottom"
+                                VerticalAlignment="Center"
                                 Content="Clear Output"
                                 FontSize="8"
                                 Foreground="SteelBlue"
