@@ -59,18 +59,21 @@ The product will be expanded in the future in process to support mutiple platfor
 
 ### Startup
 
-![](pic/AddinManagerStartup.png)
-
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk.
 - [x] Enable or Disable Add-in.
 
+- ![](pic/AddinManagerStartup.png)
+
 ### Trace/Debug
 
-![](pic/debug-trace.png)
+- [x] Show/Hide result inside **Dockpanel Revit**.
+- [x] Show Result history inside **Revit Addin Manager**.
+- [x] Clear Result.
+- [X] Show Result by color.
 
-- Show/Hide result inside Dockpanel
-- Show Result history inside **Revit Addin Manager**
-- Clear Result
+- ![](pic/debug-trace.png)
+
+
 ---
 
 ## Installation
