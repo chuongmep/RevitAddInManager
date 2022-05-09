@@ -6,6 +6,7 @@
   - Support use Trace.WriteLine() output in RevitAddinManager and DockPanel **Debug/Trace Output**
   - Support use Debug.WriteLine() output in RevitAddinManager and DockPanel **Debug/Trace Output**
   - Support use Debug.WriteLine() output in RevitAddinManager and DockPanel **Debug/Trace Output**
+  - Support show difference color type : Add,Modify,Warning,Error,Delete.
 - 2022-05-07 **1.2.5**
   - Support show detail assembly referenced to load manually.
 - 2022-04-21 **1.2.4**

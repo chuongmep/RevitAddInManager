@@ -100,7 +100,7 @@ namespace Test
           
             for (int i = 0; i < 10; i++)
             {
-                Debug.Write($"This is a test DebugWrite Test {i}");
+                Debug.Write($"Error: This is a test DebugWrite Test {i}");
             }
 
             return Result.Succeeded;
@@ -139,12 +139,24 @@ namespace Test
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
-            for (int i = 0; i < 10; i++)
+            Debug.WriteLine($"Warning: is a test TraceWriteLine Test");
+            for (int i = 0; i < 20; i++)
             {
                 Debug.WriteLine($"This is a test TraceWriteLine Test {i}");
             }
 
+            return Result.Succeeded;
+        }
+    }[Transaction(TransactionMode.Manual)]
+    public class ColorWriteLine : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            Debug.WriteLine($"Warning: This is a warning");
+            Debug.WriteLine($"Error: This is a error");
+            Debug.WriteLine($"Add: This is a add");
+            Debug.WriteLine($"Modify: This is a modify");
+            Debug.WriteLine($"Delete: This is a delete");
             return Result.Succeeded;
         }
     }

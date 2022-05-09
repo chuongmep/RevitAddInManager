@@ -156,9 +156,13 @@ public class LogControlViewModel
                                     if (s.CaseInsensitiveContains("Modify"))
                                         ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.DeepSkyBlue);
                                     else if (s.CaseInsensitiveContains("Delete"))
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Red);
+                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Gray);
                                     else if (s.CaseInsensitiveContains("Add"))
                                         ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Blue);
+                                    else if (s.CaseInsensitiveContains("Error"))
+                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Red);
+                                    else if (s.CaseInsensitiveContains("Warning"))
+                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.OrangeRed);
                                     else
                                         ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Black);
                                 }
@@ -169,7 +173,7 @@ public class LogControlViewModel
                 }
                 catch (Exception)
                 {
-                    //Thread.Sleep(50);
+                    // ignore
                 }
                 ++count;
             }
