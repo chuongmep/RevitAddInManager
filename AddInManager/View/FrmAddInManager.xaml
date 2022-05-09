@@ -290,7 +290,10 @@
                         </DataGrid>
                     </Grid>
                 </TabItem>
-                <TabItem Foreground="SteelBlue" Header="Events">
+                <TabItem
+                    Foreground="SteelBlue"
+                    Header="Listener"
+                    ToolTip="Support Listen Event Trace, Debug,Revit Events">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -298,9 +301,29 @@
                         </Grid.RowDefinitions>
                         <control:LogControl Grid.Row="0" />
                         <DockPanel Grid.Row="1">
-                            <CheckBox VerticalAlignment="Bottom" Content="Watch Events" />
-                            <CheckBox VerticalAlignment="Bottom" Content="Watch Debug" />
-                            <CheckBox VerticalAlignment="Bottom" Content="Watch Trace" />
+                            <CheckBox
+                                Margin="5,0,5,0"
+                                VerticalAlignment="Center"
+                                Content="Watch Revit Events"
+                                IsChecked="{Binding WatchRevitEventCommand}" />
+                            <CheckBox
+                                Margin="5,0,5,0"
+                                VerticalAlignment="Center"
+                                Content="Watch Debug" />
+                            <CheckBox
+                                Margin="5,0,5,0"
+                                VerticalAlignment="Center"
+                                Content="Watch Trace" />
+                            <Button
+                                Height="18"
+                                Margin="10,0,0,0"
+                                Background="Azure"
+                                VerticalAlignment="Bottom"
+                                Content="Clear Output"
+                                FontSize="8"
+                                Foreground="SteelBlue"
+                                Style="{x:Null}"
+                                ToolTip="Clear all result listener" />
                         </DockPanel>
                     </Grid>
                 </TabItem>
