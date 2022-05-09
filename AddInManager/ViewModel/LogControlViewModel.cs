@@ -21,7 +21,7 @@ public class LogControlViewModel
     private FileSystemWatcher _watcher;
     private long _startLineTotal;
     private long _lastFileSize;
-    public string LongFileName { get; set; } = DefaultSetting.PathLogFile;
+    public string LongFileName { get; set; }
     bool stopWatching;
     public FontFamily DisplayFontFamily { get; set; }
     private System.Windows.Media.Brush MessageColor { get; set; }
@@ -49,8 +49,8 @@ public class LogControlViewModel
     {
         DispatcherObject = Dispatcher.CurrentDispatcher;
         MessageList = new ObservableCollection<LogMessageString>();
-
         DisplayFontFamily = new FontFamily("Courier New");
+        LongFileName = DefaultSetting.PathLogFile;
     }
 
     public void UserControl_Unloaded(object sender, RoutedEventArgs e)

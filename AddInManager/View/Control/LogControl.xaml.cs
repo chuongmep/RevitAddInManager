@@ -35,7 +35,7 @@ namespace RevitAddinManager.View.Control
             viewModel.FrmLogControl = this;
             this.Loaded += viewModel.LogFileWatcher;
             this.Unloaded += viewModel.UserControl_Unloaded;
-            
+
         }
         
     }

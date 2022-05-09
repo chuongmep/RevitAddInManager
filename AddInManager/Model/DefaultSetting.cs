@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net;
+using System.Windows;
 
 namespace RevitAddinManager.Model;
 
@@ -22,15 +23,19 @@ public static class DefaultSetting
     {
         get
         {
+            bool flag = Directory.Exists(DirLogFile);
+            if (!flag) Directory.CreateDirectory(DirLogFile);
             DirectoryInfo directoryInfo = new DirectoryInfo(DirLogFile);
             FileInfo fileInfo = directoryInfo.GetFiles("*.txt",SearchOption.TopDirectoryOnly).OrderBy(x=>x.LastWriteTime).LastOrDefault();
             if (fileInfo==null)
             {
                 pathLogFile = Path.Combine(DirLogFile, $"{Guid.NewGuid()}.txt");
                 File.Create(pathLogFile).Close();
+                return pathLogFile;
             }
-            return pathLogFile;
+            return fileInfo.FullName;
         }
+        set => pathLogFile = value;
     }
     public static string AimInternalName = "AimInternal.ini";
 }
