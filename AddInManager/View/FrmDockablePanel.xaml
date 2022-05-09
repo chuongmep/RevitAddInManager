@@ -5,7 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:control="clr-namespace:RevitAddinManager.View.Control"
       mc:Ignorable="d"
-      Title="FrmDockablePanel" Height="800" Width="300">
+      Background="White"
+      MinWidth="350"
+      MinHeight="450"
+      Title="FrmDockablePanel" Height="800" Width="250">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,15 +18,6 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <control:LogControl></control:LogControl>
-        </Grid>
-        <DockPanel Grid.Row="1" LastChildFill="False">
-            <Button Content="Clear"></Button>
-        </DockPanel>
+        <control:LogControl></control:LogControl>
     </Grid>
 </Page>

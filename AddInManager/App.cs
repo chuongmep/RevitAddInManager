@@ -25,7 +25,6 @@ public class App : IExternalApplication
         EventWatcher eventWatcher = new EventWatcher(application);
         
         DockPanelProvider = new FrmDockablePanel() {DataContext = new DockableViewModel(application)};
-            
         if (!DockablePane.PaneIsRegistered(PaneId))
         {
             application.RegisterDockablePane(PaneId,PaneName, DockPanelProvider);

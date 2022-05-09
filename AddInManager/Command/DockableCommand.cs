@@ -14,7 +14,6 @@ public class DockableCommand  : IExternalCommand
         if (DockablePane.PaneIsRegistered(App.PaneId))
         {
             DockablePane docpanel = uiapp.GetDockablePane(App.PaneId);
-
             if (docpanel.IsShown())
                 docpanel.Hide();
             else
