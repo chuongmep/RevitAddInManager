@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
@@ -38,6 +39,7 @@ namespace Test
                 TaskDialog.Show("Add-in Manager", "Assigned Value");
                 tran.Commit();
             }
+
             return Result.Succeeded;
         }
     }
@@ -81,23 +83,23 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class DebugTrace : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-
             Debug.WriteLine($"This is a test debug Test");
             Trace.WriteLine("This is a test trace writeline");
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class DebugWrite : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
             for (int i = 0; i < 10; i++)
             {
                 Debug.Write($"Error: This is a test DebugWrite Test {i}");
@@ -106,12 +108,12 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class DebugWriteLine : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
             for (int i = 0; i < 10; i++)
             {
                 Debug.WriteLine($"This is a test DebugWriteLine Test {i}");
@@ -120,12 +122,12 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class TraceWrite : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
             for (int i = 0; i < 10; i++)
             {
                 Debug.Write($"This is a test TraceWrite Test {i}");
@@ -134,6 +136,7 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class TraceWriteLine : IExternalCommand
     {
@@ -147,7 +150,9 @@ namespace Test
 
             return Result.Succeeded;
         }
-    }[Transaction(TransactionMode.Manual)]
+    }
+
+    [Transaction(TransactionMode.Manual)]
     public class ColorWriteLine : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
@@ -157,6 +162,31 @@ namespace Test
             Debug.WriteLine($"Add: This is a add");
             Debug.WriteLine($"Modify: This is a modify");
             Debug.WriteLine($"Delete: This is a delete");
+            TraceListenerCollection traceListenerCollection = Debug.Listeners;
+            return Result.Succeeded;
+        }
+    }
+
+    [Transaction(TransactionMode.Manual)]
+    public class TestElementInfo : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Reference r = uidoc.Selection.PickObject(ObjectType.Element, "Select an element");
+            Element element = uidoc.Document.GetElement(r);
+            Type type = element.GetType();
+            foreach (PropertyInfo propertyInfo in type.GetProperties())
+            {
+                try
+                {
+                    Debug.WriteLine($"Property: {propertyInfo.Name}:{propertyInfo.GetValue(element, null)}");
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"Error Properties {propertyInfo.Name}: {e.Message}");
+                }
+            }
             return Result.Succeeded;
         }
     }
