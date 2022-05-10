@@ -293,8 +293,12 @@
                 <TabItem
                     Foreground="SteelBlue"
                     Header="Listener"
+                    IsSelected="{Binding IsTabLogSelected}"
                     ToolTip="Support Listen Event Trace, Debug,Revit Events">
-                    <control:LogControl Grid.Row="0" />
+                    <control:LogControl
+                        x:Name="LogControl"
+                        Grid.Row="0"
+                        DataContext="{x:Null}" />
                 </TabItem>
             </TabControl>
         </Grid>

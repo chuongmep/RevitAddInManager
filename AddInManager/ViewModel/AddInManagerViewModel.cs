@@ -200,6 +200,23 @@ public class AddInManagerViewModel : ViewModelBase
         }
         set => OnPropertyChanged(ref isTabStartSelected, value);
     }
+    private bool isTabLogSelected;
+
+    public bool IsTabLogSelected
+    {
+        get
+        {
+            if (isTabLogSelected)
+            {
+                LogControlViewModel vm = new LogControlViewModel(){FrmLogControl = FrmAddInManager.LogControl};
+                FrmAddInManager.LogControl.DataContext = vm;
+                FrmAddInManager.LogControl.Loaded += vm.LogFileWatcher;
+                FrmAddInManager.LogControl.Unloaded += vm.UserControl_Unloaded;
+            };
+            return isTabLogSelected;
+        }
+        set => OnPropertyChanged(ref isTabLogSelected, value);
+    }
 
     private void HelpCommandClick()
     {

@@ -70,6 +70,7 @@ public class LogControlViewModel
             {
                 try
                 {
+                    if(_watcher==null) return;
                     FileSystemEventHandler handler = new FileSystemEventHandler(FileWatcherChanged);
                     _watcher.Changed -= handler;
                     _watcher.Dispose(); // this blockes the app WA 23.12.2017
