@@ -38,6 +38,7 @@ namespace Test
                 TaskDialog.Show("Add-in Manager", "Assigned Value");
                 tran.Commit();
             }
+
             return Result.Succeeded;
         }
     }
@@ -81,23 +82,23 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class DebugTrace : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-
             Debug.WriteLine($"This is a test debug Test");
             Trace.WriteLine("This is a test trace writeline");
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class DebugWrite : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
             for (int i = 0; i < 10; i++)
             {
                 Debug.Write($"Error: This is a test DebugWrite Test {i}");
@@ -106,12 +107,12 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class DebugWriteLine : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
             for (int i = 0; i < 10; i++)
             {
                 Debug.WriteLine($"This is a test DebugWriteLine Test {i}");
@@ -120,12 +121,12 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class TraceWrite : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-          
             for (int i = 0; i < 10; i++)
             {
                 Debug.Write($"This is a test TraceWrite Test {i}");
@@ -134,6 +135,7 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
     [Transaction(TransactionMode.Manual)]
     public class TraceWriteLine : IExternalCommand
     {
@@ -147,7 +149,9 @@ namespace Test
 
             return Result.Succeeded;
         }
-    }[Transaction(TransactionMode.Manual)]
+    }
+
+    [Transaction(TransactionMode.Manual)]
     public class ColorWriteLine : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
@@ -158,6 +162,39 @@ namespace Test
             Debug.WriteLine($"Modify: This is a modify");
             Debug.WriteLine($"Delete: This is a delete");
             return Result.Succeeded;
+        }
+    }
+
+    [Transaction(TransactionMode.Manual)]
+    public class DebugAssert : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            try
+            {
+                Reference r =
+                    commandData.Application.ActiveUIDocument.Selection.PickObject(ObjectType.Element,
+                        "Please pick an element");
+                Element element = commandData.Application.ActiveUIDocument.Document.GetElement(r);
+                GetCurve(element);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
+            return Result.Succeeded;
+        }
+
+        public void GetCurve(Element element)
+        {
+            Debug.Assert(null != element.Location,
+                "expected an element with a valid Location");
+
+            LocationCurve lc = element.Location as LocationCurve;
+
+            Debug.Assert(null != lc,
+                "expected an element with a valid LocationCurve");
         }
     }
 }

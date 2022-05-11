@@ -24,15 +24,16 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] More...
 
 
-### Some feature include: 
-- Add-in tester
+### Some feature include:
+
+- Add-in tester(use Debug and Trace to test your add-in)
 - Add-in manager
     - AddInManagerFaceless
     - AddInManagerManual
     - AddInManagerReadOnly
     - Application
 - Startup manager
-- Debug / Trace : Support Show result use Debug.Write(), Debug.WriteLine(), Trace.Write(), Trace.WriteLine()
+- **Debug / Trace** : Support Show result use [Debug](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.debug?view=net-6.0) or [Trace](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.trace?view=net-6.0) to show result in Revit
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
 - Quick remove an Add-in not used in working process
@@ -161,6 +162,13 @@ Thanks for providing a free All product IDE for this project.
 
 ---
 
+## Learning Resources
+
+- [Revit Developer Center](https://www.autodesk.com/developer-network/platform-technologies/revit)
+- [Revit SDK Sample](https://github.com/jeremytammik/RevitSdkSamples)
+- [Revit API Docs](https://www.revitapidocs.com/)
+- [The Building Coder](https://thebuildingcoder.typepad.com/)
+
 ## Open Resource Recommend
 
 I suggest you some of these projects, hope you will like it.
@@ -176,3 +184,4 @@ I suggest you some of these projects, hope you will like it.
 - [Revit.Async](https://github.com/KennanChan/Revit.Async)
 
 - [pyRevit](https://github.com/eirannejad/pyRevit)
+
