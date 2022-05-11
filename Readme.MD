@@ -63,7 +63,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk.
 - [x] Enable or Disable Add-in.
 
-- ![](pic/AddinManagerStartup.png)
+![](pic/AddinManagerStartup.png)
 
 ### Trace/Debug
 
@@ -72,7 +72,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] Clear Result.
 - [X] Show Result by color.
 
-- ![](pic/debug-trace.png)
+![](pic/debug-trace.png)
 
 
 ---
