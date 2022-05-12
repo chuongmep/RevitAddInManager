@@ -191,9 +191,7 @@ namespace Test
             Debug.Assert(null != element.Location,
                 "expected an element with a valid Location");
 
-            LocationCurve lc = element.Location as LocationCurve;
-
-            Debug.Assert(null != lc,
+            Debug.Assert(element.Location is LocationCurve lc,
                 "expected an element with a valid LocationCurve");
         }
     }
