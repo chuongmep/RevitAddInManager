@@ -41,6 +41,19 @@
                         Text="{Binding Message}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.CommandBindings>
+                <CommandBinding Command="ApplicationCommands.Copy"
+                                CanExecute="RightClickCopyCmdCanExecute" Executed="RightClickCopyCmdExecuted" />
+            </ListBox.CommandBindings>
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy">
+                        <MenuItem.CommandBindings>
+                            <CommandBinding Command="ApplicationCommands.Copy" CanExecute="RightClickCopyCmdCanExecute" Executed="RightClickCopyCmdExecuted" />
+                        </MenuItem.CommandBindings>
+                    </MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
         </ListBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
