@@ -57,4 +57,28 @@ public partial class FrmAddInManager : Window
             TreeViewCommand.FontSize -= 2f;
         }
     }
+
+    private void HandleTextboxKeyPress(object sender, KeyEventArgs e)
+    {
+        if(e.Key == Key.Down)
+        {
+            if (viewModel.IsTabCmdSelected)
+            {
+                TreeViewCommand.Focus();
+            }
+            else if (viewModel.IsTabAppSelected)
+            {
+                TreeViewApp.Focus();
+            }
+            else if(viewModel.IsTabStartSelected)
+            {
+                DataGridStartup.Focus();
+            }
+            else
+            {
+                LogControl.Focus();
+            }
+        }
+        
+    }
 }

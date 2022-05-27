@@ -47,7 +47,9 @@
                 Grid.Row="0"
                 Margin="5,0,5,0"
                 VerticalAlignment="Center"
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PreviewKeyDown="HandleTextboxKeyPress"
+                >
                 <TextBox.Resources>
                     <VisualBrush
                         x:Key="tbxText"
@@ -61,11 +63,15 @@
                 </TextBox.Resources>
                 <TextBox.Style>
                     <Style TargetType="TextBox">
-                        <Setter Property="BorderBrush" Value="AliceBlue" />
-                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush"
+                                Value="AliceBlue" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
                         <Style.Triggers>
-                            <Trigger Property="Text" Value="">
-                                <Setter Property="Background" Value="{StaticResource tbxText}" />
+                            <Trigger Property="Text"
+                                     Value="">
+                                <Setter Property="Background"
+                                        Value="{StaticResource tbxText}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
