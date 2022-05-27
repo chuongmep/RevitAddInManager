@@ -58,6 +58,15 @@ public partial class FrmAddInManager : Window
         }
     }
 
+    private void HandleTreeViewCommandKeyPress(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            viewModel.ExecuteAddinCommandClick();
+        }
+
+    }
+
     private void HandleTextboxKeyPress(object sender, KeyEventArgs e)
     {
         if(e.Key == Key.Down)

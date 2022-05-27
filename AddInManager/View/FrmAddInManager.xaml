@@ -96,6 +96,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load Command"
+                         PreviewKeyDown="HandleTreeViewCommandKeyPress"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
