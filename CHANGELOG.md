@@ -1,4 +1,8 @@
 # Changelog
+- 2022-05-15 **1.2.8**
+  - Support copy Content Debug/Trace Output Right click or Crt + C
+- 2022-05-11 **1.2.7**
+  - Fix small bug use trace/debug same time in logcontrol [#24](https://github.com/chuongmep/RevitAddInManager/issues/24)
 - 2022-05-10 **1.2.6**
   - Add tab support show result trace/debug
   - Add DockPanel Support Show/Hide Debug/Trace result.
