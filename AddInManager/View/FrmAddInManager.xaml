@@ -14,6 +14,7 @@
     MinHeight="400"
     d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
     FocusManager.FocusedElement="{x:Reference tbxSearch}"
+    PreviewKeyDown="CloseFormEvent"
     Icon="../Resources/dev.ico"
     mc:Ignorable="d">
     <Window.Resources>
@@ -96,7 +97,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load Command"
-                         PreviewKeyDown="HandleTreeViewCommandKeyPress"
+                    PreviewKeyDown="HandleTreeViewCommandKeyPress"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
@@ -155,6 +156,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Load App"
+                    PreviewKeyDown="HandleTreeViewAppKeyPress"
                     IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
                         <control:ExtendedTreeView
