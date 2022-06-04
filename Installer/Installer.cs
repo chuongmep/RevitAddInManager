@@ -12,7 +12,7 @@ const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "RevitAddinManager";
 const string outputName = "RevitAddinManager";
 const string outputDir = "output";
-const string version = "1.2.8";
+const string version = "1.2.9";
 
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project

@@ -10,7 +10,7 @@ using RevitAddinManager.View.Control;
 
 namespace RevitAddinManager.ViewModel;
 
-public class LogControlViewModel
+public sealed class LogControlViewModel
 {
     public LogControl FrmLogControl { get; set; }
     private object _lockObj = new object();
@@ -26,7 +26,7 @@ public class LogControlViewModel
     bool stopWatching;
     public FontFamily DisplayFontFamily { get; set; }
     private System.Windows.Media.Brush MessageColor { get; set; }
-    public virtual Dispatcher DispatcherObject { get; protected set; }
+    public Dispatcher DispatcherObject { get; }
     public ObservableCollection<LogMessageString> MessageList { get; set; }
     public bool StopWatching
     {
@@ -73,7 +73,7 @@ public class LogControlViewModel
                     if(_watcher==null) return;
                     FileSystemEventHandler handler = new FileSystemEventHandler(FileWatcherChanged);
                     _watcher.Changed -= handler;
-                    _watcher.Dispose(); // this blockes the app WA 23.12.2017
+                    _watcher.Dispose();
                     _watcher = null;
                 }
                 catch (Exception)
@@ -95,8 +95,8 @@ public class LogControlViewModel
             {
                 string path = Path.GetDirectoryName(LongFileName);
                 string baseName = Path.GetFileName(LongFileName);
-                _watcher = new System.IO.FileSystemWatcher(path, baseName);
-                FileSystemEventHandler handler = new FileSystemEventHandler(FileWatcherChanged);
+                _watcher = new FileSystemWatcher(path, baseName);
+                FileSystemEventHandler handler = FileWatcherChanged;
                 _watcher.Changed += handler;
                 _watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
                 _watcher.EnableRaisingEvents = true;
@@ -155,18 +155,7 @@ public class LogControlViewModel
                             foreach (string s in lines)
                                 if (!String.IsNullOrEmpty(s))
                                 {
-                                    if (s.CaseInsensitiveContains("Modify"))
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.DeepSkyBlue);
-                                    else if (s.CaseInsensitiveContains("Delete"))
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Gray);
-                                    else if (s.CaseInsensitiveContains("Add"))
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Blue);
-                                    else if (s.CaseInsensitiveContains("Error"))
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Red);
-                                    else if (s.CaseInsensitiveContains("Warning"))
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.OrangeRed);
-                                    else
-                                        ListBoxLogMessageAdd(s, System.Windows.Media.Brushes.Black);
+                                    LístBoxColorMessageAdd(s);
                                 }
                             _lastFileSize = newLength;
                         }
@@ -180,7 +169,23 @@ public class LogControlViewModel
                 ++count;
             }
         }
-        public void ListBoxLogMessageAdd(string message, System.Windows.Media.Brush color)
+
+        private void LístBoxColorMessageAdd(string message)
+        {
+            if (message.CaseInsensitiveContains("Modify"))
+                ListBoxLogMessageAdd(message, System.Windows.Media.Brushes.DeepSkyBlue);
+            else if (message.CaseInsensitiveContains("Delete"))
+                ListBoxLogMessageAdd(message, System.Windows.Media.Brushes.Gray);
+            else if (message.CaseInsensitiveContains("Add"))
+                ListBoxLogMessageAdd(message, System.Windows.Media.Brushes.Blue);
+            else if (message.CaseInsensitiveContains("Error"))
+                ListBoxLogMessageAdd(message, System.Windows.Media.Brushes.Red);
+            else if (message.CaseInsensitiveContains("Warning"))
+                ListBoxLogMessageAdd(message, System.Windows.Media.Brushes.OrangeRed);
+            else
+                ListBoxLogMessageAdd(message, System.Windows.Media.Brushes.Black);
+        }
+        private void ListBoxLogMessageAdd(string message, System.Windows.Media.Brush color)
         {
             if (DispatcherObject.Thread != Thread.CurrentThread)
                 DispatcherObject.Invoke(new DMessageAdd(ListBoxLogMessageAdd), DispatcherPriority.ApplicationIdle, message, color);

@@ -190,4 +190,35 @@ namespace Test
             return Result.Succeeded;
         }
     }
+
+    [Transaction(TransactionMode.Manual)]
+    public class DebugAssert : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            try
+            {
+                Reference r =
+                    commandData.Application.ActiveUIDocument.Selection.PickObject(ObjectType.Element,
+                        "Please pick an element");
+                Element element = commandData.Application.ActiveUIDocument.Document.GetElement(r);
+                GetCurve(element);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
+            return Result.Succeeded;
+        }
+
+        public void GetCurve(Element element)
+        {
+            Debug.Assert(null != element.Location,
+                "expected an element with a valid Location");
+
+            Debug.Assert(element.Location is LocationCurve lc,
+                "expected an element with a valid LocationCurve");
+        }
+    }
 }

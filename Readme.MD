@@ -11,7 +11,10 @@ alt="follow on Twitter"></a>
 
 ## Summary
 
+![](pic/Addin.png)
+
 Usually, when developing and debugging an addin with RevitAPI, user has to close & re-open Revit each time he/she modifies the addin code and wants to re-compile. But with Add-In Manager, user can modify and run the addin directly without closing & re-opening Revit again and again.
+
 
 The product will be expanded in the future in process to support mutiple platform : 
 
@@ -24,24 +27,32 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] More...
 
 
-### Some feature include: 
-- Add-in tester
+### Some feature include:
+
+- Add-in tester(use Debug and Trace to test your add-in)
 - Add-in manager
     - AddInManagerFaceless
     - AddInManagerManual
     - AddInManagerReadOnly
     - Application
 - Startup manager
-- Debug / Trace : Support Show result use Debug.Write(), Debug.WriteLine(), Trace.Write(), Trace.WriteLine()
+- **Debug / Trace** : Support Show result use [Debug](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.debug?view=net-6.0) or [Trace](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.trace?view=net-6.0) to show result in Revit
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
 - Quick remove an Add-in not used in working process
 - No depend on any library from outside **RevitAPI**.
 - A newbie can create new Add-in in a few minutes and easily explore Revit API.
+
+![](pic/LearningCurve.png)
+
 - <kbd>F5</kbd> - Load fresh plugin don't need load again.
 - <kbd>F1</kbd> - Go link open source report some error,bug or feature request.
 - <kbd>Delete</kbd> - Quick remove by use right click or use from keyboard.
 - <kbd>Crt + MouseWheel</kbd> - Zoom in/out by use mouse wheel in command plugin.
+- <kbd>Arrow Up</kbd> - Move from TreeView to search.
+- <kbd>Arrow Down</kbd> - Move from search to TreeView.
+- <kbd>Esc</kbd> - Quick Close Add-in Manager.
+- <kbd>Enter</kbd> - Quick Run Execute a command selected in Add-in Manager.
 ## Add-In Manager
 
 ![](pic/AddinManager.png)
@@ -62,7 +73,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] Show info all add-in installed in computer include all Add-in from Autodesk.
 - [x] Enable or Disable Add-in.
 
-- ![](pic/AddinManagerStartup.png)
+![](pic/AddinManagerStartup.png)
 
 ### Trace/Debug
 
@@ -71,7 +82,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] Clear Result.
 - [X] Show Result by color.
 
-- ![](pic/debug-trace.png)
+![](pic/debug-trace.png)
 
 
 ---
@@ -120,7 +131,7 @@ Some topic common:
 - [How to Uninstall Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-Uninstall-AddinManager)
 - [How To Use Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Add-In-Manager)
 - [Fix Problem With Installer AddinManager](https://github.com/chuongmep/RevitAddInManager/wiki/Fix-Problem-With-Installer-AddinManager)
-- [How To Use Deubg Trace Show Output](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Deubg-Trace-Show-Output)
+- [How To Use Debug Trace Show Output](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Debug-Trace-Show-Output)
 
 ---
 
@@ -161,6 +172,13 @@ Thanks for providing a free All product IDE for this project.
 
 ---
 
+## Learning Resources
+
+- [Revit Developer Center](https://www.autodesk.com/developer-network/platform-technologies/revit)
+- [Revit SDK Sample](https://github.com/jeremytammik/RevitSdkSamples)
+- [Revit API Docs](https://www.revitapidocs.com/)
+- [The Building Coder](https://thebuildingcoder.typepad.com/)
+
 ## Open Resource Recommend
 
 I suggest you some of these projects, hope you will like it.
@@ -176,3 +194,4 @@ I suggest you some of these projects, hope you will like it.
 - [Revit.Async](https://github.com/KennanChan/Revit.Async)
 
 - [pyRevit](https://github.com/eirannejad/pyRevit)
+

@@ -208,7 +208,7 @@ public class AddInManagerViewModel : ViewModelBase
         {
             if (isTabLogSelected)
             {
-                LogControlViewModel vm = new LogControlViewModel(){FrmLogControl = FrmAddInManager.LogControl};
+                LogControlViewModel vm = new LogControlViewModel() { FrmLogControl = FrmAddInManager.LogControl };
                 FrmAddInManager.LogControl.DataContext = vm;
                 FrmAddInManager.LogControl.Loaded += vm.LogFileWatcher;
                 FrmAddInManager.LogControl.Unloaded += vm.UserControl_Unloaded;
@@ -283,7 +283,7 @@ public class AddInManagerViewModel : ViewModelBase
         return MainTrees;
     }
 
-    private void ExecuteAddinCommandClick()
+    public void ExecuteAddinCommandClick()
     {
         try
         {
@@ -652,7 +652,7 @@ public class AddInManagerViewModel : ViewModelBase
         var revitAddins = GetAddinFromFolder(Folder1);
         var addinsProgramData = GetAddinFromFolder(Folder2);
         var addinsPlugins = GetAddinFromFolder(Folder3);
-        revitAddins.ForEach(delegate(RevitAddin x)
+        revitAddins.ForEach(delegate (RevitAddin x)
         {
             addinStartup.Add(x);
             x.IsReadOnly = true;
@@ -780,4 +780,5 @@ public class AddInManagerViewModel : ViewModelBase
             MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
+
 }

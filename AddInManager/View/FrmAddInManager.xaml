@@ -17,6 +17,7 @@
     Background="{DynamicResource WindowBackground}"
     d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
     FocusManager.FocusedElement="{x:Reference tbxSearch}"
+    PreviewKeyDown="CloseFormEvent"
     Icon="../Resources/dev.ico"
     mc:Ignorable="d">
     <Window.Resources>
@@ -49,7 +50,9 @@
                 Grid.Row="0"
                 Margin="5,0,5,0"
                 VerticalAlignment="Center"
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PreviewKeyDown="HandleTextboxKeyPress"
+                >
                 <TextBox.Resources>
                     <VisualBrush
                         x:Key="tbxText"
@@ -63,11 +66,15 @@
                 </TextBox.Resources>
                 <TextBox.Style>
                     <Style TargetType="TextBox">
-                        <Setter Property="BorderBrush" Value="AliceBlue" />
-                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush"
+                                Value="AliceBlue" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
                         <Style.Triggers>
-                            <Trigger Property="Text" Value="">
-                                <Setter Property="Background" Value="{StaticResource tbxText}" />
+                            <Trigger Property="Text"
+                                     Value="">
+                                <Setter Property="Background"
+                                        Value="{StaticResource tbxText}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -89,6 +96,7 @@
                     x:Name="TabCommand"
                     FontSize="14"
                     Header="Load Command"
+                    PreviewKeyDown="HandleTreeViewCommandKeyPress"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
@@ -147,6 +155,7 @@
                     x:Name="TabApp"
                     FontSize="14"
                     Header="Load App"
+                    PreviewKeyDown="HandleTreeViewAppKeyPress"
                     IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
                         <control:ExtendedTreeView
