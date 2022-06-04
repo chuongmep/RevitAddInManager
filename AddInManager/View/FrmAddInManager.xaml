@@ -13,8 +13,6 @@
     Height="600"
     MinWidth="400"
     MinHeight="400"
-    Foreground="{DynamicResource WindowForeground}"
-    Background="{DynamicResource WindowBackground}"
     d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
     FocusManager.FocusedElement="{x:Reference tbxSearch}"
     PreviewKeyDown="CloseFormEvent"
@@ -24,7 +22,7 @@
         <ResourceDictionary>
             <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -299,7 +297,6 @@
                     ToolTip="Support Listen Event Trace, Debug,Revit Events">
                     <control:LogControl
                         x:Name="LogControl"
-                        Background="{DynamicResource WindowBackground}"
                         DataContext="{x:Null}" />
                 </TabItem>
             </TabControl>
@@ -331,10 +328,10 @@
                            <Label Content="Vendor Description: "></Label>
                            <controls:ToggleSwitch
                                Grid.Column="1"
-                               ToolTip="Change Them"
+                               ToolTip="Dark Them"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"
-                               IsChecked="True" />
+                               IsChecked="False" />
                        </Grid>
                       
                     </GroupBox.Header>
@@ -378,7 +375,7 @@
                             Height="25"
                             VerticalContentAlignment="Center"
                             BorderBrush="LightGray"
-                            BorderThickness="0.5">
+                            >
                             <MenuItem Header="Save Addin">
                                 <MenuItem
                                     Command="{Binding SaveCommand}"
