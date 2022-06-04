@@ -20,7 +20,7 @@
         <ResourceDictionary>
             <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -29,7 +29,7 @@
         <KeyBinding Command="{Binding ReloadCommand}" Gesture="F5" />
         <KeyBinding Command="{Binding HelpCommand}" Gesture="F1" />
     </Window.InputBindings>
-    <Grid>
+    <Grid Background="{DynamicResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition />
@@ -86,11 +86,11 @@
                     x:Name="TabCommand"
                     FontSize="14"
                     Header="Load Command"
-                    BorderBrush="Transparent"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
                         FontSize="12"
+                        Style="{DynamicResource {x:Type TreeView}}"
                         ItemsSource="{Binding CommandItems, Mode=TwoWay}"
                         PreviewMouseWheel="TreeViewCommand_OnPreviewMouseWheel"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -150,6 +150,7 @@
                             x:Name="TreeViewApp"
                             Grid.ColumnSpan="2"
                             FontSize="12"
+                            Style="{DynamicResource {x:Type TreeView}}"
                             ItemsSource="{Binding ApplicationItems, Mode=TwoWay}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             SelectedItem_="{Binding SelectedAppItem, Mode=TwoWay}">
@@ -308,7 +309,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Top"
                 Orientation="Vertical">
-                <GroupBox Style="{x:Null}" Margin="1,0,1,1" Header="Vendor Description:">
+                <GroupBox Margin="1,0,1,1" Header="Vendor Description:">
                     <TextBox
                         x:Name="TbxDescription"
                         Width="Auto"
