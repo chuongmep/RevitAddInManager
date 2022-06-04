@@ -11,9 +11,9 @@
       Title="FrmDockablePanel" Height="800" Width="250">
     <Page.Resources>
         <ResourceDictionary>
+            <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary
-                    Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>

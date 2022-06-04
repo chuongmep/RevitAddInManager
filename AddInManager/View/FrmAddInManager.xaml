@@ -20,8 +20,7 @@
         <ResourceDictionary>
             <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="/PresentationFramework.Luna;component/themes/Luna.NormalColor.xaml" />-->
-                <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -73,11 +72,9 @@
             </TextBox>
             <Button
                 Grid.Column="1"
-                Margin="0,0,1,0"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                BorderBrush="SteelBlue"
                 Command="{Binding HelpCommand}"
                 Content="Help"
                 ToolTip="Help" />
@@ -88,8 +85,8 @@
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
-                    Foreground="SteelBlue"
                     Header="Load Command"
+                    BorderBrush="Transparent"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
@@ -146,7 +143,6 @@
                 <TabItem
                     x:Name="TabApp"
                     FontSize="14"
-                    Foreground="SteelBlue"
                     Header="Load App"
                     IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
@@ -204,7 +200,6 @@
                 <TabItem
                     x:Name="tabStartUp"
                     FontSize="14"
-                    Foreground="SteelBlue"
                     Header="StartUp"
                     IsEnabled="True"
                     IsSelected="{Binding IsTabStartSelected}">
@@ -259,11 +254,6 @@
                             </DataGrid.Resources>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="80" Header="State">
-                                    <DataGridTemplateColumn.HeaderStyle>
-                                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                        </Style>
-                                    </DataGridTemplateColumn.HeaderStyle>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate DataType="model:RevitAddin">
                                             <Button
@@ -291,7 +281,6 @@
                     </Grid>
                 </TabItem>
                 <TabItem
-                    Foreground="SteelBlue"
                     Header="Listener"
                     IsSelected="{Binding IsTabLogSelected}"
                     ToolTip="Support Listen Event Trace, Debug,Revit Events">
@@ -307,7 +296,6 @@
                 Margin="1,3,1,0"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
-                Foreground="SteelBlue"
                 IsEnabled="{Binding IsCanRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="Execute Addin Selected" />
         </StackPanel>
@@ -320,12 +308,13 @@
                 Grid.Column="0"
                 VerticalAlignment="Top"
                 Orientation="Vertical">
-                <GroupBox Margin="1,0,1,1" Header="Vendor Description:">
+                <GroupBox Style="{x:Null}" Margin="1,0,1,1" Header="Vendor Description:">
                     <TextBox
                         x:Name="TbxDescription"
                         Width="Auto"
                         Height="90"
-                        Margin="1,1,1,1"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Top"
                         LostKeyboardFocus="TbxDescription_OnLostKeyboardFocus"
                         Text="{Binding VendorDescription, Mode=Default, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap"
@@ -341,14 +330,12 @@
                             Margin="5,0,5,0"
                             VerticalAlignment="Center"
                             Content="All Version"
-                            Foreground="SteelBlue"
                             IsEnabled="True"
                             ToolTip="Available Command or Application Addin For All Version" />
                         <RadioButton
                             Margin="5,0,5,0"
                             VerticalAlignment="Center"
                             Content="Current Version"
-                            Foreground="SteelBlue"
                             IsChecked="{Binding IsCurrentVersion}"
                             ToolTip="Only Available for Revit Version Current" />
                     </StackPanel>
@@ -360,24 +347,24 @@
                         <Menu
                             Width="Auto"
                             Height="25"
-                            Background="WhiteSmoke"
-                            BorderBrush="SteelBlue"
+                            VerticalContentAlignment="Center"
+                            BorderBrush="LightGray"
                             BorderThickness="0.5">
                             <MenuItem Header="Save Addin">
                                 <MenuItem
                                     Command="{Binding SaveCommand}"
                                     Header="Save"
+                                    VerticalContentAlignment="Center"
                                     ToolTip="Save To Folder Addin" />
                                 <MenuItem
                                     Command="{Binding SaveCommandFolder}"
                                     Header="Save As...."
+                                    VerticalContentAlignment="Center"
                                     ToolTip="Save To New Folder" />
                             </MenuItem>
                         </Menu>
                         <Button
                             Width="20"
-                            BorderBrush="SteelBlue"
-                            BorderThickness="0.5"
                             Command="{Binding ExploreCommand}"
                             Foreground="SteelBlue"
                             ToolTip="Open Explore Location External Command Saved">
@@ -401,30 +388,26 @@
                 Orientation="Vertical">
                 <Button
                     Width="80"
-                    Margin="1,2,1,0"
+                    Margin="1,0,1,0"
                     Command="{Binding LoadCommand}"
                     Content="Load"
-                    Foreground="SteelBlue"
                     ToolTip="Load A Dll Of Command Or Application To Run" />
                 <Button
                     Width="80"
                     Margin="1,5,1,0"
                     Command="{Binding RemoveCommand}"
                     Content="Remove"
-                    Foreground="SteelBlue"
                     ToolTip="Remove A Command Or Application Loaded" />
                 <Button
                     Width="80"
                     Margin="1,5,1,0"
                     Command="{Binding ManagerCommand}"
                     Content="Startup"
-                    Foreground="SteelBlue"
                     ToolTip="Manager List Add-in Loaded In Revit" />
                 <Button
                     Margin="1,5,1,0"
                     Command="{Binding ClearCommand}"
                     Content="Clear"
-                    Foreground="SteelBlue"
                     ToolTip="Remove Cache In Temp Folder(Require Tune Off Revit)" />
             </StackPanel>
         </Grid>
