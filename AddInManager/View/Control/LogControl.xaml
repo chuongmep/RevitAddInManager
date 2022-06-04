@@ -11,21 +11,27 @@
     d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style TargetType="ListViewItem">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                </Trigger>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="Red" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="ListViewItem">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Foreground" Value="Red" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+       
     </UserControl.Resources>
-    <Grid Margin="5,5,5,5" x:Name="ctlList">
+    <Grid x:Name="ctlList">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <ListBox
             x:Name="listBox_LogMessages"
@@ -58,7 +64,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Row="0">
                 <!-- <CheckBox -->
@@ -70,13 +76,10 @@
             </DockPanel>
             <Button
                 Grid.Column="1"
-                Width="80"
-                Background="Azure"
+                Margin="0,0,5,0"
                 VerticalAlignment="Center"
                 Content="Clear Output"
                 Command="{Binding ClearLogCommand}"
-                Foreground="SteelBlue"
-                Style="{x:Null}"
                 ToolTip="Clear all result listener" />
         </Grid>
     </Grid>

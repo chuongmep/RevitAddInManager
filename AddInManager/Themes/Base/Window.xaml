@@ -10,4 +10,8 @@
         <Setter Property="Background" Value="{StaticResource WindowBackground}"/>
         <Setter Property="Foreground" Value="{StaticResource WindowForeground}"/>
     </Style>
+    <Style x:Key="ControlStyle" TargetType="{x:Type UserControl}">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}"/>
+        <Setter Property="Foreground" Value="{StaticResource WindowForeground}"/>
+    </Style>
 </ResourceDictionary>

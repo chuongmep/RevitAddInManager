@@ -261,7 +261,10 @@
 
 	<SolidColorBrush x:Key="WindowBackground" Color="#2D2D30" />
 	<SolidColorBrush x:Key="WindowForeground" Color="#FFE5E5E5" />
+	<!-- UserControl -->
 
+	<SolidColorBrush x:Key="UserControlBackground" Color="#2D2D30" />
+	<SolidColorBrush x:Key="UserControlForeground" Color="#FFE5E5E5" />
 	<!--  Various  -->
 
 	<CornerRadius x:Key="ButtonCornerRadius">4</CornerRadius>

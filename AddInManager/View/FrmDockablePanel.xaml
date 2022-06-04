@@ -17,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
+    <Grid Background="{DynamicResource UserControlBackground}">
         <control:LogControl></control:LogControl>
     </Grid>
 </Page>
