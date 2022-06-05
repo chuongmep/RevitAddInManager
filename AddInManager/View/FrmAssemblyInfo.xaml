@@ -12,9 +12,9 @@
         Title="Assemblies Info" Height="450" Width="800">
     <Window.Resources>
         <ResourceDictionary>
+            <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary
-                    Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -27,18 +27,18 @@
         <Grid Grid.Row="0">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <Label Foreground="SteelBlue" VerticalAlignment="Center" Content="Origin Assembly Location:"></Label>
+                    <Label  VerticalAlignment="Center" Content="Origin Assembly Location:"></Label>
                     <TextBox VerticalAlignment="Center"
                              Text="{Binding SelectedCommandItem.AddinItem.AssemblyPath,Mode=OneWay}"
                              BorderThickness="0" IsReadOnly="True" TextWrapping="WrapWithOverflow" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Foreground="SteelBlue" VerticalAlignment="Center" Content="Temp Assembly Location:"></Label>
+                    <Label  VerticalAlignment="Center" Content="Temp Assembly Location:"></Label>
                     <TextBox VerticalAlignment="Center" Text="{Binding AssemblyInfo.FileName,Mode=OneWay}"
                              BorderThickness="0" IsReadOnly="True" TextWrapping="WrapWithOverflow" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Label Foreground="SteelBlue" VerticalAlignment="Center" Content="Full Name:"></Label>
+                    <Label  VerticalAlignment="Center" Content="Full Name:"></Label>
                     <TextBox VerticalAlignment="Center" Text="{Binding AssemblyInfo.FullPath,Mode=OneWay}"
                              BorderThickness="0" IsReadOnly="True" TextWrapping="WrapWithOverflow" />
                 </StackPanel>
@@ -49,7 +49,7 @@
                 <RowDefinition Height="25" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Foreground="SteelBlue" Content="Referenced Assemblies: "></Label>
+            <Label  Content="Referenced Assemblies: "></Label>
             <DataGrid Grid.Row="1" 
                       ItemsSource="{Binding AssemblyInfo.ReferencedAssemblies, Mode=OneWay}"
                       IsReadOnly="True"
@@ -68,7 +68,7 @@
             </DataGrid>
 
         </Grid>
-        <Button Margin="5,0,5,2" Foreground="SteelBlue" Grid.Row="2" IsCancel="True" Height="25" Content="OK"></Button>
+        <Button Margin="5,0,5,2" Grid.Row="2" IsCancel="True" Height="25" Content="OK"></Button>
     </Grid>
 
 </Window>

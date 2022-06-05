@@ -47,8 +47,8 @@
             <TextBox
                 x:Name="tbxSearch"
                 Grid.Row="0"
-                Margin="5,0,5,0"
                 Height="25"
+                Margin="5,0,5,0"
                 VerticalAlignment="Center"
                 PreviewKeyDown="HandleTextboxKeyPress"
                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -66,8 +66,8 @@
                 </TextBox.Resources>
                 <TextBox.Style>
                     <Style TargetType="TextBox">
-                        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-                        <Setter Property="BorderBrush" Value="AliceBlue" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="Background" Value="Transparent" />
                         <Style.Triggers>
                             <Trigger Property="Text" Value="">
@@ -219,13 +219,13 @@
                             x:Name="DataGridStartup"
                             AlternatingRowBackground="Transparent"
                             AlternationCount="2"
-                            HeadersVisibility="Column"
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
                             CanUserSortColumns="True"
                             ClipboardCopyMode="IncludeHeader"
                             ColumnWidth="*"
                             FontSize="12"
+                            HeadersVisibility="Column"
                             IsReadOnly="False"
                             ItemsSource="{Binding AddInStartUps, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             SelectionMode="Extended"
@@ -323,26 +323,24 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="Vendor Description: " />
                         <controls:ToggleSwitch
-                                Grid.Column="1"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                Background="White"
-                                IsChecked="True"
-                                ToolTip="Dark Them"
-                                Visibility="Hidden" />
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            IsChecked="True"
+                            ToolTip="Dark Them" />
                     </Grid>
                 </GroupBox.Header>
                 <TextBox
-                        x:Name="TbxDescription"
-                        Width="Auto"
-                        Height="85"
-                        Opacity="80"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Top"
-                        LostKeyboardFocus="TbxDescription_OnLostKeyboardFocus"
-                        Text="{Binding VendorDescription, Mode=Default, UpdateSourceTrigger=PropertyChanged}"
-                        TextWrapping="Wrap"
-                        ToolTip="Default Autodesk, www.autodesk.com" />
+                    x:Name="TbxDescription"
+                    Width="Auto"
+                    Height="85"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    LostKeyboardFocus="TbxDescription_OnLostKeyboardFocus"
+                    Opacity="80"
+                    Text="{Binding VendorDescription, Mode=Default, UpdateSourceTrigger=PropertyChanged}"
+                    TextWrapping="Wrap"
+                    ToolTip="Default Autodesk, www.autodesk.com" />
             </GroupBox>
 
             <DockPanel
@@ -354,21 +352,21 @@
                 Dock="Bottom">
                 <Button
                     Margin="1,0,2,0"
-                    DockPanel.Dock="Top"
                     Command="{Binding LoadCommand}"
                     Content="Load"
+                    DockPanel.Dock="Top"
                     ToolTip="Load A Dll Of Command Or Application To Run" />
                 <Button
                     Margin="1,5,2,0"
-                    DockPanel.Dock="Top"
                     Command="{Binding RemoveCommand}"
                     Content="Remove"
+                    DockPanel.Dock="Top"
                     ToolTip="Remove A Command Or Application Loaded" />
                 <Button
                     Margin="1,5,2,0"
-                    DockPanel.Dock="Top"
                     Command="{Binding ManagerCommand}"
                     Content="Startup"
+                    DockPanel.Dock="Top"
                     ToolTip="Manager List Add-in Loaded In Revit" />
                 <Button
                     Margin="1,5,2,0"
@@ -378,52 +376,55 @@
                     ToolTip="Remove Cache In Temp Folder(Require Tune Off Revit)" />
             </DockPanel>
         </Grid>
-        
-            <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal">
-                <RadioButton
-                            Margin="5,0,5,0"
-                            VerticalAlignment="Center"
-                            Content="All Version"
-                            IsEnabled="True"
-                            ToolTip="Available Command or Application Addin For All Version" />
-                <RadioButton
-                            Margin="5,0,5,0"
-                            VerticalAlignment="Center"
-                            Content="Current Version"
-                            IsChecked="{Binding IsCurrentVersion}"
-                            ToolTip="Only Available for Revit Version Current" />
-                <Menu
-                    Width="Auto"
-                    Height="25"
-                    Margin="0,0,2,0"
-                    VerticalContentAlignment="Center"
-                    BorderThickness="1"
-                    BorderBrush="LightGray">
-                    <MenuItem Header="Save Addin">
-                        <MenuItem
-                            VerticalContentAlignment="Center"
-                            Command="{Binding SaveCommand}"
-                            Header="Save"
-                            ToolTip="Save To Folder Addin" />
-                        <MenuItem
-                            VerticalContentAlignment="Center"
-                            Command="{Binding SaveCommandFolder}"
-                            Header="Save As...."
-                            ToolTip="Save To New Folder" />
-                    </MenuItem>
-                </Menu>
-                <Button
-                    Width="20"
-                    Height="25"
-                    Command="{Binding ExploreCommand}"
-                    ToolTip="Open Explore Location External Command Saved">
-                    <Button.Background>
-                        <ImageBrush
-                            AlignmentX="Center"
-                            AlignmentY="Bottom"
-                            ImageSource="../Resources/folder.png"/>
-                    </Button.Background>
-                </Button>
-            </StackPanel>
+
+        <StackPanel
+            Grid.Row="4"
+            Grid.Column="0"
+            Orientation="Horizontal">
+            <RadioButton
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Content="All Version"
+                IsEnabled="True"
+                ToolTip="Available Command or Application Addin For All Version" />
+            <RadioButton
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Content="Current Version"
+                IsChecked="{Binding IsCurrentVersion}"
+                ToolTip="Only Available for Revit Version Current" />
+            <Menu
+                Width="Auto"
+                Height="25"
+                Margin="0,0,2,0"
+                VerticalContentAlignment="Center"
+                BorderBrush="LightGray"
+                BorderThickness="1">
+                <MenuItem Header="Save Addin">
+                    <MenuItem
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveCommand}"
+                        Header="Save"
+                        ToolTip="Save To Folder Addin" />
+                    <MenuItem
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveCommandFolder}"
+                        Header="Save As...."
+                        ToolTip="Save To New Folder" />
+                </MenuItem>
+            </Menu>
+            <Button
+                Width="20"
+                Height="25"
+                Command="{Binding ExploreCommand}"
+                ToolTip="Open Explore Location External Command Saved">
+                <Button.Background>
+                    <ImageBrush
+                        AlignmentX="Center"
+                        AlignmentY="Bottom"
+                        ImageSource="../Resources/folder.png" />
+                </Button.Background>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>
