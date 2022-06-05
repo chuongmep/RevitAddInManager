@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="ListViewItem">
                 <Style.Triggers>

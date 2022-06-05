@@ -101,7 +101,7 @@
 
 	<SolidColorBrush x:Key="GroupBoxForeground" Color="#FF040404" />
 	<SolidColorBrush x:Key="GroupBoxHeaderForeground" Color="#FF040404" />
-	<SolidColorBrush x:Key="GroupBoxHeaderBackground" Color="#EEEEF2" />
+	<SolidColorBrush x:Key="GroupBoxHeaderBackground" Color="#f4f4f4" />
 	<SolidColorBrush x:Key="GroupBoxBackground" Color="White" />
 	<SolidColorBrush x:Key="GroupBoxBorderBrush" Color="#CFCFCF" />
 
@@ -261,7 +261,7 @@
 
 	<!--  Various  -->
 
-	<CornerRadius x:Key="ButtonCornerRadius">4</CornerRadius>
+	<CornerRadius x:Key="ButtonCornerRadius">0</CornerRadius>
 
 	<!--  Path  -->
 
