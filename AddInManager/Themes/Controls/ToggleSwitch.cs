@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace RevitAddinManager.Controls
+namespace RevitAddinManager.Themes.Controls
 {
     public class ToggleSwitch : CheckBox
     {

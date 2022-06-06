@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace RevitAddinManager.Converters
+namespace RevitAddinManager.Themes.Converters
 {
     public class TreeViewMarginConverter : IValueConverter
     {
