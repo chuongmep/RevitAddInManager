@@ -23,6 +23,7 @@
             <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
+                <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" /> -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
