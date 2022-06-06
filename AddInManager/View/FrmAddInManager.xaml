@@ -22,9 +22,9 @@
         <ResourceDictionary>
             <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
+                <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" /> -->
                 <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" /> -->
-                  <!-- <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" /> -->
+                  <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -32,6 +32,7 @@
         <KeyBinding Command="{Binding RemoveCommand}" Gesture="Del" />
         <KeyBinding Command="{Binding ReloadCommand}" Gesture="F5" />
         <KeyBinding Command="{Binding HelpCommand}" Gesture="F1" />
+        <KeyBinding Command="{Binding ChangeThemCommand}" Gesture="Alt+T" />
     </Window.InputBindings>
     <Grid Background="{DynamicResource WindowBackground}">
         <Grid.RowDefinitions>
@@ -324,18 +325,12 @@
                             <ColumnDefinition Width="50" />
                         </Grid.ColumnDefinitions>
                         <Label Content="Vendor Description: " />
-                        <!--<controls:ToggleSwitch
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
-                            IsChecked="True"
-                            ToolTip="Dark Them" />-->
                     </Grid>
                 </GroupBox.Header>
                 <TextBox
                     x:Name="TbxDescription"
                     Width="Auto"
-                    Height="85"
+                    Height="100"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Top"
                     LostKeyboardFocus="TbxDescription_OnLostKeyboardFocus"

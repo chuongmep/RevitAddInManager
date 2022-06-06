@@ -16,6 +16,7 @@ public class App : IExternalApplication
 {
     public static FrmAddInManager FrmAddInManager { get; set; }
     public static FrmDockablePanel DockPanelProvider;
+    public static int ThemId { get; set; } = -1;
     public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));
     public static string PaneName => "Debug/Trace Output";
     public Result OnStartup(UIControlledApplication application)
@@ -31,14 +32,10 @@ public class App : IExternalApplication
         }
         return Result.Succeeded;
     }
-
-    
-
     public Result OnShutdown(UIControlledApplication application)
     {
         return Result.Cancelled;
     }
-
     private static void CreateRibbonPanel(UIControlledApplication application)
     {
         var ribbonPanel = application.CreateRibbonPanel("External Tools");

@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -152,6 +153,7 @@ public class AddInManagerViewModel : ViewModelBase
     }
 
     public ICommand HelpCommand => new RelayCommand(HelpCommandClick);
+    public ICommand ChangeThemCommand => new RelayCommand(()=>ChangeThemCommandClick(false));
 
     private string vendorDescription = string.Empty;
 
@@ -189,6 +191,7 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref isCanRun, value);
     }
 
+
     private bool isTabStartSelected;
 
     public bool IsTabStartSelected
@@ -200,6 +203,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         set => OnPropertyChanged(ref isTabStartSelected, value);
     }
+
     private bool isTabLogSelected;
 
     public bool IsTabLogSelected
@@ -208,11 +212,13 @@ public class AddInManagerViewModel : ViewModelBase
         {
             if (isTabLogSelected)
             {
-                LogControlViewModel vm = new LogControlViewModel() { FrmLogControl = FrmAddInManager.LogControl };
+                LogControlViewModel vm = new LogControlViewModel() {FrmLogControl = FrmAddInManager.LogControl};
                 FrmAddInManager.LogControl.DataContext = vm;
                 FrmAddInManager.LogControl.Loaded += vm.LogFileWatcher;
                 FrmAddInManager.LogControl.Unloaded += vm.UserControl_Unloaded;
-            };
+            }
+
+            ;
             return isTabLogSelected;
         }
         set => OnPropertyChanged(ref isTabLogSelected, value);
@@ -221,6 +227,43 @@ public class AddInManagerViewModel : ViewModelBase
     private void HelpCommandClick()
     {
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
+    }
+
+    public void ChangeThemCommandClick(bool isStartup)
+    {
+        try
+        {
+            if(!isStartup)App.ThemId +=1;
+            FrmAddInManager.Resources.MergedDictionaries.Clear();
+            switch (App.ThemId)
+            {
+                case 0:
+                    FrmAddInManager.Resources.MergedDictionaries.Add(new ResourceDictionary() {  
+                        Source = new Uri("/RevitAddinManager;component/Themes/Styles/DarkTheme.xaml", UriKind.RelativeOrAbsolute)});
+                    break;
+                case 1 :
+                    FrmAddInManager.Resources.MergedDictionaries.Add(new ResourceDictionary()
+                    {
+                        Source = new Uri("/RevitAddinManager;component/Themes/Styles/LightTheme.xaml",
+                            UriKind.RelativeOrAbsolute)
+                    });
+                    break;
+                default:
+                    FrmAddInManager.Resources.MergedDictionaries.Add(new ResourceDictionary()
+                    {
+                        Source = new Uri("/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component/themes/royale.normalcolor.xaml",UriKind.RelativeOrAbsolute)
+                    });
+                    App.ThemId = -1;
+                    break;
+            }
+           
+            
+
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.ToString());
+        }
     }
 
     public AddInManagerViewModel(ExternalCommandData data, ref string message, ElementSet elements)
@@ -652,7 +695,7 @@ public class AddInManagerViewModel : ViewModelBase
         var revitAddins = GetAddinFromFolder(Folder1);
         var addinsProgramData = GetAddinFromFolder(Folder2);
         var addinsPlugins = GetAddinFromFolder(Folder3);
-        revitAddins.ForEach(delegate (RevitAddin x)
+        revitAddins.ForEach(delegate(RevitAddin x)
         {
             addinStartup.Add(x);
             x.IsReadOnly = true;
@@ -780,5 +823,4 @@ public class AddInManagerViewModel : ViewModelBase
             MessageBox.Show(Resource.FileNotFound, Resource.AppName);
         }
     }
-
 }
