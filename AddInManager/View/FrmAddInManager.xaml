@@ -317,16 +317,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="85" />
             </Grid.ColumnDefinitions>
-            <GroupBox Margin="1,0,1,1">
-                <GroupBox.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="50" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Vendor Description: " />
-                    </Grid>
-                </GroupBox.Header>
+            <GroupBox Margin="1,0,1,1" Header="Vendor Description:">
                 <TextBox
                     x:Name="TbxDescription"
                     Width="Auto"
