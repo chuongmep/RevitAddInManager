@@ -5,10 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
+    d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     d:DesignHeight="350"
     d:DesignWidth="350"
     Background="White"
-    d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -26,18 +26,17 @@
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
-       
+
     </UserControl.Resources>
     <Grid x:Name="ctlList">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <ListBox
             x:Name="listBox_LogMessages"
             FontFamily="{Binding DisplayFontFamily}"
-            ItemsSource="{Binding MessageList}"
-            >
+            ItemsSource="{Binding MessageList}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock
@@ -48,39 +47,37 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.CommandBindings>
-                <CommandBinding Command="ApplicationCommands.Copy"
-                                CanExecute="RightClickCopyCmdCanExecute" Executed="RightClickCopyCmdExecuted" />
+                <CommandBinding
+                    CanExecute="RightClickCopyCmdCanExecute"
+                    Command="ApplicationCommands.Copy"
+                    Executed="RightClickCopyCmdExecuted" />
             </ListBox.CommandBindings>
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="Copy">
                         <MenuItem.CommandBindings>
-                            <CommandBinding Command="ApplicationCommands.Copy" CanExecute="RightClickCopyCmdCanExecute" Executed="RightClickCopyCmdExecuted" />
+                            <CommandBinding
+                                CanExecute="RightClickCopyCmdCanExecute"
+                                Command="ApplicationCommands.Copy"
+                                Executed="RightClickCopyCmdExecuted" />
                         </MenuItem.CommandBindings>
                     </MenuItem>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
-            </Grid.ColumnDefinitions>
-            <DockPanel Grid.Row="0">
-                <!-- <CheckBox -->
-                <!--     Margin="5,0,5,0" -->
-                <!--     VerticalAlignment="Center" -->
-                <!--     Content="Revit Events" -->
-                <!--     IsEnabled="False" -->
-                <!--     IsChecked="{Binding WatchRevitEventCommand}" /> -->
-            </DockPanel>
+        <DockPanel
+            Grid.Row="1"
+            Dock="Right"
+            LastChildFill="False">
             <Button
                 Grid.Column="1"
-                Margin="0,0,5,0"
+                Width="80"
+                Margin="2,0,5,0"
                 VerticalAlignment="Center"
-                Content="Clear Output"
                 Command="{Binding ClearLogCommand}"
+                Content="Clear"
+                DockPanel.Dock="Left"
                 ToolTip="Clear all result listener" />
-        </Grid>
+        </DockPanel>
     </Grid>
 </UserControl>

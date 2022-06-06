@@ -67,7 +67,7 @@
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="VerticalContentAlignment" Value="Center" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="#FFAFAFAF" />
                         <Setter Property="Background" Value="Transparent" />
                         <Style.Triggers>
                             <Trigger Property="Text" Value="">
@@ -322,12 +322,12 @@
                             <ColumnDefinition Width="50" />
                         </Grid.ColumnDefinitions>
                         <Label Content="Vendor Description: " />
-                        <controls:ToggleSwitch
+                        <!--<controls:ToggleSwitch
                             Grid.Column="1"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Bottom"
                             IsChecked="True"
-                            ToolTip="Dark Them" />
+                            ToolTip="Dark Them" />-->
                     </Grid>
                 </GroupBox.Header>
                 <TextBox
