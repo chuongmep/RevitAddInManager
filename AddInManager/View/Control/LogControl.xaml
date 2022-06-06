@@ -8,25 +8,14 @@
     d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     d:DesignHeight="350"
     d:DesignWidth="350"
-    Background="White"
+    Background="{DynamicResource UserControlBackground}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="ListViewItem">
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                    </Trigger>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Foreground" Value="Red" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
         </ResourceDictionary>
-
     </UserControl.Resources>
     <Grid x:Name="ctlList">
         <Grid.RowDefinitions>
@@ -70,7 +59,6 @@
             Dock="Right"
             LastChildFill="False">
             <Button
-                Grid.Column="1"
                 Width="80"
                 Margin="2,0,5,0"
                 VerticalAlignment="Center"

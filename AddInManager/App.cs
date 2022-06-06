@@ -15,6 +15,7 @@ namespace RevitAddinManager;
 public class App : IExternalApplication
 {
     public static FrmAddInManager FrmAddInManager { get; set; }
+    public static LogControl FrmLogControl { get; set; }
     public static FrmDockablePanel DockPanelProvider;
     public static int ThemId { get; set; } = -1;
     public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));

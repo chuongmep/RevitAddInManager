@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 
-namespace RevitAddinManager.Themes
+namespace RevitAddinManager.Themes.Base
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class ResourceUriPathAttribute : Attribute
