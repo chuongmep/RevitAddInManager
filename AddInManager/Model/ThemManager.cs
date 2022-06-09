@@ -46,8 +46,7 @@ public static class ThemManager
                     });
                     App.FrmLogControl.Resources.MergedDictionaries.Add(new ResourceDictionary()
                     {
-                        Source = new Uri(
-                            "/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component/themes/royale.normalcolor.xaml",
+                        Source = new Uri("/RevitAddinManager;component/Themes/Styles/LightTheme.xaml",
                             UriKind.RelativeOrAbsolute)
                     });
                     App.ThemId = -1;
