@@ -1,6 +1,8 @@
-﻿using RevitAddinManager.ViewModel;
+﻿using System.Diagnostics;
+using RevitAddinManager.ViewModel;
 using System.Windows;
 using System.Windows.Input;
+using RevitAddinManager.Model;
 
 namespace RevitAddinManager.View;
 
@@ -16,7 +18,8 @@ public partial class FrmAddInManager : Window
         InitializeComponent();
         DataContext = vm;
         viewModel = vm;
-        vm.FrmAddInManager = this;
+        App.FrmAddInManager = this;
+        ThemManager.ChangeThem(true);
     }
 
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -129,4 +132,5 @@ public partial class FrmAddInManager : Window
     {
         if (e.Key == Key.Escape) Close();
     }
+
 }

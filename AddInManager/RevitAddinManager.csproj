@@ -118,6 +118,10 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2" />
+  </ItemGroup>
   
   <Target Name="CopyFiles" AfterTargets="CoreBuild">
     <ItemGroup>

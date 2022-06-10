@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/RevitAddinManager;component/Themes/Base/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <!--  Window  -->
+
+    <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource WindowForeground}" />
+    </Style>
+    <Style x:Key="ControlStyle" TargetType="{x:Type UserControl}">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource WindowForeground}" />
+    </Style>
+</ResourceDictionary>
