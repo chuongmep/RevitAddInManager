@@ -50,7 +50,7 @@
                 x:Name="tbxSearch"
                 Grid.Row="0"
                 Height="25"
-                Margin="5,0,5,0"
+                Margin="1,0,5,0"
                 VerticalAlignment="Center"
                 PreviewKeyDown="HandleTextboxKeyPress"
                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -62,15 +62,22 @@
                         Stretch="None"
                         TileMode="None">
                         <VisualBrush.Visual>
-                            <TextBlock Foreground="DimGray" Text="Search..." />
+                            <Grid Background="Transparent">
+                                <TextBlock Foreground="DimGray" Text="Search..." Margin="5,0" />
+                            </Grid>
                         </VisualBrush.Visual>
                     </VisualBrush>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="3"/>
+                    </Style>
                 </TextBox.Resources>
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="VerticalContentAlignment" Value="Center" />
                         <Setter Property="BorderBrush" Value="#FFAFAFAF" />
+                        <Setter Property="BorderThickness" Value="0.5" />
                         <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Margin" Value="5,5,0,5" />
                         <Style.Triggers>
                             <Trigger Property="Text" Value="">
                                 <Setter Property="Background" Value="{StaticResource tbxText}" />
