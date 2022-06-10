@@ -53,7 +53,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - <kbd>Arrow Down</kbd> - Move from search to TreeView.
 - <kbd>Esc</kbd> - Quick Close Add-in Manager.
 - <kbd>Enter</kbd> - Quick Run Execute a command selected in Add-in Manager.
-- <kbd>Alt +T</kbd> to change theme Default, Dark, Light.
+- <kbd>Alt + T</kbd> - Change theme Default, Dark, Light.
 ## Add-In Manager
 
 ![](pic/AddinManager.gif)
