@@ -105,6 +105,7 @@
                         PreviewMouseWheel="TreeViewCommand_OnPreviewMouseWheel"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         SelectedItem_="{Binding SelectedCommandItem, Mode=TwoWay}"
+                        ItemContainerStyle="{StaticResource TreeViewItemStyle}"
                         Style="{DynamicResource {x:Type TreeView}}">
                         <TreeView.ContextMenu>
                             <ContextMenu>
@@ -127,28 +128,7 @@
                                 </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="IsExpanded" Value="True" />
-                                <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=TwoWay}" />
-                                <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                                <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
-                                <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
-                                <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
-                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
-                                <Style.Triggers>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="IsSelected" Value="true" />
-                                            <Condition Property="control:ExtendedTreeView.ContextMenuOpened" Value="true" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                                        <Setter Property="Foreground" Value="Red" />
-                                    </MultiTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TreeView.ItemContainerStyle>
+                      
                     </control:ExtendedTreeView>
                 </TabItem>
                 <TabItem
@@ -165,6 +145,7 @@
                             ItemsSource="{Binding ApplicationItems, Mode=TwoWay}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             SelectedItem_="{Binding SelectedAppItem, Mode=TwoWay}"
+                            ItemContainerStyle="{StaticResource TreeViewItemStyle}"
                             Style="{DynamicResource {x:Type TreeView}}">
                             <TreeView.ContextMenu>
                                 <ContextMenu>
@@ -185,28 +166,6 @@
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                             </TreeView.ItemTemplate>
-                            <TreeView.ItemContainerStyle>
-                                <Style TargetType="{x:Type TreeViewItem}">
-                                    <Setter Property="IsExpanded" Value="True" />
-                                    <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=TwoWay}" />
-                                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                                    <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
-                                    <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
-                                    <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                    <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinApp, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
-                                    <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
-                                    <Style.Triggers>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="true" />
-                                                <Condition Property="control:ExtendedTreeView.ContextMenuOpened" Value="true" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                                            <Setter Property="Foreground" Value="Red" />
-                                        </MultiTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TreeView.ItemContainerStyle>
                         </control:ExtendedTreeView>
                     </Grid>
                 </TabItem>
