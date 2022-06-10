@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 
-namespace RevitAddinManager.View.Control;
+namespace RevitAddinManager.View;
 
 public partial class FrmDockablePanel : IDockablePaneProvider
 {

@@ -12,7 +12,6 @@ namespace RevitAddinManager.ViewModel;
 
 public sealed class LogControlViewModel
 {
-    public LogControl FrmLogControl { get; set; }
     private object _lockObj = new object();
     private const int MAX_MESSGAES = 200;
 
@@ -48,13 +47,12 @@ public sealed class LogControlViewModel
 
     private ICommand clearLogCommand; 
     public ICommand ClearLogCommand => clearLogCommand ??= new RelayCommand(ClearLogClick);
-
     private void ClearLogClick()
     {
         File.WriteAllText(LongFileName, String.Empty);
         MessageList.Clear();
     }
-
+    
     public LogControlViewModel()
     {
         DispatcherObject = Dispatcher.CurrentDispatcher;
@@ -86,6 +84,7 @@ public sealed class LogControlViewModel
     public void LogFileWatcher(object sender, RoutedEventArgs e)
         {
             _startLineTotal = GetTotalLinesInFile(LongFileName, ref _lastFileSize);
+            if(_startLineTotal==0)return;
             try { _lastFileSize = _lastFileSize - (_lastFileSize / _startLineTotal * MAX_MESSGAES); } catch (Exception) { _lastFileSize = 0; }
             if (_lastFileSize < 0) _lastFileSize = 0;
             StopWatching = false;
@@ -191,8 +190,8 @@ public sealed class LogControlViewModel
             else
             {
                 MessageList.Add(new LogMessageString(String.Format("{0} {1}", ++_counter, message), color, FontWeights.Normal, 14));
-                FrmLogControl.listBox_LogMessages.SelectedIndex = FrmLogControl.listBox_LogMessages.Items.Count - 1;
-                FrmLogControl. listBox_LogMessages.ScrollIntoView(FrmLogControl.listBox_LogMessages.SelectedItem);
+               App.FrmLogControl.listBox_LogMessages.SelectedIndex = App. FrmLogControl.listBox_LogMessages.Items.Count - 1;
+                App.FrmLogControl. listBox_LogMessages.ScrollIntoView(App.FrmLogControl.listBox_LogMessages.SelectedItem);
                 if (MessageList.Count > MAX_MESSGAES)
                     MessageList.RemoveAt(0);
             }

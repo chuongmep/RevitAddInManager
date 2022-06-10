@@ -1,4 +1,12 @@
 # Changelog
+- 2022-06-10 **1.3.0**
+  - Add Mutiple Theme Support : Default, Dark, Light.
+  - Use <kbd>Alt +T</kbd> to change theme.
+  - Fix some small bug.
+  - Improve search bar margin.
+- 2022-06-02 **1.2.9**
+  - Support event ArrowKeyDown and ArrowKeyUp to move between items search and TreeView [#25](https://github.com/chuongmep/RevitAddInManager/pull/25)
+  - Support press key Esc from keyboard to close Form.
 - 2022-05-15 **1.2.8**
   - Support copy Content Debug/Trace Output Right click or Crt + C
 - 2022-05-11 **1.2.7**

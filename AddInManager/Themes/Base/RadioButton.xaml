@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/RevitAddinManager;component/Themes/Base/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <!--  RadioButton  -->
+
+    <Style TargetType="{x:Type RadioButton}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <Setter Property="Background" Value="{StaticResource CheckBoxBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource CheckBoxBorderBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextBlockForeground}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="MinHeight" Value="16" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid
+                        x:Name="templateRoot"
+                        Background="Transparent"
+                        SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="16" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            x:Name="radioButtonBorder"
+                            Width="14"
+                            Height="14"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="100">
+                            <Grid x:Name="markGrid" Margin="2">
+                                <Ellipse
+                                    x:Name="optionMark"
+                                    MinWidth="6"
+                                    MinHeight="6"
+                                    Fill="{StaticResource CheckBoxFillPath}"
+                                    Opacity="0" />
+                            </Grid>
+                        </Border>
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Grid.Column="1"
+                            Margin="3,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasContent" Value="true">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}" />
+                            <Setter Property="Padding" Value="4,-1,0,0" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource CheckBoxMouseOverBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource CheckBoxBackgroundDisabled}" />
+                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource CheckBoxBorderBrushDisabled}" />
+                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource CheckBoxFillPathDisabled}" />
+                            <Setter Property="Foreground" Value="{StaticResource TextBlockForegroundDisabled}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="true" />
+                                <Condition Property="IsChecked" Value="false" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource CheckBoxPressedBackground}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="optionMark" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="optionMark" Property="Opacity" Value="0.56" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

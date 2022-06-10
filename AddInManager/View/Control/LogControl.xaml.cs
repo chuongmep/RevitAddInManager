@@ -32,7 +32,7 @@ namespace RevitAddinManager.View.Control
             InitializeComponent();
             LogControlViewModel viewModel = new LogControlViewModel();
             DataContext = viewModel;
-            viewModel.FrmLogControl = this;
+            App.FrmLogControl = this;
             this.Loaded += viewModel.LogFileWatcher;
             this.Unloaded += viewModel.UserControl_Unloaded;
 

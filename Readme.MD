@@ -49,9 +49,14 @@ The product will be expanded in the future in process to support mutiple platfor
 - <kbd>F1</kbd> - Go link open source report some error,bug or feature request.
 - <kbd>Delete</kbd> - Quick remove by use right click or use from keyboard.
 - <kbd>Crt + MouseWheel</kbd> - Zoom in/out by use mouse wheel in command plugin.
+- <kbd>Arrow Up</kbd> - Move from TreeView to search.
+- <kbd>Arrow Down</kbd> - Move from search to TreeView.
+- <kbd>Esc</kbd> - Quick Close Add-in Manager.
+- <kbd>Enter</kbd> - Quick Run Execute a command selected in Add-in Manager.
+- <kbd>Alt + T</kbd> - Change theme Default, Dark, Light.
 ## Add-In Manager
 
-![](pic/AddinManager.png)
+![](pic/AddinManager.gif)
 
 ### Command
 
