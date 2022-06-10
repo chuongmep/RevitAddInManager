@@ -105,7 +105,6 @@
                         PreviewMouseWheel="TreeViewCommand_OnPreviewMouseWheel"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         SelectedItem_="{Binding SelectedCommandItem, Mode=TwoWay}"
-                        ItemContainerStyle="{StaticResource TreeViewItemStyle}"
                         Style="{DynamicResource {x:Type TreeView}}">
                         <TreeView.ContextMenu>
                             <ContextMenu>
@@ -128,7 +127,15 @@
                                 </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
-                      
+                         <TreeView.ItemContainerStyle >
+                            <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                <Setter Property="control:MouseDoubleClick.Command"
+                                        Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened"
+                                        Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                            </Style>
+                         </TreeView.ItemContainerStyle>
                     </control:ExtendedTreeView>
                 </TabItem>
                 <TabItem
