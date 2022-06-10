@@ -1,4 +1,8 @@
 # Changelog
+- 2022-06-10 **1.3.1**
+  - Improve search bar Style
+  - Improve TreeViewItem show tree same window form
+  - Improve speed up search item by Knuth-Morris-Pratt (KMP) Algorithm.
 - 2022-06-10 **1.3.0**
   - Add Mutiple Theme Support : Default, Dark, Light.
   - Use <kbd>Alt +T</kbd> to change theme.
