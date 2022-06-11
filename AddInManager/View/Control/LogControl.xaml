@@ -24,6 +24,7 @@
         </Grid.RowDefinitions>
         <ListBox
             x:Name="listBox_LogMessages"
+            SelectionMode="Extended"
             FontFamily="{Binding DisplayFontFamily}"
             ItemsSource="{Binding MessageList}">
             <ListBox.ItemTemplate>
