@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:RevitAddinManager.Model"
     xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
+    xmlns:controls="clr-namespace:RevitAddinManager.Themes.Controls"
     Title="Revit Add In Manager"
     Width="400"
     Height="600"
@@ -33,7 +34,7 @@
         <KeyBinding Command="{Binding HelpCommand}" Gesture="F1" />
         <KeyBinding Command="{Binding ChangeThemCommand}" Gesture="Alt+T" />
     </Window.InputBindings>
-    <Grid Background="{DynamicResource WindowBackground}">
+    <Grid controls:EnableDragHelper.EnableDrag="True"  Background="{DynamicResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition />
