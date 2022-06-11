@@ -1,4 +1,6 @@
 # Changelog
+- 2022-06-11 **1.3.2**
+  - Allow drag window use mouse every where position
 - 2022-06-10 **1.3.1**
   - Improve search bar Style
   - Improve TreeViewItem show tree same window form
