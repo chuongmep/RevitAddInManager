@@ -5,8 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
             Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
-        <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" />
-        <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
+        <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" /> -->
+        <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" /> -->
     </ResourceDictionary.MergedDictionaries>
     <converters:TreeViewLineConverter x:Key="LineConverter" />
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
