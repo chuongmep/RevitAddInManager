@@ -1,4 +1,6 @@
 # Changelog
+- 2022-06-15 **1.3.3**
+  - Fix issue color with dark theme [#26](https://github.com/chuongmep/RevitAddInManager/issues/26)
 - 2022-06-11 **1.3.2**
   - Allow drag window use mouse every where position
 - 2022-06-10 **1.3.1**
