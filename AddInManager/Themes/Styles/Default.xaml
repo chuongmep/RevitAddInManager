@@ -5,6 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
             Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <converters:TreeViewLineConverter x:Key="LineConverter" />
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
@@ -37,6 +39,7 @@
     </Style>
     <Style x:Key="TreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TreeViewForeground}" />
         <Setter Property="Padding" Value="1,0,0,0" />
         <Setter Property="IsExpanded" Value="True" />
         <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=TwoWay}" />
