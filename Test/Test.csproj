@@ -20,8 +20,4 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AddInManager\RevitAddinManager.csproj" />
-  </ItemGroup>
-
 </Project>

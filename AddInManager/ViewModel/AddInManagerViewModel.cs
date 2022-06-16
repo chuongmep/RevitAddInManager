@@ -252,8 +252,7 @@ public class AddInManagerViewModel : ViewModelBase
             {
                 if (isSearchText)
                 {
-                    bool flag = KMPAlgorithm.KmpSearch(searchText, addinItem.FullClassName);
-                    // addinItem.FullClassName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+                    bool flag = addinItem.FullClassName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
                     if (flag)
                     {
                         addinModels.Add(new AddinModel(addinItem.FullClassName)
