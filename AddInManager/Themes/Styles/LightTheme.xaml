@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Colors.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Button.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Calendar.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/CheckBox.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ComboBox.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ContextMenu.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/DataGrid.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Expander.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/GridSplitter.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/GroupBox.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Label.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ListBox.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ListView.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Menu.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/PasswordBox.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ProgressBar.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/RadioButton.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/RichTextBox.xaml" />
+        <!-- <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ScrollBar.xaml" /> -->
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ScrollViewer.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Separator.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Slider.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/StatusBar.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/TabControl.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/TextBlock.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/TextBox.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ToggleSwitch.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ToolBar.xaml" />
+        <!-- <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/ToolTip.xaml" /> -->
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/TreeView.xaml" />
+        <ResourceDictionary Source="/RevitAddinManager;component/Themes/Base/Window.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

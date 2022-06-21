@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.DB;
+﻿using System.IO;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
@@ -32,6 +33,11 @@ public sealed class AddinManagerBase
     public Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
     {
         var filePath = _activeCmd.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath,DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+            return 0;
+        }
         Result result;
         try
         {

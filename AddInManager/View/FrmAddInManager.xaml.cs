@@ -1,6 +1,8 @@
-﻿using RevitAddinManager.ViewModel;
+﻿using System.Diagnostics;
+using RevitAddinManager.ViewModel;
 using System.Windows;
 using System.Windows.Input;
+using RevitAddinManager.Model;
 
 namespace RevitAddinManager.View;
 
@@ -16,7 +18,8 @@ public partial class FrmAddInManager : Window
         InitializeComponent();
         DataContext = vm;
         viewModel = vm;
-        vm.FrmAddInManager = this;
+        App.FrmAddInManager = this;
+        ThemManager.ChangeThem(true);
     }
 
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -57,4 +60,77 @@ public partial class FrmAddInManager : Window
             TreeViewCommand.FontSize -= 2f;
         }
     }
+
+    private void HandleTreeViewCommandKeyPress(object sender, KeyEventArgs e)
+    {
+        int indexCmd = TreeViewCommand.Items.IndexOf(TreeViewCommand.SelectedItem);
+        if (e.Key == Key.Up && TabCommand.IsFocused)
+        {
+            tbxSearch.Focus();
+        }
+        else if (e.Key == Key.Up && indexCmd==0 && TabCommand.IsSelected)
+        {
+            TabCommand.Focus();
+        }
+        if (e.Key == Key.Down && TabCommand.IsSelected)
+        {
+            TreeViewCommand.Focus();
+        }
+        if (e.Key == Key.Enter)
+        {
+            viewModel.ExecuteAddinCommandClick();
+        }
+
+    }
+    private void HandleTreeViewAppKeyPress(object sender, KeyEventArgs e)
+    {
+        int indexCmd = TreeViewApp.Items.IndexOf(TreeViewApp.SelectedItem);
+        if (e.Key == Key.Up && TabApp.IsFocused)
+        {
+            tbxSearch.Focus();
+        }
+        else if (e.Key == Key.Up && indexCmd==0 && TabApp.IsSelected)
+        {
+            TabApp.Focus();
+        }
+        if (e.Key == Key.Down && TabApp.IsSelected)
+        {
+            TreeViewApp.Focus();
+        }
+        if (e.Key == Key.Enter)
+        {
+            viewModel.ExecuteAddinCommandClick();
+        }
+
+    }
+
+    private void HandleTextboxKeyPress(object sender, KeyEventArgs e)
+    {
+        if(e.Key == Key.Down)
+        {
+            if (viewModel.IsTabCmdSelected)
+            {
+                TreeViewCommand.Focus();
+            }
+            else if (viewModel.IsTabAppSelected)
+            {
+                TreeViewApp.Focus();
+            }
+            else if(viewModel.IsTabStartSelected)
+            {
+                DataGridStartup.Focus();
+            }
+            else
+            {
+                LogControl.Focus();
+            }
+        }
+        
+    }
+
+    private void CloseFormEvent(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape) Close();
+    }
+
 }

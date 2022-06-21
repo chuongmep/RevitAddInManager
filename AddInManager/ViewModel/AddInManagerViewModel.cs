@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -21,7 +22,6 @@ public class AddInManagerViewModel : ViewModelBase
     private string Message { get; set; }
     private ElementSet Elements { get; set; }
     private RevitEvent RevitEvent = new RevitEvent();
-    public FrmAddInManager FrmAddInManager { get; set; }
     public AssemLoader AssemLoader { get; set; }
 
     public AddinManagerBase MAddinManagerBase { get; set; }
@@ -153,6 +153,7 @@ public class AddInManagerViewModel : ViewModelBase
     }
 
     public ICommand HelpCommand => new RelayCommand(HelpCommandClick);
+    public ICommand ChangeThemCommand => new RelayCommand(() => ThemManager.ChangeThem(false));
 
     private string vendorDescription = string.Empty;
 
@@ -190,6 +191,7 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref isCanRun, value);
     }
 
+
     private bool isTabStartSelected;
 
     public bool IsTabStartSelected
@@ -201,6 +203,7 @@ public class AddInManagerViewModel : ViewModelBase
         }
         set => OnPropertyChanged(ref isTabStartSelected, value);
     }
+
     private bool isTabLogSelected;
 
     public bool IsTabLogSelected
@@ -209,11 +212,13 @@ public class AddInManagerViewModel : ViewModelBase
         {
             if (isTabLogSelected)
             {
-                LogControlViewModel vm = new LogControlViewModel(){FrmLogControl = FrmAddInManager.LogControl};
-                FrmAddInManager.LogControl.DataContext = vm;
-                FrmAddInManager.LogControl.Loaded += vm.LogFileWatcher;
-                FrmAddInManager.LogControl.Unloaded += vm.UserControl_Unloaded;
-            };
+                LogControlViewModel vm = new LogControlViewModel();
+                App.FrmAddInManager.LogControl.DataContext = vm;
+                App.FrmAddInManager.LogControl.Loaded += vm.LogFileWatcher;
+                App.FrmAddInManager.LogControl.Unloaded += vm.UserControl_Unloaded;
+            }
+
+            ;
             return isTabLogSelected;
         }
         set => OnPropertyChanged(ref isTabLogSelected, value);
@@ -223,7 +228,6 @@ public class AddInManagerViewModel : ViewModelBase
     {
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
     }
-
     public AddInManagerViewModel(ExternalCommandData data, ref string message, ElementSet elements)
     {
         AssemLoader = new AssemLoader();
@@ -249,7 +253,8 @@ public class AddInManagerViewModel : ViewModelBase
             {
                 if (isSearchText)
                 {
-                    if (addinItem.FullClassName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    bool flag = addinItem.FullClassName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+                    if (flag)
                     {
                         addinModels.Add(new AddinModel(addinItem.FullClassName)
                         {
@@ -284,7 +289,7 @@ public class AddInManagerViewModel : ViewModelBase
         return MainTrees;
     }
 
-    private void ExecuteAddinCommandClick()
+    public void ExecuteAddinCommandClick()
     {
         try
         {
@@ -295,7 +300,7 @@ public class AddInManagerViewModel : ViewModelBase
                 CheckCountSelected(CommandItems, out var result);
                 if (result > 0)
                 {
-                    FrmAddInManager.Close();
+                    App.FrmAddInManager.Close();
                     RevitEvent.Run(Execute, false, null, null, false);
                 }
             }
@@ -446,12 +451,12 @@ public class AddInManagerViewModel : ViewModelBase
         {
             case AddinType.Command:
                 IsTabCmdSelected = true;
-                FrmAddInManager.TabCommand.Focus();
+                App.FrmAddInManager.TabCommand.Focus();
                 break;
 
             case AddinType.Application:
                 IsTabAppSelected = true;
-                FrmAddInManager.TabApp.Focus();
+                App.FrmAddInManager.TabApp.Focus();
                 break;
 
             case AddinType.Mixed:
@@ -606,9 +611,9 @@ public class AddInManagerViewModel : ViewModelBase
     }
     private void ShowSuccessfully()
     {
-        MessageBox.Show(FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK,
+        MessageBox.Show(App.FrmAddInManager, "Save Successfully", Resource.AppName, MessageBoxButton.OK,
             MessageBoxImage.Information);
-        FrmAddInManager.Close();
+        App.FrmAddInManager.Close();
     }
 
     private void FreshSearchClick()
@@ -718,12 +723,12 @@ public class AddInManagerViewModel : ViewModelBase
 
     private void SetToggleVisible()
     {
-        foreach (RevitAddin revitAddin in FrmAddInManager.DataGridStartup.SelectedItems)
+        foreach (RevitAddin revitAddin in App.FrmAddInManager.DataGridStartup.SelectedItems)
         {
             revitAddin.SetToggleState();
         }
 
-        FrmAddInManager.Close();
+        App.FrmAddInManager.Close();
         MessageBox.Show(Resource.Successfully, Resource.AppName);
     }
 
@@ -750,7 +755,7 @@ public class AddInManagerViewModel : ViewModelBase
                 var filePaths = Directory.GetFiles(folder).Where(x => x.Contains(DefaultSetting.FileName)).ToArray();
                 if (filePaths.Length == 0)
                 {
-                    MessageBox.Show(FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK,
+                    MessageBox.Show(App.FrmAddInManager, "File Empty!", Resource.AppName, MessageBoxButton.OK,
                         MessageBoxImage.Exclamation);
                     return;
                 }
@@ -771,7 +776,8 @@ public class AddInManagerViewModel : ViewModelBase
 
     private void EditAddinCommandClick()
     {
-        if (FrmAddInManager.DataGridStartup.SelectedItem is RevitAddin revitAddin && File.Exists(revitAddin.FilePath))
+        if (App.FrmAddInManager.DataGridStartup.SelectedItem is RevitAddin revitAddin &&
+            File.Exists(revitAddin.FilePath))
         {
             Process.Start(revitAddin.FilePath);
         }
@@ -783,7 +789,8 @@ public class AddInManagerViewModel : ViewModelBase
 
     private void OpenLocalAddinCommandClick()
     {
-        if (FrmAddInManager.DataGridStartup.SelectedItem is RevitAddin revitAddin && File.Exists(revitAddin.FilePath))
+        if (App.FrmAddInManager.DataGridStartup.SelectedItem is RevitAddin revitAddin &&
+            File.Exists(revitAddin.FilePath))
         {
             Process.Start("explorer.exe", "/select, " + revitAddin.FilePath);
         }

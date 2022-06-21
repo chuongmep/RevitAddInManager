@@ -31,6 +31,7 @@ public class AssemLoader
     public void CopyGeneratedFilesBack()
     {
         var files = Directory.GetFiles(tempFolder, "*.*", SearchOption.AllDirectories);
+        if(!files.Any()) return;
         foreach (var text in files)
         {
             if (copiedFiles.ContainsKey(text))
@@ -186,6 +187,7 @@ public class AssemLoader
         {
             var array = new string[] { ".dll", ".exe" };
             var text = string.Empty;
+            if(string.IsNullOrEmpty(assemName)) return String.Empty;
             var str = assemName.Substring(0, assemName.IndexOf(','));
             foreach (var str2 in array)
             {
