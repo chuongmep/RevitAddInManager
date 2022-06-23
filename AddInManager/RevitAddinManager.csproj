@@ -73,8 +73,8 @@
     <None Remove="Resources\folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Chuongmep.RevitAPI" Version="1.0.1" />
-    <!--<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" />-->
+<!--    <PackageReference Include="Chuongmep.RevitAPI" Version="1.0.1" />-->
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" />
   </ItemGroup>
 
   <ItemGroup>

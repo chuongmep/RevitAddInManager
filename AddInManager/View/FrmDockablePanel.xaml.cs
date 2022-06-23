@@ -15,9 +15,16 @@ public partial class FrmDockablePanel : IDockablePaneProvider
         data.InitialState = new DockablePaneState
         {
             DockPosition = DockPosition.Right,
+#if R14 || R15 || R16 || R17 || R18 || R19
+#else
             MinimumWidth = 250,
             MinimumHeight = 250,
+#endif
         };
+
+#if R14 || R15 || R16
+#else
         data.VisibleByDefault = false;
+#endif
     }
 }
