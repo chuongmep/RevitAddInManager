@@ -1,4 +1,7 @@
 # Changelog
+- 2022-06-23 **1.3.4**
+  - Fix DockPanel startup with some version lower 2019 [#27](https://github.com/chuongmep/RevitAddInManager/issues/27)
+  - Revert use search by index of.
 - 2022-06-15 **1.3.3**
   - Fix issue color with dark theme [#26](https://github.com/chuongmep/RevitAddInManager/issues/26)
 - 2022-06-11 **1.3.2**
