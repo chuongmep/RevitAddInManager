@@ -11,7 +11,7 @@
 <img src="https://img.shields.io/twitter/follow/chuongmep?style=social&logo=twitter"
 alt="follow on Twitter"></a>
 
-## Summary
+## 📋 Summary
 
 ![](pic/Addin.png)
 
@@ -29,7 +29,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] More...
 
 
-### Some feature include:
+### 📦 Some feature include:
 
 - Add-in tester(use Debug and Trace to test your add-in)
 - Add-in manager
@@ -56,7 +56,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - <kbd>Esc</kbd> - Quick Close Add-in Manager.
 - <kbd>Enter</kbd> - Quick Run Execute a command selected in Add-in Manager.
 - <kbd>Alt + T</kbd> - Change theme Default, Dark, Light.
-## Add-In Manager
+## 📭 Add-In Manager
 
 ![](pic/AddinManager.gif)
 
@@ -90,13 +90,13 @@ The product will be expanded in the future in process to support mutiple platfor
 
 ---
 
-## Installation
+## ⚙️ Installation
 
 Please follow last release at section [Release](https://github.com/chuongmep/RevitAddInManager/releases/latest)
 
 ---
 
-## Guideline
+## ⌨️Guideline
 
 - Quick Example to Execute a Command : 
 ``` cs
@@ -138,13 +138,13 @@ Some topic common:
 
 ---
 
-## Author
+## ✒️ Author
 
 Originally implemented by Autodesk with platform **Windows Forms** and now it maintain by [ChuongHo](https://github.com/chuongmep) with platform **WPF** and add more feature to fit with the progressive development of modern technology. His focus is to work smarter and achieve the most effective practices to enhance data utilization and digital collaboration among AEC parties.
 
 ---
 
-## License
+## 📄 License
 
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [License](License.md) file for full details.
 
@@ -154,7 +154,7 @@ Credit to [icons8.com](https://icons8.com) for the Revit Add-in Manager icons.
 
 ---
 
-## Contribute
+## 🍚 Contribute
 
 **Add-In Manager** is an open-source project and would be nothing without its community. You can make suggestions or track and submit bugs via Github [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue). You can submit your own code to the **Add-In Manager** project via a Github [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
 
@@ -167,7 +167,7 @@ Please refer to the [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ---
 
-## Sponsors
+## 🎁 Sponsors
 
 ![](pic/jetbrains.png)
 
@@ -175,14 +175,14 @@ Thanks for providing a free All product IDE for this project.
 
 ---
 
-## Learning Resources
+## 🖇️ Learning Resources
 
 - [Revit Developer Center](https://www.autodesk.com/developer-network/platform-technologies/revit)
 - [Revit SDK Sample](https://github.com/jeremytammik/RevitSdkSamples)
 - [Revit API Docs](https://www.revitapidocs.com/)
 - [The Building Coder](https://thebuildingcoder.typepad.com/)
 
-## Open Resource Recommend
+## 📌 Open Resource Recommend
 
 I suggest you some of these projects, hope you will like it.
 
