@@ -1,4 +1,6 @@
 # Changelog
+- 2022-06-24 **1.3.5**
+  - Allow Use Add-in Manager without loading a model [#28](https://github.com/chuongmep/RevitAddInManager/issues/28) 
 - 2022-06-23 **1.3.4**
   - Fix DockPanel startup with some version lower 2019 [#27](https://github.com/chuongmep/RevitAddInManager/issues/27)
   - Revert use search by index of.
