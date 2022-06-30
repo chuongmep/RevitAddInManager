@@ -53,6 +53,7 @@ public class App : IExternalApplication
     private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
     {
         var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
+        buttonData.AvailabilityClassName = typeof(AddinManagerCommandAvail).FullName;
         pullDownButton.AddPushButton(buttonData);
     }
 

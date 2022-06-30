@@ -43,3 +43,11 @@ public class AddInManagerReadOnly : IExternalCommand
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
     }
 }
+ public class AddinManagerCommandAvail : IExternalCommandAvailability {
+        public AddinManagerCommandAvail() {
+        }
+
+        public bool IsCommandAvailable(UIApplication uiApp, CategorySet selectedCategories) {
+            return true;
+        }
+    }
