@@ -300,7 +300,7 @@ public class AddInManagerViewModel : ViewModelBase
                 if (result > 0)
                 {
                     App.FrmAddInManager.Close();
-                    RevitEvent.Run(Execute, false, null, null, false);
+                    RevitEvent.Run(Execute, false, null, false);
                 }
             }
         }
