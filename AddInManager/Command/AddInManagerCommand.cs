@@ -43,11 +43,18 @@ public class AddInManagerReadOnly : IExternalCommand
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
     }
 }
- public class AddinManagerCommandAvail : IExternalCommandAvailability {
-        public AddinManagerCommandAvail() {
-        }
 
-        public bool IsCommandAvailable(UIApplication uiApp, CategorySet selectedCategories) {
-            return true;
-        }
+public class AddinManagerCommandAvailTrue : IExternalCommandAvailability
+{
+    public bool IsCommandAvailable(UIApplication uiApp, CategorySet selectedCategories)
+    {
+        return true;
     }
+}
+public class AddinManagerCommandAvailFalse : IExternalCommandAvailability
+{
+    public bool IsCommandAvailable(UIApplication uiApp, CategorySet selectedCategories)
+    {
+        return false;
+    }
+}
