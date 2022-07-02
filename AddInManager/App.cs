@@ -47,23 +47,17 @@ public class App : IExternalApplication
         AddPushButton(pulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
         AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
-        AddPushButtonEva(pulldownButton, typeof(DockableCommand), "Show/Hide Panel(Debug-Trace-Events)");
+        AddPushButton(pulldownButton, typeof(DockableCommand), "Show/Hide Panel(Debug-Trace-Events)");
     }
 
     private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
     {
         var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
-        buttonData.AvailabilityClassName = typeof(AddinManagerCommandAvailTrue).FullName;
-        pullDownButton.AddPushButton(buttonData);
-    }
-    private static void AddPushButtonEva(PulldownButton pullDownButton, Type command, string buttonText)
-    {
-        var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
-        buttonData.AvailabilityClassName = typeof(AddinManagerCommandAvailFalse).FullName;
+        buttonData.AvailabilityClassName = typeof(AddinManagerCommandAvail).FullName;
         pullDownButton.AddPushButton(buttonData);
     }
 
-    private void DocumentClosed(object sender, DocumentClosedEventArgs e)
+    private void DocumentClosed(object sender, Autodesk.Revit.DB.Events.DocumentClosedEventArgs e)
     {
         FrmAddInManager?.Close();
     }
