@@ -61,15 +61,15 @@ public class AddinManager
         {
             return addinType;
         }
-        List<AddinItem> list = null;
-        List<AddinItem> list2 = null;
+        List<AddinItem> commandItems = null;
+        List<AddinItem> appItems = null;
         try
         {
             assemLoader.HookAssemblyResolve();
 
             var assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
-            list = commands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
-            list2 = applications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
+            commandItems = commands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
+            appItems = applications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
         }
         catch (Exception e)
         {
@@ -79,15 +79,15 @@ public class AddinManager
         {
             assemLoader.UnhookAssemblyResolve();
         }
-        if (list != null && list.Count > 0)
+        if (commandItems != null && commandItems.Count > 0)
         {
-            var addin = new Addin(filePath, list);
+            var addin = new Addin(filePath, commandItems);
             commands.AddAddIn(addin);
             addinType |= AddinType.Command;
         }
-        if (list2 != null && list2.Count > 0)
+        if (appItems != null && appItems.Count > 0)
         {
-            var addin2 = new Addin(filePath, list2);
+            var addin2 = new Addin(filePath, appItems);
             applications.AddAddIn(addin2);
             addinType |= AddinType.Application;
         }
@@ -294,16 +294,16 @@ public class AddinManager
 
     private string GetProperFilePath(string folder, string fileNameWithoutExt, string ext)
     {
-        string text;
+        string filePath;
         var num = -1;
         do
         {
             num++;
             var path = num <= 0 ? fileNameWithoutExt + ext : fileNameWithoutExt + num + ext;
-            text = Path.Combine(folder, path);
+            filePath = Path.Combine(folder, path);
         }
-        while (File.Exists(text));
-        return text;
+        while (File.Exists(filePath));
+        return filePath;
     }
 
     private readonly AddinsApplication applications;
