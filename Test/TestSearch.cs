@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RevitAddinManager.Model;
 using Test.Algorithm;
 
 namespace Test;

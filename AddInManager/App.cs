@@ -1,10 +1,7 @@
-﻿using System.IO;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
 using RevitAddinManager.View;
 using System.Reflection;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Events;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
 using RevitAddinManager.ViewModel;

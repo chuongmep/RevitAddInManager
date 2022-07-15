@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using RevitAddinManager.ViewModel;
+﻿using RevitAddinManager.ViewModel;
 using System.Windows;
 using System.Windows.Input;
 using RevitAddinManager.Model;
