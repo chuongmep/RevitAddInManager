@@ -22,7 +22,7 @@ public class AddinsCommand : Addins
         SortAddin();
     }
 
-    private bool ReadExternalCommand(IniFile file, int nodeNumber)
+    void ReadExternalCommand(IniFile file, int nodeNumber)
     {
         var name = file.ReadString(ExternalName, ExternalCName + nodeNumber);
         var text = file.ReadString(ExternalName, ExternalAssembly + nodeNumber);
@@ -30,7 +30,7 @@ public class AddinsCommand : Addins
         var description = file.ReadString(ExternalName, ExternalDescription + nodeNumber);
         if (string.IsNullOrEmpty(text2) || string.IsNullOrEmpty(text))
         {
-            return false;
+            return;
         }
         AddItem(new AddinItem(AddinType.Command)
         {
@@ -39,7 +39,6 @@ public class AddinsCommand : Addins
             FullClassName = text2,
             Description = description
         });
-        return true;
     }
 
     public void Save(IniFile file)
