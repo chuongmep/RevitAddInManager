@@ -192,6 +192,8 @@ I suggest you some of these projects, hope you will like it.
 
 - [RevitLookupWpf](https://github.com/weianweigan/RevitLookupWpf)
 
+- [RevitDBExplorer](https://github.com/NeVeSpl/RevitDBExplorer)
+
 - [Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
 
 - [Revit.TestRunner](https://github.com/geberit/Revit.TestRunner)
