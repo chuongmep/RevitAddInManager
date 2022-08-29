@@ -83,8 +83,9 @@ public sealed class LogControlViewModel
     public void LogFileWatcher(object sender, RoutedEventArgs e)
     {
         _startLineTotal = GetTotalLinesInFile(LongFileName, ref _lastFileSize);
-        if (_startLineTotal == 0) return;
-        try { _lastFileSize = _lastFileSize - (_lastFileSize / _startLineTotal * MAX_MESSGAES); } catch (Exception) { _lastFileSize = 0; }
+       // if (_startLineTotal == 0) return;
+        try { _lastFileSize = _lastFileSize - (_lastFileSize / _startLineTotal * MAX_MESSGAES); } 
+        catch (Exception) { _lastFileSize = 0; }
         if (_lastFileSize < 0) _lastFileSize = 0;
         StopWatching = false;
         WatchLogFile(LongFileName);
