@@ -1,7 +1,9 @@
-﻿using Autodesk.Revit.UI;
+﻿using System.IO;
+using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
 using RevitAddinManager.View;
 using System.Reflection;
+using System.Windows;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
 using RevitAddinManager.ViewModel;
@@ -17,12 +19,12 @@ public class App : IExternalApplication
     public static int ThemId { get; set; } = -1;
     public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));
     public static string PaneName => "Debug/Trace Output";
+
     public Result OnStartup(UIControlledApplication application)
     {
         CreateRibbonPanel(application);
         application.ControlledApplication.DocumentClosed += DocumentClosed;
-        //EventWatcher eventWatcher = new EventWatcher(application);
-
+        DefaultSetting.Version += VersionChecker.CurrentVersion;
         DockPanelProvider = new FrmDockablePanel() { DataContext = new DockableViewModel(application) };
         if (!DockablePane.PaneIsRegistered(PaneId))
         {

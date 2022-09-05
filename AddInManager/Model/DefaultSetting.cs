@@ -7,6 +7,10 @@ namespace RevitAddinManager.Model;
 /// </summary>
 public static class DefaultSetting
 {
+    public static string Application = "RevitAddinManager";
+    public static string Version = " ";
+    public static string NewVersion = "";
+    public static bool IsNewVersion = false;
     public static string AppName = "Revit Add-in Manager";
     public static string FileName = "ExternalTool";
     public static string FormatExAddin = ".addin";

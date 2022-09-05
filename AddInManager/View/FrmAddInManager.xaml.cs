@@ -19,6 +19,7 @@ public partial class FrmAddInManager : Window
         viewModel = vm;
         App.FrmAddInManager = this;
         ThemManager.ChangeThem(true);
+        Title += DefaultSetting.Version;
     }
 
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
