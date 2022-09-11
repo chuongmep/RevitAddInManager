@@ -1,4 +1,7 @@
 # Changelog
+- 2022-09-11 **1.3.7**
+  - Show detail version installed in title 
+  - Improve drag window only in DataGrid tab Command and tab App
 - 2022-08-29 **1.3.6**
   - Fix problem` Trace/Debug not show result when one Add-in Manager in first time [#34](https://github.com/chuongmep/RevitAddInManager/issues/34)
 - 2022-06-30 **1.3.5**`
