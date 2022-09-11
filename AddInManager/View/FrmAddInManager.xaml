@@ -34,7 +34,7 @@
         <KeyBinding Command="{Binding HelpCommand}" Gesture="F1" />
         <KeyBinding Command="{Binding ChangeThemCommand}" Gesture="Alt+T" />
     </Window.InputBindings>
-    <Grid controls:EnableDragHelper.EnableDrag="True" Background="{DynamicResource WindowBackground}">
+    <Grid Background="{DynamicResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition />
@@ -102,7 +102,7 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TabControl x:Name="TabControl"   SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
@@ -111,6 +111,7 @@
                     PreviewKeyDown="HandleTreeViewCommandKeyPress">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
+                        controls:EnableDragHelper.EnableDrag="True"
                         FontSize="12"
                         ItemsSource="{Binding CommandItems, Mode=TwoWay}"
                         PreviewMouseWheel="TreeViewCommand_OnPreviewMouseWheel"
@@ -149,6 +150,7 @@
                 </TabItem>
                 <TabItem
                     x:Name="TabApp"
+                    controls:EnableDragHelper.EnableDrag="True"
                     FontSize="14"
                     Header="Load App"
                     IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
