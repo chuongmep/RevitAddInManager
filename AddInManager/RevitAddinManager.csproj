@@ -70,7 +70,15 @@
   <ItemGroup>
     <None Remove="Resources\dev.ico" />
     <None Remove="Resources\dev.png" />
+    <None Remove="Resources\failed_large.png" />
+    <None Remove="Resources\failed_small.png" />
     <None Remove="Resources\folder.png" />
+    <None Remove="Resources\passed_large.png" />
+    <None Remove="Resources\passed_small.png" />
+    <None Remove="Resources\running_large.png" />
+    <None Remove="Resources\running_small.png" />
+    <None Remove="Resources\skipped_large.png" />
+    <None Remove="Resources\skipped_small.png" />
   </ItemGroup>
   <ItemGroup>
 <!--    <PackageReference Include="Chuongmep.RevitAPI" Version="1.0.1" />-->
@@ -80,7 +88,15 @@
   <ItemGroup>
     <Resource Include="Resources\dev.ico" />
     <Resource Include="Resources\dev.png" />
+    <Resource Include="Resources\failed_large.png" />
+    <Resource Include="Resources\failed_small.png" />
     <Resource Include="Resources\folder.png" />
+    <Resource Include="Resources\passed_large.png" />
+    <Resource Include="Resources\passed_small.png" />
+    <Resource Include="Resources\running_large.png" />
+    <Resource Include="Resources\running_small.png" />
+    <Resource Include="Resources\skipped_large.png" />
+    <Resource Include="Resources\skipped_small.png" />
   </ItemGroup>
 
   <ItemGroup>

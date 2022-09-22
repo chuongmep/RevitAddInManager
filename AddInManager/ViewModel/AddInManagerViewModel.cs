@@ -113,6 +113,9 @@ public class AddInManagerViewModel : ViewModelBase
 
     private readonly ICommand _executeAddinCommand = null;
     public ICommand ExecuteAddinCommand => _executeAddinCommand ?? new RelayCommand(ExecuteAddinCommandClick);
+
+    private readonly ICommand _executeUnitTestCommand = null;
+    public ICommand ExecuteUnitTestCommand => _executeUnitTestCommand ?? new RelayCommand(ExecuteUnitTestCommandClick);
     public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
     public ICommand OpenRefsAssemblyCommand => new RelayCommand(OpenRefsAssemblyCommandClick);
     public ICommand ReloadCommand => new RelayCommand(ReloadCommandClick);
@@ -238,6 +241,8 @@ public class AddInManagerViewModel : ViewModelBase
         FreshItemStartupClick(false);
     }
 
+    public UnitTestViewModel UnitTestViewModel { get; set; }
+
     private ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
     {
         var MainTrees = new ObservableCollection<AddinModel>();
@@ -309,6 +314,11 @@ public class AddInManagerViewModel : ViewModelBase
         }
     }
 
+    public void ExecuteUnitTestCommandClick()
+    {
+        MessageBox.Show("TODO");
+        //TODO
+    }
     private void Execute()
     {
         string message = Message;

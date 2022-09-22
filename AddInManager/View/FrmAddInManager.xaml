@@ -102,7 +102,7 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <TabControl x:Name="TabControl"   SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
@@ -277,6 +277,88 @@
                     IsSelected="{Binding IsTabLogSelected}"
                     ToolTip="Support Listen Event Trace, Debug,Revit Events">
                     <control:LogControl x:Name="LogControl" DataContext="{x:Null}" />
+                </TabItem>
+                <TabItem
+                    Header="Unit Test"
+                    IsSelected="True"
+                    ToolTip="Support Automation Testing Method">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <Label VerticalAlignment="Center" Content="Lasted Result Run:" />
+                            <TextBlock
+                                Margin="10"
+                                VerticalAlignment="Center"
+                                Foreground="Blue">
+                                <Run>Passed:</Run>
+                                <Run Text="{Binding UnitTestViewModel.TotalPassed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </TextBlock>
+                            <TextBlock
+                                Margin="10"
+                                VerticalAlignment="Center"
+                                Foreground="Red">
+                                <Run>Failed:</Run>
+                                <Run Text="{Binding UnitTestViewModel.TotalFailed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </TextBlock>
+                            <TextBlock
+                                Margin="10"
+                                VerticalAlignment="Center"
+                                Foreground="Chocolate">
+                                <Run>Total Times:</Run>
+                                <Run Text="{Binding UnitTestViewModel.TotalTimes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </TextBlock>
+                        </StackPanel>
+                        <control:ExtendedTreeView
+                            x:Name="TreeViewUnitTest"
+                            Grid.Row="1"
+                            controls:EnableDragHelper.EnableDrag="True"
+                            FontSize="12"
+                            ItemsSource="{Binding CommandItems, Mode=TwoWay}"
+                            PreviewMouseWheel="TreeViewCommand_OnPreviewMouseWheel"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            SelectedItem_="{Binding SelectedCommandItem, Mode=TwoWay}"
+                            Style="{DynamicResource {x:Type TreeView}}">
+                            <TreeView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding RunSelectedTestCommand}" Header="Run Unit Tested" />
+                                    <MenuItem Command="{Binding RemoveTestCommand}" Header="Remove Tested" />
+                                    <MenuItem Command="{Binding ReloadCommand}" Header="Reload" />
+                                </ContextMenu>
+                            </TreeView.ContextMenu>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            BorderThickness="0"
+                                            Content="▶"
+                                            Foreground="Green"
+                                            Style="{x:Null}" />
+                                        <ContentPresenter Margin="2,0" Content="{Binding Name, Mode=OneTime}" />
+                                        <TextBlock Foreground="OrangeRed">
+                                            <Run>Times:</Run>
+                                            <Run Text="{Binding Time}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                            <TreeView.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                    <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                    <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                        </control:ExtendedTreeView>
+
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
