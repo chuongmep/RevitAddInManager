@@ -37,6 +37,18 @@ public class AddInManagerViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
+    private ObservableCollection<AddinModel> methodItems;
+
+    public ObservableCollection<AddinModel> MethodItems
+    {
+        get => methodItems;
+        set
+        {
+            if (value == methodItems) return;
+            methodItems = value;
+            OnPropertyChanged();
+        }
+    }
 
     private AddinModel selectedCommandItem;
 
@@ -61,6 +73,31 @@ public class AddInManagerViewModel : ViewModelBase
             return selectedCommandItem;
         }
         set => OnPropertyChanged(ref selectedCommandItem, value);
+    }
+    
+    private AddinModel selectedMethodItem;
+
+    public AddinModel SelectedMethodItem
+    {
+        get
+        {
+            if (selectedMethodItem != null && selectedMethodItem.IsParentTree == true && IsTabCmdSelected)
+            {
+                IsCanRun = false;
+                MAddinManagerBase.ActiveCmd = selectedMethodItem.Addin;
+            }
+            else if (selectedMethodItem != null && selectedMethodItem.IsParentTree == false && IsTabCmdSelected)
+            {
+                IsCanRun = true;
+                MAddinManagerBase.ActiveCmdItem = selectedMethodItem.AddinItem;
+                MAddinManagerBase.ActiveCmd = selectedMethodItem.Addin;
+                VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
+            }
+            else IsCanRun = false;
+
+            return selectedMethodItem;
+        }
+        set => OnPropertyChanged(ref selectedMethodItem, value);
     }
 
     private ObservableCollection<AddinModel> applicationItems;
@@ -105,6 +142,7 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
     public ICommand RemoveCommand => new RelayCommand(RemoveAddinClick);
+    public ICommand RemoveTestCommand => new RelayCommand(RemoveTestClick);
     public ICommand SaveCommand => new RelayCommand(SaveCommandClick);
     public ICommand SaveCommandFolder => new RelayCommand(SaveCommandLocalFolder);
 
@@ -171,7 +209,13 @@ public class AddInManagerViewModel : ViewModelBase
         get => isTabCmdSelected;
         set => OnPropertyChanged(ref isTabCmdSelected, value);
     }
+    private bool isTabTestSelected = true;
 
+    public bool IsTabTestSelected
+    {
+        get => isTabTestSelected;
+        set => OnPropertyChanged(ref isTabTestSelected, value);
+    }
     private bool isTabAppSelected;
 
     public bool IsTabAppSelected
@@ -461,15 +505,14 @@ public class AddInManagerViewModel : ViewModelBase
                 IsTabCmdSelected = true;
                 App.FrmAddInManager.TabCommand.Focus();
                 break;
-
             case AddinType.Application:
                 IsTabAppSelected = true;
                 App.FrmAddInManager.TabApp.Focus();
                 break;
-
             case AddinType.Mixed:
                 break;
-
+            case AddinType.UnitTest:
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -568,6 +611,59 @@ public class AddInManagerViewModel : ViewModelBase
         }
         catch (Exception e)
         {
+            MessageBox.Show(e.ToString());
+        }
+    }
+
+    private void RemoveTestClick()
+    {
+        try
+        {
+            if (IsTabTestSelected)
+            {
+                foreach (var parent in MethodItems)
+                {
+                    if (parent.IsInitiallySelected)
+                    {
+                        MAddinManagerBase.ActiveTest = parent.Addin;
+                        MAddinManagerBase.ActiveTestItem = parent.AddinItem;
+                        if (MAddinManagerBase.ActiveTest != null)
+                        {
+                            MAddinManagerBase.AddinManager.Commands.RemoveAddIn(MAddinManagerBase.ActiveTest);
+                        }
+
+                        MAddinManagerBase.ActiveTest = null;
+                        MAddinManagerBase.ActiveTestItem = null;
+                        MethodItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+                        return;
+                    }
+
+                    foreach (var addinChild in parent.Children)
+                    {
+                        if (addinChild.IsInitiallySelected)
+                        {
+                            //Set Value to run for add-in command
+                            MAddinManagerBase.ActiveCmd = parent.Addin;
+                            MAddinManagerBase.ActiveCmdItem = addinChild.AddinItem;
+                        }
+                    }
+                }
+
+                if (MAddinManagerBase.ActiveCmdItem != null)
+                {
+                    MAddinManagerBase.ActiveCmd.RemoveItem(MAddinManagerBase.ActiveCmdItem);
+                    MAddinManagerBase.ActiveCmd = null;
+                    MAddinManagerBase.ActiveCmdItem = null;
+                }
+
+                CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+            }
+            //Save All SetTings
+            MAddinManagerBase.AddinManager.SaveToAimIni();
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.ToString());
             MessageBox.Show(e.ToString());
         }
     }

@@ -19,7 +19,7 @@ public class ManifestFile
         this.fileName = fileName;
         if (string.IsNullOrEmpty(filePath))
         {
-            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AddIn");
+            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "AddIn");
             filePath = Path.Combine(path, this.fileName);
         }
     }
@@ -28,45 +28,7 @@ public class ManifestFile
     {
         this.local = local;
     }
-
-    public void Load()
-    {
-        xmlDoc = new XmlDocument();
-        xmlDoc.Load(filePath);
-        var documentElement = xmlDoc.DocumentElement;
-        if (!documentElement.Name.Equals(ROOT_NODE))
-        {
-            throw new ArgumentException(INCORRECT_NODE);
-        }
-        if (documentElement.ChildNodes.Count == 0)
-        {
-            throw new ArgumentException(EMPTY_ADDIN);
-        }
-        applications.Clear();
-        commands.Clear();
-        foreach (var obj in documentElement.ChildNodes)
-        {
-            var xmlNode = (XmlNode)obj;
-            if (!xmlNode.Name.Equals(ADDIN_NODE) || xmlNode.Attributes.Count != 1)
-            {
-                throw new ArgumentException(INCORRECT_NODE);
-            }
-            var xmlAttribute = xmlNode.Attributes[0];
-            if (xmlAttribute.Value.Equals(APPLICATION_NODE))
-            {
-                ParseExternalApplications(xmlNode);
-            }
-            else
-            {
-                if (!xmlAttribute.Value.Equals(COMMAND_NODE))
-                {
-                    throw new ArgumentException(INCORRECT_NODE);
-                }
-                ParseExternalCommands(xmlNode);
-            }
-        }
-    }
-
+    
     public void Save()
     {
         SaveAs(filePath);
@@ -390,9 +352,9 @@ public class ManifestFile
 
     private string TYPE_ATTRIBUTE = "Type";
 
-    private string INCORRECT_NODE = "incorrect node in addin file!";
+    // private string INCORRECT_NODE = "incorrect node in addin file!";
 
-    private string EMPTY_ADDIN = "empty addin file!";
+    // private string EMPTY_ADDIN = "empty addin file!";
 
     private string ASSEMBLY = "Assembly";
 

@@ -1,7 +1,9 @@
-﻿using Autodesk.Revit.Attributes;
+﻿using System.Diagnostics;
+using Autodesk.Revit.Attributes;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows;
 
 namespace RevitAddinManager.Model;
 
@@ -35,6 +37,7 @@ public abstract class Addins
         {
             addinDict.Remove(fileName);
         }
+
         addinDict[fileName] = addin;
     }
 
@@ -46,6 +49,7 @@ public abstract class Addins
             addinDict.Remove(fileName);
             return true;
         }
+
         return false;
     }
 
@@ -56,10 +60,12 @@ public abstract class Addins
         {
             addinDict[assemblyName] = new Addin(item.AssemblyPath);
         }
+
         addinDict[assemblyName].ItemList.Add(item);
     }
 
-    public List<AddinItem> LoadItems(Assembly assembly, string fullName, string originalAssemblyFilePath, AddinType type)
+    public List<AddinItem> LoadItems(Assembly assembly, string fullName, string originalAssemblyFilePath,
+        AddinType addinType)
     {
         var list = new List<AddinItem>();
         Type[] array = null;
@@ -75,12 +81,17 @@ public abstract class Addins
                 return list;
             }
         }
+
         var list2 = new List<string>();
         var list3 = new List<string>();
         foreach (var type2 in array)
         {
             try
             {
+                if (addinType == AddinType.UnitTest)
+                {
+                    GetMethodByAtt(type2);
+                }
                 if (!(null == type2) && !type2.IsAbstract)
                 {
                     var @interface = type2.GetInterface(fullName);
@@ -89,40 +100,47 @@ public abstract class Addins
                         TransactionMode? transactionMode = null;
                         RegenerationOption? regenerationOption = null;
                         JournalingMode? journalingMode = null;
-                        if (type != AddinType.Application)
+                        if (addinType != AddinType.Application)
                         {
                             var customAttributes = Attribute.GetCustomAttributes(type2, false);
-                            foreach (var attribute in customAttributes)
+                            foreach (Attribute attribute in customAttributes)
                             {
                                 if (attribute is RegenerationAttribute regenerationAttribute)
                                 {
                                     regenerationOption = regenerationAttribute.Option;
                                 }
+
                                 if (attribute is TransactionAttribute transactionAttribute)
                                 {
                                     transactionMode = transactionAttribute.Mode;
                                 }
+
                                 if (attribute is JournalingAttribute journalingAttribute)
                                 {
                                     journalingMode = journalingAttribute.Mode;
                                 }
+
                                 if (transactionMode != null && regenerationOption != null)
                                 {
                                     break;
                                 }
                             }
+
                             if (transactionMode == null)
                             {
                                 list2.Add(type2.Name);
                                 goto IL_1A7;
                             }
+
                             if (transactionMode != StaticUtil.TransactMode)
                             {
                                 list3.Add(type2.Name);
                                 goto IL_1A7;
                             }
                         }
-                        var item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), type2.FullName, type, transactionMode, regenerationOption, journalingMode);
+
+                        var item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), type2.FullName, addinType,
+                            transactionMode, regenerationOption, journalingMode);
                         list.Add(item);
                     }
                 }
@@ -131,8 +149,10 @@ public abstract class Addins
             {
                 throw new ArgumentException(e.ToString());
             }
-        IL_1A7:;
+
+            IL_1A7: ;
         }
+
         if (list2.Count > 0)
         {
             var stringBuilder = new StringBuilder();
@@ -141,9 +161,12 @@ public abstract class Addins
             {
                 stringBuilder.AppendLine(value);
             }
-            stringBuilder.Append("implements IExternalCommand but doesn't contain both RegenerationAttribute and TransactionAttribute!");
+
+            stringBuilder.Append(
+                "implements IExternalCommand but doesn't contain both RegenerationAttribute and TransactionAttribute!");
             StaticUtil.ShowWarning(stringBuilder.ToString());
         }
+
         if (list3.Count > 0)
         {
             var stringBuilder2 = new StringBuilder();
@@ -152,12 +175,27 @@ public abstract class Addins
             {
                 stringBuilder2.AppendLine(value2);
             }
+
             stringBuilder2.Append(" are not the same as the mode set to Add-In Manager!");
             StaticUtil.ShowWarning(stringBuilder2.ToString());
         }
+
         return list;
     }
-
+    
+    void GetMethodByAtt(Type type)
+    {
+        System.Attribute[] attributes = System.Attribute.GetCustomAttributes(type);
+        StringBuilder sb = new StringBuilder();
+        foreach (Attribute attribute in attributes)
+        {
+            string name = attribute.ToString();
+            if (name.ToLower().Contains("UnitTesting".ToLower()))
+            {
+                //TODO : Add Test Method to Tree View
+            }
+        }
+    }
     protected SortedDictionary<string, Addin> addinDict;
 
     protected int maxCount = 100;

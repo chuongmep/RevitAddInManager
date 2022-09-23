@@ -132,7 +132,17 @@ public sealed class AddinManagerBase
         get => _activeAppItem;
         set => _activeAppItem = value;
     }
+    public Addin ActiveTest
+    {
+        get => _activeTest;
+        set => _activeTest = value;
+    }
 
+    public AddinItem ActiveTestItem
+    {
+        get => _activeTestItem;
+        set => _activeTestItem = value;
+    }
     public AddinManager AddinManager
     {
         get => _addinManager;
@@ -150,8 +160,10 @@ public sealed class AddinManagerBase
     private AddinItem _activeCmdItem;
 
     private Addin _activeApp;
+    private Addin _activeTest;
 
     private AddinItem _activeAppItem;
+    private AddinItem _activeTestItem;
 
     private AddinManager _addinManager;
 }

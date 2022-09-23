@@ -10,12 +10,15 @@ public class AddinManager
     public AddinsApplication Applications => applications;
     public int AppCount => applications.Count;
     public AddinsCommand Commands => commands;
+    public AddinsTestMethod TestMethods => testMethods;
     public int CmdCount => commands.Count;
+    public int TestCount => testMethods.Count;
 
     public AddinManager()
     {
         commands = new AddinsCommand();
         applications = new AddinsApplication();
+        testMethods = new AddinsTestMethod();
         GetIniFilePaths();
         ReadAddinsFromAimIni();
     }
@@ -63,13 +66,14 @@ public class AddinManager
         }
         List<AddinItem> commandItems = null;
         List<AddinItem> appItems = null;
+        List<AddinItem> testMethodItems = null;
         try
         {
             assemLoader.HookAssemblyResolve();
-
             var assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
             commandItems = commands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
             appItems = applications.LoadItems(assembly, StaticUtil.AppFullName, filePath, AddinType.Application);
+            testMethodItems = applications.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.UnitTest);
         }
         catch (Exception e)
         {
@@ -94,48 +98,44 @@ public class AddinManager
         return addinType;
     }
 
-    public void SaveToRevitIni()
-    {
-        if (!File.Exists(revitIniFile.FilePath))
-        {
-            throw new FileNotFoundException("can't find the revit.ini file from: " + revitIniFile.FilePath);
-        }
-        commands.Save(revitIniFile);
-        applications.Save(revitIniFile);
-    }
+    // public void SaveToRevitIni()
+    // {
+    //     if (!File.Exists(revitIniFile.FilePath))
+    //     {
+    //         throw new FileNotFoundException("can't find the revit.ini file from: " + revitIniFile.FilePath);
+    //     }
+    //     commands.Save(revitIniFile);
+    //     applications.Save(revitIniFile);
+    //     testMethods.Save(revitIniFile);
+    // }
 
     public void SaveAsLocal(AddInManagerViewModel vm, string filepath)
     {
         ManifestFile manifestFile = AddManifestFile(vm);
         manifestFile.SaveAs(filepath);
     }
-
-    public void SaveToLocal()
-    {
-        SaveToLocalManifest();
-    }
-
-    public void SaveToLocalRevitIni()
-    {
-        foreach (var keyValuePair in commands.AddinDict)
-        {
-            var key = keyValuePair.Key;
-            var value = keyValuePair.Value;
-            var directoryName = Path.GetDirectoryName(value.FilePath);
-            if (string.IsNullOrEmpty(directoryName))
-            {
-                MessageBox.Show(@"Directory Not Found");
-                return;
-            }
-            var file = new IniFile(Path.Combine(directoryName, DefaultSetting.IniName));
-            value.SaveToLocalIni(file);
-            if (applications.AddinDict.ContainsKey(key))
-            {
-                var addin = applications.AddinDict[key];
-                addin.SaveToLocalIni(file);
-            }
-        }
-    }
+    
+    // public void SaveToLocalRevitIni()
+    // {
+    //     foreach (var keyValuePair in commands.AddinDict)
+    //     {
+    //         var key = keyValuePair.Key;
+    //         var value = keyValuePair.Value;
+    //         var directoryName = Path.GetDirectoryName(value.FilePath);
+    //         if (string.IsNullOrEmpty(directoryName))
+    //         {
+    //             MessageBox.Show(@"Directory Not Found");
+    //             return;
+    //         }
+    //         var file = new IniFile(Path.Combine(directoryName, DefaultSetting.IniName));
+    //         value.SaveToLocalIni(file);
+    //         if (applications.AddinDict.ContainsKey(key))
+    //         {
+    //             var addin = applications.AddinDict[key];
+    //             addin.SaveToLocalIni(file);
+    //         }
+    //     }
+    // }
 
     public void SaveToAimIni()
     {
@@ -146,6 +146,7 @@ public class AddinManager
         }
         commands.Save(aimIniFile);
         applications.Save(aimIniFile);
+        testMethods.Save(aimIniFile);
     }
 
     public bool HasItemsToSave()
@@ -222,76 +223,7 @@ public class AddinManager
 
         return manifestFile;
     }
-
-    private void SaveToLocalManifest()
-    {
-        var dictionary = new Dictionary<string, Addin>();
-        var dictionary2 = new Dictionary<string, Addin>();
-        foreach (var keyValuePair in commands.AddinDict)
-        {
-            var key = keyValuePair.Key;
-            var value = keyValuePair.Value;
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(value.FilePath);
-            var directoryName = Path.GetDirectoryName(value.FilePath);
-            if (string.IsNullOrEmpty(directoryName)) throw new ArgumentNullException(nameof(directoryName));
-            var filePath = Path.Combine(directoryName, fileNameWithoutExtension + DefaultSetting.FormatExAddin);
-            var manifestFile = new ManifestFile(true);
-            foreach (var addinItem in value.ItemList)
-            {
-                if (addinItem.Save)
-                {
-                    manifestFile.Commands.Add(addinItem);
-                }
-            }
-            if (applications.AddinDict.ContainsKey(key))
-            {
-                var addin = applications.AddinDict[key];
-                foreach (var addinItem2 in addin.ItemList)
-                {
-                    if (addinItem2.Save)
-                    {
-                        manifestFile.Applications.Add(addinItem2);
-                    }
-                }
-                dictionary.Add(key, applications.AddinDict[key]);
-            }
-            manifestFile.SaveAs(filePath);
-        }
-        foreach (var keyValuePair2 in applications.AddinDict)
-        {
-            var key2 = keyValuePair2.Key;
-            var value2 = keyValuePair2.Value;
-            if (!dictionary.ContainsKey(key2))
-            {
-                var fileNameWithoutExtension2 = Path.GetFileNameWithoutExtension(value2.FilePath);
-                var directoryName2 = Path.GetDirectoryName(value2.FilePath);
-                if (string.IsNullOrEmpty(directoryName2)) throw new ArgumentNullException(nameof(directoryName2));
-                var filePath2 = Path.Combine(directoryName2, fileNameWithoutExtension2 + DefaultSetting.FormatExAddin);
-                var manifestFile2 = new ManifestFile(true);
-                foreach (var addinItem3 in value2.ItemList)
-                {
-                    if (addinItem3.Save)
-                    {
-                        manifestFile2.Applications.Add(addinItem3);
-                    }
-                }
-                if (commands.AddinDict.ContainsKey(key2))
-                {
-                    var addin2 = commands.AddinDict[key2];
-                    foreach (var addinItem4 in addin2.ItemList)
-                    {
-                        if (addinItem4.Save)
-                        {
-                            manifestFile2.Commands.Add(addinItem4);
-                        }
-                    }
-                    dictionary2.Add(key2, commands.AddinDict[key2]);
-                }
-                manifestFile2.SaveAs(filePath2);
-            }
-        }
-    }
-
+    
     private string GetProperFilePath(string folder, string fileNameWithoutExt, string ext)
     {
         string filePath;
@@ -309,6 +241,7 @@ public class AddinManager
     private readonly AddinsApplication applications;
 
     private readonly AddinsCommand commands;
+    private readonly AddinsTestMethod testMethods;
 
     private IniFile aimIniFile;
 
