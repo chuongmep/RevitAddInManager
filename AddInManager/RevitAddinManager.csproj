@@ -84,10 +84,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\App.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
+      <DependentUpon>App.settings</DependentUpon>
     </Compile>
     <Compile Update="Resource.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -104,9 +104,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Properties\Settings.settings">
+    <None Update="Properties\App.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <LastGenOutput>App.Designer.cs</LastGenOutput>
     </None>
     <None Update="View\AssemblyLoader.xaml">
       <Generator>MSBuild:Compile</Generator>

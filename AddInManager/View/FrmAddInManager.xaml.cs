@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using RevitAddinManager.Model;
+using System.Windows.Threading;
 
 namespace RevitAddinManager.View;
 
@@ -17,6 +18,8 @@ public partial class FrmAddInManager : Window
         InitializeComponent();
         DataContext = vm;
         viewModel = vm;
+        this.Width = Properties.App.Default.AppWidth;
+        this.Height = Properties.App.Default.AppHeight;
         App.FrmAddInManager = this;
         ThemManager.ChangeThem(true);
         Title += DefaultSetting.Version;
@@ -132,5 +135,29 @@ public partial class FrmAddInManager : Window
     {
         if (e.Key == Key.Escape) Close();
     }
+    private DispatcherTimer SizeChangedDebouncer;
+    private void FrmSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        SizeChangedDebouncer = Debounce(SizeChangedDebouncer, TimeSpan.FromSeconds(1), SaveUserSettings);
+    }
 
+    private void SaveUserSettings()
+    {
+        Properties.App.Default.AppHeight = Height;
+        Properties.App.Default.AppWidth = Width;
+        Properties.App.Default.Save();
+    }
+    private  DispatcherTimer Debounce(DispatcherTimer dispatcher, TimeSpan interval, Action action)
+    {
+        dispatcher?.Stop();
+        dispatcher = null;
+        dispatcher = new DispatcherTimer(interval, DispatcherPriority.ApplicationIdle, (s, e) =>
+        {
+            dispatcher?.Stop();
+            action.Invoke();
+        }, Dispatcher.CurrentDispatcher);
+        dispatcher?.Start();
+
+        return dispatcher;
+    }
 }
