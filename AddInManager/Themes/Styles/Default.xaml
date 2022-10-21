@@ -1,10 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
-                    xmlns:converters="clr-namespace:RevitAddinManager.Themes.Converters">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
+    xmlns:converters="clr-namespace:RevitAddinManager.Themes.Converters">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary
-            Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+        <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
         <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" /> -->
         <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" /> -->
     </ResourceDictionary.MergedDictionaries>
@@ -14,23 +14,38 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid Width="15" Height="13" SnapsToDevicePixels="True">
-                        <Rectangle Width="9" Height="9" Stroke="#919191" SnapsToDevicePixels="true">
+                    <Grid
+                        Width="15"
+                        Height="13"
+                        SnapsToDevicePixels="True">
+                        <Rectangle
+                            Width="9"
+                            Height="9"
+                            SnapsToDevicePixels="true"
+                            Stroke="#919191">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.5,0">
-                                    <GradientStop Color="White" Offset="0" />
-                                    <GradientStop Color="Silver" Offset="0.5" />
-                                    <GradientStop Color="LightGray" Offset="1" />
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,2">
+                                    <GradientStop Offset="0" Color="White" />
+                                    <GradientStop Offset="0.5" Color="Silver" />
+                                    <GradientStop Offset="1" Color="LightGray" />
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Rectangle x:Name="ExpandPath" Width="1" Height="5" Stroke="Black"
-                                   SnapsToDevicePixels="true" />
-                        <Rectangle Width="5" Height="1" Stroke="Black" SnapsToDevicePixels="true" />
+                        <Rectangle
+                            x:Name="ExpandPath"
+                            Width="1"
+                            Height="5"
+                            SnapsToDevicePixels="true"
+                            Stroke="Black" />
+                        <Rectangle
+                            Width="5"
+                            Height="1"
+                            SnapsToDevicePixels="true"
+                            Stroke="Black" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Visibility" TargetName="ExpandPath" Value="Collapsed" />
+                            <Setter TargetName="ExpandPath" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -48,7 +63,7 @@
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="19" Width="Auto" />
+                            <ColumnDefinition Width="Auto" MinWidth="19" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
@@ -57,39 +72,56 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <!-- Connecting Lines -->
-                        <Rectangle x:Name="HorLn" Margin="9,1,0,0" Height="1" Stroke="#DCDCDC"
-                                   SnapsToDevicePixels="True" />
-                        <Rectangle x:Name="VerLn" Width="1" Stroke="#DCDCDC" Margin="0,0,1,0"
-                                   Grid.RowSpan="2" SnapsToDevicePixels="true" Fill="White" />
-                        <ToggleButton Margin="-1,0,0,0" x:Name="Expander"
-                                      Style="{StaticResource ExpandCollapseToggleStyle}"
-                                      IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
-                                      ClickMode="Press" />
-                        <Border Name="Bd" Grid.Column="1"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                            <ContentPresenter x:Name="PART_Header" ContentSource="Header"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              MinWidth="20" />
+                        <!--  Connecting Lines  -->
+                        <Rectangle
+                            x:Name="HorLn"
+                            Height="1"
+                            Margin="9,1,0,0"
+                            SnapsToDevicePixels="True"
+                            Stroke="#DCDCDC" />
+                        <Rectangle
+                            x:Name="VerLn"
+                            Grid.RowSpan="2"
+                            Width="1"
+                            Margin="0,0,1,0"
+                            Fill="White"
+                            SnapsToDevicePixels="true"
+                            Stroke="#DCDCDC" />
+                        <ToggleButton
+                            x:Name="Expander"
+                            Margin="-1,0,0,0"
+                            ClickMode="Press"
+                            IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                            Style="{StaticResource ExpandCollapseToggleStyle}" />
+                        <Border
+                            Name="Bd"
+                            Grid.Column="1"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter
+                                x:Name="PART_Header"
+                                MinWidth="20"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                ContentSource="Header" />
                         </Border>
-                        <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1"
-                                        Grid.ColumnSpan="2" />
+                        <ItemsPresenter
+                            x:Name="ItemsHost"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2" />
                     </Grid>
                     <ControlTemplate.Triggers>
 
-                        <!-- This trigger changes the connecting lines if the item is the last in the list -->
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource LineConverter}}"
-                            Value="true">
+                        <!--  This trigger changes the connecting lines if the item is the last in the list  -->
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource LineConverter}}" Value="true">
                             <Setter TargetName="VerLn" Property="Height" Value="9" />
                             <Setter TargetName="VerLn" Property="VerticalAlignment" Value="Top" />
                         </DataTrigger>
                         <Trigger Property="IsExpanded" Value="false">
-                            <Setter TargetName="ItemsHost" Property="Visibility"
-                                    Value="Collapsed" />
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="HasItems" Value="false">
                             <Setter TargetName="Expander" Property="Visibility" Value="Hidden" />
@@ -109,10 +141,8 @@
                             <Setter TargetName="PART_Header" Property="MinHeight" Value="19" />
                         </MultiTrigger>
                         <Trigger Property="IsSelected" Value="true">
-                            <Setter TargetName="Bd" Property="Background"
-                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                         </Trigger>
                         <!-- <MultiTrigger> -->
                         <!--     <MultiTrigger.Conditions> -->
@@ -123,8 +153,7 @@
                         <!--     <Setter Property="Foreground" Value="White" /> -->
                         <!-- </MultiTrigger> -->
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -137,11 +166,9 @@
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsSelected" Value="true" />
-                    <Condition Property="control:ExtendedTreeView.ContextMenuOpened"
-                               Value="true" />
+                    <Condition Property="control:ExtendedTreeView.ContextMenuOpened" Value="true" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                 <Setter Property="Foreground" Value="Red" />
             </MultiTrigger>
         </Style.Triggers>

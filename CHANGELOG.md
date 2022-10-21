@@ -1,4 +1,6 @@
 # Changelog
+- 2022-10-16 **1.3.8**
+  - Support save keep last window size change. 
 - 2022-09-11 **1.3.7**
   - Show detail version installed in title 
   - Improve drag window only in DataGrid tab Command and tab App
