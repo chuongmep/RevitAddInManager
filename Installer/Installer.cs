@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using ICSharpCode.SharpZipLib.Zip;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
+using File = System.IO.File;
 
 const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "RevitAddinManager";
 const string outputName = "RevitAddinManager";
 const string outputDir = "output";
-const string version = "1.3.8";
+const string version = "1.3.9";
 
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project
@@ -44,8 +47,10 @@ var project = new Project
 
 MajorUpgrade.Default.AllowSameVersionUpgrades = true;
 project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
-project.BuildMsi();
-
+string buildMsi = project.BuildMsi();
+FileInfo fileInfo = new FileInfo(buildMsi);
+string zipfileName = Path.Combine(fileInfo.Directory.FullName, fileName + ".zip");
+CompressFile(buildMsi, zipfileName);
 WixEntity[] GenerateWixEntities()
 {
     var versionRegex = new Regex(@"\d+");
@@ -67,4 +72,43 @@ WixEntity[] GenerateWixEntities()
     }
 
     return versionStorages.Select(storage => new Dir(storage.Key, storage.Value.ToArray())).Cast<WixEntity>().ToArray();
+}
+
+
+void CompressFile(string filePath, string OutputFilePath, int compressLevel = 9)
+{
+    try
+    {
+        using (ZipOutputStream OutputStream = new ZipOutputStream(File.Create(OutputFilePath)))
+        {
+            // Define the compression level
+            // 0 - store only to 9 - means best compression
+            OutputStream.SetLevel(compressLevel);
+            byte[] buffer = new byte[4096];
+            ZipEntry entry = new ZipEntry(Path.GetFileName(filePath));
+            entry.DateTime = DateTime.Now;
+            OutputStream.PutNextEntry(entry);
+
+            using (FileStream fs = File.OpenRead(filePath))
+            {
+                // Using a fixed size buffer here makes no noticeable difference for output
+                // but keeps a lid on memory usage.
+                int sourceBytes;
+                do
+                {
+                    sourceBytes = fs.Read(buffer, 0, buffer.Length);
+                    OutputStream.Write(buffer, 0, sourceBytes);
+                } while (sourceBytes > 0);
+            }
+
+            OutputStream.Finish();
+            OutputStream.Close();
+            Console.WriteLine("Zip file has been built: " + OutputFilePath);
+        }
+    }
+    catch (Exception ex)
+    {
+        // No need to rethrow the exception as for our purposes its handled.
+        Console.WriteLine("Exception during processing {0}", ex);
+    }
 }
