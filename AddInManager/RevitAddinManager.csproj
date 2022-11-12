@@ -7,7 +7,7 @@
     <UseWindowsForms>false</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
     <Configurations>Debug R22;Debug R23</Configurations>
-    <Configurations>$(Configurations);Release R14;Release R15;Release R16;Release R17;Release R18;Release R19;Release R20;Release R21;Release R22;Release R23</Configurations>
+    <Configurations>$(Configurations);Release R18;Release R19;Release R20;Release R21;Release R22;Release R23</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <DebugSymbols>true</DebugSymbols>
@@ -18,22 +18,6 @@
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Configuration.Contains('R14'))">
-    <RevitVersion>2014</RevitVersion>
-    <DefineConstants>$(DefineConstants);R14</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Configuration.Contains('R15'))">
-    <RevitVersion>2015</RevitVersion>
-    <DefineConstants>$(DefineConstants);R15</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Configuration.Contains('R16'))">
-    <RevitVersion>2016</RevitVersion>
-    <DefineConstants>$(DefineConstants);R16</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Configuration.Contains('R17'))">
-    <RevitVersion>2017</RevitVersion>
-    <DefineConstants>$(DefineConstants);R17</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R18'))">
     <RevitVersion>2018</RevitVersion>
@@ -73,8 +57,8 @@
     <None Remove="Resources\folder.png" />
   </ItemGroup>
   <ItemGroup>
-<!--    <PackageReference Include="Chuongmep.RevitAPI" Version="1.0.1" />-->
-    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" />
+    <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
   </ItemGroup>
 
   <ItemGroup>
