@@ -1,4 +1,6 @@
 # Changelog
+- 2022-11-26 **1.4.0**
+  - Support Revit 2024 Preview Release
 - 2022-11-8 **1.3.9**
   - Fix problem with some user install msi with PC company have policy [#41](https://github.com/chuongmep/RevitAddInManager/issues/41).
 - 2022-10-16 **1.3.8**
