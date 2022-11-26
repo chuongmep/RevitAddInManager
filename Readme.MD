@@ -95,6 +95,7 @@ The product will be expanded in the future in process to support mutiple platfor
 Please follow last release at section [Release](https://github.com/chuongmep/RevitAddInManager/releases/latest)
 
 ### Version support : From Revit 2018 to Revit 2023.
+### Version support : From Revit 2018 to Revit 2024.
 
 ---
 
