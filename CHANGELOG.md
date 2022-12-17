@@ -1,4 +1,6 @@
 # Changelog
+- 2022-12-18 **1.4.1**
+	- Fix problem relative path \\\\mac... in MACOS [#40](https://github.com/chuongmep/RevitAddInManager/issues/40)
 - 2022-11-26 **1.4.0**
   - Support Revit 2024 Preview Release
 - 2022-11-8 **1.3.9**
