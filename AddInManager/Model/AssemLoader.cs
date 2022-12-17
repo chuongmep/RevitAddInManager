@@ -66,7 +66,7 @@ public class AssemLoader
 
     public Assembly LoadAddinsToTempFolder(string originalFilePath, bool parsingOnly)
     {
-        if (string.IsNullOrEmpty(originalFilePath) || originalFilePath.StartsWith("\\") || !File.Exists(originalFilePath))
+        if (string.IsNullOrEmpty(originalFilePath)|| !File.Exists(originalFilePath))
         {
             return null;
         }
