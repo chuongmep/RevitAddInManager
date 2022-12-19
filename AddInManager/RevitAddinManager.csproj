@@ -6,6 +6,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <UseWindowsForms>false</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <Configurations>Debug R22;Debug R23;Debug R24</Configurations>
     <Configurations>$(Configurations);Release R18;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
   </PropertyGroup>
@@ -63,6 +64,7 @@
   <ItemGroup>
     <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
     <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
