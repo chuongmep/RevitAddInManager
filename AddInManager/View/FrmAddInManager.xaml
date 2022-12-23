@@ -286,14 +286,34 @@
                 </TabItem>
             </TabControl>
         </Grid>
-        <StackPanel Grid.Row="2">
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
             <Button
+                Width="30"
+                Height="30"
+                Margin="0,3,0,0"
+                VerticalAlignment="Center"
+                BorderBrush="Transparent"
+                Command="{Binding ReloadCommand}"
+                ToolTip="Reload Assembly (F5)">
+                <Button.Background>
+                    <ImageBrush
+                        AlignmentX="Left"
+                        AlignmentY="Center"
+                        ImageSource="../Resources/reload.png" />
+                </Button.Background>
+            </Button>
+            <Button
+                Grid.Column="1"
                 Margin="1,3,1,0"
                 Command="{Binding ExecuteAddinCommand}"
                 Content="Run"
                 IsEnabled="{Binding IsCanRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="Execute Addin Selected" />
-        </StackPanel>
+        </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

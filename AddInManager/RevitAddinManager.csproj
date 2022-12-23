@@ -69,6 +69,8 @@
     <Resource Include="Resources\dev.ico" />
     <Resource Include="Resources\dev.png" />
     <Resource Include="Resources\folder.png" />
+    <None Remove="Resources\reload.png" />
+    <Resource Include="Resources\reload.png" />
   </ItemGroup>
 
   <ItemGroup>
