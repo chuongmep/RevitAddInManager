@@ -1,4 +1,6 @@
 # Changelog
+- 2022-12-23 **1.4.2**
+  - Keep save window position when close and open again (useful for multi monitor).
 - 2022-12-18 **1.4.1**
 	- Fix problem relative path \\\\mac... in MACOS [#40](https://github.com/chuongmep/RevitAddInManager/issues/40)
 - 2022-11-26 **1.4.0**
