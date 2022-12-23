@@ -41,8 +41,8 @@ public class App : IExternalApplication
         var ribbonPanel = application.CreateRibbonPanel("External Tools");
         var pulldownButtonData = new PulldownButtonData("Options", "Add-in Manager");
         var pulldownButton = (PulldownButton)ribbonPanel.AddItem(pulldownButtonData);
-        pulldownButton.Image = ToImageSource(Resource.dev1, BitmapSourceConverter.ImageType.Small);
-        pulldownButton.LargeImage = ToImageSource(Resource.dev1, BitmapSourceConverter.ImageType.Large);
+        pulldownButton.Image = ToImageSource(Resource.dev1, ImageType.Small);
+        pulldownButton.LargeImage = ToImageSource(Resource.dev1, ImageType.Large);
         AddPushButton(pulldownButton, typeof(AddInManagerManual), "Add-In Manager(Manual Mode)");
         AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");

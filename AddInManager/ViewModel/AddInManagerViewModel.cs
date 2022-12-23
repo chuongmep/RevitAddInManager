@@ -22,7 +22,8 @@ public class AddInManagerViewModel : ViewModelBase
     private ElementSet Elements { get; set; }
     private RevitEvent RevitEvent = new RevitEvent();
     public AssemLoader AssemLoader { get; set; }
-
+    public int AppWidth { get; set; } = 400;
+    public int AppHeight { get; set; } = 600;
     public AddinManagerBase MAddinManagerBase { get; set; }
 
     private ObservableCollection<AddinModel> commandItems;

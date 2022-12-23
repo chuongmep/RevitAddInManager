@@ -18,8 +18,6 @@ public partial class FrmAddInManager : Window
         InitializeComponent();
         DataContext = vm;
         viewModel = vm;
-        this.Width = Properties.App.Default.AppWidth;
-        this.Height = Properties.App.Default.AppHeight;
         App.FrmAddInManager = this;
         ThemManager.ChangeThem(true);
         Title += DefaultSetting.Version;
