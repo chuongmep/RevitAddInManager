@@ -17,7 +17,7 @@ namespace RevitAddinManager.Model
         public static void SetRevitAsWindowOwner(this Window window)
         {
             if (null == window) { return; }
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.WindowStartupLocation = WindowStartupLocation.Manual;
             WindowInteropHelper helper = new WindowInteropHelper(window);
             helper.Owner = GetActivateWindow();
             window.Loaded += delegate { FrmControl.IsOpened = true; };

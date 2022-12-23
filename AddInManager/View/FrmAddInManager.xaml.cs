@@ -22,7 +22,6 @@ public partial class FrmAddInManager : Window
         ThemManager.ChangeThem(true);
         Title += DefaultSetting.Version;
     }
-
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
         if (viewModel.MAddinManagerBase.ActiveCmdItem != null && TabControl.SelectedIndex == 0)
@@ -157,5 +156,12 @@ public partial class FrmAddInManager : Window
         dispatcher?.Start();
 
         return dispatcher;
+    }
+
+    private void OnCloseApp(object sender, EventArgs e)
+    {
+        Properties.App.Default.AppLeft = Left;
+        Properties.App.Default.AppTop = Top;
+        Properties.App.Default.Save();
     }
 }

@@ -16,10 +16,13 @@
     d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
     d:DesignHeight="600"
     d:DesignWidth="400"
+    Closed="OnCloseApp"
     FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
     Icon="../Resources/dev.ico"
+    Left="{model:SettingBinding AppLeft}"
     PreviewKeyDown="CloseFormEvent"
     SizeChanged="FrmSizeChanged"
+    Top="{model:SettingBinding AppTop}"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>

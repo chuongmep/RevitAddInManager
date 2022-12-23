@@ -24,6 +24,8 @@ public class AddInManagerViewModel : ViewModelBase
     public AssemLoader AssemLoader { get; set; }
     public int AppWidth { get; set; } = 400;
     public int AppHeight { get; set; } = 600;
+    public int AppLeft { get; set; } = 0;
+    public int AppTop { get; set; } = 0;
     public AddinManagerBase MAddinManagerBase { get; set; }
 
     private ObservableCollection<AddinModel> commandItems;
