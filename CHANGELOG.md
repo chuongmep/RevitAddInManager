@@ -1,4 +1,6 @@
 # Changelog
+- 2023-02-14 **1.4.3**
+  - Fix Window Stuck Off Screen [#43](https://github.com/chuongmep/RevitAddInManager/issues/43)
 - 2022-12-23 **1.4.2**
   - Keep save window position when close and open again (useful for multi monitor).
 - 2022-12-18 **1.4.1**
