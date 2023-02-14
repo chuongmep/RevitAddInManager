@@ -20,6 +20,7 @@ public sealed class AddinManagerBase
         }
         FrmAddInManager = new View.FrmAddInManager(vm);
         FrmAddInManager.SetRevitAsWindowOwner();
+        FrmAddInManager.SetMonitorSize();
         FrmAddInManager.Show();
         return Result.Failed;
     }

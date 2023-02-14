@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using Autodesk.Revit.DB;
+using Size = System.Drawing.Size;
 
 namespace RevitAddinManager.Model
 {
@@ -23,6 +25,27 @@ namespace RevitAddinManager.Model
             window.Loaded += delegate { FrmControl.IsOpened = true; };
             window.Closed += delegate { FrmControl.IsOpened = false; };
             window.Closing += SetActivateWindow;
+           
+        }
+        
+        /// <summary>
+        /// Set correct position for window when monitor is changed
+        /// </summary>
+        /// <param name="window"></param>
+        public static void SetMonitorSize(this Window window)
+        {
+            ScreenInformation screenInformation = new ScreenInformation();
+            int monitorCount = screenInformation.GetMonitorCount();
+            double appLeft = Properties.App.Default.AppLeft;
+            int width = MonitorControl.GetMonitorSize().Width;
+            int height = MonitorControl.GetMonitorSize().Height;
+            if (monitorCount==1 && appLeft>width)
+            {
+                Properties.App.Default.AppLeft = width *0.5;
+                Properties.App.Default.AppTop = height * 0.5;
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                Properties.App.Default.Save();
+            }
         }
 
         private static void SetActivateWindow(object sender, CancelEventArgs e)
