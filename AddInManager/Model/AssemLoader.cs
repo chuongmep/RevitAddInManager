@@ -157,6 +157,14 @@ public class AssemLoader
                     {
                         ass = ass.Substring(0, ass.Length - ".resources".Length);
                     }
+                    // Skip searching for the assembly if assembly with specified name is already loaded
+                    foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        if (String.Compare(assembly.GetName().Name, ass, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            return null;
+                        }
+                    }
                     filePath = SearchAssemblyFileInTempFolder(ass);
                     if (File.Exists(filePath))
                     {
@@ -188,7 +196,9 @@ public class AssemLoader
             var array = new string[] { ".dll", ".exe" };
             var filePath = string.Empty;
             if(string.IsNullOrEmpty(assemName)) return String.Empty;
-            var str = assemName.Substring(0, assemName.IndexOf(','));
+            // Avoid ArgumentOutOfRangeException from .Substring() by checking length parameter
+            var strLength = assemName.IndexOf(',');
+            var str = strLength == -1 ? assemName : assemName.Substring(0, strLength);
             foreach (var str2 in array)
             {
                 filePath = tempFolder + "\\" + str + str2;
@@ -214,7 +224,9 @@ public class AssemLoader
             ".exe"
         };
         string filePath;
-        var ass = assemName.Substring(0, assemName.IndexOf(','));
+        // Avoid ArgumentOutOfRangeException from .Substring() by checking length parameter
+        var assLength = assemName.IndexOf(',');
+        var ass = assLength == -1 ? assemName : assemName.Substring(0, assLength);
         foreach (var str in extensions)
         {
             filePath = dotnetDir + "\\" + ass + str;

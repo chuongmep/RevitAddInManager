@@ -41,9 +41,12 @@ public partial class AssemblyLoader : Window
         openFileDialog.FileName = str + ".*";
         if (openFileDialog.ShowDialog() == true)
         {
-            ShowWarning();
+            TbxAssemPath.Text = openFileDialog.FileName;
         }
-        TbxAssemPath.Text = openFileDialog.FileName;
+        else
+        {
+            TbxAssemPath.Text = string.Empty;
+        }
     }
 
     private void OKButtonClick(object sender, RoutedEventArgs e)
@@ -52,10 +55,8 @@ public partial class AssemblyLoader : Window
         {
             resultPath = TbxAssemPath.Text;
             isFound = true;
-        }
-        else
-        {
-            ShowWarning();
+            // Set ShowDialog() to return true after closing with Ok button
+            this.DialogResult = true;
         }
         Close();
     }
