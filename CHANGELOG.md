@@ -1,4 +1,6 @@
 # Changelog
+- 2023-03-12 **1.4.4**
+  - Fix load assembly with specified name is already loaded [#45](https://github.com/chuongmep/RevitAddInManager/pull/45)
 - 2023-02-14 **1.4.3**
   - Fix Window Stuck Off Screen [#43](https://github.com/chuongmep/RevitAddInManager/issues/43)
 - 2022-12-23 **1.4.2**
