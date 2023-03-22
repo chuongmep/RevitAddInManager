@@ -22,16 +22,19 @@ public partial class FrmAddInManager : Window
         ThemManager.ChangeThem(true);
         Title += DefaultSetting.Version;
     }
+
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
         if (viewModel.MAddinManagerBase.ActiveCmdItem != null && TabControl.SelectedIndex == 0)
         {
             viewModel.MAddinManagerBase.ActiveCmdItem.Description = TbxDescription.Text;
         }
+
         if (viewModel.MAddinManagerBase.ActiveAppItem != null && TabControl.SelectedIndex == 1)
         {
             viewModel.MAddinManagerBase.ActiveAppItem.Description = TbxDescription.Text;
         }
+
         viewModel.MAddinManagerBase.AddinManager.SaveToAimIni();
     }
 
@@ -46,6 +49,7 @@ public partial class FrmAddInManager : Window
         else if (e.Delta < 0)
             ZoomOut();
     }
+
     void ZoomIn()
     {
         if (TreeViewCommand.FontSize <= 30)
@@ -53,9 +57,10 @@ public partial class FrmAddInManager : Window
             TreeViewCommand.FontSize += 2f;
         }
     }
+
     void ZoomOut()
     {
-        if(TreeViewCommand.FontSize >= 10)
+        if (TreeViewCommand.FontSize >= 10)
         {
             TreeViewCommand.FontSize -= 2f;
         }
@@ -68,7 +73,11 @@ public partial class FrmAddInManager : Window
         {
             tbxSearch.Focus();
         }
-        else if (e.Key == Key.Up && indexCmd==0 && TabCommand.IsSelected)
+        else if (e.Key == Key.Up && Keyboard.Modifiers == ModifierKeys.Control && TabCommand.IsSelected)
+        {
+            tbxSearch.Focus();
+        }
+        else if (e.Key == Key.Up && indexCmd == 0 && TabCommand.IsSelected)
         {
             TabCommand.Focus();
         }
@@ -80,8 +89,8 @@ public partial class FrmAddInManager : Window
         {
             viewModel.ExecuteAddinCommandClick();
         }
-
     }
+
     private void HandleTreeViewAppKeyPress(object sender, KeyEventArgs e)
     {
         int indexCmd = TreeViewApp.Items.IndexOf(TreeViewApp.SelectedItem);
@@ -89,7 +98,11 @@ public partial class FrmAddInManager : Window
         {
             tbxSearch.Focus();
         }
-        else if (e.Key == Key.Up && indexCmd==0 && TabApp.IsSelected)
+        else if (e.Key == Key.Up && Keyboard.Modifiers == ModifierKeys.Control && TabApp.IsSelected)
+        {
+            tbxSearch.Focus();
+        }
+        else if (e.Key == Key.Up && indexCmd == 0 && TabApp.IsSelected)
         {
             TabApp.Focus();
         }
@@ -101,12 +114,11 @@ public partial class FrmAddInManager : Window
         {
             viewModel.ExecuteAddinCommandClick();
         }
-
     }
 
     private void HandleTextboxKeyPress(object sender, KeyEventArgs e)
     {
-        if(e.Key == Key.Down)
+        if (e.Key == Key.Down)
         {
             if (viewModel.IsTabCmdSelected)
             {
@@ -116,7 +128,7 @@ public partial class FrmAddInManager : Window
             {
                 TreeViewApp.Focus();
             }
-            else if(viewModel.IsTabStartSelected)
+            else if (viewModel.IsTabStartSelected)
             {
                 DataGridStartup.Focus();
             }
@@ -125,14 +137,15 @@ public partial class FrmAddInManager : Window
                 LogControl.Focus();
             }
         }
-        
     }
 
     private void CloseFormEvent(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape) Close();
     }
+
     private DispatcherTimer SizeChangedDebouncer;
+
     private void FrmSizeChanged(object sender, SizeChangedEventArgs e)
     {
         SizeChangedDebouncer = Debounce(SizeChangedDebouncer, TimeSpan.FromSeconds(1), SaveUserSettings);
@@ -144,7 +157,8 @@ public partial class FrmAddInManager : Window
         Properties.App.Default.AppWidth = Width;
         Properties.App.Default.Save();
     }
-    private  DispatcherTimer Debounce(DispatcherTimer dispatcher, TimeSpan interval, Action action)
+
+    private DispatcherTimer Debounce(DispatcherTimer dispatcher, TimeSpan interval, Action action)
     {
         dispatcher?.Stop();
         dispatcher = null;
