@@ -4,10 +4,12 @@ using RevitAddinManager.Command;
 using RevitAddinManager.View;
 using System.Reflection;
 using System.Windows;
+using Autodesk.Windows;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
 using RevitAddinManager.ViewModel;
 using static RevitAddinManager.Model.BitmapSourceConverter;
+using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 
 namespace RevitAddinManager;
 
@@ -47,6 +49,20 @@ public class App : IExternalApplication
         AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
         AddPushButton(pulldownButton, typeof(DockableCommand), "Show/Hide Panel(Debug-Trace-Events)");
+        var tab = ComponentManager.Ribbon.FindTab("Modify");
+        if (tab != null)
+        {
+            var adwPanel = new Autodesk.Windows.RibbonPanel();
+            adwPanel.CopyFrom(GetRibbonPanel(ribbonPanel));
+            tab.Panels.Add(adwPanel);
+        }
+
+    }
+    private static readonly FieldInfo RibbonPanelField = typeof(Autodesk.Revit.UI.RibbonPanel).GetField("m_RibbonPanel", BindingFlags.Instance | BindingFlags.NonPublic);
+       
+    public static Autodesk.Windows.RibbonPanel GetRibbonPanel(Autodesk.Revit.UI.RibbonPanel panel)
+    {
+        return RibbonPanelField.GetValue(panel) as Autodesk.Windows.RibbonPanel;
     }
 
     private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)

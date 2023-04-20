@@ -63,6 +63,7 @@
   <ItemGroup>
     <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
     <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Chuongmep.Revit.Api.AdWindows" Version="$(RevitVersion).*" />
   </ItemGroup>
 
   <ItemGroup>
