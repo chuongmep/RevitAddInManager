@@ -1,4 +1,6 @@
 # Changelog
+- 2023-04-20 **1.4.5**
+  - Support open add-in manager from modify tab in Revit
 - 2023-03-12 **1.4.4**
   - Fix load assembly with specified name is already loaded [#45](https://github.com/chuongmep/RevitAddInManager/pull/45)
 - 2023-02-14 **1.4.3**

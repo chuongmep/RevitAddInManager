@@ -1,15 +1,12 @@
-﻿using System.IO;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
 using RevitAddinManager.View;
 using System.Reflection;
-using System.Windows;
 using Autodesk.Windows;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
 using RevitAddinManager.ViewModel;
 using static RevitAddinManager.Model.BitmapSourceConverter;
-using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 
 namespace RevitAddinManager;
 
