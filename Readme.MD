@@ -102,32 +102,40 @@ Please follow last release at section [Release](https://github.com/chuongmep/Rev
 
 - Quick Example to Execute a Command : 
 ``` cs
+using Autodesk.Revit.Attributes;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
 [Transaction(TransactionMode.Manual)]
-    public class TestCommand : IExternalCommand
+public class TestCommand : IExternalCommand
+{
+    public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            //Code Something 
-            return Result.Succeeded;
-        }
+        //Code Something 
+        return Result.Succeeded;
     }
+}
 ```
-- Quick Example to Debug or Trace result output :
+- Quick Example to **Debug** or **Trace** result output :
 
 ```cs
+using Autodesk.Revit.Attributes;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
 [Transaction(TransactionMode.Manual)]
-    public class TraceWriteLine : IExternalCommand
+public class TraceWriteLine : IExternalCommand
+{
+    public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            //Trace or Debug Something
-            Debug.Write($"Message output");
-            Debug.WriteLine($"Message output");
-            Trace.Write($"Message output");
-            Trace.WriteLine($"Message output");
-            return Result.Succeeded;
-        }
+        //Trace or Debug Something
+        Debug.Write($"Message output");
+        Debug.WriteLine($"Message output");
+        Trace.Write($"Message output");
+        Trace.WriteLine($"Message output");
+        return Result.Succeeded;
     }
+}
 ```
 You can visit to wiki and read document or access by this [link](https://github.com/chuongmep/RevitAddInManager/wiki).
 
