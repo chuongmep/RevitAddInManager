@@ -74,7 +74,7 @@ public class App : IExternalApplication
     {
         var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
         buttonData.AvailabilityClassName = typeof(BipCheckerCommandAvail).FullName;
-        buttonData.ToolTip = "Check the parameter of the selected element";
+        buttonData.ToolTip = "Check Built-in Parameter of the Element";
         pullDownButton.AddPushButton(buttonData);
     }
     private void DocumentClosed(object sender, Autodesk.Revit.DB.Events.DocumentClosedEventArgs e)
