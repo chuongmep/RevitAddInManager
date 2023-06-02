@@ -38,6 +38,7 @@ The product will be expanded in the future in process to support mutiple platfor
     - AddInManagerReadOnly
     - Application
 - Startup manager
+- Bip Checker - Check Built-in Parameter of the Element
 - **Debug / Trace** : Support Show result use [Debug](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.debug?view=net-6.0) or [Trace](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.trace?view=net-6.0) to show result in Revit
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
@@ -65,7 +66,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] AddInManagerManual
 - [x] AddInManagerFaceless
 - [x] AddInManagerReadOnly
-
+- [x] Bip Checker
 ### Application
 
 - [x] Preview
@@ -143,6 +144,7 @@ Some topic common:
 - [How to install Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-install-AddinManager)
 - [How to Uninstall Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-Uninstall-AddinManager)
 - [How To Use Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Add-In-Manager)
+- [How To Use Bip Checker](https://github.com/chuongmep/RevitElementBipChecker)
 - [Fix Problem With Installer AddinManager](https://github.com/chuongmep/RevitAddInManager/wiki/Fix-Problem-With-Installer-AddinManager)
 - [How To Use Debug Trace Show Output](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Debug-Trace-Show-Output)
 
