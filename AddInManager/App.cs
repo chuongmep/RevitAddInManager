@@ -6,6 +6,7 @@ using Autodesk.Windows;
 using RevitAddinManager.Model;
 using RevitAddinManager.View.Control;
 using RevitAddinManager.ViewModel;
+using RevitElementBipChecker.Command;
 using static RevitAddinManager.Model.BitmapSourceConverter;
 
 namespace RevitAddinManager;
@@ -46,6 +47,7 @@ public class App : IExternalApplication
         AddPushButton(pulldownButton, typeof(AddInManagerFaceless), "Add-In Manager(Manual Mode,Faceless)");
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
         AddPushButton(pulldownButton, typeof(DockableCommand), "Show/Hide Panel(Debug-Trace-Events)");
+        AddPushButtonBipChecker(pulldownButton, typeof(BipCheckerCommand), "Bip Checker");
         var tab = ComponentManager.Ribbon.FindTab("Modify");
         if (tab != null)
         {
@@ -68,7 +70,13 @@ public class App : IExternalApplication
         buttonData.AvailabilityClassName = typeof(AddinManagerCommandAvail).FullName;
         pullDownButton.AddPushButton(buttonData);
     }
-
+    private static void AddPushButtonBipChecker(PulldownButton pullDownButton, Type command, string buttonText)
+    {
+        var buttonData = new PushButtonData(command.FullName, buttonText, Assembly.GetAssembly(command).Location, command.FullName);
+        buttonData.AvailabilityClassName = typeof(BipCheckerCommandAvail).FullName;
+        buttonData.ToolTip = "Check the parameter of the selected element";
+        pullDownButton.AddPushButton(buttonData);
+    }
     private void DocumentClosed(object sender, Autodesk.Revit.DB.Events.DocumentClosedEventArgs e)
     {
         FrmAddInManager?.Close();

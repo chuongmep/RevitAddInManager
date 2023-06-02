@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -15,8 +17,10 @@ namespace Test
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            string tempPath = Path.GetTempPath();
-            MessageBox.Show(tempPath);
+            // Get all command id 
+            RevitCommandId lookupCommandId = RevitCommandId.LookupCommandId("CustomCtrl_%CustomCtrl_%Add-Ins%Explorer%RevitDBExplorer.Command");
+            // execute the command
+            commandData.Application.PostCommand(lookupCommandId);
             return Result.Succeeded;
         }
     }

@@ -61,9 +61,15 @@
     <None Remove="Resources\folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
-    <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
-    <PackageReference Include="Chuongmep.Revit.Api.AdWindows" Version="$(RevitVersion).*" />
+    <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Chuongmep.Revit.Api.AdWindows" Version="$(RevitVersion).*">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -111,11 +117,16 @@
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RevitElementBipChecker\RevitElementBipChecker.csproj" />
+  </ItemGroup>
   
   <Target Name="CopyFiles" AfterTargets="CoreBuild">
     <ItemGroup>
       <RootItem Include="$(ProjectDir)*.addin" />
-      <AddinItem Include="$(TargetDir)$(AssemblyName).*" />
+      <AddinItem Include="$(TargetDir)*.dll" />
+      <AddinItem Include="$(TargetDir)*.pdb" />
     </ItemGroup>
 
     <PropertyGroup>
@@ -129,7 +140,7 @@
     <ItemGroup>
       <AddinFiles Include="$(RootDir)**\*.*" />
     </ItemGroup>
-    <Message Text="Copy files to Addin folder" Importance="high"/>
+    <Message Text="Copy files to Addin folder" Importance="high" />
     <Copy SourceFiles="@(AddinFiles)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" />
   </Target>
 

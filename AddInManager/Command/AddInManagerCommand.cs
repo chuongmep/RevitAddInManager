@@ -19,7 +19,6 @@ public class AddInManagerManual : IExternalCommand
         StaticUtil.TransactMode = TransactionMode.Manual;
         Result result = AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
         return result;
-
     }
 }
 
@@ -42,11 +41,15 @@ public class AddInManagerReadOnly : IExternalCommand
         return AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
     }
 }
- public class AddinManagerCommandAvail : IExternalCommandAvailability {
-        public AddinManagerCommandAvail() {
-        }
 
-        public bool IsCommandAvailable(UIApplication uiApp, CategorySet selectedCategories) {
-            return true;
-        }
+public class AddinManagerCommandAvail : IExternalCommandAvailability
+{
+    public AddinManagerCommandAvail()
+    {
     }
+
+    public bool IsCommandAvailable(UIApplication uiApp, CategorySet selectedCategories)
+    {
+        return true;
+    }
+}
