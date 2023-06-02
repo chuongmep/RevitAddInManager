@@ -1,4 +1,6 @@
 # Changelog
+- 2023-06-02 **1.4.6**
+  - Supported Button Quick Bip Checker - [RevitElementBipChecker](https://github.com/chuongmep/RevitElementBipChecker)
 - 2023-04-20 **1.4.5**
   - Support open add-in manager from modify tab in Revit
 - 2023-03-12 **1.4.4**

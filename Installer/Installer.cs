@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using ICSharpCode.SharpZipLib.Zip;
@@ -15,7 +14,7 @@ const string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\";
 const string projectName = "RevitAddinManager";
 const string outputName = "RevitAddinManager";
 const string outputDir = "output";
-const string version = "1.4.5";
+const string version = "1.4.6";
 
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project
