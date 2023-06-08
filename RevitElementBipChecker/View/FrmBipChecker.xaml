@@ -141,6 +141,7 @@
                 <DataGridTextColumn Binding="{Binding BuiltInParameter}" Header="BuiltInParameter" />
                 <DataGridTextColumn Binding="{Binding ParameterType}" Header="ParameterType" />
                 <DataGridTextColumn Binding="{Binding Type}" Header="Type" />
+                <DataGridTextColumn Binding="{Binding Unit}" Header="Unit" />
                 <DataGridTextColumn Binding="{Binding ReadWrite}" Header="ReadWrite" />
                 <DataGridTextColumn Binding="{Binding Value}" Header="Value" />
                 <DataGridTextColumn Binding="{Binding StringValue}" Header="StringValue" />

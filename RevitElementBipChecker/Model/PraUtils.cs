@@ -82,6 +82,31 @@ namespace RevitElementBipChecker.Model
         }
 
         /// <summary>
+        /// return unit of parameter
+        /// </summary>
+        /// <param name="parameter">parameter</param>
+        /// <returns></returns>
+        public static string GetParameterUnit(this Autodesk.Revit.DB.Parameter parameter)
+        {
+            try
+            {
+#if R18 || R19 || R20
+                DisplayUnitType unitType = parameter.DisplayUnitType;
+                return LabelUtils.GetLabelFor(unitType);
+
+#else
+                ForgeTypeId unitTypeId = parameter.GetUnitTypeId();
+                if (unitTypeId == null) return String.Empty;
+                return LabelUtils.GetLabelForUnit(unitTypeId);
+#endif
+            }
+            catch (Exception)
+            {
+                return String.Empty;
+            }
+        }
+
+        /// <summary>
         /// Check Parameter Is Read Or Write
         /// </summary>
         /// <param name="parameter"></param>

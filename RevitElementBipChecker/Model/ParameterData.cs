@@ -14,6 +14,7 @@ namespace RevitElementBipChecker.Model
             this.ParameterType = parameter.GetParameterType();
             this.GroupName = LabelUtils.GetLabelFor(parameter.Definition.ParameterGroup);
             this.Type = parameter.GetParameterType();
+            this.Unit = parameter.GetParameterUnit();
             this.ReadWrite = parameter.IsReadWrite();
             this.Value = parameter.GetValue();
             this.StringValue = parameter.AsValueString() == null
@@ -32,6 +33,7 @@ namespace RevitElementBipChecker.Model
         public string TypeOrInstance { get; set; }
         public string BuiltInParameter { get; set; }
         public string Type { get; set; }
+        public string Unit { get; set; }
         public string ReadWrite { get; set; }
         public string Value { get; set; }
         public string StringValue { get; set; }
