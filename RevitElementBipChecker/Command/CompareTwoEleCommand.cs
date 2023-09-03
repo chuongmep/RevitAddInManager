@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
@@ -22,10 +23,25 @@ public class CompareTwoEleCommand : IExternalCommand
         UIApplication uiapp = commandData.Application;
         UIDocument uidoc = uiapp.ActiveUIDocument;
         Document doc = uidoc.Document;
-        Reference r1 = uidoc.Selection.PickObject(ObjectType.Element,"Select first element");
-        Element element1 = doc.GetElement(r1);
-        Reference r2 = uidoc.Selection.PickObject(ObjectType.Element,"Select second element");
-        Element element2 = doc.GetElement(r2);
+        Element element1 = null;
+        Element element2 = null;
+        try
+        {
+            Reference r1 = uidoc.Selection.PickObject(ObjectType.Element, "Select first element");
+            element1 = doc.GetElement(r1);
+            Reference r2 = uidoc.Selection.PickObject(ObjectType.Element, "Select second element");
+            element2 = doc.GetElement(r2);
+        }
+        catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+        {
+            MessageBox.Show("Please Select Two Element");
+            return Result.Failed;
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show("Error: " + e.Message);
+            return Result.Cancelled;
+        }
         CompareBipViewModel viewModel = new CompareBipViewModel(element1, element2);
         FrmCompareBip frmCompareBip = new FrmCompareBip(viewModel);
      
