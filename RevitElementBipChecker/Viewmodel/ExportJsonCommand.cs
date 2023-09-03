@@ -24,7 +24,7 @@ namespace RevitElementBipChecker.Viewmodel
 
             List<ParameterData> parameterDatas = Viewmodel.frmmain.lsBipChecker.Items.Cast<ParameterData>().ToList();
             DataTable dataTable = parameterDatas.ToDataTable();
-            dataTable.Columns.RemoveAt(0);
+            dataTable.Columns.Remove("Parameter");
             dataTable.WriteJson(out string path);
             Process.Start("explorer.exe", path);
 
