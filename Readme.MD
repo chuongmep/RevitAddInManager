@@ -145,6 +145,7 @@ Some topic common:
 - [How to Uninstall Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-Uninstall-AddinManager)
 - [How To Use Add In Manager](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Add-In-Manager)
 - [How To Use Bip Checker](https://github.com/chuongmep/RevitElementBipChecker)
+- [How To Use Compare Parameter Element](https://github.com/chuongmep/RevitAddInManager/wiki/How-to-use-Compare-Parameter-Element)
 - [Fix Problem With Installer AddinManager](https://github.com/chuongmep/RevitAddInManager/wiki/Fix-Problem-With-Installer-AddinManager)
 - [How To Use Debug Trace Show Output](https://github.com/chuongmep/RevitAddInManager/wiki/How-To-Use-Debug-Trace-Show-Output)
 
