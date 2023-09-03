@@ -8,14 +8,10 @@ namespace RevitElementBipChecker.Model
     /// </summary>
     public class RelayCommand : ICommand
     {
-        #region Variables
         private readonly Predicate<object> m_canExecute;
         private readonly Action<object> m_execute;
         private readonly Action _act;
 
-        #endregion
-
-        #region Constructor
         public RelayCommand(Action act)
         {
             _act = act;
@@ -30,9 +26,7 @@ namespace RevitElementBipChecker.Model
             m_execute = execute;
             m_canExecute = canExecute;
         }
-        #endregion
 
-        #region Implementation 
         // Evaluate the command if it is valid to execute
         public bool CanExecute(object parameter = null)
         {
@@ -53,8 +47,6 @@ namespace RevitElementBipChecker.Model
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
-        #endregion
-
     }
 }
 

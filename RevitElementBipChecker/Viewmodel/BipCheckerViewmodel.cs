@@ -5,7 +5,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using OOG.Core.RevitData;
 using RevitElementBipChecker.Model;
 using RevitElementBipChecker.View;
 

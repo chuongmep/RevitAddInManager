@@ -4,7 +4,7 @@ using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-namespace OOG.Core.RevitData
+namespace RevitElementBipChecker.Model
 {
     public class RevitEvent : IExternalEventHandler
     {
