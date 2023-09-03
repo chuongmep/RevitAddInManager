@@ -1,4 +1,6 @@
 # Changelog
+- 2023-09-04 **1.4.9**
+  - Add new tool Compare Element Parameter.
 - 2023-09-03 **1.4.8**
   - Add support bip checker multiple element.
   - Add more column parameter bip checker (ElementId,Category).
