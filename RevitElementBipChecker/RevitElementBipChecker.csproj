@@ -70,8 +70,6 @@
 		<PackageReference Include="Chuongmep.Revit.Api.AdWindows" Version="$(RevitVersion).*">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
-		<PackageReference Include="CompareNETObjects" Version="4.80.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="ObjectsComparer" Version="1.4.1" />
 	</ItemGroup>
 </Project>
