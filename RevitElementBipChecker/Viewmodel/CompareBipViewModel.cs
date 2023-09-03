@@ -96,6 +96,7 @@ public class CompareBipViewModel : ViewmodeBase
 
     private void SelectElement1Click()
     {
+        UiDoc.RefreshActiveView();
         if (IsToggle)
         {
             UiDoc.Selection.SetElementIds(new List<ElementId>() {Element1.Id});
@@ -107,6 +108,7 @@ public class CompareBipViewModel : ViewmodeBase
     }
     private void SelectElement2Click()
     {
+        UiDoc.RefreshActiveView();
         if (IsToggle)
         {
             UiDoc.Selection.SetElementIds(new List<ElementId>() {Element2.Id});
