@@ -6,6 +6,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using RevitElementBipChecker.Model;
 using RevitElementBipChecker.View;
+using RevitElementBipChecker.Viewmodel;
 
 namespace RevitElementBipChecker.Command;
 
@@ -25,7 +26,8 @@ public class CompareTwoEleCommand : IExternalCommand
         Element element1 = doc.GetElement(r1);
         Reference r2 = uidoc.Selection.PickObject(ObjectType.Element,"Select second element");
         Element element2 = doc.GetElement(r2);
-        FrmCompareBip frmCompareBip = new FrmCompareBip(element1,element2);
+        CompareBipViewModel viewModel = new CompareBipViewModel(element1, element2);
+        FrmCompareBip frmCompareBip = new FrmCompareBip(viewModel);
      
         frmCompareBip.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         frmCompareBip.SetRevitAsWindowOwner();
