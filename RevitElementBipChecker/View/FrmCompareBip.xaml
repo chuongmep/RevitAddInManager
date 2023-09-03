@@ -83,6 +83,9 @@
                     <MenuItem
                         Command="{Binding SelectElement2Command}"
                         Header="Select Element2" />
+                    <MenuItem
+                        Command="{Binding SnoopCommand}"
+                        Header="Snoop Elements" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

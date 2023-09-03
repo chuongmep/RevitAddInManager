@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
@@ -15,6 +16,7 @@ namespace RevitElementBipChecker.Viewmodel;
 public class CompareBipViewModel : ViewmodeBase
 {
     private UIDocument UiDoc { get; set; }
+    private UIApplication UiApp { get; set; }
     private Element Element1 { get; set; }
     private Element Element2 { get; set; }
     private List<ParameterBase> diffParameters1 = new List<ParameterBase>();
@@ -27,6 +29,7 @@ public class CompareBipViewModel : ViewmodeBase
     public ICommand ExportCommand { get; set; }
     public ICommand SelectElement1Command { get; set; }
     public ICommand SelectElement2Command { get; set; }
+    public ICommand SnoopCommand { get; set; }
     private ObservableCollection<ParameterDifference> differences;
     public ObservableCollection<ParameterDifference> Differences
     {
@@ -80,9 +83,10 @@ public class CompareBipViewModel : ViewmodeBase
             ItemsView.Refresh();
         }
     }
-    public CompareBipViewModel(UIDocument uiDoc,Element element1, Element element2)
+    public CompareBipViewModel(UIApplication uiApp,Element element1, Element element2)
     {
-        this.UiDoc = uiDoc;
+        this.UiApp = uiApp;
+        this.UiDoc = uiApp.ActiveUIDocument;
         this.Element1 = element1;
         this.Element2 = element2;
         InitData();
@@ -92,6 +96,7 @@ public class CompareBipViewModel : ViewmodeBase
         ExportCommand = new RelayCommand(() => revitEvent.Run(ExportCsv, true, null));
         SelectElement1Command = new RelayCommand(() => revitEvent.Run(SelectElement1Click, true, null));
         SelectElement2Command = new RelayCommand(() => revitEvent.Run(SelectElement2Click, true, null));
+        SnoopCommand = new RelayCommand(() => revitEvent.Run(SnoopCommandClick, true, null));
     }
 
     private void SelectElement1Click()
@@ -117,6 +122,23 @@ public class CompareBipViewModel : ViewmodeBase
         {
             UiDoc.Selection.SetElementIds(new List<ElementId>() {Element1.Id});
         }
+    }
+
+    private void SnoopCommandClick()
+    {
+        List<Element> newElements = new List<Element>(){Element1,Element2};
+        ICollection<ElementId> elementIds = newElements.Select(x => x.Id).ToList();
+        UiDoc.Selection.SetElementIds(elementIds);
+        RevitCommandId lookupCommandId = RevitCommandId.LookupCommandId("CustomCtrl_%CustomCtrl_%Add-Ins%Explorer%RevitDBExplorer.Command");
+        if(lookupCommandId == null)
+        {
+            TaskDialog.Show("Error", "Please install RevitDBExplorer");
+            Process.Start("https://github.com/NeVeSpl/RevitDBExplorer");
+            MessageBox.Show("Please install RevitDBExplorer");
+            return;
+        }
+        // execute the command
+        UiApp.PostCommand(lookupCommandId);
     }
 
     void ToggleCompare()
