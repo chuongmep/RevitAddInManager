@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using RevitElementBipChecker.Model;
 using RevitElementBipChecker.View;
 
@@ -13,6 +14,7 @@ namespace RevitElementBipChecker.Viewmodel;
 
 public class CompareBipViewModel : ViewmodeBase
 {
+    private UIDocument UiDoc { get; set; }
     private Element Element1 { get; set; }
     private Element Element2 { get; set; }
     private List<ParameterBase> diffParameters1 = new List<ParameterBase>();
@@ -23,6 +25,8 @@ public class CompareBipViewModel : ViewmodeBase
     public ICommand CloseCommand { get; set; }
     public ICommand ToggleCommand { get; set; }
     public ICommand ExportCommand { get; set; }
+    public ICommand SelectElement1Command { get; set; }
+    public ICommand SelectElement2Command { get; set; }
     private ObservableCollection<ParameterDifference> differences;
     public ObservableCollection<ParameterDifference> Differences
     {
@@ -76,8 +80,9 @@ public class CompareBipViewModel : ViewmodeBase
             ItemsView.Refresh();
         }
     }
-    public CompareBipViewModel(Element element1, Element element2)
+    public CompareBipViewModel(UIDocument uiDoc,Element element1, Element element2)
     {
+        this.UiDoc = uiDoc;
         this.Element1 = element1;
         this.Element2 = element2;
         InitData();
@@ -85,6 +90,31 @@ public class CompareBipViewModel : ViewmodeBase
         ToggleCommand = new RelayCommand(() => revitEvent.Run(this.ToggleCompare, true, null));
         CloseCommand = new RelayCommand(() => revitEvent.Run(FrmCompareBip.Close, true, null));
         ExportCommand = new RelayCommand(() => revitEvent.Run(ExportCsv, true, null));
+        SelectElement1Command = new RelayCommand(() => revitEvent.Run(SelectElement1Click, true, null));
+        SelectElement2Command = new RelayCommand(() => revitEvent.Run(SelectElement2Click, true, null));
+    }
+
+    private void SelectElement1Click()
+    {
+        if (IsToggle)
+        {
+            UiDoc.Selection.SetElementIds(new List<ElementId>() {Element1.Id});
+        }
+        else
+        {
+            UiDoc.Selection.SetElementIds(new List<ElementId>() {Element2.Id});
+        }
+    }
+    private void SelectElement2Click()
+    {
+        if (IsToggle)
+        {
+            UiDoc.Selection.SetElementIds(new List<ElementId>() {Element2.Id});
+        }
+        else
+        {
+            UiDoc.Selection.SetElementIds(new List<ElementId>() {Element1.Id});
+        }
     }
 
     void ToggleCompare()
@@ -177,14 +207,14 @@ public class CompareBipViewModel : ViewmodeBase
 
     private void ExportCsv()
     {
-        string filename = "result";
+        string filename;
         if (IsToggle)
         {
-            filename = Element1.Id.ToString() + "_" + Element2.Id.ToString() + ".csv";
+            filename = Element1.Id + "_" + Element2.Id + ".csv";
         }
         else
         {
-            filename = Element2.Id.ToString() + "_" + Element1.Id.ToString() + ".csv";
+            filename = Element2.Id + "_" + Element1.Id + ".csv";
         }
         string exportCsv = FrmCompareBip.dataGrid.Items.Cast<ParameterDifference>()
             .ToList()

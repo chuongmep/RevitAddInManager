@@ -75,6 +75,16 @@
                 <DataGridTextColumn Width="*" Header="Value Element1" Binding="{Binding Value1}" />
                 <DataGridTextColumn Width="*" Header="Value Element2" Binding="{Binding Value2}" />
             </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding SelectElement1Command}"
+                        Header="Select Element1" />
+                    <MenuItem
+                        Command="{Binding SelectElement2Command}"
+                        Header="Select Element2" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
         <Grid Grid.Row="2" Margin="2,2,2,2">
             <Grid.ColumnDefinitions>
