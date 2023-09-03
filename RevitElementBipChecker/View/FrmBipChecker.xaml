@@ -18,62 +18,64 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="1">
-            <Button
-                Command="{Binding OpenCsv}"
-                Content="Open In Csv"
-                Margin="5,5,5,5"
-                ToolTip="Save data csv format to path document" />
-            <Button
-                Command="{Binding OpenJson}"
-                Content="Open In Json"
-                Margin="5,5,5,5"
-                ToolTip="Save Data json format to path document" />
-            <Button
-                Command="{Binding SnoopCommand}"
-                Content="Snoop"
-                Margin="5,5,5,5" />
-            <GroupBox Header="State Check">
-                <Label
-                    Content="{Binding State}"
-                    Foreground="Red"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" />
-            </GroupBox>
-            <GroupBox Header="Show Filter" Height="80">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <CheckBox
-                        Command="{Binding CheckTypeInstance}"
-                        Content="Instance"
-                        HorizontalAlignment="Left"
-                        IsChecked="{Binding IsInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Margin="5,0,0,5"
+        <Expander IsExpanded="True" ExpandDirection="Right" Grid.Column="0" Grid.Row="1">
+            <StackPanel MinWidth="120">
+                <Button
+                    Command="{Binding OpenCsv}"
+                    Content="Open In Csv"
+                    Margin="5,5,0,5"
+                    ToolTip="Save data csv format to path document" />
+                <Button
+                    Command="{Binding OpenJson}"
+                    Content="Open In Json"
+                    Margin="5,5,0,5"
+                    ToolTip="Save Data json format to path document" />
+                <Button
+                    Command="{Binding SnoopCommand}"
+                    Content="Snoop"
+                    Margin="5,5,0,5" />
+                <GroupBox Header="State Check">
+                    <Label
+                        Content="{Binding State}"
+                        Foreground="Red"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
-                    <CheckBox
-                        Command="{Binding CheckTypeInstance}"
-                        Content="Type"
-                        Grid.Row="1"
-                        HorizontalAlignment="Left"
-                        IsChecked="{Binding IsType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Margin="5,0,0,5"
-                        VerticalAlignment="Center" />
-                </Grid>
+                </GroupBox>
+                <GroupBox Margin="0,5,0,5" Header="Show Filter" Height="80">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <CheckBox
+                            Command="{Binding CheckTypeInstance}"
+                            Content="Instance"
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding IsInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="5,0,0,5"
+                            VerticalAlignment="Center" />
+                        <CheckBox
+                            Command="{Binding CheckTypeInstance}"
+                            Content="Type"
+                            Grid.Row="1"
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding IsType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="5,0,0,5"
+                            VerticalAlignment="Center" />
+                    </Grid>
 
-            </GroupBox>
+                </GroupBox>
 
-            <Button Click="AboutOnClick" Content="About" />
-        </StackPanel>
+                <Button Click="AboutOnClick" Content="About" />
+            </StackPanel>
+        </Expander>
         <DataGrid
             AlternatingRowBackground="Transparent"
             AlternationCount="2"
@@ -91,27 +93,42 @@
                 <Style TargetType="{x:Type DataGridCell}">
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                         </Trigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
-                                <Condition Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="False" />
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition
+                                    Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    Value="False" />
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
-                                <Condition Binding="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="True" />
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition
+                                    Binding="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    Value="True" />
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                         </MultiDataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -172,9 +189,8 @@
         <TextBox
             Grid.Column="1"
             Grid.Row="0"
-            Margin="10,0,0,5"
+            Margin="10,5,10,0"
             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            VerticalAlignment="Center"
             x:Name="tbxSearch">
             <TextBox.Resources>
                 <VisualBrush
