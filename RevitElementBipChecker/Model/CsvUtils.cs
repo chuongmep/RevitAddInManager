@@ -9,10 +9,10 @@ namespace RevitElementBipChecker.Model
 {
     public static class CsvUtils
     {
-        public static string ExportCsv(this DataTable dataTable)
+        public static string ExportCsv(this DataTable dataTable,string name="BipChecker.csv")
         {
             string PathDocument = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string filePath = Path.Combine(PathDocument, "BipChecker.csv");
+            string filePath = Path.Combine(PathDocument, name);
             using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 // Write the column headers

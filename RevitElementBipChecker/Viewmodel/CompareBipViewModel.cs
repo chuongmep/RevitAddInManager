@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
 using RevitElementBipChecker.Model;
@@ -20,6 +22,7 @@ public class CompareBipViewModel : ViewmodeBase
     public FrmCompareBip FrmCompareBip { get; set; }
     public ICommand CloseCommand { get; set; }
     public ICommand ToggleCommand { get; set; }
+    public ICommand ExportCommand { get; set; }
     private ObservableCollection<ParameterDifference> differences;
     public ObservableCollection<ParameterDifference> Differences
     {
@@ -33,6 +36,46 @@ public class CompareBipViewModel : ViewmodeBase
         }
         set => OnPropertyChanged(ref differences, value);
     }
+    private ICollectionView itemsView;
+    public ICollectionView ItemsView
+    {
+        get
+        {
+            if (itemsView == null)
+            {
+                itemsView = CollectionViewSource.GetDefaultView(Differences);
+                itemsView.Filter = filterSearchText;
+            }
+            return itemsView;
+        }
+        set => OnPropertyChanged(ref itemsView, value);
+    }
+    private bool filterSearchText(object item)
+    {
+        var data = (ParameterDifference)item;
+        if (SearchText != null || SearchText != "")
+        {
+            return SearchText != null && data.Name.ToUpper().Contains(SearchText.ToUpper());
+        }
+        return true;
+    }
+    private string _searchText;
+    public string SearchText
+    {
+        get
+        {
+            if (_searchText == null)
+            {
+                _searchText = "";
+            }
+            return _searchText;
+        }
+        set
+        {
+            OnPropertyChanged(ref _searchText, value);
+            ItemsView.Refresh();
+        }
+    }
     public CompareBipViewModel(Element element1, Element element2)
     {
         this.Element1 = element1;
@@ -41,6 +84,7 @@ public class CompareBipViewModel : ViewmodeBase
         ToggleCompare();
         ToggleCommand = new RelayCommand(() => revitEvent.Run(this.ToggleCompare, true, null));
         CloseCommand = new RelayCommand(() => revitEvent.Run(FrmCompareBip.Close, true, null));
+        ExportCommand = new RelayCommand(() => revitEvent.Run(ExportCsv, true, null));
     }
 
     void ToggleCompare()
@@ -55,7 +99,7 @@ public class CompareBipViewModel : ViewmodeBase
             {
                 if (diffParameters2.All(x => x.Name != item?.Name))
                 {
-                    item!.BackgroundColor = System.Windows.Media.Brushes.Firebrick;
+                    item!.RowColor = System.Windows.Media.Brushes.Firebrick;
                 }
             }
         }
@@ -68,11 +112,15 @@ public class CompareBipViewModel : ViewmodeBase
             {
                 if (diffParameters1.All(x => x.Name != item?.Name))
                 {
-                    item!.BackgroundColor = System.Windows.Media.Brushes.Firebrick;
+                    item!.RowColor = System.Windows.Media.Brushes.Firebrick;
                 }
             }
         }
         OnPropertyChanged(nameof(Differences));
+        ItemsView = CollectionViewSource.GetDefaultView(Differences);
+        ItemsView.Refresh();
+        ItemsView.Filter = filterSearchText;
+        OnPropertyChanged(nameof(SearchText));
     }
 
     void InitData()
@@ -124,5 +172,24 @@ public class CompareBipViewModel : ViewmodeBase
                 });
             }
         }
+        
+    }
+
+    private void ExportCsv()
+    {
+        string filename = "result";
+        if (IsToggle)
+        {
+            filename = Element1.Id.ToString() + "_" + Element2.Id.ToString() + ".csv";
+        }
+        else
+        {
+            filename = Element2.Id.ToString() + "_" + Element1.Id.ToString() + ".csv";
+        }
+        string exportCsv = FrmCompareBip.dataGrid.Items.Cast<ParameterDifference>()
+            .ToList()
+            .ToDataTable()
+            .ExportCsv(filename);
+        Process.Start(exportCsv);
     }
 }

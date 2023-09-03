@@ -5,15 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodel="clr-namespace:RevitElementBipChecker.Viewmodel"
         mc:Ignorable="d"
+        FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
         d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
         Title="Mini Compare Two Element" Height="600" Width="400">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
+        <TextBox
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="2,2,2,2"
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            x:Name="tbxSearch">
+            <TextBox.Resources>
+                <VisualBrush
+                    AlignmentX="Left"
+                    AlignmentY="Center"
+                    Stretch="None"
+                    TileMode="None"
+                    x:Key="tbxText">
+                    <VisualBrush.Visual>
+                        <Grid Background="Transparent">
+                            <TextBlock
+                                Foreground="DimGray"
+                                Margin="5,0"
+                                Text="Search Filter By Parameter Name" />
+                        </Grid>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="3" />
+                </Style>
+            </TextBox.Resources>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="BorderBrush" Value="#FFAFAFAF" />
+                    <Setter Property="BorderThickness" Value="0.5" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Margin" Value="5,5,0,5" />
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource tbxText}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
         <DataGrid
             x:Name="dataGrid"
+            Grid.Row="1"
             Background="WhiteSmoke"
             AlternatingRowBackground="Transparent"
             AlternationCount="2"
@@ -22,7 +66,7 @@
             AutoGenerateColumns="False">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="{Binding BackgroundColor}" />
+                    <Setter Property="Background" Value="{Binding RowColor}" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
@@ -32,10 +76,11 @@
                 <DataGridTextColumn Width="*" Header="Value Element2" Binding="{Binding Value2}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Grid.Row="1" Margin="2,2,2,2">
+        <Grid Grid.Row="2" Margin="2,2,2,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
             <Button Content="Toggle"
                     Margin="1,1,1,1"
@@ -48,6 +93,11 @@
                     Margin="1,1,1,1"
                     Command="{Binding CloseCommand}" Grid.Column="1" Grid.Row="0" Content="Close">
             </Button>
+            <Button Margin="1,1,1,1" 
+                    Background="WhiteSmoke"
+                    Command="{Binding ExportCommand}"
+                    Grid.Column="2" 
+                    Content="Export"></Button>
         </Grid>
 
     </Grid>

@@ -70,14 +70,14 @@ public class ParameterDifference: INotifyPropertyChanged
     public string Type { get; set; }
     public string Value1 { get; set; }
     public string Value2 { get; set; }
-    private Brush _backgroundColor = Brushes.Transparent;
-    public Brush BackgroundColor
+    private Brush _rowColor = Brushes.Transparent;
+    public Brush RowColor
     {
-        get { return _backgroundColor; }
+        get { return _rowColor; }
         set
         {
-            _backgroundColor = value;
-            OnPropertyChanged(nameof(BackgroundColor));
+            _rowColor = value;
+            OnPropertyChanged(nameof(RowColor));
         }
     }
     public event PropertyChangedEventHandler PropertyChanged;
