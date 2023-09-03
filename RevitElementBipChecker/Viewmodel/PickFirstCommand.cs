@@ -47,7 +47,6 @@ namespace RevitElementBipChecker.Viewmodel
                 {
                     RevitLinkInstance linkInstance = e as RevitLinkInstance;
                     Document linkDocument = linkInstance.GetLinkDocument();
-                    UIDoc = new UIDocument(linkDocument);
                     Elements = new List<Element>() {linkDocument.GetElement(pickObject.LinkedElementId)};
                     Viewmodel.Elements = Elements;
                     Viewmodel.State = "Link Element";

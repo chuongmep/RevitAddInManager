@@ -123,7 +123,7 @@ namespace RevitElementBipChecker.Viewmodel
 
             if (IsType && element.CanHaveTypeAssigned())
             {
-                Element elementType = UIDoc.Document.GetElement(element.GetTypeId());
+                Element elementType = element.Document.GetElement(element.GetTypeId());
                 foreach (Parameter parameter in elementType.Parameters)
                 {
                     var parameterData = new ParameterData(element,parameter, UIDoc.Document, false);
