@@ -1,4 +1,9 @@
 # Changelog
+- 2023-09-03 **1.4.8**
+  - Add support bip checker multiple element.
+  - Add more column parameter bip checker (ElementId,Category).
+  - Fix installer assembly bip checker overrider update.
+  - Improvement UI bip checker.
 - 2023-06-02 **1.4.7**
   - Add more column parameter unit bip checker.
 - 2023-06-02 **1.4.6**
