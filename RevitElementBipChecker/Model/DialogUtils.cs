@@ -9,7 +9,7 @@ namespace RevitElementBipChecker.Model
         /// </summary>
         /// <param name="Caption">Title Question</param>
         /// <returns></returns>
-        public static bool QuestionMsg(string Caption)
+        public static TaskDialogResult QuestionMsg(string Caption)
         {
             
             var dialog = new TaskDialog(Caption);
@@ -17,10 +17,11 @@ namespace RevitElementBipChecker.Model
             dialog.MainIcon = TaskDialogIcon.TaskDialogIconNone;
             dialog.MainInstruction = Caption;
 
-            dialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink1, "Element Current");
-            dialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink2, "Element In RvtLinked");
+            dialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink1, "Single Element Current");
+            dialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink2, "Multiples Element Current");
+            dialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink3, "Element In RvtLinked");
 
-            return dialog.Show() == TaskDialogResult.CommandLink1;
+            return dialog.Show();
         }
     }
 }

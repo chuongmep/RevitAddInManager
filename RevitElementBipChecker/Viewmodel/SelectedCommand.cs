@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Autodesk.Revit.DB;
 using RevitElementBipChecker.Model;
 
 namespace RevitElementBipChecker.Viewmodel
@@ -11,8 +13,8 @@ namespace RevitElementBipChecker.Viewmodel
             int count = vm.UIDoc.GetSelection().Count;
             if (count>0)
             {
-                Element =vm.UIDoc.GetSelection().First();
-                vm.Element = Element;
+                Elements =vm.UIDoc.GetSelection();
+                vm.Elements = Elements;
                 vm.State = "Element"; 
                 vm.GetDatabase();
             }

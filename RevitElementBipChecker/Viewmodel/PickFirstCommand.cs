@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using RevitElementBipChecker.Model;
 
@@ -16,20 +18,26 @@ namespace RevitElementBipChecker.Viewmodel
         }
         void PickFirst()
         {
-            if (Viewmodel.Element == null)
+            if (Viewmodel.Elements == null)
             {
-                bool isintance = DialogUtils.QuestionMsg("Select Option Snoop Element Or LinkElement");
-                if (isintance == false)
+                TaskDialogResult result = DialogUtils.QuestionMsg("Select Option Snoop Element Or LinkElement");
+                switch (result)
                 {
-                    PickLink_Element();
-                }
-                else
-                {
-                    PickElement();
+                    case TaskDialogResult.CommandLink1:
+                        PickElement();
+                        break;
+                    case TaskDialogResult.CommandLink2:
+                        PickElements();
+                        break;
+                    case TaskDialogResult.CommandLink3:
+                        PickLinkElement();
+                        break;
+                    case TaskDialogResult.CommandLink4:
+                        break;
                 }
             }
         }
-        private void PickLink_Element()
+        private void PickLinkElement()
         {
             try
             {
@@ -39,8 +47,9 @@ namespace RevitElementBipChecker.Viewmodel
                 {
                     RevitLinkInstance linkInstance = e as RevitLinkInstance;
                     Document linkDocument = linkInstance.GetLinkDocument();
-                    Element = linkDocument.GetElement(pickObject.LinkedElementId);
-                    Viewmodel.Element = Element;
+                    UIDoc = new UIDocument(linkDocument);
+                    Elements = new List<Element>() {linkDocument.GetElement(pickObject.LinkedElementId)};
+                    Viewmodel.Elements = Elements;
                     Viewmodel.State = "Link Element";
                 }
 
@@ -59,14 +68,14 @@ namespace RevitElementBipChecker.Viewmodel
             try
             {
                 Reference pickObject = Viewmodel.UIDoc.Selection.PickObject(ObjectType.Element);
-                Element = Viewmodel.UIDoc.Document.GetElement(pickObject);
-                Viewmodel.Element = Element;
+                Elements = new List<Element>(){Viewmodel.UIDoc.Document.GetElement(pickObject)};
+                Viewmodel.Elements = Elements;
                 Viewmodel.State = "Element";
-                if (Element.CanHaveTypeAssigned())
-                {
-                    ElementType = Viewmodel.UIDoc.Document.GetElement(Element.GetTypeId());
-                    Viewmodel.ElementType = ElementType;
-                }
+                // if (Elements.CanHaveTypeAssigned())
+                // {
+                //     ElementType = Viewmodel.UIDoc.Document.GetElement(Elements.GetTypeId());
+                //     Viewmodel.ElementType = ElementType;
+                // }
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException) { }
             catch (Exception)
@@ -75,10 +84,40 @@ namespace RevitElementBipChecker.Viewmodel
             }
         }
 
+        private void PickElements()
+        {
+            try
+            {
+                IList<Reference> pickObject = Viewmodel.UIDoc.Selection.PickObjects(ObjectType.Element);
+                Elements = ToElements(pickObject, Viewmodel.UIDoc.Document);
+                Viewmodel.Elements = Elements;
+                Viewmodel.State = "Elements";
+                // if (Elements.CanHaveTypeAssigned())
+                // {
+                //     ElementType = Viewmodel.UIDoc.Document.GetElement(Elements.GetTypeId());
+                //     Viewmodel.ElementType = ElementType;
+                // }
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException) { }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+        List<Element> ToElements(IList<Reference> references, Document document)
+        {
+            List<Element> elements = new List<Element>();
+            foreach (Reference reference in references)
+            {
+                elements.Add(document.GetElement(reference));
+            }
+            return elements;
+        }
+
         public void Toggle()
         {
             Viewmodel.frmmain?.Hide();
-            Viewmodel.Element = null;
+            Viewmodel.Elements = null;
             PickFirst();
             Viewmodel.GetDatabase();
             Viewmodel.frmmain?.Show();

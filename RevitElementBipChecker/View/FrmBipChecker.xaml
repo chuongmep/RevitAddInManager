@@ -37,27 +37,9 @@
                 Margin="5,5,5,5"
                 ToolTip="Save Data json format to path document" />
             <Button
-                Command="{Binding SnoopElement}"
+                Command="{Binding SnoopCommand}"
                 Content="Snoop"
                 Margin="5,5,5,5" />
-            <TextBox
-                HorizontalContentAlignment="Center"
-                Margin="5,5,5,5"
-                Text="{Binding Element.Name}"
-                ToolTip="Element Id"
-                VerticalContentAlignment="Center" />
-            <TextBox
-                HorizontalContentAlignment="Center"
-                Margin="5,5,5,5"
-                Text="{Binding Category}"
-                ToolTip="Category Of Element"
-                VerticalContentAlignment="Center" />
-            <TextBox
-                HorizontalContentAlignment="Center"
-                Margin="5,5,5,5"
-                Text="{Binding Name}"
-                ToolTip="Element Name"
-                VerticalContentAlignment="Center" />
             <GroupBox Header="State Check">
                 <Label
                     Content="{Binding State}"
@@ -135,7 +117,9 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding ParameterName}" Header="Name" />
+                <DataGridTextColumn Binding="{Binding ElementId}" Header="ElementId" />
+                <DataGridTextColumn Binding="{Binding Category}" Header="Category" />
+                <DataGridTextColumn Binding="{Binding ParameterName}" Header="Parameter Name" />
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
                 <DataGridTextColumn Binding="{Binding TypeOrInstance}" Header="TypeOrInstance" />
                 <DataGridTextColumn Binding="{Binding BuiltInParameter}" Header="BuiltInParameter" />
@@ -188,7 +172,7 @@
         <TextBox
             Grid.Column="1"
             Grid.Row="0"
-            Margin="10,0,10,0"
+            Margin="10,0,0,5"
             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             VerticalAlignment="Center"
             x:Name="tbxSearch">

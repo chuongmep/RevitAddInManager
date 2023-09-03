@@ -7,7 +7,7 @@ namespace RevitElementBipChecker.Model
         public ParameterData(Parameter parameter,Document doc,bool isinstance=true)
         {
             this.Parameter = parameter;
-            this.BuiltInParameter = (parameter.Definition as InternalDefinition).BuiltInParameter.ToString();
+            this.BuiltInParameter = (parameter.Definition as InternalDefinition)?.BuiltInParameter.ToString();
             this.ParameterName = parameter.Definition.Name;
             this.Id = parameter.Id.ToString();
             this.ParameterGroup = parameter.Definition.ParameterGroup.ToString();
@@ -27,6 +27,15 @@ namespace RevitElementBipChecker.Model
             this.AssGlobalParaValue = parameter.GetAssGlobalParameterValue(doc);
         }
 
+        public ParameterData(Autodesk.Revit.DB.Element element, Parameter parameter, Document doc,
+            bool isinstance = true) : this(parameter, doc, isinstance)
+        {
+            this.ElementId = element.Id.ToString();
+            this.Category = element.Category?.Name;
+        }
+
+        public string ElementId { get; set; }
+        public string Category { get; set; }
         public Autodesk.Revit.DB.Parameter Parameter { get; set; }
         public string ParameterName { get; set; }
         public string Id { get; set; }

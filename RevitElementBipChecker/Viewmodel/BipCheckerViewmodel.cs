@@ -1,6 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
@@ -82,7 +84,7 @@ namespace RevitElementBipChecker.Viewmodel
         public ICommand OpenCsv => new ExportCsvCommand(this);
         public ExportJsonCommand OpenJson  => new ExportJsonCommand(this);
         private PickFirstCommand PickFirstCommand { get; set; }
-        public ICommand SnoopElement => new RelayCommand(()=>revitEvent.Run(PickFirstCommand.Toggle, true, null, null, false));
+        public ICommand SnoopCommand => new RelayCommand(()=>revitEvent.Run(PickFirstCommand.Toggle, true, null, null, false));
         public ICommand CheckTypeInstance => new RelayCommand(PickFirstCommand.ToggleTypeInstance);
         public BipCheckerViewmodel(UIDocument uidoc)
         {
@@ -96,32 +98,39 @@ namespace RevitElementBipChecker.Viewmodel
         {
 
             Data = new ObservableCollection<ParameterData>();
-            if(Element==null) return;
-            if (IsInstance)
-            {
-                foreach (Parameter parameter in Element.Parameters)
-                {
-
-                    var parameterData = new ParameterData(parameter, Element.Document);
-                    Data.Add(parameterData);
-                }
-            }
-
-            if (IsType && ElementType != null)
-            {
-                foreach (Parameter parameter in ElementType.Parameters)
-                {
-                    var parameterData = new ParameterData(parameter, Element.Document, false);
-                    Data.Add(parameterData);
-                }
-            }
-
+            if(Elements==null || Elements.Count==0) return;
+            Elements.ForEach(x => GetParametersData(x));
             ObservableCollection<ParameterData> list = Data.GroupBy(x => x.Parameter.Id).Select(x => x.First()).ToObservableCollection();
             Data = list;
             //Sort
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(data);
+            view.SortDescriptions.Add(new SortDescription("ElementId", ListSortDirection.Ascending));
             view.SortDescriptions.Add(new SortDescription("TypeOrInstance", ListSortDirection.Ascending));
             view.SortDescriptions.Add(new SortDescription("ParameterName", ListSortDirection.Ascending));
+        }
+
+        ObservableCollection<ParameterData> GetParametersData(Autodesk.Revit.DB.Element element)
+        {
+            if (IsInstance)
+            {
+                foreach (Parameter parameter in element.Parameters)
+                {
+
+                    var parameterData = new ParameterData(element, parameter, element.Document);
+                    Data.Add(parameterData);
+                }
+            }
+
+            if (IsType && element.CanHaveTypeAssigned())
+            {
+                Element elementType = UIDoc.Document.GetElement(element.GetTypeId());
+                foreach (Parameter parameter in elementType.Parameters)
+                {
+                    var parameterData = new ParameterData(element,parameter, UIDoc.Document, false);
+                    Data.Add(parameterData);
+                }
+            }
+            return Data;
         }
     }
 }
