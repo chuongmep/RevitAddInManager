@@ -48,6 +48,7 @@ public class App : IExternalApplication
         AddPushButton(pulldownButton, typeof(AddInManagerReadOnly), "Add-In Manager(Read Only Mode)");
         AddPushButton(pulldownButton, typeof(DockableCommand), "Show/Hide Panel(Debug-Trace-Events)");
         AddPushButtonBipChecker(pulldownButton, typeof(BipCheckerCommand), "Bip Checker");
+        AddPushButtonBipChecker(pulldownButton, typeof(CompareTwoEleCommand), "Mini Compare\nTwo Element(Mini)");
         var tab = ComponentManager.Ribbon.FindTab("Modify");
         if (tab != null)
         {

@@ -97,7 +97,7 @@ namespace RevitElementBipChecker.View
 
         void InitData()
         {
-            foreach (Autodesk.Revit.DB.Parameter parameter in Element1.Parameters)
+            foreach (Autodesk.Revit.DB.Parameter parameter in Element1.ParametersMap)
             {
                 diffParameters1.Add(new ParameterBase()
                 {
@@ -106,7 +106,21 @@ namespace RevitElementBipChecker.View
                     Type = parameter.StorageType.ToString()
                 });
             }
-            foreach (Autodesk.Revit.DB.Parameter parameter in Element2.Parameters)
+
+            if (Element1.CanHaveTypeAssigned())
+            {
+                var typeElement1 = Element1.Document.GetElement(Element1.GetTypeId());
+                foreach (Autodesk.Revit.DB.Parameter parameter in typeElement1.ParametersMap)
+                {
+                    diffParameters1.Add(new ParameterBase()
+                    {
+                        Name = parameter.Definition.Name,
+                        Value = parameter.AsValueString(),
+                        Type = parameter.StorageType.ToString()
+                    });
+                }
+            }
+            foreach (Autodesk.Revit.DB.Parameter parameter in Element2.ParametersMap)
             {
                 diffParameters2.Add(new ParameterBase()
                 {
@@ -114,6 +128,19 @@ namespace RevitElementBipChecker.View
                     Value = parameter.AsValueString(),
                     Type = parameter.StorageType.ToString()
                 });
+            }
+            if (Element2.CanHaveTypeAssigned())
+            {
+                var typeElement2 = Element2.Document.GetElement(Element2.GetTypeId());
+                foreach (Autodesk.Revit.DB.Parameter parameter in typeElement2.ParametersMap)
+                {
+                    diffParameters2.Add(new ParameterBase()
+                    {
+                        Name = parameter.Definition.Name,
+                        Value = parameter.AsValueString(),
+                        Type = parameter.StorageType.ToString()
+                    });
+                }
             }
         }
 

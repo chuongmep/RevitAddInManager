@@ -9,8 +9,12 @@ using RevitElementBipChecker.View;
 
 namespace RevitElementBipChecker.Command;
 
+
+/// <summary>
+/// Compare Two Element with parameter instance different
+/// </summary>
 [Transaction(TransactionMode.Manual)]
-public class CompareCommand : IExternalCommand
+public class CompareTwoEleCommand : IExternalCommand
 {
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
