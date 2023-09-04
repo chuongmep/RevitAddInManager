@@ -6,12 +6,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:RevitElementBipChecker.Viewmodel"
     Title="Mini Compare Two Element"
-    Width="650"
     MinWidth="450"
     MinHeight="200"
+    Width="650"
     Height="600"
-    MinWidth="400"
-    MinHeight="300"
     d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
     FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
     mc:Ignorable="d">
