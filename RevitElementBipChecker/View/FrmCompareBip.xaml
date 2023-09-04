@@ -1,37 +1,80 @@
-﻿<Window x:Class="RevitElementBipChecker.View.FrmCompareBip"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodel="clr-namespace:RevitElementBipChecker.Viewmodel"
-        mc:Ignorable="d"
-        FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
-        d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
-        Title="Mini Compare Two Element" Height="600" Width="650">
+﻿<Window
+    x:Class="RevitElementBipChecker.View.FrmCompareBip"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:RevitElementBipChecker.Viewmodel"
+    Title="Mini Compare Two Element"
+    Width="650"
+    Height="600"
+    d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
+    FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Margin="2,2,2,2"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--  Style for the MouseOver state  -->
+        <Style
+            x:Key="RoundedButtonMouseOver"
+            BasedOn="{StaticResource RoundedButton}"
+            TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--  Style for the Pressed state  -->
+        <Style
+            x:Key="RoundedButtonPressed"
+            BasedOn="{StaticResource RoundedButtonMouseOver}"
+            TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="LightCoral" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <TextBox
-            Grid.Column="0"
+            x:Name="tbxSearch"
             Grid.Row="0"
+            Grid.Column="0"
             Margin="2,2,2,2"
-            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            x:Name="tbxSearch">
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.Resources>
                 <VisualBrush
+                    x:Key="tbxText"
                     AlignmentX="Left"
                     AlignmentY="Center"
                     Stretch="None"
-                    TileMode="None"
-                    x:Key="tbxText">
+                    TileMode="None">
                     <VisualBrush.Visual>
                         <Grid Background="Transparent">
                             <TextBlock
-                                Foreground="DimGray"
                                 Margin="5,0"
+                                Foreground="DimGray"
                                 Text="Search Filter By Parameter Name" />
                         </Grid>
                     </VisualBrush.Visual>
@@ -58,64 +101,160 @@
         <DataGrid
             x:Name="dataGrid"
             Grid.Row="1"
-            Background="WhiteSmoke"
+            Margin="2,2,2,2"
             AlternationCount="2"
+            AutoGenerateColumns="False"
+            Background="WhiteSmoke"
+            BorderThickness="0"
             IsReadOnly="True"
-            ItemsSource="{Binding Differences}"
-            AutoGenerateColumns="False">
+            ItemsSource="{Binding Differences}">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Background" Value="{Binding RowColor}" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Binding="{Binding Name}" Header="Parameter Name" />
-                <DataGridTextColumn Width="90" Binding="{Binding GroupName}" Header="GroupName" />
-                <DataGridTextColumn Width="60" Binding="{Binding TypeOrInstance}" Header="TypeOrInstance" />
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding Name}"
+                    Header="Parameter Name" />
+                <DataGridTextColumn
+                    Width="90"
+                    Binding="{Binding GroupName}"
+                    Header="GroupName" />
+                <DataGridTextColumn
+                    Width="60"
+                    Binding="{Binding TypeOrInstance}"
+                    Header="TypeOrInstance" />
                 <!-- <DataGridTextColumn Binding="{Binding BuiltInParameter}" Header="BuiltInParameter" /> -->
-                <DataGridTextColumn Width="70" Binding="{Binding Type}" Header="Type" />
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding Type}"
+                    Header="Type" />
                 <!-- <DataGridTextColumn Binding="{Binding Unit}" Header="Unit" /> -->
                 <!-- <DataGridTextColumn Binding="{Binding ReadWrite}" Header="ReadWrite" /> -->
                 <!-- <DataGridTextColumn Binding="{Binding Shared}" Header="Shared" /> -->
-                <DataGridTextColumn Width="*" Header="Value Element1" Binding="{Binding Value1}" />
-                <DataGridTextColumn Width="*" Header="Value Element2" Binding="{Binding Value2}" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Value1}"
+                    Header="Value Element1" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Value2}"
+                    Header="Value Element2" />
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem
-                        Command="{Binding SelectElement1Command}"
-                        Header="Select Element1" />
-                    <MenuItem
-                        Command="{Binding SelectElement2Command}"
-                        Header="Select Element2" />
-                    <MenuItem
-                        Command="{Binding SnoopCommand}"
-                        Header="Snoop Elements" />
+                    <MenuItem Command="{Binding SelectElement1Command}" Header="Select Element1" />
+                    <MenuItem Command="{Binding SelectElement2Command}" Header="Select Element2" />
+                    <MenuItem Command="{Binding SnoopCommand}" Header="Snoop Elements" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
-        <Grid Grid.Row="2" Margin="2,2,2,2">
+        <StackPanel
+            Grid.Row="2"
+            Margin="2,0,2,0"
+            Orientation="Horizontal">
+            <Button
+                Width="80"
+                Height="Auto"
+                Background="Yellow"
+                Style="{StaticResource RoundedButton}">
+                <Button.ToolTip>
+                    <ToolTip
+                        Width="400"
+                        Height="30"
+                        AllowDrop="True"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        Content="Parameter Difference between Element1 and Element2"
+                        FontWeight="Bold"
+                        HasDropShadow="True"
+                        Placement="Top"
+                        StaysOpen="True" />
+                </Button.ToolTip>
+            </Button>
+            <Button
+                Width="80"
+                Height="Auto"
+                Background="Firebrick "
+                Style="{StaticResource RoundedButton}">
+                <Button.ToolTip>
+                    <ToolTip
+                        Width="300"
+                        Height="30"
+                        AllowDrop="True"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        Content="Parameter Not Exist In Element 1"
+                        FontWeight="Bold"
+                        Placement="Top"
+                        StaysOpen="True" />
+                </Button.ToolTip>
+            </Button>
+            <Button
+                Width="80"
+                Height="Auto"
+                Background="SeaGreen"
+                Style="{StaticResource RoundedButton}">
+                <Button.ToolTip>
+                    <ToolTip
+                        Width="300"
+                        Height="30"
+                        AllowDrop="True"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        Content="Parameter Not Exist In Element 2"
+                        FontWeight="Bold"
+                        Placement="Top"
+                        StaysOpen="True" />
+                </Button.ToolTip>
+            </Button>
+            <Button
+                Width="80"
+                Height="Auto"
+                Background="Gray"
+                Style="{StaticResource RoundedButton}">
+                <Button.ToolTip>
+                    <ToolTip
+                        Width="300"
+                        Height="30"
+                        AllowDrop="True"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        Content="Parameter Is Same In Both Element"
+                        FontWeight="Bold"
+                        Placement="Top"
+                        StaysOpen="True" />
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="3" Margin="2,2,2,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition />
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
-            <Button Content="Toggle"
-                    Margin="1,1,1,1"
-                    Background="WhiteSmoke"
-                    ToolTip="Toggle to check different parameters between two elements invert"
-                    Command="{Binding ToggleCommand}">
-            </Button>
-            <Button IsCancel="True"
-                    Background="WhiteSmoke"
-                    Margin="1,1,1,1"
-                    Command="{Binding CloseCommand}" Grid.Column="1" Grid.Row="0" Content="Close">
-            </Button>
-            <Button Margin="1,1,1,1" 
-                    Background="WhiteSmoke"
-                    Command="{Binding ExportCommand}"
-                    Grid.Column="2" 
-                    Content="Export"></Button>
+            <Button
+                Margin="1,1,1,1"
+                Background="WhiteSmoke"
+                Command="{Binding ToggleCommand}"
+                Content="Toggle"
+                ToolTip="Toggle to check different parameters between two elements invert" />
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="1,1,1,1"
+                Background="WhiteSmoke"
+                Command="{Binding CloseCommand}"
+                Content="Close"
+                IsCancel="True" />
+            <Button
+                Grid.Column="2"
+                Margin="1,1,1,1"
+                Background="WhiteSmoke"
+                Command="{Binding ExportCommand}"
+                Content="Export" />
         </Grid>
 
     </Grid>
