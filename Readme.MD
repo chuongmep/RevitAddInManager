@@ -39,6 +39,7 @@ The product will be expanded in the future in process to support mutiple platfor
     - Application
 - Startup manager
 - Bip Checker - Check Built-in Parameter of the Element
+- Bip Compare - Compare Built-in Parameter of two Element
 - **Debug / Trace** : Support Show result use [Debug](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.debug?view=net-6.0) or [Trace](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.trace?view=net-6.0) to show result in Revit
 - Quick create `.addin` and load to `Revit`
 - Clear Cache saved in temp folder
@@ -67,6 +68,7 @@ The product will be expanded in the future in process to support mutiple platfor
 - [x] AddInManagerFaceless
 - [x] AddInManagerReadOnly
 - [x] Bip Checker
+- [x] Bip Compare
 ### Application
 
 - [x] Preview

@@ -1,4 +1,12 @@
 # Changelog
+- 2023-09-04 **1.5.0**
+  - Compare Element Parameter Support All Parameter.
+  - Add 4 color for compare element parameter.
+  - Add new column compare element parameter.
+  - Add compare result similarity score.
+  - Support export all information bip checker compare element parameter.
+  - Fix issue compare with color highlight missing with some parameter.
+  - Enhancement UI compare parameter.
 - 2023-09-04 **1.4.9**
   - Add new tool Compare Element Parameter.
 - 2023-09-03 **1.4.8**
