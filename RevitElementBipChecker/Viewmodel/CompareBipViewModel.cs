@@ -25,6 +25,7 @@ public class CompareBipViewModel : ViewmodeBase
     RevitEvent revitEvent = new RevitEvent();
     public FrmCompareBip FrmCompareBip { get; set; }
     public ICommand CloseCommand { get; set; }
+    public ICommand HelpCommand { get; set; }
     public ICommand ToggleCommand { get; set; }
     public ICommand ExportCommand { get; set; }
     public ICommand SelectElement1Command { get; set; }
@@ -104,6 +105,7 @@ public class CompareBipViewModel : ViewmodeBase
         ToggleCompare();
         ToggleCommand = new RelayCommand(() => revitEvent.Run(this.ToggleCompare, true, null));
         CloseCommand = new RelayCommand(() => revitEvent.Run(FrmCompareBip.Close, true, null));
+        HelpCommand = new RelayCommand(() => revitEvent.Run(HelpClick, true, null));
         ExportCommand = new RelayCommand(() => revitEvent.Run(ExportCsv, true, null));
         SelectElement1Command = new RelayCommand(() => revitEvent.Run(SelectElement1Click, true, null));
         SelectElement2Command = new RelayCommand(() => revitEvent.Run(SelectElement2Click, true, null));
@@ -247,6 +249,10 @@ public class CompareBipViewModel : ViewmodeBase
         }
     }
 
+    private void HelpClick()
+    {
+        Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki/How-to-use-Compare-Parameter-Element");
+    }
     private void ExportCsv()
     {
         string filename;

@@ -7,6 +7,8 @@
     xmlns:viewmodel="clr-namespace:RevitElementBipChecker.Viewmodel"
     Title="Mini Compare Two Element"
     Width="650"
+    MinWidth="450"
+    MinHeight="200"
     Height="600"
     d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
     FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
@@ -55,7 +57,7 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="35" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <TextBox
             x:Name="tbxSearch"
@@ -160,8 +162,21 @@
             Margin="2,0,2,0"
             Orientation="Horizontal">
             <Button
+                Width="20"
+                Height="20"
+                Background="Transparent"
+                BorderThickness="0"
+                Command="{Binding HelpCommand}"
+                Style="{x:Null}"
+                ToolTip="You need help ?">
+                <Button.Content>
+                    <Image Source="../Resources/lightbulb_702797.png" Stretch="Uniform" />
+                </Button.Content>
+            </Button>
+            <Button
                 Width="80"
                 Height="Auto"
+                Margin="2,0,2,0"
                 Background="Yellow"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
@@ -181,6 +196,7 @@
             <Button
                 Width="80"
                 Height="Auto"
+                Margin="0,0,2,0"
                 Background="Firebrick "
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
@@ -199,6 +215,7 @@
             <Button
                 Width="80"
                 Height="Auto"
+                Margin="0,0,2,0"
                 Background="SeaGreen"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
@@ -217,6 +234,7 @@
             <Button
                 Width="80"
                 Height="Auto"
+                Margin="0,0,2,0"
                 Background="Gray"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
@@ -232,33 +250,55 @@
                         StaysOpen="True" />
                 </Button.ToolTip>
             </Button>
+            
         </StackPanel>
         <Grid Grid.Row="3" Margin="2,2,2,2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition />
-                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="80" />
             </Grid.ColumnDefinitions>
             <Button
                 Margin="1,1,1,1"
+                BorderThickness="0.5"
                 Background="WhiteSmoke"
                 Command="{Binding ToggleCommand}"
                 Content="Toggle"
-                ToolTip="Toggle to check different parameters between two elements invert" />
+                ToolTip="Toggle to check different parameters between two elements invert">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="3"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="1,1,1,1"
+                BorderThickness="0.5"
                 Background="WhiteSmoke"
                 Command="{Binding CloseCommand}"
                 Content="Close"
-                IsCancel="True" />
+                IsCancel="True">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="3"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
             <Button
                 Grid.Column="2"
                 Margin="1,1,1,1"
+                BorderThickness="0.5"
                 Background="WhiteSmoke"
                 Command="{Binding ExportCommand}"
-                Content="Export" />
+                Content="Export">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="3"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </Grid>
 
     </Grid>

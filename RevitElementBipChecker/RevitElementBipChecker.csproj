@@ -61,6 +61,10 @@
 		<Authors>https://chuongmep.com/</Authors>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\lightbulb_702797.png" />
+	  <None Remove="Resources\lightbulb_702814.png" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
@@ -71,5 +75,22 @@
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Resource Include="Resources\lightbulb_702797.png" />
+	  <Resource Include="Resources\lightbulb_702814.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>
