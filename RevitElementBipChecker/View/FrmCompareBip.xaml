@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
         d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
-        Title="Mini Compare Two Element" Height="600" Width="450">
+        Title="Mini Compare Two Element" Height="600" Width="550">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />

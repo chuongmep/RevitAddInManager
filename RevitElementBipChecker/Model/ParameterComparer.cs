@@ -47,14 +47,7 @@ public class ParameterComparer
         return differences;
     }
 }
-// public class ParameterBase : ViewmodeBase
-// {
-//     public string Name { get; set; }
-//     public string Value { get; set; }
-//     public string Type { get; set; }
-//     public bool IsInstance { get; set; }
-//     public string GroupName { get; set; }
-// }
+
 public class ParameterDifference: ParameterData
 {
     /// <summary>
