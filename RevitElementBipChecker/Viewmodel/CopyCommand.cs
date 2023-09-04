@@ -64,7 +64,7 @@ namespace RevitElementBipChecker.Viewmodel
         private void Copy_ParameterName()
         {
             ParameterData parameterData = GetSelectedItem();
-            Clipboard.SetText(parameterData.ParameterName);
+            Clipboard.SetText(parameterData.Name);
         }
         private void Copy_Type()
         {

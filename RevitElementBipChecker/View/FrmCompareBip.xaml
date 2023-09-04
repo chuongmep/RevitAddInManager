@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
         d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
-        Title="Mini Compare Two Element" Height="600" Width="400">
+        Title="Mini Compare Two Element" Height="600" Width="450">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -69,8 +69,14 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="Parameter Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Width="70" Header="Type" Binding="{Binding Type}" />
+                <DataGridTextColumn Width="100" Binding="{Binding Name}" Header="Parameter Name" />
+                <DataGridTextColumn Width="90" Binding="{Binding GroupName}" Header="GroupName" />
+                <DataGridTextColumn Width="60" Binding="{Binding TypeOrInstance}" Header="TypeOrInstance" />
+                <!-- <DataGridTextColumn Binding="{Binding BuiltInParameter}" Header="BuiltInParameter" /> -->
+                <DataGridTextColumn Width="70" Binding="{Binding Type}" Header="Type" />
+                <!-- <DataGridTextColumn Binding="{Binding Unit}" Header="Unit" /> -->
+                <!-- <DataGridTextColumn Binding="{Binding ReadWrite}" Header="ReadWrite" /> -->
+                <!-- <DataGridTextColumn Binding="{Binding Shared}" Header="Shared" /> -->
                 <DataGridTextColumn Width="*" Header="Value Element1" Binding="{Binding Value1}" />
                 <DataGridTextColumn Width="*" Header="Value Element2" Binding="{Binding Value2}" />
             </DataGrid.Columns>

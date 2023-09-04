@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using Autodesk.Revit.DB;
 
 namespace RevitElementBipChecker.Model;
 
 public class ParameterComparer
 {
-    public static List<ParameterDifference> CompareParameters(List<ParameterBase> list1, List<ParameterBase> list2)
+    public const string NotExistValue = "<Not Exist>";
+    public const string EmptyValue = "<empty>";
+    public static List<ParameterDifference> CompareParameters(List<ParameterDifference> list1, List<ParameterDifference> list2)
     {
         var differences = new List<ParameterDifference>();
 
@@ -17,23 +20,15 @@ public class ParameterComparer
 
             if (parameter2 == null)
             {
-                differences.Add(new ParameterDifference
-                {
-                    Name = parameter1.Name,
-                    Type = parameter1.Type,
-                    Value1 = parameter1.Value,
-                    Value2 = null // Not found in list2
-                });
+                parameter1.Value1 = parameter1.StringValue;
+                parameter1.Value2 = NotExistValue;
+                differences.Add(parameter1);
             }
             else if (parameter1.Type != parameter2.Type || parameter1.Value != parameter2.Value)
             {
-                differences.Add(new ParameterDifference
-                {
-                    Name = parameter1.Name,
-                    Type = parameter1.Type,
-                    Value1 = parameter1.Value,
-                    Value2 = parameter2.Value
-                });
+                parameter1.Value1 = parameter1.StringValue;
+                parameter1.Value2 = parameter2.StringValue;
+                differences.Add(parameter1);
             }
         }
 
@@ -44,31 +39,33 @@ public class ParameterComparer
 
             if (parameter1 == null)
             {
-                differences.Add(new ParameterDifference
-                {
-                    Name = parameter2.Name,
-                    Type = parameter2.Type,
-                    Value1 = null, // Not found in list1
-                    Value2 = parameter2.Value
-                });
+                parameter2.Value1 = NotExistValue;
+                parameter2.Value2 = parameter2.StringValue;
+                differences.Add(parameter2);
             }
         }
         return differences;
     }
 }
-public class ParameterBase
+// public class ParameterBase : ViewmodeBase
+// {
+//     public string Name { get; set; }
+//     public string Value { get; set; }
+//     public string Type { get; set; }
+//     public bool IsInstance { get; set; }
+//     public string GroupName { get; set; }
+// }
+public class ParameterDifference: ParameterData
 {
-    public string Name { get; set; }
-    public string Value { get; set; }
-    public string Type { get; set; }
-}
-public class ParameterDifference: ViewmodeBase
-{
-    public string Name { get; set; }
-    public string Type { get; set; }
+    /// <summary>
+    /// Value parameter of Element1
+    /// </summary>
     public string Value1 { get; set; }
+    /// <summary>
+    /// Value parameter of Element2
+    /// </summary>
     public string Value2 { get; set; }
-    private Brush _rowColor = Brushes.Transparent;
+    private Brush _rowColor = Brushes.White;
     public Brush RowColor
     {
         get { return _rowColor; }
@@ -77,5 +74,14 @@ public class ParameterDifference: ViewmodeBase
             _rowColor = value;
             OnPropertyChanged(nameof(RowColor));
         }
+    }
+
+    public ParameterDifference(Parameter parameter, Document doc, bool isinstance = true) : base(parameter, doc, isinstance)
+    {
+        
+    }
+
+    public ParameterDifference(Element element, Parameter parameter, Document doc, bool isinstance = true) : base(element, parameter, doc, isinstance)
+    {
     }
 }

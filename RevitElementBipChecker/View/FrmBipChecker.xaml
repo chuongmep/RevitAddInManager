@@ -136,7 +136,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding ElementId}" Header="ElementId" />
                 <DataGridTextColumn Binding="{Binding Category}" Header="Category" />
-                <DataGridTextColumn Binding="{Binding ParameterName}" Header="Parameter Name" />
+                <DataGridTextColumn Binding="{Binding Name}" Header="Parameter Name" />
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
                 <DataGridTextColumn Binding="{Binding TypeOrInstance}" Header="TypeOrInstance" />
                 <DataGridTextColumn Binding="{Binding BuiltInParameter}" Header="BuiltInParameter" />

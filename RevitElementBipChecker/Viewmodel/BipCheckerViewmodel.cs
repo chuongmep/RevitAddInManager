@@ -64,7 +64,7 @@ namespace RevitElementBipChecker.Viewmodel
             ParameterData paradata = (ParameterData)item;
             if (SearchText != null || SearchText != "")
             {
-                return paradata.ParameterName.ToUpper().Contains(SearchText.ToUpper());
+                return paradata.Name.ToUpper().Contains(SearchText.ToUpper());
 
             }
             else { return true; }

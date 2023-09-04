@@ -19,9 +19,9 @@ public class CompareBipViewModel : ViewmodeBase
     private UIApplication UiApp { get; set; }
     private Element Element1 { get; set; }
     private Element Element2 { get; set; }
-    private List<ParameterBase> diffParameters1 = new List<ParameterBase>();
-    private List<ParameterBase> diffParameters2 = new List<ParameterBase>();
-    private bool IsToggle { get; set; }
+    private List<ParameterDifference> diffParameters1 = new List<ParameterDifference>();
+    private List<ParameterDifference> diffParameters2 = new List<ParameterDifference>();
+    private bool IsToggle { get; set; } = false;
     RevitEvent revitEvent = new RevitEvent();
     public FrmCompareBip FrmCompareBip { get; set; }
     public ICommand CloseCommand { get; set; }
@@ -31,6 +31,7 @@ public class CompareBipViewModel : ViewmodeBase
     public ICommand SelectElement2Command { get; set; }
     public ICommand SnoopCommand { get; set; }
     private ObservableCollection<ParameterDifference> differences;
+
     public ObservableCollection<ParameterDifference> Differences
     {
         get
@@ -39,11 +40,14 @@ public class CompareBipViewModel : ViewmodeBase
             {
                 differences = new ObservableCollection<ParameterDifference>();
             }
+
             return differences;
         }
         set => OnPropertyChanged(ref differences, value);
     }
+
     private ICollectionView itemsView;
+
     public ICollectionView ItemsView
     {
         get
@@ -53,20 +57,25 @@ public class CompareBipViewModel : ViewmodeBase
                 itemsView = CollectionViewSource.GetDefaultView(Differences);
                 itemsView.Filter = filterSearchText;
             }
+
             return itemsView;
         }
         set => OnPropertyChanged(ref itemsView, value);
     }
+
     private bool filterSearchText(object item)
     {
-        var data = (ParameterDifference)item;
+        var data = (ParameterDifference) item;
         if (SearchText != null || SearchText != "")
         {
             return SearchText != null && data.Name.ToUpper().Contains(SearchText.ToUpper());
         }
+
         return true;
     }
+
     private string _searchText;
+
     public string SearchText
     {
         get
@@ -75,6 +84,7 @@ public class CompareBipViewModel : ViewmodeBase
             {
                 _searchText = "";
             }
+
             return _searchText;
         }
         set
@@ -83,7 +93,8 @@ public class CompareBipViewModel : ViewmodeBase
             ItemsView.Refresh();
         }
     }
-    public CompareBipViewModel(UIApplication uiApp,Element element1, Element element2)
+
+    public CompareBipViewModel(UIApplication uiApp, Element element1, Element element2)
     {
         this.UiApp = uiApp;
         this.UiDoc = uiApp.ActiveUIDocument;
@@ -111,6 +122,7 @@ public class CompareBipViewModel : ViewmodeBase
             UiDoc.Selection.SetElementIds(new List<ElementId>() {Element2.Id});
         }
     }
+
     private void SelectElement2Click()
     {
         UiDoc.RefreshActiveView();
@@ -126,17 +138,19 @@ public class CompareBipViewModel : ViewmodeBase
 
     private void SnoopCommandClick()
     {
-        List<Element> newElements = new List<Element>(){Element1,Element2};
+        List<Element> newElements = new List<Element>() {Element1, Element2};
         ICollection<ElementId> elementIds = newElements.Select(x => x.Id).ToList();
         UiDoc.Selection.SetElementIds(elementIds);
-        RevitCommandId lookupCommandId = RevitCommandId.LookupCommandId("CustomCtrl_%CustomCtrl_%Add-Ins%Explorer%RevitDBExplorer.Command");
-        if(lookupCommandId == null)
+        RevitCommandId lookupCommandId =
+            RevitCommandId.LookupCommandId("CustomCtrl_%CustomCtrl_%Add-Ins%Explorer%RevitDBExplorer.Command");
+        if (lookupCommandId == null)
         {
             TaskDialog.Show("Error", "Please install RevitDBExplorer");
             Process.Start("https://github.com/NeVeSpl/RevitDBExplorer");
             MessageBox.Show("Please install RevitDBExplorer");
             return;
         }
+
         // execute the command
         UiApp.PostCommand(lookupCommandId);
     }
@@ -149,27 +163,46 @@ public class CompareBipViewModel : ViewmodeBase
             differences =
                 ParameterComparer.CompareParameters(diffParameters1, diffParameters2)
                     .OrderBy(x => x.Name).ToObservableCollection();
-            foreach (var item in differences)
+            foreach (ParameterDifference difference in differences)
             {
-                if (diffParameters2.All(x => x.Name != item?.Name))
+                if (difference.Value1 == ParameterComparer.NotExistValue)
                 {
-                    item!.RowColor = System.Windows.Media.Brushes.Firebrick;
+                    difference.RowColor = System.Windows.Media.Brushes.Firebrick;
+                }
+                else if (difference.Value2 == ParameterComparer.NotExistValue)
+                {
+                    difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
+                }
+                else
+                {
+                    difference.RowColor = System.Windows.Media.Brushes.Yellow;
                 }
             }
+           
         }
         else
         {
             differences =
                 ParameterComparer.CompareParameters(diffParameters2, diffParameters1)
-                .OrderBy(x => x.Name).ToObservableCollection();
-            foreach (var item in differences)
+                    .OrderBy(x => x.Name).ToObservableCollection();
+            foreach (ParameterDifference difference in differences)
             {
-                if (diffParameters1.All(x => x.Name != item?.Name))
+                if (difference.Value1 == ParameterComparer.NotExistValue)
                 {
-                    item!.RowColor = System.Windows.Media.Brushes.Firebrick;
+                    difference.RowColor = System.Windows.Media.Brushes.Firebrick;
+                }
+                else if (difference.Value2 == ParameterComparer.NotExistValue)
+                {
+                    difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
+                }
+                else
+                {
+                    difference.RowColor = System.Windows.Media.Brushes.Yellow;
                 }
             }
         }
+
+
         OnPropertyChanged(nameof(Differences));
         ItemsView = CollectionViewSource.GetDefaultView(Differences);
         ItemsView.Refresh();
@@ -181,12 +214,7 @@ public class CompareBipViewModel : ViewmodeBase
     {
         foreach (Autodesk.Revit.DB.Parameter parameter in Element1.ParametersMap)
         {
-            diffParameters1.Add(new ParameterBase()
-            {
-                Name = parameter.Definition.Name,
-                Value = parameter.AsValueString(),
-                Type = parameter.StorageType.ToString()
-            });
+            diffParameters1.Add(new ParameterDifference(Element1, parameter, Element1.Document, true));
         }
 
         if (Element1.CanHaveTypeAssigned())
@@ -194,23 +222,13 @@ public class CompareBipViewModel : ViewmodeBase
             var typeElement1 = Element1.Document.GetElement(Element1.GetTypeId());
             foreach (Autodesk.Revit.DB.Parameter parameter in typeElement1.ParametersMap)
             {
-                diffParameters1.Add(new ParameterBase()
-                {
-                    Name = parameter.Definition.Name,
-                    Value = parameter.AsValueString(),
-                    Type = parameter.StorageType.ToString()
-                });
+                diffParameters1.Add(new ParameterDifference(Element1, parameter, Element1.Document, false));
             }
         }
 
         foreach (Autodesk.Revit.DB.Parameter parameter in Element2.ParametersMap)
         {
-            diffParameters2.Add(new ParameterBase()
-            {
-                Name = parameter.Definition.Name,
-                Value = parameter.AsValueString(),
-                Type = parameter.StorageType.ToString()
-            });
+            diffParameters2.Add(new ParameterDifference(Element2, parameter, Element2.Document, true));
         }
 
         if (Element2.CanHaveTypeAssigned())
@@ -218,15 +236,9 @@ public class CompareBipViewModel : ViewmodeBase
             var typeElement2 = Element2.Document.GetElement(Element2.GetTypeId());
             foreach (Autodesk.Revit.DB.Parameter parameter in typeElement2.ParametersMap)
             {
-                diffParameters2.Add(new ParameterBase()
-                {
-                    Name = parameter.Definition.Name,
-                    Value = parameter.AsValueString(),
-                    Type = parameter.StorageType.ToString()
-                });
+                diffParameters2.Add(new ParameterDifference(Element2, parameter, Element2.Document, false));
             }
         }
-        
     }
 
     private void ExportCsv()
@@ -240,6 +252,7 @@ public class CompareBipViewModel : ViewmodeBase
         {
             filename = Element2.Id + "_" + Element1.Id + ".csv";
         }
+
         string exportCsv = FrmCompareBip.dataGrid.Items.Cast<ParameterDifference>()
             .ToList()
             .ToDataTable()

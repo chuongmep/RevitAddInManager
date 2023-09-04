@@ -2,13 +2,23 @@
 
 namespace RevitElementBipChecker.Model
 {
-   public class ParameterData
+   public class ParameterData : ViewmodeBase
     {
+        // public ParameterData()
+        // {
+        //     
+        // }
+        /// <summary>
+        ///  Init Parameter data with type or instance
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="doc"></param>
+        /// <param name="isinstance"></param>
         public ParameterData(Parameter parameter,Document doc,bool isinstance=true)
         {
             this.Parameter = parameter;
             this.BuiltInParameter = (parameter.Definition as InternalDefinition)?.BuiltInParameter.ToString();
-            this.ParameterName = parameter.Definition.Name;
+            this.Name = parameter.Definition.Name;
             this.Id = parameter.Id.ToString();
             this.ParameterGroup = parameter.Definition.ParameterGroup.ToString();
             this.ParameterType = parameter.GetParameterType();
@@ -37,7 +47,7 @@ namespace RevitElementBipChecker.Model
         public string ElementId { get; set; }
         public string Category { get; set; }
         public Autodesk.Revit.DB.Parameter Parameter { get; set; }
-        public string ParameterName { get; set; }
+        public string Name { get; set; }
         public string Id { get; set; }
         public string TypeOrInstance { get; set; }
         public string BuiltInParameter { get; set; }
