@@ -173,6 +173,10 @@ public class CompareBipViewModel : ViewmodeBase
                 {
                     difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
                 }
+                else if (difference.Value1 == difference.Value2)
+                {
+                    difference.RowColor = System.Windows.Media.Brushes.Gray;
+                }
                 else
                 {
                     difference.RowColor = System.Windows.Media.Brushes.Yellow;
@@ -195,14 +199,16 @@ public class CompareBipViewModel : ViewmodeBase
                 {
                     difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
                 }
+                else if (difference.Value1 == difference.Value2)
+                {
+                    difference.RowColor = System.Windows.Media.Brushes.Gray;
+                }
                 else
                 {
                     difference.RowColor = System.Windows.Media.Brushes.Yellow;
                 }
             }
         }
-
-
         OnPropertyChanged(nameof(Differences));
         ItemsView = CollectionViewSource.GetDefaultView(Differences);
         ItemsView.Refresh();

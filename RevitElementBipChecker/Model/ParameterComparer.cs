@@ -12,7 +12,6 @@ public class ParameterComparer
     public static List<ParameterDifference> CompareParameters(List<ParameterDifference> list1, List<ParameterDifference> list2)
     {
         var differences = new List<ParameterDifference>();
-
         // Find parameters in list1 that are not in list2
         foreach (var parameter1 in list1)
         {
@@ -22,12 +21,21 @@ public class ParameterComparer
             {
                 parameter1.Value1 = parameter1.StringValue;
                 parameter1.Value2 = NotExistValue;
+                parameter1.State = StateParameter.NotExist;
                 differences.Add(parameter1);
             }
             else if (parameter1.Type != parameter2.Type || parameter1.Value != parameter2.Value)
             {
                 parameter1.Value1 = parameter1.StringValue;
                 parameter1.Value2 = parameter2.StringValue;
+                parameter1.State = StateParameter.Different;
+                differences.Add(parameter1);
+            }
+            else
+            {
+                parameter1.Value1 = parameter1.StringValue;
+                parameter1.Value2 = parameter2.StringValue;
+                parameter1.State = StateParameter.Same;
                 differences.Add(parameter1);
             }
         }
@@ -41,6 +49,7 @@ public class ParameterComparer
             {
                 parameter2.Value1 = NotExistValue;
                 parameter2.Value2 = parameter2.StringValue;
+                parameter2.State = StateParameter.NotExist;
                 differences.Add(parameter2);
             }
         }
@@ -50,6 +59,7 @@ public class ParameterComparer
 
 public class ParameterDifference: ParameterData
 {
+    public StateParameter State { get; set; } = StateParameter.Unknown;
     /// <summary>
     /// Value parameter of Element1
     /// </summary>
@@ -77,4 +87,12 @@ public class ParameterDifference: ParameterData
     public ParameterDifference(Element element, Parameter parameter, Document doc, bool isinstance = true) : base(element, parameter, doc, isinstance)
     {
     }
+}
+
+public enum StateParameter
+{
+    Same,
+    Different,
+    NotExist,
+    Unknown
 }
