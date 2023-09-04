@@ -8,6 +8,8 @@
     Title="Mini Compare Two Element"
     Width="650"
     Height="600"
+    MinWidth="400"
+    MinHeight="300"
     d:DataContext="{d:DesignInstance viewmodel:CompareBipViewModel}"
     FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
     mc:Ignorable="d">
@@ -143,7 +145,7 @@
                     Binding="{Binding Value2}"
                     Header="Value Element2" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="60"
                     Binding="{Binding Similarity}"
                     Header="Similarity" />
             </DataGrid.Columns>
