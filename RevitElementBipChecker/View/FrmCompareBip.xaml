@@ -142,6 +142,10 @@
                     Width="*"
                     Binding="{Binding Value2}"
                     Header="Value Element2" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Similarity}"
+                    Header="Similarity" />
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>

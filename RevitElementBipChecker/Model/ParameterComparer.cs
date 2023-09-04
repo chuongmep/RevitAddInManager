@@ -28,6 +28,7 @@ public class ParameterComparer
             {
                 parameter1.Value1 = parameter1.StringValue;
                 parameter1.Value2 = parameter2.StringValue;
+                parameter1.Similarity = CosineSimilarity.CalculateCosineSimilarity(parameter1.Value1, parameter1.Value2);
                 parameter1.State = StateParameter.Different;
                 differences.Add(parameter1);
             }
@@ -35,6 +36,7 @@ public class ParameterComparer
             {
                 parameter1.Value1 = parameter1.StringValue;
                 parameter1.Value2 = parameter2.StringValue;
+                parameter1.Similarity = CosineSimilarity.CalculateCosineSimilarity(parameter1.Value1, parameter1.Value2);
                 parameter1.State = StateParameter.Same;
                 differences.Add(parameter1);
             }
@@ -68,6 +70,8 @@ public class ParameterDifference: ParameterData
     /// Value parameter of Element2
     /// </summary>
     public string Value2 { get; set; }
+
+    public double Similarity { get; set; } = -1;
     private Brush _rowColor = Brushes.White;
     public Brush RowColor
     {
@@ -78,7 +82,6 @@ public class ParameterDifference: ParameterData
             OnPropertyChanged(nameof(RowColor));
         }
     }
-
     public ParameterDifference(Parameter parameter, Document doc, bool isinstance = true) : base(parameter, doc, isinstance)
     {
         
