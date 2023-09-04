@@ -59,7 +59,6 @@
             x:Name="dataGrid"
             Grid.Row="1"
             Background="WhiteSmoke"
-            AlternatingRowBackground="Transparent"
             AlternationCount="2"
             IsReadOnly="True"
             ItemsSource="{Binding Differences}"
