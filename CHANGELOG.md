@@ -1,4 +1,14 @@
 # Changelog
+- 2023-09-05 **1.5.1**
+  - Support basic compare element properties.
+  - Add new button compare properties.
+  - Add new button help.
+  - Improvement UI compare element parameter.
+  - Supported Sort by color when click to color button.
+  - Improvement performance compare element parameter.
+  - Fix min size windows popup.
+  - Fix some small bug.
+  - Fix round corner windows 11 problem.
 - 2023-09-04 **1.5.0**
   - Compare Element Parameter Support All Parameter.
   - Add 4 color for compare element parameter.
