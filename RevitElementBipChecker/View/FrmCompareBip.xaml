@@ -178,6 +178,7 @@
                 Height="Auto"
                 Margin="2,0,2,0"
                 Background="Yellow"
+                Click="SortByColor"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
                     <ToolTip
@@ -198,6 +199,7 @@
                 Height="Auto"
                 Margin="0,0,2,0"
                 Background="Firebrick "
+                Click="SortByColor"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
                     <ToolTip
@@ -217,6 +219,7 @@
                 Height="Auto"
                 Margin="0,0,2,0"
                 Background="SeaGreen"
+                Click="SortByColor"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
                     <ToolTip
@@ -236,6 +239,7 @@
                 Height="Auto"
                 Margin="0,0,2,0"
                 Background="Gray"
+                Click="SortByColor"
                 Style="{StaticResource RoundedButton}">
                 <Button.ToolTip>
                     <ToolTip
@@ -252,6 +256,7 @@
             </Button>
             <Button
                 Margin="2,0,0,0"
+                Width="80"
                 Background="WhiteSmoke"
                 BorderThickness="0.5"
                 Command="{Binding PropertyCommand}"
