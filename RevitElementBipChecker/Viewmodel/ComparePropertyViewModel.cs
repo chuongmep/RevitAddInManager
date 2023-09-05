@@ -5,8 +5,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitElementBipChecker.Model;
+using Color = System.Windows.Media.Color;
 
 namespace RevitElementBipChecker.Viewmodel
 {
@@ -112,7 +115,12 @@ namespace RevitElementBipChecker.Viewmodel
             }
             foreach (var difference in differences)
             {
-                if (difference.StateCompare == StateCompare.InList1Only)
+                if(difference.Type.FullName != null && difference.Type.FullName.Contains("Autodesk"))
+                {
+                    // set color #0000FF
+                    difference.RowColor = Brushes.Beige;
+                }
+                else if (difference.StateCompare == StateCompare.InList1Only)
                 {
                     difference.RowColor = System.Windows.Media.Brushes.Firebrick;
                 }

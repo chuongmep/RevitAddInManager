@@ -1,11 +1,12 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 
 namespace RevitElementBipChecker.Model;
 
 public class BaseDataCompare : ViewmodeBase
 {
     public string Name { get; set; }
-    public string Type { get; set; }
+    public Type Type { get; set; }
     public string Value { get; set; }
 }
 

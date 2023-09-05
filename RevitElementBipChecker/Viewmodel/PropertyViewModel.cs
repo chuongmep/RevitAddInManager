@@ -24,7 +24,7 @@ namespace RevitElementBipChecker.Viewmodel
                 {
                     BaseDataCompare data = new BaseDataCompare();
                     data.Name = property.Name;
-                    data.Type = property.PropertyType.Name;
+                    data.Type = property.PropertyType;
                     try
                     {
                         data.Value = property.GetValue(Element)?.ToString();
