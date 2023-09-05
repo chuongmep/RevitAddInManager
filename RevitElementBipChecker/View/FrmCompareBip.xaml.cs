@@ -7,7 +7,7 @@ namespace RevitElementBipChecker.View
     /// </summary>
     public partial class FrmCompareBip
     {
-        public FrmCompareBip(CompareBipViewModel viewModel)
+        public FrmCompareBip(ParameterCompareViewModel viewModel)
         {
             InitializeComponent();
             this.DataContext = viewModel;

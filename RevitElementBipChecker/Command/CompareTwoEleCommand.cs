@@ -42,7 +42,7 @@ public class CompareTwoEleCommand : IExternalCommand
             MessageBox.Show("Error: " + e.Message);
             return Result.Cancelled;
         }
-        CompareBipViewModel viewModel = new CompareBipViewModel(uiapp,element1, element2);
+        ParameterCompareViewModel viewModel = new ParameterCompareViewModel(uiapp,element1, element2);
         FrmCompareBip frmCompareBip = new FrmCompareBip(viewModel);
      
         frmCompareBip.WindowStartupLocation = WindowStartupLocation.CenterScreen;

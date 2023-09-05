@@ -13,12 +13,9 @@ using RevitElementBipChecker.View;
 
 namespace RevitElementBipChecker.Viewmodel;
 
-public class CompareBipViewModel : ViewmodeBase
+public class ParameterCompareViewModel : BaseElementCompare
 {
-    private UIDocument UiDoc { get; set; }
-    private UIApplication UiApp { get; set; }
-    private Element Element1 { get; set; }
-    private Element Element2 { get; set; }
+   
     private List<ParameterDifference> diffParameters1 = new List<ParameterDifference>();
     private List<ParameterDifference> diffParameters2 = new List<ParameterDifference>();
     private bool IsToggle { get; set; } = false;
@@ -26,6 +23,7 @@ public class CompareBipViewModel : ViewmodeBase
     public FrmCompareBip FrmCompareBip { get; set; }
     public ICommand CloseCommand { get; set; }
     public ICommand HelpCommand { get; set; }
+    public ICommand PropertyCommand { get; set; }
     public ICommand ToggleCommand { get; set; }
     public ICommand ExportCommand { get; set; }
     public ICommand SelectElement1Command { get; set; }
@@ -95,7 +93,7 @@ public class CompareBipViewModel : ViewmodeBase
         }
     }
 
-    public CompareBipViewModel(UIApplication uiApp, Element element1, Element element2)
+    public ParameterCompareViewModel(UIApplication uiApp, Element element1, Element element2)
     {
         this.UiApp = uiApp;
         this.UiDoc = uiApp.ActiveUIDocument;
@@ -106,6 +104,7 @@ public class CompareBipViewModel : ViewmodeBase
         ToggleCommand = new RelayCommand(() => revitEvent.Run(this.ToggleCompare, true, null));
         CloseCommand = new RelayCommand(() => revitEvent.Run(FrmCompareBip.Close, true, null));
         HelpCommand = new RelayCommand(() => revitEvent.Run(HelpClick, true, null));
+        PropertyCommand = new RelayCommand(() => revitEvent.Run(PropertyClick, true, null));
         ExportCommand = new RelayCommand(() => revitEvent.Run(ExportCsv, true, null));
         SelectElement1Command = new RelayCommand(() => revitEvent.Run(SelectElement1Click, true, null));
         SelectElement2Command = new RelayCommand(() => revitEvent.Run(SelectElement2Click, true, null));
@@ -163,52 +162,32 @@ public class CompareBipViewModel : ViewmodeBase
         if (IsToggle)
         {
             differences =
-                ParameterComparer.CompareParameters(diffParameters1, diffParameters2)
+                CompareParameter.CompareParameters(diffParameters1, diffParameters2)
                     .OrderBy(x => x.Name).ToObservableCollection();
-            foreach (ParameterDifference difference in differences)
-            {
-                if (difference.Value1 == ParameterComparer.NotExistValue)
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.Firebrick;
-                }
-                else if (difference.Value2 == ParameterComparer.NotExistValue)
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
-                }
-                else if (difference.Value1 == difference.Value2)
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.Gray;
-                }
-                else
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.Yellow;
-                }
-            }
-           
         }
         else
         {
             differences =
-                ParameterComparer.CompareParameters(diffParameters2, diffParameters1)
+                CompareParameter.CompareParameters(diffParameters2, diffParameters1)
                     .OrderBy(x => x.Name).ToObservableCollection();
-            foreach (ParameterDifference difference in differences)
+        }
+        foreach (ParameterDifference difference in differences)
+        {
+            if (difference.State == StateParameter.NotExistIn1)
             {
-                if (difference.Value1 == ParameterComparer.NotExistValue)
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.Firebrick;
-                }
-                else if (difference.Value2 == ParameterComparer.NotExistValue)
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
-                }
-                else if (difference.Value1 == difference.Value2)
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.Gray;
-                }
-                else
-                {
-                    difference.RowColor = System.Windows.Media.Brushes.Yellow;
-                }
+                difference.RowColor = System.Windows.Media.Brushes.Firebrick;
+            }
+            else if (difference.State == StateParameter.NotExistIn2)
+            {
+                difference.RowColor = System.Windows.Media.Brushes.SeaGreen;
+            }
+            else if (difference.State == StateParameter.SameValue)
+            {
+                difference.RowColor = System.Windows.Media.Brushes.Gray;
+            }
+            else if (difference.State == StateParameter.DifferentValue)
+            {
+                difference.RowColor = System.Windows.Media.Brushes.Yellow;
             }
         }
         OnPropertyChanged(nameof(Differences));
@@ -252,6 +231,15 @@ public class CompareBipViewModel : ViewmodeBase
     private void HelpClick()
     {
         Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki/How-to-use-Compare-Parameter-Element");
+    }
+
+    private void PropertyClick()
+    {
+        PropertyObjectCompareViewModel viewModel = new PropertyObjectCompareViewModel(UiApp, Element1, Element2);
+        FrmPropertyChecker frmPropertyChecker = new FrmPropertyChecker(viewModel);
+        frmPropertyChecker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        frmPropertyChecker.Owner = FrmCompareBip;
+        frmPropertyChecker.Show();
     }
     private void ExportCsv()
     {
