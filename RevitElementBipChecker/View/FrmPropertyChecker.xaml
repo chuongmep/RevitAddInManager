@@ -10,7 +10,7 @@
     MinHeight="400"
     Width="550"
     Height="600"
-    d:DataContext="{d:DesignInstance viewmodel:PropertyObjectCompareViewModel}"
+    d:DataContext="{d:DesignInstance viewmodel:ComparePropertyViewModel}"
     mc:Ignorable="d">
     <Window.Resources>
         <Style x:Key="RoundedButton" TargetType="Button">
@@ -126,7 +126,7 @@
                 Height="20"
                 Background="Transparent"
                 BorderThickness="0"
-                Command="{Binding HelpCommand}"
+                Command="{Binding }"
                 Style="{x:Null}"
                 ToolTip="You need help ?">
                 <Button.Content>

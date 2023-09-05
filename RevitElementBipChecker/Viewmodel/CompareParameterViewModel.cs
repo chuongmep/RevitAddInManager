@@ -235,7 +235,7 @@ public class ParameterCompareViewModel : BaseElementCompare
 
     private void PropertyClick()
     {
-        PropertyObjectCompareViewModel viewModel = new PropertyObjectCompareViewModel(UiApp, Element1, Element2);
+        ComparePropertyViewModel viewModel = new ComparePropertyViewModel(UiApp, Element1, Element2);
         FrmPropertyChecker frmPropertyChecker = new FrmPropertyChecker(viewModel);
         frmPropertyChecker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         frmPropertyChecker.Owner = FrmCompareBip;

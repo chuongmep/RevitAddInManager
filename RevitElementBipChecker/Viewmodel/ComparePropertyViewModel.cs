@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.UI;
@@ -10,7 +10,7 @@ using RevitElementBipChecker.Model;
 
 namespace RevitElementBipChecker.Viewmodel
 {
-    public class PropertyObjectCompareViewModel : BaseElementCompare
+    public class ComparePropertyViewModel : BaseElementCompare
     {
         private ObservableCollection<ComparisonResult> differences;
 
@@ -75,7 +75,8 @@ namespace RevitElementBipChecker.Viewmodel
         public bool IsToggle { get; set; } = false;
         public ICommand ToggleCommand { get; set; }
         RevitEvent revitEvent = new RevitEvent();
-        public PropertyObjectCompareViewModel(UIApplication uiApp, Autodesk.Revit.DB.Element element1,Autodesk.Revit.DB.Element element2)
+        public ICommand HelpCommand { get; set; }
+        public ComparePropertyViewModel(UIApplication uiApp, Autodesk.Revit.DB.Element element1,Autodesk.Revit.DB.Element element2)
         {
             UiApp = uiApp;
             UiDoc = uiApp.ActiveUIDocument;
@@ -83,6 +84,7 @@ namespace RevitElementBipChecker.Viewmodel
             this.Element2  = element2;
             Toggle();
             ToggleCommand = new RelayCommand(() => revitEvent.Run(Toggle, true, null));
+            HelpCommand = new RelayCommand(() => revitEvent.Run(HelpClick, true, null));
         }
         
         private void Toggle()
@@ -132,6 +134,10 @@ namespace RevitElementBipChecker.Viewmodel
             ItemsView.Refresh();
             ItemsView.Filter = filterSearchText;
             OnPropertyChanged(nameof(SearchText));
+        }
+        private void HelpClick()
+        {
+            Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki/How-to-use-Compare-Parameter-Element");
         }
     }
 }

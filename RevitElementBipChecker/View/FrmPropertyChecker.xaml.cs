@@ -11,8 +11,8 @@ namespace RevitElementBipChecker.View
     /// </summary>
     public partial class FrmPropertyChecker : Window
     {
-        private PropertyObjectCompareViewModel _viewModel;
-        public FrmPropertyChecker(PropertyObjectCompareViewModel viewModel)
+        private ComparePropertyViewModel _viewModel;
+        public FrmPropertyChecker(ComparePropertyViewModel viewModel)
         {
             InitializeComponent();
             this._viewModel = viewModel;
