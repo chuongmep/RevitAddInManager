@@ -1,6 +1,6 @@
 # Changelog
 - 2023-09-05 **1.5.1**
-  - Support basic compare element properties.
+  - Support basic compare element properties (Alpha).
   - Add new button compare properties.
   - Add new button help.
   - Improvement UI compare element parameter.
