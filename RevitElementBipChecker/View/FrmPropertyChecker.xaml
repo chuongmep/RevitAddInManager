@@ -247,7 +247,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80" />
                 <ColumnDefinition />
-                <ColumnDefinition Width="80" />
+                <!--<ColumnDefinition Width="80" />-->
             </Grid.ColumnDefinitions>
             <Button
                 Margin="1,1,1,1"
@@ -277,7 +277,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button
+            <!--<Button
                 Grid.Column="2"
                 Margin="1,1,1,1"
                 Background="WhiteSmoke"
@@ -289,7 +289,7 @@
                         <Setter Property="CornerRadius" Value="3" />
                     </Style>
                 </Button.Resources>
-            </Button>
+            </Button>-->
         </Grid>
     </Grid>
 </Window>
