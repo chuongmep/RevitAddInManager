@@ -11,6 +11,8 @@
 <img src="https://img.shields.io/twitter/follow/chuongmep?style=social&logo=twitter"
 alt="follow on Twitter"></a>
 
+![](pic/RevitAddinManager.png)
+
 ## 📋 Summary
 
 ![](pic/Addin.png)
