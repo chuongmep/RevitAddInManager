@@ -60,7 +60,7 @@
                 Margin="1,0,5,0"
                 VerticalAlignment="Center"
                 PreviewKeyDown="HandleTextboxKeyPress"
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding SearchText, Mode=TwoWay,Delay=200, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.Resources>
                     <VisualBrush
                         x:Key="tbxText"

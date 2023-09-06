@@ -59,7 +59,7 @@
             Grid.Row="0"
             Grid.Column="0"
             Margin="2,2,2,2"
-            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            Text="{Binding SearchText, Mode=TwoWay,Delay=500, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.Resources>
                 <VisualBrush
                     x:Key="tbxText"
