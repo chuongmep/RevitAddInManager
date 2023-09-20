@@ -175,13 +175,19 @@ public class AssemLoader
             }
             if (string.IsNullOrEmpty(filePath))
             {
-                var loader = new AssemblyLoader(args.Name);
-                loader.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                if (loader.ShowDialog() != true)
+                string assName = args.Name.Split(',').FirstOrDefault();
+                bool contains = copiedFiles.Select(x => x.Key.Split('\\').LastOrDefault()).Contains(assName);
+                if (contains)
                 {
-                    return null;
+                    // Just allow manual load assembly in folder copied, because we checked same domain conflict with another add-in.
+                    var loader = new AssemblyLoader(args.Name);
+                    loader.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    if (loader.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+                    filePath = loader.resultPath;
                 }
-                filePath = loader.resultPath;
             }
             result = CopyAndLoadAddin(filePath, true);
         }
