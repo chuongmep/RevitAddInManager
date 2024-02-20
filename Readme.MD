@@ -209,6 +209,8 @@ I suggest you some of these projects, hope you will like it.
 
 - [RevitDBExplorer](https://github.com/NeVeSpl/RevitDBExplorer)
 
+- [bim-net-interactive](https://github.com/jowsy/bim-net-interactive)
+
 - [Revit.ScriptCS](https://github.com/sridharbaldava/Revit.ScriptCS)
 
 - [Revit.TestRunner](https://github.com/geberit/Revit.TestRunner)
