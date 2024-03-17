@@ -217,4 +217,6 @@ I suggest you some of these projects, hope you will like it.
 
 - [pyRevit](https://github.com/eirannejad/pyRevit)
 
+- [Bowerbird](https://github.com/ara3d/bowerbird)
+
 [![Star History Chart](https://api.star-history.com/svg?repos=chuongmep/RevitAddInManager&type=Date)](https://star-history.com/#chuongmep/RevitAddInManager&Date)
