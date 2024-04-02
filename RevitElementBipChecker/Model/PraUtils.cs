@@ -71,7 +71,7 @@ namespace RevitElementBipChecker.Model
         /// <returns></returns>
         public static string GetParameterType(this Autodesk.Revit.DB.Parameter parameter)
         {
-#if R18 || R19 || R20 || R21
+#if R19 || R20 || R21 || R22
             ParameterType pt = parameter.Definition.ParameterType; // returns 'Invalid' for 'ElementId'
             string s = ParameterType.Invalid == pt ? "" : "/" + pt;
 #else
@@ -90,7 +90,7 @@ namespace RevitElementBipChecker.Model
         {
             try
             {
-#if R18 || R19 || R20
+#if R19 || R20
                 DisplayUnitType unitType = parameter.DisplayUnitType;
                 return LabelUtils.GetLabelFor(unitType);
 

@@ -1,5 +1,6 @@
 # Changelog
-
+- 2024-04-02 **1.5.3**
+  - Support Revit 2025 Release
 - 2023-09-20 **1.5.2**
     - Improvement search bar.
     - Fix Bug Popup resolve load assembly manual with same domain conflict with another add-in.

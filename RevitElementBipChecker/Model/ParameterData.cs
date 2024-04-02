@@ -20,9 +20,15 @@ namespace RevitElementBipChecker.Model
             this.BuiltInParameter = (parameter.Definition as InternalDefinition)?.BuiltInParameter.ToString();
             this.Name = parameter.Definition.Name;
             this.Id = parameter.Id.ToString();
+#if R19 || R20 || R21 || R22  || R23 || R24
             this.ParameterGroup = parameter.Definition.ParameterGroup.ToString();
+             this.GroupName = LabelUtils.GetLabelFor(parameter.Definition.ParameterGroup);
+#else
+            this.ParameterGroup = parameter.Definition.GetGroupTypeId().ToString();
+            this.GroupName = LabelUtils.GetLabelForGroup(parameter.Definition.GetGroupTypeId());
+#endif
             this.ParameterType = parameter.GetParameterType();
-            this.GroupName = LabelUtils.GetLabelFor(parameter.Definition.ParameterGroup);
+
             this.Type = parameter.GetParameterType();
             this.Unit = parameter.GetParameterUnit();
             this.ReadWrite = parameter.IsReadWrite();
