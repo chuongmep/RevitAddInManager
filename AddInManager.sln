@@ -24,6 +24,7 @@ Global
 		Debug R22|Any CPU = Debug R22|Any CPU
 		Debug R23|Any CPU = Debug R23|Any CPU
 		Debug R24|Any CPU = Debug R24|Any CPU
+		Debug R25|Any CPU = Debug R25|Any CPU
 		Installer|Any CPU = Installer|Any CPU
 		Release R19|Any CPU = Release R19|Any CPU
 		Release R20|Any CPU = Release R20|Any CPU
@@ -55,6 +56,8 @@ Global
 		{C872CDA2-93F5-4681-BD2F-207EACF83D2E}.Release R24|Any CPU.Build.0 = Release R24|Any CPU
 		{C872CDA2-93F5-4681-BD2F-207EACF83D2E}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
 		{C872CDA2-93F5-4681-BD2F-207EACF83D2E}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
+		{C872CDA2-93F5-4681-BD2F-207EACF83D2E}.Debug R25|Any CPU.ActiveCfg = Debug R25|Any CPU
+		{C872CDA2-93F5-4681-BD2F-207EACF83D2E}.Debug R25|Any CPU.Build.0 = Debug R25|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R22|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R23|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R24|Any CPU.ActiveCfg = Debug|Any CPU
@@ -90,6 +93,7 @@ Global
 		{1661572C-EF3A-4DD6-83BD-CB4239CE8CDD}.Release R23|Any CPU.ActiveCfg = Release R23|Any CPU
 		{1661572C-EF3A-4DD6-83BD-CB4239CE8CDD}.Release R24|Any CPU.ActiveCfg = Release R24|Any CPU
 		{1661572C-EF3A-4DD6-83BD-CB4239CE8CDD}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
+		{1661572C-EF3A-4DD6-83BD-CB4239CE8CDD}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
 		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Debug R22|Any CPU.ActiveCfg = Debug R22|Any CPU
 		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Debug R22|Any CPU.Build.0 = Debug R22|Any CPU
 		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Installer|Any CPU.ActiveCfg = Debug R22|Any CPU
@@ -112,6 +116,8 @@ Global
 		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Release R24|Any CPU.Build.0 = Release R24|Any CPU
 		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
 		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
+		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Debug R25|Any CPU.ActiveCfg = Release R25|Any CPU
+		{21460D85-C4AD-49D5-963F-CF13C4AE99EB}.Debug R25|Any CPU.Build.0 = Release R25|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

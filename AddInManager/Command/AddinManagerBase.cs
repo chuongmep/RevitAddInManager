@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Loader;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
@@ -16,7 +19,7 @@ public sealed class AddinManagerBase
         var vm = new AddInManagerViewModel(data, ref message, elements);
         if (_activeCmd != null && faceless)
         {
-            return RunActiveCommand(vm, data, ref message, elements);
+            return RunActiveCommand(data, ref message, elements);
         }
         FrmAddInManager = new View.FrmAddInManager(vm);
         FrmAddInManager.SetRevitAsWindowOwner();
@@ -31,7 +34,7 @@ public sealed class AddinManagerBase
         set => _activeTempFolder = value;
     }
 
-    public Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
+    public Result RunActiveCommand(ExternalCommandData data, ref string message, ElementSet elements)
     {
         var filePath = _activeCmd.FilePath;
         if (!File.Exists(filePath))
@@ -39,40 +42,56 @@ public sealed class AddinManagerBase
             MessageBox.Show("File not found: " + filePath,DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
             return 0;
         }
-        Result result;
+        Result result = Result.Failed;
+        var alc = new TestAssemblyLoadContext();
         try
         {
-            vm.AssemLoader.HookAssemblyResolve();
-            var assembly = vm.AssemLoader.LoadAddinsToTempFolder(filePath, false);
-            if (null == assembly)
+            Trace.WriteLine("Loading assembly...");
+            Assembly assembly = alc.LoadFromAssemblyPath(filePath);
+            object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
+            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            if (instance is IExternalCommand externalCommand)
             {
-                result = Result.Failed;
+                Trace.WriteLine("Chuong");
+                _activeEc = externalCommand;
+                result = _activeEc.Execute(data, ref message, elements);
+                alc.Unload();
             }
-            else
+            int counter = 0;
+            for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
             {
-                _activeTempFolder = vm.AssemLoader.TempFolder;
-                if (assembly.CreateInstance(_activeCmdItem.FullClassName) is not IExternalCommand externalCommand)
-                {
-                    result = Result.Failed;
-                }
-                else
-                {
-                    _activeEc = externalCommand;
-                    result = _activeEc.Execute(data, ref message, elements);
-                }
+                alc = null;
+                Console.WriteLine("Waiting for unload...");
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            //TODO : Why?>???????? still can't delete inside Revit ^_^
+            Console.WriteLine("Try Delete");
+            File.Delete(filePath);
+            if(File.Exists(filePath))
+            {
+                Console.WriteLine("Delete Not Done");
             }
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             MessageBox.Show(ex.ToString());
             result = Result.Failed;
         }
         finally
         {
-            vm.AssemLoader.UnhookAssemblyResolve();
-            vm.AssemLoader.CopyGeneratedFilesBack();
+            Trace.WriteLine("Unloading context...");
+            alc.Unload();
+            int counter = 0;
         }
         return result;
+    }
+
+
+    private void AssembUnloading(AssemblyLoadContext obj)
+    {
+        Console.WriteLine("Unloading.....");
     }
 
     public static AddinManagerBase Instance

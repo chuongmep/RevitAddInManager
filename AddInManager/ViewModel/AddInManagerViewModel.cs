@@ -315,7 +315,7 @@ public class AddInManagerViewModel : ViewModelBase
     private void Execute()
     {
         string message = Message;
-        MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref message, Elements);
+        MAddinManagerBase.RunActiveCommand(ExternalCommandData, ref message, Elements);
     }
 
     private void OpenLcAssemblyCommandClick()

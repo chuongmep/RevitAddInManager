@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Interop;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -166,7 +162,7 @@ namespace Test
             Debug.WriteLine($"Add: This is a add");
             Debug.WriteLine($"Modify: This is a modify");
             Debug.WriteLine($"Delete: This is a delete");
-            TraceListenerCollection traceListenerCollection = Debug.Listeners;
+            TraceListenerCollection traceListenerCollection = Trace.Listeners;
             return Result.Succeeded;
         }
     }

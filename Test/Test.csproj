@@ -6,6 +6,7 @@
     <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
     <PlatformTarget>x64</PlatformTarget>
+    <UseWpf>true</UseWpf>
     <Configurations>Debug R21;Debug R22;Debug R23;Debug R24;</Configurations>
     <Configurations>$(Configurations)Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
   </PropertyGroup>
@@ -35,6 +36,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R25'))">
     <RevitVersion>2025</RevitVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <DefineConstants>$(DefineConstants);R25</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
