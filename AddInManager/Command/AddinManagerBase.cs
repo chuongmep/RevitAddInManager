@@ -8,6 +8,7 @@ using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
 using System.Windows;
 using static RevitAddinManager.App;
+using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;
 
 namespace RevitAddinManager.Command;
 
@@ -43,16 +44,15 @@ public sealed class AddinManagerBase
             return 0;
         }
         Result result = Result.Failed;
-        var alc = new TestAssemblyLoadContext();
+        var alc = new AssemblyLoadContext();
         try
         {
-            Trace.WriteLine("Loading assembly...");
-            Assembly assembly = alc.LoadFromAssemblyPath(filePath);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            Assembly assembly = alc.LoadFromStream(stream);
             object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
             WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
             if (instance is IExternalCommand externalCommand)
             {
-                Trace.WriteLine("Chuong");
                 _activeEc = externalCommand;
                 result = _activeEc.Execute(data, ref message, elements);
                 alc.Unload();
@@ -61,39 +61,23 @@ public sealed class AddinManagerBase
             for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
             {
                 alc = null;
-                Console.WriteLine("Waiting for unload...");
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
             //TODO : Why?>???????? still can't delete inside Revit ^_^
-            Console.WriteLine("Try Delete");
-            File.Delete(filePath);
-            if(File.Exists(filePath))
-            {
-                Console.WriteLine("Delete Not Done");
-            }
+            stream.Close();
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
             MessageBox.Show(ex.ToString());
             result = Result.Failed;
         }
         finally
         {
-            Trace.WriteLine("Unloading context...");
-            alc.Unload();
-            int counter = 0;
+            alc = null;
         }
         return result;
     }
-
-
-    private void AssembUnloading(AssemblyLoadContext obj)
-    {
-        Console.WriteLine("Unloading.....");
-    }
-
     public static AddinManagerBase Instance
     {
         get

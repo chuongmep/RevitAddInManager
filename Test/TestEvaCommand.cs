@@ -12,7 +12,7 @@ public class TestEvaCommand  : IExternalCommand
     {
         
         UIApplication uiApplication = commandData.Application;
-        MessageBox.Show(uiApplication.Application.Username);
+        MessageBox.Show(uiApplication.Application.VersionBuild);
         return Result.Succeeded;
     }
 }
