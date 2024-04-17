@@ -97,9 +97,24 @@ public sealed class AddinManagerBase
             return 0;
         }
         Result result = Result.Failed;
-        var alc = new AssemblyLoadContext();
+        var alc = new AssemblyLoadContext(filePath);
         try
         {
+
+            // get list dependencies assembly at same folder
+            //var dependencies = alc.GetDependencies(filePath);
+            // List<AssemblyLoadContext> subAlcs = new List<AssemblyLoadContext>();
+            // foreach (var dependency in dependencies)
+            // {
+            //     string subFilePath = Path.Combine(Path.GetDirectoryName(filePath), dependency + ".dll");
+            //     var subAlc = new AssemblyLoadContext(subFilePath);
+            //     if (!File.Exists(subFilePath)) continue;
+            //     // load stream with security permission
+            //     // var subStream = new FileStream(subFilePath, FileMode.Open, FileAccess.Read);
+            //     subAlc.LoadFromAssemblyPath(subFilePath);
+            //     // subStream.Close();
+            //     subAlcs.Add(subAlc);
+            // }
             var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             Assembly assembly = alc.LoadFromStream(stream);
             object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
@@ -109,6 +124,10 @@ public sealed class AddinManagerBase
                 _activeEc = externalCommand;
                 result = _activeEc.Execute(data, ref message, elements);
                 alc.Unload();
+                // foreach (AssemblyLoadContext subAlc in subAlcs)
+                // {
+                //     subAlc.Unload();
+                // }
             }
             int counter = 0;
             for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
