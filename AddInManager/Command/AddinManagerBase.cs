@@ -1,14 +1,17 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Loader;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
 using System.Windows;
 using static RevitAddinManager.App;
+
+#if R25
 using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;
+using System.Runtime.Loader;
+#endif
 
 namespace RevitAddinManager.Command;
 
@@ -20,7 +23,12 @@ public sealed class AddinManagerBase
         var vm = new AddInManagerViewModel(data, ref message, elements);
         if (_activeCmd != null && faceless)
         {
+#if R19 || R20 || R21 || R22 || R23 || R24
+            return RunActiveCommand(vm, data, ref message, elements);
+#else
             return RunActiveCommand(data, ref message, elements);
+#endif
+
         }
         FrmAddInManager = new View.FrmAddInManager(vm);
         FrmAddInManager.SetRevitAsWindowOwner();
@@ -35,6 +43,51 @@ public sealed class AddinManagerBase
         set => _activeTempFolder = value;
     }
 
+    public Result RunActiveCommand(AddInManagerViewModel vm, ExternalCommandData data, ref string message, ElementSet elements)
+    {
+        var filePath = _activeCmd.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath,DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+            return 0;
+        }
+        Result result;
+        try
+        {
+            vm.AssemLoader.HookAssemblyResolve();
+            var assembly = vm.AssemLoader.LoadAddinsToTempFolder(filePath, false);
+            if (null == assembly)
+            {
+                result = Result.Failed;
+            }
+            else
+            {
+                _activeTempFolder = vm.AssemLoader.TempFolder;
+                if (assembly.CreateInstance(_activeCmdItem.FullClassName) is not IExternalCommand externalCommand)
+                {
+                    result = Result.Failed;
+                }
+                else
+                {
+                    _activeEc = externalCommand;
+                    result = _activeEc.Execute(data, ref message, elements);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString());
+            result = Result.Failed;
+        }
+        finally
+        {
+            vm.AssemLoader.UnhookAssemblyResolve();
+            vm.AssemLoader.CopyGeneratedFilesBack();
+        }
+        return result;
+    }
+
+#if R25
     public Result RunActiveCommand(ExternalCommandData data, ref string message, ElementSet elements)
     {
         var filePath = _activeCmd.FilePath;
@@ -64,7 +117,6 @@ public sealed class AddinManagerBase
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
-            //TODO : Why?>???????? still can't delete inside Revit ^_^
             stream.Close();
         }
         catch (Exception ex)
@@ -78,6 +130,8 @@ public sealed class AddinManagerBase
         }
         return result;
     }
+#endif
+
     public static AddinManagerBase Instance
     {
         get
