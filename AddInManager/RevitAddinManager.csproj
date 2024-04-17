@@ -52,6 +52,7 @@
     <RevitVersion>2025</RevitVersion>
     <DefineConstants>$(DefineConstants);R25</DefineConstants>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <PropertyGroup>
     <Version>$(RevitVersion)</Version>
