@@ -30,6 +30,7 @@
     <PackageReference Include="coverlet.collector" Version="3.1.0" />
     <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
     <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
