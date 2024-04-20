@@ -26,10 +26,6 @@ class AssemblyLoadContext : System.Runtime.Loader.AssemblyLoadContext
             {
                 return null;
             }
-            if(assemblyPath.Contains("RevitAPIUI"))
-            {
-                return null;
-            }
             var stream = new FileStream(assemblyPath, FileMode.Open, FileAccess.Read);
             return LoadFromStream(stream);
         }

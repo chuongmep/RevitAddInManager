@@ -109,10 +109,6 @@ public sealed class AddinManagerBase
                 _activeEc = externalCommand;
                 result = _activeEc.Execute(data, ref message, elements);
                 alc.Unload();
-                // foreach (AssemblyLoadContext subAlc in subAlcs)
-                // {
-                //     subAlc.Unload();
-                // }
             }
             int counter = 0;
             for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
