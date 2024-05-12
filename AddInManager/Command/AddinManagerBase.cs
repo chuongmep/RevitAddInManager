@@ -1,10 +1,17 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
 using System.Windows;
 using static RevitAddinManager.App;
+
+#if R25
+using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;
+using System.Runtime.Loader;
+#endif
 
 namespace RevitAddinManager.Command;
 
@@ -16,7 +23,12 @@ public sealed class AddinManagerBase
         var vm = new AddInManagerViewModel(data, ref message, elements);
         if (_activeCmd != null && faceless)
         {
+#if R19 || R20 || R21 || R22 || R23 || R24
             return RunActiveCommand(vm, data, ref message, elements);
+#else
+            return RunActiveCommand(data, ref message, elements);
+#endif
+
         }
         FrmAddInManager = new View.FrmAddInManager(vm);
         FrmAddInManager.SetRevitAsWindowOwner();
@@ -74,6 +86,51 @@ public sealed class AddinManagerBase
         }
         return result;
     }
+
+#if R25
+    public Result RunActiveCommand(ExternalCommandData data, ref string message, ElementSet elements)
+    {
+        var filePath = _activeCmd.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath,DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+            return 0;
+        }
+        Result result = Result.Failed;
+        var alc = new AssemblyLoadContext(filePath);
+        try
+        {
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            Assembly assembly = alc.LoadFromStream(stream);
+            object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
+            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            if (instance is IExternalCommand externalCommand)
+            {
+                _activeEc = externalCommand;
+                result = _activeEc.Execute(data, ref message, elements);
+                alc.Unload();
+            }
+            int counter = 0;
+            for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
+            {
+                alc = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            stream.Close();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString());
+            result = Result.Failed;
+        }
+        finally
+        {
+            alc = null;
+        }
+        return result;
+    }
+#endif
 
     public static AddinManagerBase Instance
     {

@@ -315,7 +315,11 @@ public class AddInManagerViewModel : ViewModelBase
     private void Execute()
     {
         string message = Message;
+        #if R19 || R20 || R21 || R22 || R23 || R24
         MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref message, Elements);
+        #else
+        MAddinManagerBase.RunActiveCommand(ExternalCommandData, ref message, Elements);
+        #endif
     }
 
     private void OpenLcAssemblyCommandClick()
