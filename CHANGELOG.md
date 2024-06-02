@@ -1,4 +1,6 @@
 # Changelog
+- 2024-04-02 **1.5.4**
+  - Add new way to execute command with Revit 2025 [#54](https://github.com/chuongmep/RevitAddInManager/pull/54)
 - 2024-04-02 **1.5.3**
   - Support Revit 2025 Release
 - 2023-09-20 **1.5.2**
