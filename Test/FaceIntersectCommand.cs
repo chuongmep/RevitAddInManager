@@ -90,6 +90,7 @@ public class FaceIntersectCommand : IExternalCommand
         FaceIntersectionFaceResult result = face1.Intersect(face2, out Curve curve);
         Trace.WriteLine(result.ToString());
         // fu...k, why ?????????? ^🫡🫡^
+        //https://thebuildingcoder.typepad.com/blog/2019/09/face-intersect-face-is-unbounded.html
 
     }
     public static List<XYZ> GetIntersection(List<XYZ> poly1, List<XYZ> poly2)
