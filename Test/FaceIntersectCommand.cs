@@ -40,6 +40,20 @@ public class FaceIntersectCommand : IExternalCommand
         {
             Trace.WriteLine(xyz.ToString());
         }
+        // create direct shape
+        using Autodesk.Revit.DB.Transaction trans = new Transaction(doc, "Create Direct Shape");
+        trans.Start();
+        DirectShape ds = DirectShape.CreateElement(doc, new ElementId(BuiltInCategory.OST_GenericModel));
+        ds.ApplicationId = "ApplicationId";
+        ds.ApplicationDataId = "ApplicationDataId";
+        var curveloop = new CurveLoop();
+        for (int i = 0; i < intersection.Count; i++)
+        {
+            curveloop.Append(Line.CreateBound(intersection[i], intersection[(i + 1) % intersection.Count]));
+        }
+        Solid solid = GeometryCreationUtilities.CreateExtrusionGeometry(new List<CurveLoop> { curveloop }, XYZ.BasisZ, 1);
+        ds.SetShape(new GeometryObject[] { solid });
+        trans.Commit();
         return Result.Succeeded;
     }
     public PlanarFace? GetTopFace(Extrusion? extrusion)
