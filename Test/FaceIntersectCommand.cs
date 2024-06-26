@@ -149,7 +149,7 @@ public class FaceIntersectCommand : IExternalCommand
         {
             double x = (B2 * C1 - B1 * C2) / determinant;
             double y = (A1 * C2 - A2 * C1) / determinant;
-            return new XYZ(x, y,A.Z);
+            return new XYZ(x, y,P.Z);
         }
     }
 
