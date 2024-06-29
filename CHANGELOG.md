@@ -1,5 +1,5 @@
 # Changelog
-- 2024-06-29 **1.5.5**
+- 2024-06-29 **1.5.6**
   - Hotfix bug with Revit 2025: Unload assembly not done when user raise an execute exception.
 - 2024-04-02 **1.5.4**
   - Add new way to execute command with Revit 2025 [#54](https://github.com/chuongmep/RevitAddInManager/pull/54)
