@@ -13,9 +13,9 @@ public class TestEvaCommand  : IExternalCommand
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
         MessageBox.Show("TestEvaCommand");
-        // string? value = DependLib.ShowDialogFolder();
-        // Console.WriteLine(value);
-        // MessageBox.Show(value.ToString());
+        string? value = DependLib.ShowDialogFolder();
+        Console.WriteLine(value);
+        MessageBox.Show(value.ToString());
         return Result.Succeeded;
     }
 }

@@ -98,9 +98,10 @@ public sealed class AddinManagerBase
         }
         Result result = Result.Failed;
         var alc = new AssemblyLoadContext(filePath);
+        Stream stream = null;
         try
         {
-            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             Assembly assembly = alc.LoadFromStream(stream);
             object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
             WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
@@ -121,13 +122,25 @@ public sealed class AddinManagerBase
         }
         catch (Exception ex)
         {
+            // unload the assembly
             MessageBox.Show(ex.ToString());
+            alc?.Unload();
             result = Result.Failed;
+            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            for (int counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
+            {
+                alc = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            stream?.Close();
+            Debug.WriteLine("Assembly unloaded");
+
         }
-        finally
-        {
-            alc = null;
-        }
+        // finally
+        // {
+        //     alc?.Unload();
+        // }
         return result;
     }
 #endif
