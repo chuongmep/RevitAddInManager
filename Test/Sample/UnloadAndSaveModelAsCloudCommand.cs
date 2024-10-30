@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -13,9 +15,9 @@ namespace Test
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            UIApplication uiApp = commandData.Application;
-            uiApp.Idling += ApplicationIdling;
-            string dir = @"D:\_WIP\Download\04-Mechanical_selected_2024-10-21_08-46-43am";
+            //UIApplication uiApp = commandData.Application;
+            //uiApp.Idling += ApplicationIdling;
+            string dir = @"D:\Development\Revit\Project\F7H-M";
             Guid accountId = new Guid("1715cf2b-cc12-46fd-9279-11bbc47e72f6");
             Guid projectId = new Guid("58450c0d-394f-41b2-a7e6-7aa53665dfb8");
             string folderId = "urn:adsk.wipprod:fs.folder:co.qslf4shtRpOHsZLUmwANiQ";
@@ -25,6 +27,7 @@ namespace Test
             foreach (string revitPath in revitPaths)
             {
                 UnloadRevitLinks(revitPath);
+                continue;
                 string fileName = System.IO.Path.GetFileNameWithoutExtension(revitPath);
 
                 Document? doc = OpenDocument(commandData.Application.Application, revitPath, report);
@@ -32,28 +35,18 @@ namespace Test
                 {
                     continue;
                 }
-                // Start transaction and use custom failure preprocessor
-                using Transaction transaction = new Transaction(doc, "Save As Cloud");
-                transaction.Start();
-
-                // Set the failure handler to suppress warnings
-                FailureHandlingOptions failureOptions = transaction.GetFailureHandlingOptions();
-                failureOptions.SetFailuresPreprocessor(new IgnoreFailuresPreprocessor());
-                transaction.SetFailureHandlingOptions(failureOptions);
-
                 try
                 {
                     doc.SaveAsCloudModel(accountId, projectId, folderId, fileName);
+                    // sleep for 5 seconds to allow the cloud model to be created
+                    Thread.Sleep(5000);
+                    doc.Close(false);
                 }
                 catch (Exception e)
                 {
-                    // Handle the error appropriately
-                    report.Add($"Error saving cloud model: {e.Message}");
+                    Trace.WriteLine(e.Message);
                 }
-
-                transaction.Commit();
             }
-
             TaskDialog.Show("Done", "Process complete.");
             return Result.Succeeded;
         }
@@ -96,7 +89,6 @@ namespace Test
         {
             ModelPath mPath = ModelPathUtils.ConvertUserVisiblePathToModelPath(path);
             TransmissionData tData = TransmissionData.ReadTransmissionData(mPath);
-
             if (tData == null)
             {
                 return path;
