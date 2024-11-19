@@ -31,7 +31,6 @@ public class OpenModelFromCloud : IExternalCommand
                 var records = csv.GetRecords<DataInput>().ToList();
                 dataInputs.AddRange(records);
             }
-
         }
 
         string csvFamily = BrowsePath();
@@ -50,7 +49,14 @@ public class OpenModelFromCloud : IExternalCommand
                 UpdateUFCodeBaseFamily updateUfCodeBaseFamily = new UpdateUFCodeBaseFamily();
                 updateUfCodeBaseFamily.Execute(document, csvFamily);
                 // sync model
-                doc.SynchronizeWithCentral(new TransactWithCentralOptions(), new SynchronizeWithCentralOptions());
+                TransactWithCentralOptions twcOpts = new TransactWithCentralOptions();
+                SynchronizeWithCentralOptions syncopt = new SynchronizeWithCentralOptions();
+                RelinquishOptions rOptions = new RelinquishOptions(true);
+                rOptions.UserWorksets = true;
+                syncopt.SetRelinquishOptions(rOptions);
+                syncopt.SaveLocalBefore = false;
+                syncopt.SaveLocalAfter = false;
+                doc.SynchronizeWithCentral(twcOpts, syncopt);
                 OpenLogFileAndWrite("Sync model to central is done");
                 // close model
                 doc.Close(false);
@@ -62,9 +68,9 @@ public class OpenModelFromCloud : IExternalCommand
         }
 
         return Result.Succeeded;
-
     }
-    public  void OpenLogFileAndWrite(string message)
+
+    public void OpenLogFileAndWrite(string message)
     {
         string fileName = "log.txt";
         string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
@@ -83,6 +89,7 @@ public class OpenModelFromCloud : IExternalCommand
             }
         }
     }
+
     public string BrowsePath()
     {
         var dialog = new OpenFileDialog();
@@ -91,7 +98,8 @@ public class OpenModelFromCloud : IExternalCommand
         dialog.ShowDialog();
         return dialog.FileName;
     }
-    public class  DataInput
+
+    public class DataInput
     {
         public string item_id { get; set; }
         public string item_name { get; set; }

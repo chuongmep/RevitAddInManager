@@ -72,5 +72,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Test2\Test2.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sample\data\" />
+  </ItemGroup>
 
 </Project>
