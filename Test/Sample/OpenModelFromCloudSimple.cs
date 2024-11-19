@@ -23,7 +23,9 @@ public class OpenModelFromCloudSimple : IExternalCommand
         var doc = commandData.Application.ActiveUIDocument.Document;
         string region = "US";
         var projectGuid = new Guid("f10b5c85-fd34-435a-9206-e4a8c21d761c");
-        var modelGuid = new Guid("119d11f3-4d92-4d50-81db-0a03aa20fd82");
+        string input = @"D:\API\Revit\RevitAddInManager\Test\Sample\data\input.txt";
+        string guidModelInput = File.ReadAllText(input).Trim();
+        var modelGuid = new Guid(guidModelInput);
         var modelPath = ModelPathUtils.ConvertCloudGUIDsToCloudPath(region, projectGuid, modelGuid);
         // Document document = doc.Application.OpenDocumentFile(modelPath, new OpenOptions());
         // active document
