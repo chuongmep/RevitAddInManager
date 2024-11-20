@@ -20,6 +20,9 @@ public class CategoriesCommand : IExternalCommand
             .WhereElementIsNotElementType()
             .Where(x=>x.Category!=null)
             .GroupBy(x => x.Category.Name);
+        FilteredWorksetCollector fwc = new FilteredWorksetCollector(doc);
+        WorksetKindFilter wf = new WorksetKindFilter(WorksetKind.UserWorkset);
+        ICollection<Workset> worksets = fwc.WherePasses(wf).ToWorksets();
         foreach (IGrouping<string, Element>? category in categories)
         {
             var categoryBenchmark = new CategoryBenchmark();
@@ -27,7 +30,7 @@ public class CategoriesCommand : IExternalCommand
             categoryBenchmark.Count = category.Count();
             categoryBenchmark.Id = category.First().Category.Id.ToString();
             categoryBenchmark.Name = category.Key;
-            categoryBenchmark.Workset = CountWorksetName(doc,category.ToList());
+            categoryBenchmark.Workset = CountWorksetName(worksets,category.ToList());
             categoryBenchmark.Family = CountFamilyName(category.ToList());
             categoryBenchmark.Type = CountFamilyTypeName(category.ToList());
             categoryBenchmark.Nestest = CountNestestElement(category.ToList());
@@ -37,22 +40,22 @@ public class CategoriesCommand : IExternalCommand
             categoryBenchmarks.Add(categoryBenchmark);
         }
         // save csv
-        string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
         string filePath = System.IO.Path.Combine(folderPath, "categories.csv");
         CsvUtils.WriteCsvCategories(categoryBenchmarks, filePath);
         Process.Start(filePath);
         return Result.Succeeded;
     }
-    public double CountWorksetName(Document doc,List<Element> elements)
+    public double CountWorksetName(ICollection<Workset> worksets,List<Element> elements)
     {
         List<string> names = new List<string>();
-        WorksetTable worksetTable = doc.GetWorksetTable();
+        // get user workset created
         foreach (Element element in elements)
         {
             WorksetId worksetId = element.WorksetId;
             if (worksetId == WorksetId.InvalidWorksetId) continue;
-            Workset workset = worksetTable.GetWorkset(worksetId);
-            names.Add(workset.Name);
+            var workset = worksets.FirstOrDefault(x => x.Id == worksetId);
+            if (workset != null) names.Add(workset.Name);
         }
         return names.Distinct().Count();
     }
