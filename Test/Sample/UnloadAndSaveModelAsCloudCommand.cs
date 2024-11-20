@@ -26,68 +26,38 @@ namespace Test
             Guid projectId = new Guid("ca790fb5-141d-4ad5-b411-0461af2e9748");
             string folderIdMech = "urn:adsk.wipprod:fs.folder:co.kHlWc1ajSHSxey-_bGjKwg";
             // string folderIdElec = "urn:adsk.wipprod:fs.folder:co.xm8eECPARESSL00xbO7qLw";
-            string csvPath = OpenDialogGetPath();
             string dir = OpenDirectoryDialog();
-            if(string.IsNullOrEmpty(csvPath))
-            {
-                TaskDialog.Show("Error", "Please select uniformat code a csv file.");
-                return Result.Failed;
-            }
             List<string> revitPaths = GetAllRevitPaths(dir);
             List<string> report = new List<string>();
             // start write a .txt log file
             string logPath = Path.Combine(dir, "log.txt");
+            // clear log file
+            if (File.Exists(logPath))
+            {
+                File.Delete(logPath);
+            }
             using (StreamWriter writer = new StreamWriter(logPath))
             {
                 foreach (string revitPath in revitPaths)
                 {
-                    UnloadRevitLinks(revitPath,writer);
+                    UnloadRevitLinks(revitPath);
                     string fileName = Path.GetFileNameWithoutExtension(revitPath);
 
-                    Document? doc = OpenDocument(commandData.Application.Application, revitPath, report,writer);
+                    Document? doc = OpenDocument(commandData.Application.Application, revitPath, report);
                     if (doc == null)
                     {
                         continue;
                     }
                     try
                     {
-
-                        // string csvPath = @"C:\Users\vho2\Downloads\AseemblyCodeUpdate\Uniformat.csv";
-                        // read csv file
-                        var allElements = new FilteredElementCollector(doc).WhereElementIsElementType()
-                            //group by id
-                            .GroupBy(x => x.Id.IntegerValue).Select(x => x.First())
-                            .Where(x => x.Category != null);
-
-
-                        using (var reader = new StreamReader(csvPath))
-                        {
-                            using Autodesk.Revit.DB.Transaction tran = new Transaction(doc, "Update Assembly Code");
-                            tran.Start();
-                            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                            {
-                                var records = csv.GetRecords<Uniformat>().ToList();
-                                foreach (var record in records)
-                                {
-                                    var type_elements = allElements.Where(x => Math.Abs(x.Category.Id.IntegerValue - record.Category) < 0.001);
-                                    foreach (var element in type_elements)
-                                    {
-                                        Parameter parameter = element.get_Parameter(BuiltInParameter.UNIFORMAT_CODE);
-                                        if (parameter != null && !parameter.IsReadOnly)
-                                        {
-                                            parameter.Set(record.UniformatCode);
-                                        }
-                                    }
-                                }
-                            }
-                            tran.Commit();
-                        }
                         // sync to central
                         //doc.SynchronizeWithCentral(new TransactWithCentralOptions(), new SynchronizeWithCentralOptions());
                         // publish model by command
                         doc.SaveAsCloudModel(accountId, projectId, folderIdMech, fileName);
+                        // write to log format DAteTime.Now - ModelName - Status
+                        writer.WriteLine($"{DateTime.Now} - {fileName} - Success");
                         // sleep for 5 seconds to allow the cloud model to be created
-                        Thread.Sleep(5000);
+                        // Thread.Sleep(5000);
                         doc.Close(false);
                     }
                     catch (Exception e)
@@ -121,16 +91,6 @@ namespace Test
             }
             return string.Empty;
         }
-        private void ApplicationIdling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
-        {
-            UIApplication? uiApp = sender as UIApplication;
-            if (uiApp == null)
-            {
-                return;
-            }
-            uiApp.Idling -= ApplicationIdling;
-            uiApp.Application.FailuresProcessing += Application_FailuresProcessing;
-        }
         public void Application_FailuresProcessing(object sender, Autodesk.Revit.DB.Events.FailuresProcessingEventArgs e)
         {
             FailuresAccessor failuresAccessor = e.GetFailuresAccessor();
@@ -156,10 +116,8 @@ namespace Test
             return revitPaths;
         }
 
-        private static string UnloadRevitLinks(string path,StreamWriter writer)
+        private static string UnloadRevitLinks(string path)
         {
-            var fileName = Path.GetFileNameWithoutExtension(path);
-            writer.WriteLine($"Model'{fileName}'");
             ModelPath mPath = ModelPathUtils.ConvertUserVisiblePathToModelPath(path);
             //bool isDocumentTransmitted = TransmissionData.IsDocumentTransmitted(mPath);
             // if (!isDocumentTransmitted)
@@ -168,27 +126,15 @@ namespace Test
             //     return path;
             // }
             TransmissionData tData = TransmissionData.ReadTransmissionData(mPath);
-            ICollection<ElementId> externalReferences = tData.GetAllExternalFileReferenceIds();
-            foreach (ElementId refId in externalReferences)
-            {
-                ExternalFileReference extRef = tData.GetLastSavedReferenceData(refId);
-                LinkedFileStatus status = extRef.GetLinkedFileStatus();
-                if (status == LinkedFileStatus.Loaded && extRef.ExternalFileReferenceType==ExternalFileReferenceType.RevitLink)
-                {
-                    string name = ModelPathUtils.ConvertModelPathToUserVisiblePath(extRef.GetPath());
-                    writer.WriteLine($"{extRef.ExternalFileReferenceType.ToString()}:'{name}' Status: {status}");
-                    //tData.SetDesiredReferenceData(elementid, extRef.GetPath(), extRef.PathType, false);
-                }
-            }
             tData.IsTransmitted = true;
             TransmissionData.WriteTransmissionData(mPath, tData);
 
             return path;
         }
 
-        private static Document? OpenDocument(Application app, string filePath, List<string> errorMessages,StreamWriter writer)
+        private static Document? OpenDocument(Application app, string filePath, List<string> errorMessages)
         {
-            UnloadRevitLinks(filePath,writer);
+            UnloadRevitLinks(filePath);
 
             ModelPath modelPath = ModelPathUtils.ConvertUserVisiblePathToModelPath(filePath);
             OpenOptions options = new OpenOptions

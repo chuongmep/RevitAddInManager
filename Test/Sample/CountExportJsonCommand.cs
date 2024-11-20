@@ -54,27 +54,27 @@ public class CountExportJsonCommand : IExternalCommand
         {
             if (ele is Pipe pipe)
             {
-                output.PipeLenght +=ConvertToRealLength( pipe.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble());
+                output.PipeLenght +=ConvertToRealLength( pipe.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)?.AsDouble()??0);
             }
             else if (ele is Duct duct)
             {
-                output.DuctLenght += ConvertToRealLength(duct.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble());
+                output.DuctLenght += ConvertToRealLength(duct.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)?.AsDouble()??0);
             }
             else if (ele is CableTray cableTray)
             {
-                output.CableTrayLenght += ConvertToRealLength(cableTray.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble());
+                output.CableTrayLenght += ConvertToRealLength(cableTray.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)?.AsDouble()??0);
             }
             else if (ele is Conduit conduit)
             {
-                output.ConduitsLenght += ConvertToRealLength(conduit.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble());
+                output.ConduitsLenght += ConvertToRealLength(conduit.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)?.AsDouble()??0);
             }
             else if (ele is ConduitRun conduitRun)
             {
-                output.ConduitRunsLength += ConvertToRealLength(conduitRun.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble());
+                output.ConduitRunsLength += ConvertToRealLength(conduitRun.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)?.AsDouble() ?? 0);
             }
             else if (ele is CableTrayRun cableTrayRun)
             {
-                output.CableTrayRunsLength += ConvertToRealLength(cableTrayRun.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble());
+                output.CableTrayRunsLength += ConvertToRealLength(cableTrayRun.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)?.AsDouble()??0);
             }
 
         }
@@ -102,6 +102,10 @@ public class CountExportJsonCommand : IExternalCommand
     public double ConvertToRealLength(double length)
     {
         // convert to meter
+        if (length == null)
+        {
+            return 0;
+        }
         double convert = UnitUtils.Convert(length, UnitTypeId.Feet, UnitTypeId.Meters);
         return convert;
     }

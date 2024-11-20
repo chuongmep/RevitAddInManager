@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
-using System.Windows;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -15,7 +13,7 @@ using Microsoft.Win32;
 namespace Test;
 
 [Transaction(TransactionMode.Manual)]
-public class OpenModelFromCloud : IExternalCommand
+public class OpenModelFromCloudUpdateAssemblyCode : IExternalCommand
 {
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
@@ -24,7 +22,7 @@ public class OpenModelFromCloud : IExternalCommand
         string region = "US";
         List<DataInput> dataInputs = new List<DataInput>();
         // browser to item path
-        using (var reader = new StreamReader(BrowsePath()))
+        using (var reader = new StreamReader(BrowsePathItems()))
         {
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -33,7 +31,7 @@ public class OpenModelFromCloud : IExternalCommand
             }
         }
 
-        string csvFamily = BrowsePath();
+        string csvFamily = BrowsePathFamily();
 
         foreach (DataInput dataInput in dataInputs)
         {
@@ -45,7 +43,7 @@ public class OpenModelFromCloud : IExternalCommand
                 var modelGuid = new Guid(dataInput.model_guid);
                 var modelPath = ModelPathUtils.ConvertCloudGUIDsToCloudPath(region, projectGuid, modelGuid);
                 Document document = doc.Application.OpenDocumentFile(modelPath, new OpenOptions());
-                OpenLogFileAndWrite($"Open model {modelPath}");
+                OpenLogFileAndWrite($"Open model {modelPath.CentralServerPath}");
                 UpdateUFCodeBaseFamily updateUfCodeBaseFamily = new UpdateUFCodeBaseFamily();
                 updateUfCodeBaseFamily.Execute(document, csvFamily);
                 // sync model
@@ -54,8 +52,8 @@ public class OpenModelFromCloud : IExternalCommand
                 RelinquishOptions rOptions = new RelinquishOptions(true);
                 rOptions.UserWorksets = true;
                 syncopt.SetRelinquishOptions(rOptions);
-                syncopt.SaveLocalBefore = false;
-                syncopt.SaveLocalAfter = false;
+                // syncopt.SaveLocalBefore = false;
+                // syncopt.SaveLocalAfter = false;
                 doc.SynchronizeWithCentral(twcOpts, syncopt);
                 OpenLogFileAndWrite("Sync model to central is done");
                 // close model
@@ -63,6 +61,7 @@ public class OpenModelFromCloud : IExternalCommand
             }
             catch (Exception e)
             {
+                OpenLogFileAndWrite($"Error: {e.Message}");
                 Trace.Write(e.Message);
             }
         }
@@ -90,7 +89,15 @@ public class OpenModelFromCloud : IExternalCommand
         }
     }
 
-    public string BrowsePath()
+    public string BrowsePathFamily()
+    {
+        var dialog = new OpenFileDialog();
+        dialog.Filter = "Revit Files (*.csv)|*.csv";
+        dialog.Title = "Select a items file";
+        dialog.ShowDialog();
+        return dialog.FileName;
+    }
+    public string BrowsePathItems()
     {
         var dialog = new OpenFileDialog();
         dialog.Filter = "Revit Files (*.csv)|*.csv";
