@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using CsvHelper;
@@ -110,6 +111,48 @@ public static class CsvUtils
             using var writer = new StreamWriter(fileName,true);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csvWriter.WriteRecords(items);
+        }
+    }
+    public static void WriteRvtLinks(List<RvtLinksCommand.RvtLinkBenchmark>? items, string fileName)
+    {
+        // Ensure items is not null or empty
+        if (items == null || items.Count == 0)
+            return;
+
+        var csvFile = new FileInfo(fileName);
+
+        if (csvFile.Exists && csvFile.Length > 0)
+        {
+            // Read existing records from the CSV file
+            var records = new List<RvtLinksCommand.RvtLinkBenchmark>();
+            using (var reader = new StreamReader(fileName))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                records.AddRange(csv.GetRecords<RvtLinksCommand.RvtLinkBenchmark>());
+            }
+
+            // Remove existing records with the same ModelName
+            var modelName = items[0].ModelName; // Assuming all items have the same ModelName
+            records.RemoveAll(x => x.ModelName == modelName);
+
+            // Append the new items to the list
+            records.AddRange(items);
+
+            // Overwrite the file with updated records
+            using (var writer = new StreamWriter(fileName))
+            using (var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csvWriter.WriteRecords(records);
+            }
+        }
+        else
+        {
+            // File doesn't exist or is empty, write new records
+            using (var writer = new StreamWriter(fileName, false)) // Use `false` to overwrite or create a new file
+            using (var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csvWriter.WriteRecords(items);
+            }
         }
     }
 }
