@@ -15,7 +15,6 @@ public class OverallCommand : IExternalCommand
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
         var doc = commandData.Application.ActiveUIDocument.Document;
-        var allElements = new FilteredElementCollector(doc).WhereElementIsNotElementType().ToElements();
         BenchmarkReport benchmarkReport = new BenchmarkReport();
         benchmarkReport.FolderId = GetFolderId(doc);
         benchmarkReport.ItemId = GetItemId(doc);
@@ -23,7 +22,7 @@ public class OverallCommand : IExternalCommand
         benchmarkReport.ProjectGuid = GetProjectGuid(doc);
         benchmarkReport.ModelGuid = GetModelGuid(doc);
         benchmarkReport.ModelName = doc.Title + ".rvt";
-        benchmarkReport.Version = doc.Application.VersionName;
+        benchmarkReport.Version = doc.Application.VersionNumber;
         benchmarkReport.Path = GetPath(doc);
         benchmarkReport.Unit = GetUnit(doc);
         benchmarkReport.Categories = GetCountCategories(doc).ToString();
@@ -44,7 +43,7 @@ public class OverallCommand : IExternalCommand
         // save json
         string fileName = "OverallBenchmark.csv";
         string filePath =
-            System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
+            System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile),
                 fileName);
         CsvUtils.WriteOverallBenmark(new List<BenchmarkReport>(){benchmarkReport}, filePath);
         Process.Start(filePath);
@@ -63,12 +62,20 @@ public class OverallCommand : IExternalCommand
 
     public string GetModelGuid(Document doc)
     {
+        if (!doc.IsModelInCloud)
+        {
+            return "";
+        }
         ModelPath modelPath = doc.GetCloudModelPath();
         return modelPath.GetModelGUID().ToString();
     }
 
     public string GetProjectGuid(Document doc)
     {
+        if (!doc.IsModelInCloud)
+        {
+            return "";
+        }
         ModelPath modelPath = doc.GetCloudModelPath();
         return modelPath.GetProjectGUID().ToString();
     }
