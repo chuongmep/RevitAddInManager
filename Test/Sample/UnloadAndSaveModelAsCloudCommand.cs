@@ -72,6 +72,14 @@ namespace Test
             {
                 foreach (string revitPath in revitPaths)
                 {
+                    // if revit file name exist in temp./../ folder include scan subfolder
+                    var fileNameTemp = Path.GetFileName(revitPath);
+                    bool flag = IsInsideFolder(dirPath, fileNameTemp);
+                    if (flag)
+                    {
+                        writer.WriteLine($"{DateTime.Now} - {fileNameTemp} - Skipped Because it is already processed");
+                        continue;
+                    }
                     // create temp folder in current directory, tempfodler name is guid
                     string tempFolder = Path.Combine(dirPath, Guid.NewGuid().ToString());
                     if (!Directory.Exists(tempFolder))
@@ -113,6 +121,20 @@ namespace Test
             TaskDialog.Show("Done", "Process complete.");
             Process.Start(logPath);
             return Result.Succeeded;
+        }
+        public bool IsInsideFolder(string folderPath, string fileName)
+        {
+            string[] files = System.IO.Directory.GetFiles(folderPath, "*.rvt", SearchOption.AllDirectories);
+            // compare ==
+            foreach (string file in files)
+            {
+                string name = System.IO.Path.GetFileName(file);
+                if (name == fileName)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public string OpenDirectoryDialog()
         {
