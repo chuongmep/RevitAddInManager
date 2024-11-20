@@ -20,4 +20,5 @@ public class ItemReport
     public string ProjectGuid { get; set; }
     public string ModelGuid { get; set; }
     public string ModelName { get; set; }
+    public string Version { get; set; }
 }

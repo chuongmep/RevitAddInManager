@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Threading;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using CsvHelper;
 using Microsoft.Win32;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 
@@ -25,7 +20,6 @@ namespace Test
             Guid accountId = new Guid("1715cf2b-cc12-46fd-9279-11bbc47e72f6");
             Guid projectId = new Guid("ca790fb5-141d-4ad5-b411-0461af2e9748");
             string folderIdMech = "urn:adsk.wipprod:fs.folder:co.kHlWc1ajSHSxey-_bGjKwg";
-            // string folderIdElec = "urn:adsk.wipprod:fs.folder:co.xm8eECPARESSL00xbO7qLw";
             string dir = OpenDirectoryDialog();
             List<string> revitPaths = GetAllRevitPaths(dir);
             List<string> report = new List<string>();
@@ -62,6 +56,7 @@ namespace Test
                     }
                     catch (Exception e)
                     {
+                        writer.WriteLine($"{DateTime.Now} - {fileName} - Failed: {e.Message}");
                         Trace.WriteLine(e.Message);
                     }
                 }
