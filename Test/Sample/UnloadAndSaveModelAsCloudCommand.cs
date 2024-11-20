@@ -6,7 +6,9 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
 using Application = Autodesk.Revit.ApplicationServices.Application;
+using TaskDialog = Autodesk.Revit.UI.TaskDialog;
 
 namespace Test
 {
@@ -15,16 +17,52 @@ namespace Test
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            //UIApplication uiApp = commandData.Application;
-            //uiApp.Idling += ApplicationIdling;
-            Guid accountId = new Guid("1715cf2b-cc12-46fd-9279-11bbc47e72f6");
-            Guid projectId = new Guid("ca790fb5-141d-4ad5-b411-0461af2e9748");
-            string folderIdMech = "urn:adsk.wipprod:fs.folder:co.kHlWc1ajSHSxey-_bGjKwg";
-            string dir = OpenDirectoryDialog();
-            List<string> revitPaths = GetAllRevitPaths(dir);
+            // read file .env to get account id and project id
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
+            openFileDialog.Filter = "Text files (*.env)|*.env";
+            openFileDialog.Title = "Select a text file with FolderId";
+            string envPath = string.Empty;
+            string folderIdStr = string.Empty;
+            Guid accountId = Guid.Empty;
+            Guid projectId = Guid.Empty;
+            string? dirPath = string.Empty;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                envPath = openFileDialog.FileName;
+                string[] envLines = File.ReadAllLines(openFileDialog.FileName);
+                string accountIdStr = envLines[0].Split('=')[1];
+                string projectIdStr = envLines[1].Split('=')[1];
+                folderIdStr = envLines[2].Split('=')[1];
+                accountId = new Guid(accountIdStr);
+                projectId = new Guid(projectIdStr);
+                dirPath = Path.GetDirectoryName(openFileDialog.FileName);
+            }
+            else
+            {
+                return Result.Cancelled;
+            }
+            if (string.IsNullOrEmpty(envPath))
+            {
+                return Result.Cancelled;
+            }
+            // string[] envLines = File.ReadAllLines(envPath);
+            // string accountIdStr = envLines[0].Split('=')[1];
+            // string projectIdStr = envLines[1].Split('=')[1];
+            // string folderIdStr = envLines[2].Split('=')[1];
+            // Guid accountId = new Guid(accountIdStr);
+            // Guid projectId = new Guid(projectIdStr);
+            //string folderIdMech = "urn:adsk.wipprod:fs.folder:co.kHlWc1ajSHSxey-_bGjKwg";
+            // create a new temp folder if it does not exist
+            List<string> revitPaths = GetAllRevitPaths(dirPath);
+            string logPath = Path.Combine(dirPath, "log.txt");
+            dirPath = Path.Combine(dirPath, "Temp");
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+
             List<string> report = new List<string>();
             // start write a .txt log file
-            string logPath = Path.Combine(dir, "log.txt");
             // clear log file
             if (File.Exists(logPath))
             {
@@ -34,10 +72,20 @@ namespace Test
             {
                 foreach (string revitPath in revitPaths)
                 {
+                    // create temp folder in current directory, tempfodler name is guid
+                    string tempFolder = Path.Combine(dirPath, Guid.NewGuid().ToString());
+                    if (!Directory.Exists(tempFolder))
+                    {
+                        Directory.CreateDirectory(tempFolder);
+                    }
+                    // copy revit file to temp folder and set the path to the copied file
+                    string copiedRevitPath = Path.Combine(tempFolder, Path.GetFileName(revitPath));
+                    File.Copy(revitPath, copiedRevitPath);
+                    var newRevitPath = copiedRevitPath;
                     UnloadRevitLinks(revitPath);
-                    string fileName = Path.GetFileNameWithoutExtension(revitPath);
+                    string fileName = Path.GetFileNameWithoutExtension(newRevitPath);
 
-                    Document? doc = OpenDocument(commandData.Application.Application, revitPath, report);
+                    Document? doc = OpenDocument(commandData.Application.Application, newRevitPath, report);
                     if (doc == null)
                     {
                         continue;
@@ -47,7 +95,7 @@ namespace Test
                         // sync to central
                         //doc.SynchronizeWithCentral(new TransactWithCentralOptions(), new SynchronizeWithCentralOptions());
                         // publish model by command
-                        doc.SaveAsCloudModel(accountId, projectId, folderIdMech, fileName);
+                        doc.SaveAsCloudModel(accountId, projectId, folderIdStr, fileName);
                         // write to log format DAteTime.Now - ModelName - Status
                         writer.WriteLine($"{DateTime.Now} - {fileName} - Success");
                         // sleep for 5 seconds to allow the cloud model to be created
@@ -65,17 +113,6 @@ namespace Test
             TaskDialog.Show("Done", "Process complete.");
             Process.Start(logPath);
             return Result.Succeeded;
-        }
-
-        public string OpenDialogGetPath()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "CSV files (*.csv)|*.csv";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                return openFileDialog.FileName;
-            }
-            return string.Empty;
         }
         public string OpenDirectoryDialog()
         {
