@@ -33,6 +33,7 @@ public class CategoriesCommand : IExternalCommand
             categoryBenchmark.Workset = CountWorksetName(worksets,category.ToList());
             categoryBenchmark.Family = CountFamilyName(category.ToList());
             categoryBenchmark.Type = CountFamilyTypeName(category.ToList());
+            categoryBenchmark.AssemblyCode = CountAssemblyCode(category.ToList());
             categoryBenchmark.Nestest = CountNestestElement(category.ToList());
             categoryBenchmark.Length = category.Sum(x=> UnitFeetToMeter(x.LookupParameter("Length")?.AsDouble() ?? 0));
             categoryBenchmark.Width = category.Sum(x=> UnitFeetToMeter(x.LookupParameter("Width")?.AsDouble() ?? 0));
@@ -46,7 +47,7 @@ public class CategoriesCommand : IExternalCommand
         Process.Start(filePath);
         return Result.Succeeded;
     }
-    public double CountWorksetName(ICollection<Workset> worksets,List<Element> elements)
+    private double CountWorksetName(ICollection<Workset> worksets,List<Element> elements)
     {
         List<string> names = new List<string>();
         // get user workset created
@@ -59,7 +60,7 @@ public class CategoriesCommand : IExternalCommand
         }
         return names.Distinct().Count();
     }
-    public double CountFamilyTypeName(List<Element> elements)
+    private double CountFamilyTypeName(List<Element> elements)
     {
         List<string> names = new List<string>();
         foreach (Element element in elements)
@@ -70,7 +71,7 @@ public class CategoriesCommand : IExternalCommand
         }
         return names.Distinct().Count();
     }
-    public double CountFamilyName(List<Element> elements)
+    private double CountFamilyName(List<Element> elements)
     {
         List<string?> names = new List<string?>();
         foreach (Element element in elements)
@@ -82,7 +83,7 @@ public class CategoriesCommand : IExternalCommand
         return names.Distinct().Count();
     }
 
-    public double CountNestestElement(List<Autodesk.Revit.DB.Element> elements)
+    private double CountNestestElement(List<Autodesk.Revit.DB.Element> elements)
     {
         List<string> names = new List<string>();
         foreach (Element element in elements)
@@ -99,8 +100,20 @@ public class CategoriesCommand : IExternalCommand
         return names.Distinct().Count();
     }
 
+    private double CountAssemblyCode(List<Element> elements)
+    {
+        List<string> names = new List<string>();
+        var familySymbols = elements.Select(x => x.Document.GetElement(x.GetTypeId()) as FamilySymbol);
+        foreach (FamilySymbol familySymbol in familySymbols)
+        {
+            string? assemblyCode = familySymbol?.get_Parameter(BuiltInParameter.UNIFORMAT_CODE)?.AsValueString();
+            if (assemblyCode != null) names.Add(assemblyCode);
+        }
+        return names.Distinct().Count();
+    }
 
-    public double UnitFeetToMeter(double value)
+
+    private double UnitFeetToMeter(double value)
     {
         return UnitUtils.Convert(value,UnitTypeId.Feet,UnitTypeId.Meters);
     }
@@ -112,8 +125,11 @@ public class CategoriesCommand : IExternalCommand
         public double Count { get; set; } = 0;
         public double Workset { get; set; }
         public double Family { get; set; } = 0;
+
         public double Type { get; set; } = 0;
         public double Nestest { get; set; } = 0;
+
+        public double AssemblyCode { get; set; } = 0;
         // set feild name csv
         [CsvHelper.Configuration.Attributes.Name("Length(m)")]
         public double Length { get; set; }
