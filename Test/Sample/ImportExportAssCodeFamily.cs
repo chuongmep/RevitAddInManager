@@ -23,7 +23,13 @@ public class AssemblyCodeFamilyExport : IExternalCommand
         if (!Directory.Exists(dataDir)) Directory.CreateDirectory(dataDir);
         string filePath = Path.Combine(dataDir, "assemblycode.csv");
         ExportAssemblyCodes(doc, filePath);
-        Process.Start(filePath);
+        ProcessStartInfo processStartInfo = new ProcessStartInfo()
+        {
+            FileName = filePath,
+            WorkingDirectory = dataDir,
+            UseShellExecute = true
+        };
+        Process.Start(processStartInfo);
         return Result.Succeeded;
     }
     private void ExportAssemblyCodes(Document doc, string filePath)
