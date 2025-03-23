@@ -1,4 +1,7 @@
 # Changelog
+- 2025-03-23 **1.5.7**
+  - Fix click help button in revit 2025
+  - Change configuration package to open source maintainer
 - 2024-06-29 **1.5.6**
   - Hotfix bug with Revit 2025: Unload assembly not done when user raise an execute exception.
 - 2024-04-02 **1.5.4**
