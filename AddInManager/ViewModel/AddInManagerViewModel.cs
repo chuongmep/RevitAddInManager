@@ -227,8 +227,22 @@ public class AddInManagerViewModel : ViewModelBase
 
     private void HelpCommandClick()
     {
-        Process.Start("https://github.com/chuongmep/RevitAddInManager/wiki");
+        try
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "https://github.com/chuongmep/RevitAddInManager/wiki",
+                UseShellExecute = true // Required for opening URLs in the default browser
+            };
+
+            Process.Start(psi);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show($"Error: {e.Message}");
+        }
     }
+
     public AddInManagerViewModel(ExternalCommandData data, ref string message, ElementSet elements)
     {
         AssemLoader = new AssemLoader();
