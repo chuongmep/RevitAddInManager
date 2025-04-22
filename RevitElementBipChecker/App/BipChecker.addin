@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Built-in Parameter Checker</Text>
+    <Description>List all built-in parameters on selected element or its type</Description>
+    <Assembly>RevitElementBipChecker.dll</Assembly>
+    <FullClassName>RevitElementBipChecker.Command.Command</FullClassName>
+    <ClientId>B83C55F1-7C4E-4DDD-B609-17FBEA21A137</ClientId>
+    <VendorId>https://chuongmep.com/</VendorId>
+    <VendorDescription>https://chuongmep.com/</VendorDescription>
+  </AddIn>
+</RevitAddIns>

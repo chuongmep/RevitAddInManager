@@ -1,0 +1,231 @@
+﻿<Window
+    Height="Auto"
+    MinHeight="420"
+    MinWidth="500"
+    PreviewKeyDown="HandleEsc"
+    ResizeMode="CanResize"
+    Title="Revit Element Bip Checker"
+    Width="Auto"
+    d:DataContext="{d:DesignInstance viewmodel:BipCheckerViewmodel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="RevitElementBipChecker.View.FrmBipChecker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:RevitElementBipChecker.Viewmodel"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Expander IsExpanded="True" ExpandDirection="Right" Grid.Column="0" Grid.Row="1">
+            <StackPanel MinWidth="120">
+                <Button
+                    Command="{Binding OpenCsv}"
+                    Content="Open In Csv"
+                    Margin="5,5,0,5"
+                    ToolTip="Save data csv format to path document" />
+                <Button
+                    Command="{Binding OpenJson}"
+                    Content="Open In Json"
+                    Margin="5,5,0,5"
+                    ToolTip="Save Data json format to path document" />
+                <Button
+                    Command="{Binding SnoopCommand}"
+                    Content="Snoop"
+                    Margin="5,5,0,5" />
+                <GroupBox Header="State Check">
+                    <Label
+                        Content="{Binding State}"
+                        Foreground="Red"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </GroupBox>
+                <GroupBox Margin="0,5,0,5" Header="Show Filter" Height="80">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <CheckBox
+                            Command="{Binding CheckTypeInstance}"
+                            Content="Instance"
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding IsInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="5,0,0,5"
+                            VerticalAlignment="Center" />
+                        <CheckBox
+                            Command="{Binding CheckTypeInstance}"
+                            Content="Type"
+                            Grid.Row="1"
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding IsType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="5,0,0,5"
+                            VerticalAlignment="Center" />
+                    </Grid>
+
+                </GroupBox>
+
+                <Button Click="AboutOnClick" Content="About" />
+            </StackPanel>
+        </Expander>
+        <DataGrid
+            AlternatingRowBackground="Transparent"
+            AlternationCount="2"
+            AutoGenerateColumns="False"
+            Grid.Column="1"
+            Grid.Row="1"
+            GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
+            IsReadOnly="True"
+            ItemsSource="{Binding Data}"
+            Margin="10"
+            Name="lsBipChecker"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition
+                                    Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition
+                                    Binding="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ElementId}" Header="ElementId" />
+                <DataGridTextColumn Binding="{Binding Category}" Header="Category" />
+                <DataGridTextColumn Binding="{Binding Name}" Header="Parameter Name" />
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                <DataGridTextColumn Binding="{Binding TypeOrInstance}" Header="TypeOrInstance" />
+                <DataGridTextColumn Binding="{Binding BuiltInParameter}" Header="BuiltInParameter" />
+                <DataGridTextColumn Binding="{Binding ParameterType}" Header="ParameterType" />
+                <DataGridTextColumn Binding="{Binding Type}" Header="Type" />
+                <DataGridTextColumn Binding="{Binding Unit}" Header="Unit" />
+                <DataGridTextColumn Binding="{Binding ReadWrite}" Header="ReadWrite" />
+                <DataGridTextColumn Binding="{Binding Value}" Header="Value" />
+                <DataGridTextColumn Binding="{Binding StringValue}" Header="StringValue" />
+                <DataGridTextColumn Binding="{Binding ParameterGroup}" Header="ParameterGroup" />
+                <DataGridTextColumn Binding="{Binding GroupName}" Header="GroupName" />
+                <DataGridTextColumn Binding="{Binding Shared}" Header="Shared" />
+                <DataGridTextColumn Binding="{Binding GUID}" Header="GUID" />
+                <DataGridTextColumn Binding="{Binding AssGlobalPara}" Header="AssGlobalPara" />
+                <DataGridTextColumn Binding="{Binding AssGlobalParaValue}" Header="AssGlobalParaValue" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="PraName"
+                        Header="Copy ParameterName" />
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="BuildIn"
+                        Header="Copy BuiltInParameter" />
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="Type"
+                        Header="Copy Type" />
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="Value"
+                        Header="Copy Value" />
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="PraGroup"
+                        Header="Copy ParameterGroup" />
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="GName"
+                        Header="Copy GroupName" />
+                    <MenuItem
+                        Command="{Binding Copy}"
+                        CommandParameter="GUID"
+                        Header="Copy GUID" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <TextBox
+            Grid.Column="1"
+            Grid.Row="0"
+            Margin="10,5,10,0"
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            x:Name="tbxSearch">
+            <TextBox.Resources>
+                <VisualBrush
+                    AlignmentX="Left"
+                    AlignmentY="Center"
+                    Stretch="None"
+                    TileMode="None"
+                    x:Key="tbxText">
+                    <VisualBrush.Visual>
+                        <Grid Background="Transparent">
+                            <TextBlock
+                                Foreground="DimGray"
+                                Margin="5,0"
+                                Text="Search Filter By Parameter Name" />
+                        </Grid>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="3" />
+                </Style>
+            </TextBox.Resources>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="BorderBrush" Value="#FFAFAFAF" />
+                    <Setter Property="BorderThickness" Value="0.5" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Margin" Value="5,5,0,5" />
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource tbxText}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+    </Grid>
+</Window>

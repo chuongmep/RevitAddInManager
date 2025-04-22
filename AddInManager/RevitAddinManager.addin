@@ -1,0 +1,10 @@
+<RevitAddIns>
+    <AddIn Type="Application">
+        <Name>AddinManager</Name>
+        <Assembly>RevitAddinManager/RevitAddinManager.dll</Assembly>
+        <FullClassName>RevitAddinManager.App</FullClassName>
+        <AddInId>A7C7965D-E72F-4769-A3AC-BE0C14764BA2</AddInId>
+        <VendorId>ADSK</VendorId>
+        <VendorDescription>Autodesk, https://www.autodesk.com/</VendorDescription>
+    </AddIn>
+</RevitAddIns>

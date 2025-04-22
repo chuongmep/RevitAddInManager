@@ -1,0 +1,400 @@
+﻿<Window
+    x:Class="RevitAddinManager.View.FrmAddInManager"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="clr-namespace:RevitAddinManager.View.Control"
+    xmlns:controls="clr-namespace:RevitAddinManager.Themes.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:RevitAddinManager.Model"
+    xmlns:viewModel="clr-namespace:RevitAddinManager.ViewModel"
+    Title="Revit Add In Manager"
+    Width="{model:SettingBinding AppWidth}"
+    Height="{model:SettingBinding AppHeight}"
+    MinWidth="400"
+    MinHeight="400"
+    d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
+    d:DesignHeight="600"
+    d:DesignWidth="400"
+    Closed="OnCloseApp"
+    FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
+    Icon="../Resources/dev.ico"
+    Left="{model:SettingBinding AppLeft}"
+    PreviewKeyDown="CloseFormEvent"
+    SizeChanged="FrmSizeChanged"
+    Top="{model:SettingBinding AppTop}"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
+            <ResourceDictionary.MergedDictionaries>
+                <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/LightTheme.xaml" /> -->
+                <!-- <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/DarkTheme.xaml" /> -->
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/Default.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding RemoveCommand}" Gesture="Del" />
+        <KeyBinding Command="{Binding ReloadCommand}" Gesture="F5" />
+        <KeyBinding Command="{Binding HelpCommand}" Gesture="F1" />
+        <KeyBinding Command="{Binding ChangeThemCommand}" Gesture="Alt+T" />
+    </Window.InputBindings>
+    <Grid Background="{DynamicResource WindowBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+            <TextBox
+                x:Name="tbxSearch"
+                Grid.Row="0"
+                Height="25"
+                Margin="1,0,5,0"
+                VerticalAlignment="Center"
+                PreviewKeyDown="HandleTextboxKeyPress"
+                Text="{Binding SearchText, Mode=TwoWay,Delay=200, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Resources>
+                    <VisualBrush
+                        x:Key="tbxText"
+                        AlignmentX="Left"
+                        AlignmentY="Center"
+                        Stretch="None"
+                        TileMode="None">
+                        <VisualBrush.Visual>
+                            <Grid Background="Transparent">
+                                <TextBlock
+                                    Margin="5,0"
+                                    Foreground="DimGray"
+                                    Text="Search..." />
+                            </Grid>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="3" />
+                    </Style>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderBrush" Value="#FFAFAFAF" />
+                        <Setter Property="BorderThickness" Value="0.5" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Margin" Value="5,5,0,5" />
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource tbxText}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Button
+                Grid.Column="1"
+                Margin="1,1,2,1"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding HelpCommand}"
+                Content="Help"
+                ToolTip="Help" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TabItem
+                    x:Name="TabCommand"
+                    FontSize="14"
+                    Header="Load Command"
+                    IsSelected="{Binding IsTabCmdSelected}"
+                    PreviewKeyDown="HandleTreeViewCommandKeyPress">
+                    <control:ExtendedTreeView
+                        x:Name="TreeViewCommand"
+                        controls:EnableDragHelper.EnableDrag="True"
+                        FontSize="12"
+                        ItemsSource="{Binding CommandItems, Mode=TwoWay}"
+                        PreviewMouseWheel="TreeViewCommand_OnPreviewMouseWheel"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        SelectedItem_="{Binding SelectedCommandItem, Mode=TwoWay}"
+                        Style="{DynamicResource {x:Type TreeView}}">
+                        <TreeView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding LoadCommand}" Header="Load" />
+                                <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
+                                <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
+                                <MenuItem Command="{Binding OpenRefsAssemblyCommand}" Header="Assembly Info..." />
+                                <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
+                                <MenuItem Command="{Binding ReloadCommand}" Header="Reload" />
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                        VerticalAlignment="Center"
+                                        Focusable="False"
+                                        IsChecked="{Binding IsChecked}" />
+                                    <ContentPresenter Margin="2,0" Content="{Binding Name, Mode=OneTime}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </control:ExtendedTreeView>
+                </TabItem>
+                <TabItem
+                    x:Name="TabApp"
+                    controls:EnableDragHelper.EnableDrag="True"
+                    FontSize="14"
+                    Header="Load App"
+                    IsSelected="{Binding IsTabAppSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    PreviewKeyDown="HandleTreeViewAppKeyPress">
+                    <Grid>
+                        <control:ExtendedTreeView
+                            x:Name="TreeViewApp"
+                            Grid.ColumnSpan="2"
+                            FontSize="12"
+                            ItemContainerStyle="{StaticResource TreeViewItemStyle}"
+                            ItemsSource="{Binding ApplicationItems, Mode=TwoWay}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            SelectedItem_="{Binding SelectedAppItem, Mode=TwoWay}"
+                            Style="{DynamicResource {x:Type TreeView}}">
+                            <TreeView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding OpenLcAssemblyApp}" Header="Open Location Assembly" />
+                                    <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
+                                    <MenuItem Command="{Binding LoadCommand}" Header="Load" />
+                                    <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
+                                </ContextMenu>
+                            </TreeView.ContextMenu>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox
+                                            VerticalAlignment="Center"
+                                            Focusable="False"
+                                            IsChecked="{Binding IsChecked}" />
+                                        <ContentPresenter Margin="2,0" Content="{Binding Name, Mode=OneTime}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </control:ExtendedTreeView>
+                    </Grid>
+                </TabItem>
+                <TabItem
+                    x:Name="tabStartUp"
+                    FontSize="14"
+                    Header="Startup"
+                    IsEnabled="True"
+                    IsSelected="{Binding IsTabStartSelected}">
+                    <Grid>
+                        <DataGrid
+                            x:Name="DataGridStartup"
+                            AlternatingRowBackground="Transparent"
+                            AlternationCount="2"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            CanUserSortColumns="True"
+                            ClipboardCopyMode="IncludeHeader"
+                            ColumnWidth="*"
+                            FontSize="12"
+                            HeadersVisibility="Column"
+                            IsReadOnly="False"
+                            ItemsSource="{Binding AddInStartUps, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectionMode="Extended"
+                            VerticalScrollBarVisibility="Auto">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding OpenLocalAddinCommand}" Header="Open Location Addin" />
+                                    <MenuItem Command="{Binding EditAddinCommand}" Header="Edit Addin" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                        </Trigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                <Condition Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                <Condition Binding="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="True" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="80" Header="State">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="model:RevitAddin">
+                                            <Button
+                                                Height="25"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VisibleToggle}"
+                                                Content="{Binding State}"
+                                                FontSize="10"
+                                                IsEnabled="{Binding IsReadOnly}"
+                                                ToolTip="Toggle To Convert State" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn
+                                    Width="0.6*"
+                                    Binding="{Binding NameNotEx}"
+                                    Header="Name" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding FilePath}"
+                                    Header="Full Path" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem
+                    Header="Listener"
+                    IsSelected="{Binding IsTabLogSelected}"
+                    ToolTip="Support Listen Event Trace, Debug,Revit Events">
+                    <control:LogControl x:Name="LogControl" DataContext="{x:Null}" />
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <StackPanel Grid.Row="2">
+            <Button
+                Margin="1,3,1,0"
+                Command="{Binding ExecuteAddinCommand}"
+                Content="Run"
+                IsEnabled="{Binding IsCanRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ToolTip="Execute Addin Selected" />
+        </StackPanel>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="85" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Margin="1,0,1,1" Header="Vendor Description:">
+                <TextBox
+                    x:Name="TbxDescription"
+                    Width="Auto"
+                    Height="100"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    LostKeyboardFocus="TbxDescription_OnLostKeyboardFocus"
+                    Opacity="80"
+                    Text="{Binding VendorDescription, Mode=Default, UpdateSourceTrigger=PropertyChanged}"
+                    TextWrapping="Wrap"
+                    ToolTip="Default Autodesk, www.autodesk.com" />
+            </GroupBox>
+
+            <DockPanel
+                Grid.Column="1"
+                Width="82"
+                Margin="1,0,1,1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Dock="Bottom">
+                <Button
+                    Margin="1,0,2,0"
+                    Command="{Binding LoadCommand}"
+                    Content="Load"
+                    DockPanel.Dock="Top"
+                    ToolTip="Load A Dll Of Command Or Application To Run" />
+                <Button
+                    Margin="1,5,2,0"
+                    Command="{Binding RemoveCommand}"
+                    Content="Remove"
+                    DockPanel.Dock="Top"
+                    ToolTip="Remove A Command Or Application Loaded" />
+                <Button
+                    Margin="1,5,2,0"
+                    Command="{Binding ManagerCommand}"
+                    Content="Startup"
+                    DockPanel.Dock="Top"
+                    ToolTip="Manager List Add-in Loaded In Revit" />
+                <Button
+                    Margin="1,5,2,0"
+                    VerticalAlignment="Top"
+                    Command="{Binding ClearCommand}"
+                    Content="Clear"
+                    ToolTip="Remove Cache In Temp Folder(Require Tune Off Revit)" />
+            </DockPanel>
+        </Grid>
+
+        <StackPanel
+            Grid.Row="4"
+            Grid.Column="0"
+            Orientation="Horizontal">
+            <RadioButton
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Content="All Version"
+                IsEnabled="True"
+                ToolTip="Available Command or Application Addin For All Version" />
+            <RadioButton
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Content="Current Version"
+                IsChecked="{Binding IsCurrentVersion}"
+                ToolTip="Only Available for Revit Version Current" />
+            <Menu
+                Width="Auto"
+                Height="25"
+                Margin="0,0,2,0"
+                VerticalContentAlignment="Center"
+                BorderBrush="LightGray"
+                BorderThickness="1">
+                <MenuItem Header="Save Addin">
+                    <MenuItem
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveCommand}"
+                        Header="Save"
+                        ToolTip="Save To Folder Addin" />
+                    <MenuItem
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveCommandFolder}"
+                        Header="Save As...."
+                        ToolTip="Save To New Folder" />
+                </MenuItem>
+            </Menu>
+            <Button
+                Width="20"
+                Height="25"
+                Command="{Binding ExploreCommand}"
+                ToolTip="Open Explore Location External Command Saved">
+                <Button.Background>
+                    <ImageBrush
+                        AlignmentX="Center"
+                        AlignmentY="Bottom"
+                        ImageSource="../Resources/folder.png" />
+                </Button.Background>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

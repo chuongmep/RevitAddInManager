@@ -1,0 +1,88 @@
+﻿<Window
+    x:Class="RevitAddinManager.View.AssemblyLoader"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="AssemblyLoader"
+    Width="400"
+    Height="Auto"
+    Closing="AssemblyLoader_OnClosing"
+    Icon="../Resources/dev.ico"
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/RevitAddinManager;component\Themes\Styles/Default.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical">
+            <Label Content="The following assembly name can not be resolved automatically" />
+            <Label x:Name="tbxAssembly" Content="Assembly Name" />
+            <Label Content="" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="TbxAssemPath"
+                    Grid.Row="0"
+                    Margin="5,0,5,0"
+                    VerticalAlignment="Center">
+                    <TextBox.Resources>
+                        <VisualBrush
+                            x:Key="tbxText"
+                            AlignmentX="Left"
+                            Stretch="None"
+                            TileMode="None">
+                            <VisualBrush.Visual>
+                                <TextBlock Foreground="DimGray" Text="Assembly Path..." />
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </TextBox.Resources>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="BorderBrush" Value="AliceBlue" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="{StaticResource tbxText}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Button
+                    Grid.Column="1"
+                    Margin="1,1,1,1"
+                    Click="ButtonBase_OnClick"
+                    Content="Load" />
+            </Grid>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Margin="1,1,1,1"
+                Click="OKButtonClick"
+                Content="OK" />
+            <Button
+                Grid.Column="1"
+                Margin="1,1,1,1"
+                Click="Close_OnClick"
+                Content="Cancel" />
+        </Grid>
+    </Grid>
+</Window>
