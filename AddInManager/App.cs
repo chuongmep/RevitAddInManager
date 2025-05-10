@@ -19,9 +19,18 @@ public class App : IExternalApplication
     public static int ThemId { get; set; } = -1;
     public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));
     public static string PaneName => "Debug/Trace Output";
+    
+    private static readonly Dictionary<string, string> KnownAssemblies = new Dictionary<string, string>(StringComparer.Ordinal)
+    {
+        { "System.Resources.Extensions", "System.Resources.Extensions.dll" },
+        { "System.Runtime.CompilerServices.Unsafe", "System.Runtime.CompilerServices.Unsafe.dll" }
+    };
+    private static readonly ConcurrentDictionary<string, Assembly> AssemblyCache = new ConcurrentDictionary<string, Assembly>(StringComparer.Ordinal);
+    private static readonly string BaseDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
     public Result OnStartup(UIControlledApplication application)
     {
+        AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         CreateRibbonPanel(application);
         application.ControlledApplication.DocumentClosed += DocumentClosed;
         DefaultSetting.Version += VersionChecker.CurrentVersion;
@@ -78,6 +87,33 @@ public class App : IExternalApplication
         buttonData.ToolTip = "Check Built-in Parameter of the Element";
         pullDownButton.AddPushButton(buttonData);
     }
+
+    private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+    {
+        var requestedAssemblyName = new AssemblyName(args.Name).Name;
+        if (AssemblyCache.TryGetValue(requestedAssemblyName, out var cachedAssembly))
+        {
+            return cachedAssembly;
+        }
+        if (KnownAssemblies.TryGetValue(requestedAssemblyName, out var assemblyFile))
+        {
+            var assemblyPath = Path.Combine(BaseDirectory, assemblyFile);
+        
+            try
+            {
+                var assembly = Assembly.LoadFrom(assemblyPath);
+                AssemblyCache.TryAdd(requestedAssemblyName, assembly); // 线程安全添加缓存
+                return assembly;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+    
+        return null;
+    }
+    
     private void DocumentClosed(object sender, Autodesk.Revit.DB.Events.DocumentClosedEventArgs e)
     {
         FrmAddInManager?.Close();
