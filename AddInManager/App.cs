@@ -1,4 +1,7 @@
-﻿using Autodesk.Revit.UI;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.IO;
+using Autodesk.Revit.UI;
 using RevitAddinManager.Command;
 using RevitAddinManager.View;
 using System.Reflection;
@@ -8,6 +11,7 @@ using RevitAddinManager.View.Control;
 using RevitAddinManager.ViewModel;
 using RevitElementBipChecker.Command;
 using static RevitAddinManager.Model.BitmapSourceConverter;
+using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 
 namespace RevitAddinManager;
 
@@ -102,7 +106,7 @@ public class App : IExternalApplication
             try
             {
                 var assembly = Assembly.LoadFrom(assemblyPath);
-                AssemblyCache.TryAdd(requestedAssemblyName, assembly); // 线程安全添加缓存
+                AssemblyCache.TryAdd(requestedAssemblyName, assembly);
                 return assembly;
             }
             catch (Exception ex)
