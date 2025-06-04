@@ -1,4 +1,6 @@
 # Changelog
+- 2026-04-10 **1.5.8**
+  - Support Revit 2026 Release
 - 2025-03-23 **1.5.7**
   - Fix click help button in revit 2025
   - Change configuration package to open source maintainer

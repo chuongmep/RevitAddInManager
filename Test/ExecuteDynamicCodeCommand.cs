@@ -62,8 +62,8 @@ public class ExecuteDynamicCodeCommand : IExternalCommand
         
 
         // Add Revit API assemblies explicitly
-        string revitApiPath = @"C:\Program Files\Autodesk\Revit 2025\RevitAPI.dll"; // Modify the path if needed
-        string revitUiPath = @"C:\Program Files\Autodesk\Revit 2025\RevitAPIUI.dll"; // Modify the path if needed
+        string revitApiPath = @"C:\Program Files\Autodesk\Revit 2026\RevitAPI.dll"; // Modify the path if needed
+        string revitUiPath = @"C:\Program Files\Autodesk\Revit 2026\RevitAPIUI.dll"; // Modify the path if needed
 
         references.Add(MetadataReference.CreateFromFile(revitApiPath));
         references.Add(MetadataReference.CreateFromFile(revitUiPath));
