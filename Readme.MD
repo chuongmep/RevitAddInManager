@@ -1,6 +1,6 @@
 
 # Revit Add-in Manager
-![Revit API](https://img.shields.io/badge/Revit%20API%202025-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows-lightgray.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Revit API](https://img.shields.io/badge/Revit%20API%202026-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows-lightgray.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![ReSharper](https://img.shields.io/badge/ReSharper-2023-yellow) ![Rider](https://img.shields.io/badge/Rider-2023-yellow) ![Visual Studio 2022](https://img.shields.io/badge/Visual_Studio_2022-yellow) ![.NET Framework](https://img.shields.io/badge/.NET_8.0-yellow)
 
@@ -110,7 +110,7 @@ The product will be expanded in the future in process to support mutiple platfor
 
 Please follow last release at section [Release](https://github.com/chuongmep/RevitAddInManager/releases/latest)
 
-### Version support : From Revit 2019 to Revit 2025.
+### Version support : From Revit 2019 to Revit 2026.
 
 ---
 

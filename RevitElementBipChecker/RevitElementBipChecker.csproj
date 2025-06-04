@@ -8,8 +8,8 @@
 		<Version>1.1.0.0</Version>
 		<AssemblyVersion>1.1.0.*</AssemblyVersion>
 		<Deterministic>false</Deterministic>
-		<Configurations>Debug R22;Debug R23;Debug R24</Configurations>
-		<Configurations>$(Configurations);Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
+                <Configurations>Debug R22;Debug R23;Debug R24;Debug R26</Configurations>
+                <Configurations>$(Configurations);Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
 		<LangVersion>latest</LangVersion>
 		<NoWarn>CS7035</NoWarn>
 	</PropertyGroup>
@@ -53,15 +53,20 @@
 		<TargetFramework>net48</TargetFramework>
 		<DefineConstants>$(DefineConstants);R24</DefineConstants>
 	</PropertyGroup>
-	<PropertyGroup Condition="$(Configuration.Contains('R25'))">
-		<RevitVersion>2025</RevitVersion>
-		<DefineConstants>$(DefineConstants);R25</DefineConstants>
-		<TargetFramework>net8.0-windows</TargetFramework>
-	</PropertyGroup>
-	<PropertyGroup>
-		<Version>$(RevitVersion)</Version>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<Description>A Project Support Parameter Database for developer in revit</Description>
+        <PropertyGroup Condition="$(Configuration.Contains('R25'))">
+                <RevitVersion>2025</RevitVersion>
+                <DefineConstants>$(DefineConstants);R25</DefineConstants>
+                <TargetFramework>net8.0-windows</TargetFramework>
+        </PropertyGroup>
+        <PropertyGroup Condition="$(Configuration.Contains('R26'))">
+                <RevitVersion>2026</RevitVersion>
+                <DefineConstants>$(DefineConstants);R26</DefineConstants>
+                <TargetFramework>net8.0-windows</TargetFramework>
+        </PropertyGroup>
+        <PropertyGroup>
+                <Version>$(RevitVersion)</Version>
+                <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+                <Description>A Project Support Parameter Database for developer in revit</Description>
 		<AssemblyCopyright>Copyright ©Chuongmep  2023</AssemblyCopyright>
 		<AssemblyTitle>RevitElementBipChecker</AssemblyTitle>
 		<Authors>https://chuongmep.com/</Authors>

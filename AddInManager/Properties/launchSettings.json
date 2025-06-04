@@ -20,6 +20,10 @@
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\Autodesk\\Revit 2025\\Revit.exe"
     } ,
+    "Revit2026": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Autodesk\\Revit 2026\\Revit.exe"
+    } ,
     "RevitPreview": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\Autodesk\\Revit Preview Release\\Revit.exe"
