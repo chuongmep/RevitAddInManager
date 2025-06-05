@@ -12,6 +12,12 @@ internal partial class Build
              var configurations = GetConfigurations(BuildConfiguration, InstallerConfiguration);
              configurations.ForEach(configuration =>
              {
+                 Console.WriteLine($"Compiling {configuration} configuration...");
+             });
+             
+             configurations.ForEach(configuration =>
+             {
+                 Console.WriteLine($"Compiling project {configuration}...");
                  MSBuild(s => s
                      .SetTargets("Rebuild")
                      .SetProcessToolPath(MsBuildPath.Value)
@@ -19,6 +25,7 @@ internal partial class Build
                      .SetVerbosity(MSBuildVerbosity.Minimal)
                      .DisableNodeReuse()
                      .EnableRestore());
+                 Console.WriteLine($"Project {configuration} has been compiled successfully.");
              });
          });
 }

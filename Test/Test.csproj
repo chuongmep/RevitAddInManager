@@ -8,8 +8,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWpf>true</UseWpf>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25;</Configurations>
-    <Configurations>$(Configurations)Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
+    <Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25;Debug R26;</Configurations>
+    <Configurations>$(Configurations)Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R19'))">
     <RevitVersion>2019</RevitVersion>
@@ -42,6 +42,14 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <DefineConstants>$(DefineConstants);R25</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R26'))">
+    <RevitVersion>2026</RevitVersion>
+    <DebugType>Full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <DefineConstants>$(DefineConstants);R26</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <Version>$(RevitVersion)</Version>

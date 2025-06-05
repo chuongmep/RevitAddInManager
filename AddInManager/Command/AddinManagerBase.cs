@@ -8,7 +8,7 @@ using RevitAddinManager.ViewModel;
 using System.Windows;
 using static RevitAddinManager.App;
 
-#if R25
+#if R25 || R26
 using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;
 using System.Runtime.Loader;
 #endif
@@ -87,7 +87,7 @@ public sealed class AddinManagerBase
         return result;
     }
 
-#if R25
+#if R25 || R26
     public Result RunActiveCommand(ExternalCommandData data, ref string message, ElementSet elements)
     {
         var filePath = _activeCmd.FilePath;
