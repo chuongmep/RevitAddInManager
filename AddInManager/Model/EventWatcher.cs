@@ -40,7 +40,11 @@ namespace RevitAddinManager.Model
         {
             foreach (ElementId elementId in ids)
             {
+#if R26
+                SendMessage(@event, elementId.Value.ToString(), eventType);
+#else
                 SendMessage(@event,elementId.IntegerValue.ToString(),eventType);
+#endif
             }
         }
         void SendMessage(EventArgs @event,string message,EventType eventType)

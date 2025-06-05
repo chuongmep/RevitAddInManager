@@ -139,7 +139,11 @@ namespace RevitElementBipChecker.Model
                     value = _parameter.AsString();
                     break;
                 case StorageType.ElementId:
+#if R26
+                    value = _parameter.AsElementId().Value.ToString();
+#else
                     value = _parameter.AsElementId().IntegerValue.ToString();
+#endif
                     break;
                 case StorageType.None:
                     value = "None";
@@ -161,7 +165,11 @@ namespace RevitElementBipChecker.Model
             if (param.StorageType == StorageType.ElementId && doc != null)
             {
                 var paramId = param.AsElementId();
+#if R26
+                var id = paramId.Value;
+#else
                 var id = paramId.IntegerValue;
+#endif
 
                 if (id < 0)
                 {
@@ -182,7 +190,7 @@ namespace RevitElementBipChecker.Model
 
         static int _min_bic = 0;
         static int _max_bic = 0;
-        static string BuiltInCategoryString(int id)
+        static string BuiltInCategoryString(long id)
         {
             if (_min_bic == 0)
             {
@@ -206,7 +214,12 @@ namespace RevitElementBipChecker.Model
 
             if (includeId)
             {
-                description += " " + element.Id.IntegerValue.ToString();
+#if R26
+                var id = element.Id.Value;
+#else
+                var id = element.Id.IntegerValue;
+#endif
+                description += " " + id.ToString();
             }
 
             return description;
@@ -266,7 +279,11 @@ namespace RevitElementBipChecker.Model
                     break;
 
                 case StorageType.ElementId:
+#if R26
+                    parameterString = param.AsElementId().Value.ToString();
+#else
                     parameterString = param.AsElementId().IntegerValue.ToString();
+#endif
                     break;
 
                 case StorageType.None:
