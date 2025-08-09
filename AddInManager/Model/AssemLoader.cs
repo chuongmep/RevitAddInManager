@@ -133,7 +133,7 @@ public class AssemLoader
 
     private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
     {
-        Assembly result;
+        Assembly result = null;
         new AssemblyName(args.Name);
         var filePath = SearchAssemblyFileInTempFolder(args.Name);
         if (File.Exists(filePath))
@@ -143,6 +143,7 @@ public class AssemLoader
         else
         {
             filePath = SearchAssemblyFileInOriginalFolders(args.Name);
+
             if (string.IsNullOrEmpty(filePath))
             {
                 var array = args.Name.Split(new char[]
@@ -189,7 +190,11 @@ public class AssemLoader
                     filePath = loader.resultPath;
                 }
             }
-            result = CopyAndLoadAddin(filePath, true);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                result = CopyAndLoadAddin(filePath, true);
+            }
         }
 
         return result;
