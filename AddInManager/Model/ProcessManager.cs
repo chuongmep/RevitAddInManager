@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using Autodesk.Revit.DB;
 using Size = System.Drawing.Size;
@@ -39,13 +40,41 @@ namespace RevitAddinManager.Model
             double appLeft = Properties.App.Default.AppLeft;
             int width = MonitorControl.GetMonitorSize().Width;
             int height = MonitorControl.GetMonitorSize().Height;
+
+            var isOnScreen = IsOnScreen(window);
+
+            if (!isOnScreen)
+            {
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
             if (monitorCount==1 && appLeft>width)
             {
-                Properties.App.Default.AppLeft = width *0.5;
+                Properties.App.Default.AppLeft = width * 0.5;
                 Properties.App.Default.AppTop = height * 0.5;
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 Properties.App.Default.Save();
             }
+        }
+
+        /// Checks whether the specified window is at least partially visible 
+        /// on any of the connected screens
+        /// </summary>
+        /// <param name="window">The WPF window to check</param>
+        /// <returns>
+        /// <c>true</c> if any part of the window is visible on at least one screen; 
+        /// otherwise, <c>false</c>
+        /// </returns>
+        private static bool IsOnScreen(Window window)
+        {
+            var rect = new System.Drawing.Rectangle(
+                (int)window.Left,
+                (int)window.Top,
+                (int)window.Width,
+                (int)window.Height
+            );
+
+            return Screen.AllScreens.Any(screen => screen.WorkingArea.IntersectsWith(rect));
         }
 
         private static void SetActivateWindow(object sender, CancelEventArgs e)
