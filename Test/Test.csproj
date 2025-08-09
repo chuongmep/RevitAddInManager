@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>default</LangVersion>
     <IsPackable>false</IsPackable>

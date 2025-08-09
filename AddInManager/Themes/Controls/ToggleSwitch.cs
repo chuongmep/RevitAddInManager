@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using CheckBox = System.Windows.Controls.CheckBox;
 
 namespace RevitAddinManager.Themes.Controls
 {

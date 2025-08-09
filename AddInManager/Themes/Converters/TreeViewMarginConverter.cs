@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using TreeView = System.Windows.Controls.TreeView;
 
 namespace RevitAddinManager.Themes.Converters
 {

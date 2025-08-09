@@ -12,6 +12,9 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace RevitAddinManager.ViewModel;
 

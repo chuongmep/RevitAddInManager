@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using Binding = System.Windows.Data.Binding;
 
 namespace RevitAddinManager.Model
 {

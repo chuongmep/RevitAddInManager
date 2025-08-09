@@ -7,6 +7,7 @@ using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
 using System.Windows;
 using static RevitAddinManager.App;
+using MessageBox = System.Windows.MessageBox;
 
 #if R25 || R26
 using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;

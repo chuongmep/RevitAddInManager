@@ -25,7 +25,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('R19'))">
 		<RevitVersion>2019</RevitVersion>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net481</TargetFramework>
 		<DefineConstants>$(DefineConstants);R19</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('R20'))">

@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <UseWPF>true</UseWPF>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
     <ImplicitUsings>true</ImplicitUsings>
-    <UseWindowsForms>false</UseWindowsForms>
+    <UseWindowsForms>true</UseWindowsForms>
     <Configurations>Debug R22;Debug R23;Debug R24;Debug R25;</Configurations>
     <Configurations>$(Configurations);Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24;</Configurations>
   </PropertyGroup>
@@ -21,7 +21,7 @@
   <PropertyGroup Condition="$(Configuration.Contains('R19'))">
     <RevitVersion>2019</RevitVersion>
     <DefineConstants>$(DefineConstants);R19</DefineConstants>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R20'))">
     <RevitVersion>2020</RevitVersion>

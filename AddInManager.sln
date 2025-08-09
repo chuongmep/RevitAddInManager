@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{A8C6
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
 		Readme.MD = Readme.MD
+		.github\workflows\Workflow.yml = .github\workflows\Workflow.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevitAddinManager", "AddInManager\RevitAddinManager.csproj", "{C872CDA2-93F5-4681-BD2F-207EACF83D2E}"
@@ -67,7 +68,6 @@ Global
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R23|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R24|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R25|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3C87D34-638C-47A0-A73A-D967B119458D}.Debug R25|Any CPU.Build.0 = Debug|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Installer|Any CPU.ActiveCfg = Release|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Installer|Any CPU.Build.0 = Release|Any CPU
 		{E3C87D34-638C-47A0-A73A-D967B119458D}.Release R19|Any CPU.ActiveCfg = Release|Any CPU
@@ -82,7 +82,6 @@ Global
 		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Debug R23|Any CPU.ActiveCfg = Debug|Any CPU
 		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Debug R24|Any CPU.ActiveCfg = Debug|Any CPU
 		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Debug R25|Any CPU.ActiveCfg = Debug|Any CPU
-		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Debug R25|Any CPU.Build.0 = Debug|Any CPU
 		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Installer|Any CPU.ActiveCfg = Release|Any CPU
 		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Release R19|Any CPU.ActiveCfg = Release|Any CPU
 		{5016ED6D-5A9A-4F59-AE49-CAA9615798F7}.Release R20|Any CPU.ActiveCfg = Release|Any CPU
@@ -140,25 +139,15 @@ Global
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Debug R24|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Debug R24|Any CPU.Build.0 = Debug|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Debug R25|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Debug R25|Any CPU.Build.0 = Debug|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Installer|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Installer|Any CPU.Build.0 = Debug|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R19|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R19|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R20|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R20|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R21|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R21|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R22|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R22|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R23|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R23|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R24|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R24|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R25|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R25|Any CPU.Build.0 = Release|Any CPU
 		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R26|Any CPU.ActiveCfg = Release|Any CPU
-		{DA609427-F086-4C79-A5FA-202DBB5DE48D}.Release R26|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

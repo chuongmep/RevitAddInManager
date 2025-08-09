@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using Application = System.Windows.Application;
 
 namespace RevitAddinManager.Themes.Base
 {

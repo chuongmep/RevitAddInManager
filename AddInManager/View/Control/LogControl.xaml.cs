@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using RevitAddinManager.Model;
 using RevitAddinManager.ViewModel;
+using Clipboard = System.Windows.Clipboard;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace RevitAddinManager.View.Control
 {

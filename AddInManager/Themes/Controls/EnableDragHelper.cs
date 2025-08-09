@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace RevitAddinManager.Themes.Controls;
 

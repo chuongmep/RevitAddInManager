@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using RevitAddinManager.Model;
 using System.Windows.Threading;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace RevitAddinManager.View;
 
