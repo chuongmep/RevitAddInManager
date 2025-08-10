@@ -1,4 +1,7 @@
 # Changelog
+- 2026-08-10 **1.5.9**
+  - Fix bug open add-in manager with multiple monitor.
+  - Minor improve load assembly.
 - 2026-04-10 **1.5.8**
   - Support Revit 2026 Release
 - 2025-03-23 **1.5.7**
