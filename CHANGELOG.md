@@ -1,8 +1,10 @@
 # Changelog
-- 2026-08-10 **1.5.9**
+- 2026-01-20 **1.6.0**
+  - Fixed bug StackTrace does not show up on stack trace debug [#59](https://github.com/chuongmep/RevitAddInManager/issues/59)
+- 2025-08-10 **1.5.9**
   - Fix bug open add-in manager with multiple monitor.
   - Minor improve load assembly.
-- 2026-04-10 **1.5.8**
+- 2025-04-10 **1.5.8**
   - Support Revit 2026 Release
 - 2025-03-23 **1.5.7**
   - Fix click help button in revit 2025
