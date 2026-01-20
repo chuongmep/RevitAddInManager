@@ -100,10 +100,16 @@ public sealed class AddinManagerBase
         Result result = Result.Failed;
         var alc = new AssemblyLoadContext(filePath);
         Stream stream = null;
+        Stream symbolStream = null;
         try
         {
             stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            Assembly assembly = alc.LoadFromStream(stream);
+            string pdbPath = Path.ChangeExtension(filePath, ".pdb");
+            if (File.Exists(pdbPath))
+            {
+                symbolStream = new FileStream(pdbPath, FileMode.Open, FileAccess.Read);
+            }
+            Assembly assembly = alc.LoadFromStream(stream, symbolStream);
             object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
             WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
             if (instance is IExternalCommand externalCommand)
@@ -119,6 +125,7 @@ public sealed class AddinManagerBase
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
+            symbolStream?.Close();
             stream.Close();
         }
         catch (Exception ex)
@@ -134,6 +141,7 @@ public sealed class AddinManagerBase
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
+            symbolStream?.Close();
             stream?.Close();
             Debug.WriteLine("Assembly unloaded");
 
