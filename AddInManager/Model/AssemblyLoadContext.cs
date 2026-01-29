@@ -7,7 +7,7 @@ namespace RevitAddinManager.Model;
 
 class AssemblyLoadContext : System.Runtime.Loader.AssemblyLoadContext
 {
-    public AssemblyLoadContext() : base(isCollectible: true)
+    public AssemblyLoadContext() : base(name: "RevitAddinManager", isCollectible: true)
     {
     }
     private AssemblyDependencyResolver _resolver;
