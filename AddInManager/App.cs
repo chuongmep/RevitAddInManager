@@ -34,7 +34,9 @@ public class App : IExternalApplication
 
     public Result OnStartup(UIControlledApplication application)
     {
+#if !(R25 || R26)
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+#endif
         CreateRibbonPanel(application);
         application.ControlledApplication.DocumentClosed += DocumentClosed;
         DefaultSetting.Version += VersionChecker.CurrentVersion;

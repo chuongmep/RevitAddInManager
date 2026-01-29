@@ -11,7 +11,7 @@ using MessageBox = System.Windows.MessageBox;
 
 #if R25 || R26
 using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;
-using System.Runtime.Loader;
+using System.Windows.Threading;
 #endif
 
 namespace RevitAddinManager.Command;
@@ -99,58 +99,52 @@ public sealed class AddinManagerBase
         }
         Result result = Result.Failed;
         var alc = new AssemblyLoadContext(filePath);
-        Stream stream = null;
-        Stream symbolStream = null;
         try
         {
-            stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            string pdbPath = Path.ChangeExtension(filePath, ".pdb");
-            if (File.Exists(pdbPath))
-            {
-                symbolStream = new FileStream(pdbPath, FileMode.Open, FileAccess.Read);
-            }
-            Assembly assembly = alc.LoadFromStream(stream, symbolStream);
-            object instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
-            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            var assembly = Load(alc, filePath);
+            var instance = assembly.CreateInstance(_activeCmdItem.FullClassName);
+            
             if (instance is IExternalCommand externalCommand)
-            {
-                _activeEc = externalCommand;
-                result = _activeEc.Execute(data, ref message, elements);
-                alc.Unload();
-            }
-            int counter = 0;
-            for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
-            {
-                alc = null;
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
-            symbolStream?.Close();
-            stream.Close();
+                result = externalCommand.Execute(data, ref message, elements);
         }
         catch (Exception ex)
         {
-            // unload the assembly
             MessageBox.Show(ex.ToString());
-            alc?.Unload();
-            result = Result.Failed;
-            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
-            for (int counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
-            {
-                alc = null;
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
-            symbolStream?.Close();
-            stream?.Close();
-            Debug.WriteLine("Assembly unloaded");
-
         }
-        // finally
-        // {
-        //     alc?.Unload();
-        // }
+        finally
+        {
+            alc.Unload();
+
+            var alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
+            {
+                for (var counter = 0; alcWeakRef.IsAlive && counter < 10; counter++)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+
+                Debug.WriteLine(alcWeakRef.IsAlive ? "Assembly has not been unloaded properly" : "Assembly unloaded");
+            });
+        }
         return result;
+    }
+
+    private static Assembly Load(AssemblyLoadContext assemblyLoadContext, string filePath)
+    {
+        using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+        var pdbPath = Path.ChangeExtension(filePath, ".pdb");
+
+        if (File.Exists(pdbPath))
+        {
+            using var symbolStream = new FileStream(pdbPath, FileMode.Open, FileAccess.Read);
+
+            return assemblyLoadContext.LoadFromStream(stream, symbolStream);
+        }
+
+        return assemblyLoadContext.LoadFromStream(stream);
     }
 #endif
 
