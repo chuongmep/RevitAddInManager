@@ -12,7 +12,7 @@ class AssemblyLoadContext : System.Runtime.Loader.AssemblyLoadContext
     }
     private AssemblyDependencyResolver _resolver;
 
-    public AssemblyLoadContext(string pluginPath): base(isCollectible: true)
+    public AssemblyLoadContext(string pluginPath): base(name: "RevitAddinManager", isCollectible: true)
     {
         _resolver = new AssemblyDependencyResolver(pluginPath);
     }
