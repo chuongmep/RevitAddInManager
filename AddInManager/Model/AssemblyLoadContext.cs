@@ -26,7 +26,7 @@ class AssemblyLoadContext : System.Runtime.Loader.AssemblyLoadContext
             {
                 return null;
             }
-            var stream = new FileStream(assemblyPath, FileMode.Open, FileAccess.Read);
+            using var stream = new FileStream(assemblyPath, FileMode.Open, FileAccess.Read);
             return LoadFromStream(stream);
         }
 
