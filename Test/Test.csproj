@@ -81,8 +81,5 @@
   <ItemGroup>
     <Reference Include="PresentationFramework" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Test2\Test2.csproj" />
-  </ItemGroup>
 
 </Project>
