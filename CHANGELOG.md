@@ -1,4 +1,6 @@
 # Changelog
+- 2026-02-09 **1.6.1**
+  - Fixed issues unloading assembly context [#70](https://github.com/chuongmep/RevitAddInManager/pull/70)
 - 2026-01-20 **1.6.0**
   - Fixed bug StackTrace does not show up on stack trace debug [#59](https://github.com/chuongmep/RevitAddInManager/issues/59)
 - 2025-08-10 **1.5.9**
