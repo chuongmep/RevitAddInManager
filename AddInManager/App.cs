@@ -34,7 +34,7 @@ public class App : IExternalApplication
 
     public Result OnStartup(UIControlledApplication application)
     {
-#if !(R25 || R26)
+#if !(R25 || R26 || R27)
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 #endif
         CreateRibbonPanel(application);

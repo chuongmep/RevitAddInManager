@@ -8,8 +8,8 @@
 		<Version>1.1.0.0</Version>
 		<AssemblyVersion>1.1.0.*</AssemblyVersion>
 		<Deterministic>false</Deterministic>
-                <Configurations>Debug R22;Debug R23;Debug R24;Debug R26</Configurations>
-                <Configurations>$(Configurations);Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24;Release R26</Configurations>
+                <Configurations>Debug R22;Debug R23;Debug R24;Debug R26;Debug R27</Configurations>
+                <Configurations>$(Configurations);Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24;Release R26;Release R27</Configurations>
 		<LangVersion>latest</LangVersion>
 		<NoWarn>CS7035</NoWarn>
 	</PropertyGroup>
@@ -63,6 +63,11 @@
     <DefineConstants>$(DefineConstants);R26</DefineConstants>
     <TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R27'))">
+    <RevitVersion>2027</RevitVersion>
+    <DefineConstants>$(DefineConstants);R27</DefineConstants>
+    <TargetFramework>net10.0-windows</TargetFramework>
+  </PropertyGroup>
   <PropertyGroup>
     <Version>$(RevitVersion)</Version>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -76,13 +81,13 @@
 	  <None Remove="Resources\lightbulb_702814.png" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*">
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
-		<PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*">
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
-		<PackageReference Include="Chuongmep.Revit.Api.AdWindows" Version="$(RevitVersion).*">
+		<PackageReference Include="Nice3point.Revit.Api.AdWindows" Version="$(RevitVersion).*">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

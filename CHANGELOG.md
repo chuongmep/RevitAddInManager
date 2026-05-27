@@ -1,4 +1,6 @@
 # Changelog
+- 2026-05-27 **1.6.2**
+  - Support Revit 2027 Release
 - 2026-02-09 **1.6.1**
   - Fixed issues unloading assembly context [#70](https://github.com/chuongmep/RevitAddInManager/pull/70)
 - 2026-01-20 **1.6.0**

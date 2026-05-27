@@ -5,8 +5,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <ImplicitUsings>true</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
-    <Configurations>Debug R22;Debug R23;Debug R24;Debug R25;</Configurations>
-    <Configurations>$(Configurations);Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24;</Configurations>
+    <Configurations>Debug R22;Debug R23;Debug R24;Debug R25;Debug R26;Debug R27;</Configurations>
+    <Configurations>$(Configurations);Release R27;Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24;</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <DebugSymbols>true</DebugSymbols>
@@ -60,6 +60,12 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R27'))">
+    <RevitVersion>2027</RevitVersion>
+    <DefineConstants>$(DefineConstants);R27</DefineConstants>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
   <PropertyGroup>
     <Version>$(RevitVersion)</Version>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -87,6 +93,9 @@
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition="$(Configuration.Contains('R26'))">
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition="$(Configuration.Contains('R27'))">
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 

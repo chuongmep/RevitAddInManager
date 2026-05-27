@@ -8,8 +8,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWpf>true</UseWpf>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25;Debug R26;</Configurations>
-    <Configurations>$(Configurations)Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
+    <Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25;Debug R26;Debug R27;</Configurations>
+    <Configurations>$(Configurations)Release R27;Release R26;Release R25;Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R19'))">
     <RevitVersion>2019</RevitVersion>
@@ -51,6 +51,14 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <DefineConstants>$(DefineConstants);R26</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R27'))">
+    <RevitVersion>2027</RevitVersion>
+    <DebugType>Full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <DefineConstants>$(DefineConstants);R27</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup>
     <Version>$(RevitVersion)</Version>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -73,8 +81,8 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
     <PackageReference Include="coverlet.collector" Version="3.1.0" />
-    <PackageReference Include="Chuongmep.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
-    <PackageReference Include="Chuongmep.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
