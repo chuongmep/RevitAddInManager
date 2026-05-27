@@ -1,4 +1,4 @@
-﻿#if R25 || R26
+﻿#if R25 || R26 || R27
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;

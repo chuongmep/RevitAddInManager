@@ -9,7 +9,7 @@ using System.Windows;
 using static RevitAddinManager.App;
 using MessageBox = System.Windows.MessageBox;
 
-#if R25 || R26
+#if R25 || R26 || R27
 using AssemblyLoadContext = RevitAddinManager.Model.AssemblyLoadContext;
 using System.Windows.Threading;
 #endif
@@ -88,7 +88,7 @@ public sealed class AddinManagerBase
         return result;
     }
 
-#if R25 || R26
+#if R25 || R26 || R27
     public Result RunActiveCommand(ExternalCommandData data, ref string message, ElementSet elements)
     {
         var filePath = _activeCmd.FilePath;

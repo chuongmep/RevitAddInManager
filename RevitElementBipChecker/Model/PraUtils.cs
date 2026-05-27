@@ -139,7 +139,7 @@ namespace RevitElementBipChecker.Model
                     value = _parameter.AsString();
                     break;
                 case StorageType.ElementId:
-#if R26
+#if R26 || R27
                     value = _parameter.AsElementId().Value.ToString();
 #else
                     value = _parameter.AsElementId().IntegerValue.ToString();
@@ -165,7 +165,7 @@ namespace RevitElementBipChecker.Model
             if (param.StorageType == StorageType.ElementId && doc != null)
             {
                 var paramId = param.AsElementId();
-#if R26
+#if R26 || R27
                 var id = paramId.Value;
 #else
                 var id = paramId.IntegerValue;
@@ -214,7 +214,7 @@ namespace RevitElementBipChecker.Model
 
             if (includeId)
             {
-#if R26
+#if R26 || R27
                 var id = element.Id.Value;
 #else
                 var id = element.Id.IntegerValue;
@@ -279,7 +279,7 @@ namespace RevitElementBipChecker.Model
                     break;
 
                 case StorageType.ElementId:
-#if R26
+#if R26 || R27
                     parameterString = param.AsElementId().Value.ToString();
 #else
                     parameterString = param.AsElementId().IntegerValue.ToString();
