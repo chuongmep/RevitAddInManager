@@ -19,7 +19,7 @@ internal partial class Build
                     MSBuild(s => s
                         .SetTargetPath(Solution) // Explicitly set solution file
                         .SetTargets("Rebuild")
-                        .SetProcessToolPath(MSBuildTasks.MSBuildPath) // Use standard MSBuild path
+                        .SetProcessToolPath(MsBuildPath.Value ?? MSBuildTasks.MSBuildPath)
                         .SetConfiguration(configuration)
                         .SetVerbosity(MSBuildVerbosity.Minimal)
                         .DisableNodeReuse()

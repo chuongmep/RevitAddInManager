@@ -21,7 +21,16 @@ internal partial class Build : NukeBuild
                .SetProperty("installationPath")
            );
 
-           if (output.Count > 0) return null;
+           var installationPath = output
+               .Select(line => line.Text)
+               .LastOrDefault(Directory.Exists);
+
+           if (installationPath != null)
+           {
+               var msBuild = Path.Combine(installationPath, "MSBuild", "Current", "Bin", "MSBuild.exe");
+               if (File.Exists(msBuild)) return msBuild;
+           }
+
            if (!File.Exists(CustomMsBuildPath)) throw new Exception($"Missing file: {CustomMsBuildPath}. Change the path to the build platform or install Visual Studio.");
            return CustomMsBuildPath;
        });
