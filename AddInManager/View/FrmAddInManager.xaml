@@ -363,6 +363,12 @@
                 Content="Current Version"
                 IsChecked="{Binding IsCurrentVersion}"
                 ToolTip="Only Available for Revit Version Current" />
+            <CheckBox
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Content="Separate loaded list per Revit version"
+                IsChecked="{Binding IsSeparateVersion}"
+                ToolTip="Keep separate loaded add-in lists for each Revit version" />
             <Menu
                 Width="Auto"
                 Height="25"

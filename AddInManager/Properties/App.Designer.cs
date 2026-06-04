@@ -81,5 +81,17 @@ namespace RevitAddinManager.Properties {
                 this["AppTop"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsSeparateVersion {
+            get {
+                return ((bool)(this["IsSeparateVersion"]));
+            }
+            set {
+                this["IsSeparateVersion"] = value;
+            }
+        }
     }
 }
