@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
@@ -68,7 +67,6 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <Version>$(RevitVersion)</Version>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -152,7 +150,6 @@
     <ProjectReference Include="..\RevitElementBipChecker\RevitElementBipChecker.csproj" />
   </ItemGroup>
   <PropertyGroup>
-    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files\Autodesk\Revit $(RevitVersion)\Revit.exe</StartProgram>
     <StartArguments>/language ENG</StartArguments>
@@ -165,7 +162,6 @@
     </ItemGroup>
 
     <PropertyGroup>
-    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
       <RootDir>bin\AddIn $(RevitVersion) $(Configuration)\</RootDir>
       <AddinDir>$(RootDir)$(AssemblyName)\</AddinDir>
     </PropertyGroup>
@@ -180,7 +176,4 @@
     <Copy SourceFiles="@(AddinFiles)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" />
   </Target>
 
-  <ItemGroup>
-    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
-  </ItemGroup>
 </Project>
