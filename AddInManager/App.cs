@@ -37,6 +37,7 @@ public class App : IExternalApplication
 #if !(R25 || R26 || R27)
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 #endif
+        CodeListener.EnsureRegistered();
         CreateRibbonPanel(application);
         application.ControlledApplication.DocumentClosed += DocumentClosed;
         DefaultSetting.Version += VersionChecker.CurrentVersion;

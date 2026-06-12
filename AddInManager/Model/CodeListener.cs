@@ -5,6 +5,22 @@ namespace RevitAddinManager.Model;
 
 public class CodeListener : TraceListener
 {
+    private static readonly object SyncRoot = new object();
+
+    public static void EnsureRegistered()
+    {
+        lock (SyncRoot)
+        {
+            if (Trace.Listeners.OfType<CodeListener>().Any())
+            {
+                return;
+            }
+
+            Trace.Listeners.Add(new CodeListener());
+            Trace.AutoFlush = true;
+        }
+    }
+
     public override void Write(string message)
     {
         WriteMessage(message);

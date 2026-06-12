@@ -11,9 +11,7 @@ public class AddInManagerManual : IExternalCommand
 {
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
-        Trace.Listeners.Clear();
-        CodeListener codeListener = new CodeListener();
-        Trace.Listeners.Add(codeListener);
+        CodeListener.EnsureRegistered();
         StaticUtil.RegenOption = RegenerationOption.Manual;
         StaticUtil.TransactMode = TransactionMode.Manual;
         Result result = AddinManagerBase.Instance.ExecuteCommand(commandData, ref message, elements, false);
