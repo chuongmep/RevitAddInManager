@@ -1,6 +1,4 @@
 # Changelog
-- 2026-06-12 **1.6.3**
-  - Add option load separate version Revit.
 - 2026-05-27 **1.6.2**
   - Support Revit 2027 Release
 - 2026-02-09 **1.6.1**

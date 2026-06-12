@@ -65,7 +65,7 @@ public class UpdateUFCodeBaseFamily : IExternalCommand
                     x.Family == familySymbol.FamilyName && x.FamilyType == familySymbol.Name);
                 if (inputAssembly != null)
                 {
-                    Parameter parameter = familySymbol.get_Parameter(BuiltInParameter.ASSEMBLY_CODE);
+                    Parameter parameter = familySymbol.get_Parameter(BuiltInParameter.UNIFORMAT_CODE);
                     if (parameter != null && !parameter.IsReadOnly)
                     {
                         parameter.Set(inputAssembly.UF2Code);

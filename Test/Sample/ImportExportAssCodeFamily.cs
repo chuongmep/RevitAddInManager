@@ -101,7 +101,7 @@ public class AssemblyCodeFamilyImport : IExternalCommand
 
                 if (symbol != null)
                 {
-                    Parameter assemblyCodeParam = symbol.get_Parameter(BuiltInParameter.ASSEMBLY_CODE);
+                    Parameter assemblyCodeParam = symbol.get_Parameter(BuiltInParameter.UNIFORMAT_CODE);
                     if (assemblyCodeParam != null && !assemblyCodeParam.IsReadOnly)
                     {
                         if(data.AssemblyCode=="N/A") continue;

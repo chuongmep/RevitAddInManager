@@ -106,7 +106,7 @@ public class CategoriesCommand : IExternalCommand
         var familySymbols = elements.Select(x => x.Document.GetElement(x.GetTypeId()) as FamilySymbol);
         foreach (FamilySymbol familySymbol in familySymbols)
         {
-            string? assemblyCode = familySymbol?.get_Parameter(BuiltInParameter.ASSEMBLY_CODE)?.AsValueString();
+            string? assemblyCode = familySymbol?.get_Parameter(BuiltInParameter.UNIFORMAT_CODE)?.AsValueString();
             if (assemblyCode != null) names.Add(assemblyCode);
         }
         return names.Distinct().Count();
