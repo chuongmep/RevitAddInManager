@@ -1,4 +1,8 @@
 # Changelog
+- 2026-06-12 **1.6.4**
+  - Fix scrollbar drag not working when mouse capture is active.
+  - Fix Debug/Trace output not showing in DockPanel when it is opened before Add-in Manager.
+  - Improve Trace listener registration to avoid duplicate listeners and preserve existing listener behavior.
 - 2026-06-12 **1.6.3**
   - Add option load separate version Revit.
 - 2026-05-27 **1.6.2**
