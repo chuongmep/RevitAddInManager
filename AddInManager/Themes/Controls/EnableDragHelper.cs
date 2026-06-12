@@ -1,7 +1,9 @@
 ﻿using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using WpfScrollBar = System.Windows.Controls.Primitives.ScrollBar;
 
 namespace RevitAddinManager.Themes.Controls;
 
@@ -22,7 +24,7 @@ public class EnableDragHelper
             return;
         }
 
-        if ((bool) dependencyPropertyChangedEventArgs.NewValue == true)
+        if ((bool) dependencyPropertyChangedEventArgs.NewValue)
         {
             uiElement.MouseMove += UIElementOnMouseMove;
         }
@@ -39,24 +41,48 @@ public class EnableDragHelper
         {
             if (mouseEventArgs.LeftButton == MouseButtonState.Pressed)
             {
-                DependencyObject parent = uiElement;
-                int avoidInfiniteLoop = 0;
-                // Search up the visual tree to find the first parent window.
-                while ((parent is Window) == false)
+                var source = mouseEventArgs.OriginalSource as DependencyObject;
+                if (IsMouseCapturedByAnotherElement(uiElement) || (source != null && IsScrollBarInteraction(source)))
                 {
-                    parent = VisualTreeHelper.GetParent(parent);
-                    avoidInfiniteLoop++;
-                    if (avoidInfiniteLoop == 1000)
-                    {
-                        // Something is wrong - we could not find the parent window.
-                        return;
-                    }
+                    return;
                 }
 
-                var window = parent as Window;
-                window.DragMove();
+                DependencyObject parent = uiElement;
+                // Search up the visual tree to find the first parent window.
+                while (parent != null && parent is not Window)
+                {
+                    parent = VisualTreeHelper.GetParent(parent);
+                }
+
+                if (parent is Window window)
+                {
+                    window.DragMove();
+                }
             }
         }
+    }
+
+    private static bool IsMouseCapturedByAnotherElement(UIElement uiElement)
+    {
+        // When a child control (for example a ScrollBar thumb) captures mouse input,
+        // avoid turning that gesture into a window drag.
+        var captured = Mouse.Captured;
+        return captured != null && !ReferenceEquals(captured, uiElement);
+    }
+
+    private static bool IsScrollBarInteraction(DependencyObject source)
+    {
+        while (source != null)
+        {
+            if (source is WpfScrollBar or Thumb or Track or RepeatButton)
+            {
+                return true;
+            }
+
+            source = VisualTreeHelper.GetParent(source);
+        }
+
+        return false;
     }
 
     public static void SetEnableDrag(DependencyObject element, bool value)
