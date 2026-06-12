@@ -24,7 +24,7 @@ public class UpdateAssemblyCode : IExternalCommand
         // read csv file
         var allElements = new FilteredElementCollector(doc).WhereElementIsElementType()
             //group by id
-            .GroupBy(x => x.Id.IntegerValue).Select(x => x.First())
+            .GroupBy(x => x.Id.Value).Select(x => x.First())
             .Where(x => x.Category != null);
 
 
@@ -37,10 +37,10 @@ public class UpdateAssemblyCode : IExternalCommand
                 var records = csv.GetRecords<Uniformat>().ToList();
                 foreach (var record in records)
                 {
-                    var type_elements = allElements.Where(x => Math.Abs(x.Category.Id.IntegerValue - record.Category) < 0.001);
+                    var type_elements = allElements.Where(x => Math.Abs(x.Category.Id.Value - record.Category) < 0.001);
                     foreach (var element in type_elements)
                     {
-                        Parameter parameter = element.get_Parameter(BuiltInParameter.UNIFORMAT_CODE);
+                        Parameter parameter = element.get_Parameter(BuiltInParameter.ASSEMBLY_CODE);
                         if (parameter != null && !parameter.IsReadOnly)
                         {
                             parameter.Set(record.UniformatCode);
