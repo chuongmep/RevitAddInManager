@@ -148,6 +148,24 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref isCurrentVersion, value);
     }
 
+    public bool IsSeparateVersion
+    {
+        get => Properties.App.Default.IsSeparateVersion;
+        set
+        {
+            if (Properties.App.Default.IsSeparateVersion == value) return;
+            Properties.App.Default.IsSeparateVersion = value;
+            Properties.App.Default.Save();
+            OnPropertyChanged();
+
+            // Reload commands/apps list
+            MAddinManagerBase.AddinManager = new AddinManager(ExternalCommandData.Application.Application.VersionNumber);
+            CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+            ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
+            FreshSearchClick();
+        }
+    }
+
     private ObservableCollection<RevitAddin> addinStartup;
 
     public ObservableCollection<RevitAddin> AddInStartUps
@@ -250,6 +268,16 @@ public class AddInManagerViewModel : ViewModelBase
     {
         AssemLoader = new AssemLoader();
         MAddinManagerBase = AddinManagerBase.Instance;
+        // Make sure AddinManager uses the correct revit version if needed
+        if (MAddinManagerBase.AddinManager == null)
+        {
+             MAddinManagerBase.AddinManager = new AddinManager(data.Application.Application.VersionNumber);
+        }
+        else if (Properties.App.Default.IsSeparateVersion)
+        {
+            // if we missed setting it properly before due to no commandData at Instance creation
+            MAddinManagerBase.AddinManager = new AddinManager(data.Application.Application.VersionNumber);
+        }
         CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
         ApplicationItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Applications);
         ExternalCommandData = data;

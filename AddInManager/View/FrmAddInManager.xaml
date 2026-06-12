@@ -60,7 +60,7 @@
                 Margin="1,0,5,0"
                 VerticalAlignment="Center"
                 PreviewKeyDown="HandleTextboxKeyPress"
-                Text="{Binding SearchText, Mode=TwoWay,Delay=200, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding SearchText, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.Resources>
                     <VisualBrush
                         x:Key="tbxText"
@@ -363,6 +363,12 @@
                 Content="Current Version"
                 IsChecked="{Binding IsCurrentVersion}"
                 ToolTip="Only Available for Revit Version Current" />
+            <CheckBox
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Content="Separate Version"
+                IsChecked="{Binding IsSeparateVersion}"
+                ToolTip="Keep separate loaded add-in lists for each Revit version" />
             <Menu
                 Width="Auto"
                 Height="25"

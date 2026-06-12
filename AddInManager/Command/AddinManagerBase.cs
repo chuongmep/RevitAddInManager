@@ -170,7 +170,7 @@ public sealed class AddinManagerBase
 
     private AddinManagerBase()
     {
-        _addinManager = new AddinManager();
+        _addinManager = null; // initialized dynamically later when version is available
         _activeCmd = null;
         _activeCmdItem = null;
         _activeApp = null;

@@ -13,11 +13,11 @@ public class AddinManager
     public AddinsCommand Commands => commands;
     public int CmdCount => commands.Count;
 
-    public AddinManager()
+    public AddinManager(string revitVersion = "")
     {
         commands = new AddinsCommand();
         applications = new AddinsApplication();
-        GetIniFilePaths();
+        GetIniFilePaths(revitVersion);
         ReadAddinsFromAimIni();
     }
 
@@ -29,10 +29,14 @@ public class AddinManager
         set => revitIniFile = value;
     }
 
-    private void GetIniFilePaths()
+    private void GetIniFilePaths(string revitVersion)
     {
         var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var path = Path.Combine(folderPath, Resource.AppName);
+        if (Properties.App.Default.IsSeparateVersion && !string.IsNullOrEmpty(revitVersion))
+        {
+            path = Path.Combine(path, revitVersion);
+        }
         var filePath = Path.Combine(path, DefaultSetting.AimInternalName);
         aimIniFile = new IniFile(filePath);
         var currentProcess = Process.GetCurrentProcess();
