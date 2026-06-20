@@ -38,10 +38,6 @@ public static class RibbonUtils
                                 shouldRemove = true;
                                 break;
                             }
-                            if (button.Text != null && button.Text.Contains(assemblyName))
-                            {
-                                // dangerous, but might work
-                            }
                         }
                     }
 
@@ -53,7 +49,14 @@ public static class RibbonUtils
 
                 foreach (var panel in panelsToRemove)
                 {
-                    tab.Panels.Remove(panel);
+                    try
+                    {
+                        tab.Panels.Remove(panel);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e);
+                    }
                 }
             }
         }
