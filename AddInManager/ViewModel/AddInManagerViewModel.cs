@@ -127,6 +127,7 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand FreshSearch => new RelayCommand(FreshSearchClick);
     public ICommand VisibleToggle => new RelayCommand(SetToggleVisible);
     public ICommand ExploreCommand => new RelayCommand(ExploreCommandClick);
+    public ICommand BuildMsiCommand => new RelayCommand(BuildMsiClick);
 
     private string searchText;
 
@@ -836,6 +837,44 @@ public class AddInManagerViewModel : ViewModelBase
         else
         {
             MessageBox.Show(Resource.FileNotFound, Resource.AppName);
+        }
+    }
+
+    private void BuildMsiClick()
+    {
+        string filePath = string.Empty;
+        if (IsTabCmdSelected && SelectedCommandItem != null)
+        {
+            filePath = SelectedCommandItem.Addin.FilePath;
+        }
+        else if (IsTabAppSelected && SelectedAppItem != null)
+        {
+            filePath = SelectedAppItem.Addin.FilePath;
+        }
+
+        if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+        {
+            MessageBox.Show("Please select a valid assembly first.", Resource.AppName);
+            return;
+        }
+
+        try
+        {
+            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string uiPath = Path.Combine(assemblyDir, "QuickMsiBuilder.UI.exe");
+
+            if (!File.Exists(uiPath))
+            {
+                // Fallback for development/debug environments where UI might be in a different folder
+                uiPath = Path.Combine(assemblyDir, "..", "..", "..", "QuickMsiBuilder", "QuickMsiBuilder.UI", "bin", "Debug", "net8.0-windows", "QuickMsiBuilder.UI.exe");
+            }
+
+            string revitVersion = ExternalCommandData.Application.Application.VersionNumber;
+            Process.Start(uiPath, $"\"{filePath}\" \"{revitVersion}\"");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error launching Quick MSI Builder: {ex.Message}", Resource.AppName);
         }
     }
 }

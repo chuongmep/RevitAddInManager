@@ -1,0 +1,56 @@
+<Window x:Class="QuickMsiBuilder.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quick MSI Builder" Height="450" Width="400">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Target DLL:" Grid.Row="0" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtDllPath" Grid.Row="0" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+        <Button Content="Browse" Grid.Row="0" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseDll"/>
+
+        <TextBlock Text="Version:" Grid.Row="1" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtVersion" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="1.0.0"/>
+
+        <TextBlock Text="Author:" Grid.Row="2" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtAuthor" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="Autodesk"/>
+
+        <TextBlock Text="Description:" Grid.Row="3" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtDescription" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="Revit Add-in"/>
+
+        <TextBlock Text="Icon (.ico):" Grid.Row="4" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtIconPath" Grid.Row="4" Grid.Column="1" Margin="5"/>
+        <Button Content="Browse" Grid.Row="4" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseIcon"/>
+
+        <TextBlock Text="Background (.png):" Grid.Row="5" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtBgPath" Grid.Row="5" Grid.Column="1" Margin="5"/>
+        <Button Content="Browse" Grid.Row="5" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseBg"/>
+
+        <TextBlock Text="Revit Year:" Grid.Row="6" VerticalAlignment="Center" Margin="0,5"/>
+        <ComboBox x:Name="cbRevitYear" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
+            <ComboBoxItem Content="2020"/>
+            <ComboBoxItem Content="2021"/>
+            <ComboBoxItem Content="2022"/>
+            <ComboBoxItem Content="2023"/>
+            <ComboBoxItem Content="2024" IsSelected="True"/>
+            <ComboBoxItem Content="2025"/>
+        </ComboBox>
+
+        <Button Content="Build MSI" Grid.Row="8" Grid.ColumnSpan="3" Padding="10" Margin="0,10" Click="OnBuildMsi"/>
+    </Grid>
+</Window>
