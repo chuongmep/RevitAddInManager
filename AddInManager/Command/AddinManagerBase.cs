@@ -114,6 +114,7 @@ public sealed class AddinManagerBase
                 }
                 else
                 {
+                    RibbonUtils.RemovePanels(filePath);
                     result = externalApp.OnStartup(application);
                 }
             }
@@ -190,7 +191,10 @@ public sealed class AddinManagerBase
             var instance = assembly.CreateInstance(_activeAppItem.FullClassName);
 
             if (instance is IExternalApplication externalApp)
+            {
+                RibbonUtils.RemovePanels(filePath);
                 result = externalApp.OnStartup(application);
+            }
         }
         catch (Exception ex)
         {

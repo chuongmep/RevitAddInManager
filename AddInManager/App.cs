@@ -71,16 +71,10 @@ public class App : IExternalApplication
         if (tab != null)
         {
             var adwPanel = new Autodesk.Windows.RibbonPanel();
-            adwPanel.CopyFrom(GetRibbonPanel(ribbonPanel));
+            adwPanel.CopyFrom(RibbonUtils.GetRibbonPanel(ribbonPanel));
             tab.Panels.Add(adwPanel);
         }
 
-    }
-    private static readonly FieldInfo RibbonPanelField = typeof(Autodesk.Revit.UI.RibbonPanel).GetField("m_RibbonPanel", BindingFlags.Instance | BindingFlags.NonPublic);
-       
-    public static Autodesk.Windows.RibbonPanel GetRibbonPanel(Autodesk.Revit.UI.RibbonPanel panel)
-    {
-        return RibbonPanelField.GetValue(panel) as Autodesk.Windows.RibbonPanel;
     }
 
     private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)
