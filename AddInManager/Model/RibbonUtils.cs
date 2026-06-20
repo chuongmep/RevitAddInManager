@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using Autodesk.Revit.UI;
@@ -29,7 +30,7 @@ public static class RibbonUtils
                     bool shouldRemove = false;
                     foreach (var item in panel.Source.Items)
                     {
-                        if (item is RibbonButton button)
+                        if (item is Autodesk.Windows.RibbonButton button)
                         {
                             // Heuristic check: check button ID, text, or tooltips for the assembly name
                             if (button.Id != null && (button.Id.Contains(assemblyName) || button.Id.Contains(assemblyPath)))
