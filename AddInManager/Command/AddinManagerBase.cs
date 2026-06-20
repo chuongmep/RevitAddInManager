@@ -88,6 +88,49 @@ public sealed class AddinManagerBase
         return result;
     }
 
+    public Result RunActiveApp(AddInManagerViewModel vm, UIControlledApplication application)
+    {
+        var filePath = _activeApp.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath, DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+            return Result.Failed;
+        }
+        Result result;
+        try
+        {
+            vm.AssemLoader.HookAssemblyResolve();
+            var assembly = vm.AssemLoader.LoadAddinsToTempFolder(filePath, false);
+            if (null == assembly)
+            {
+                result = Result.Failed;
+            }
+            else
+            {
+                _activeTempFolder = vm.AssemLoader.TempFolder;
+                if (assembly.CreateInstance(_activeAppItem.FullClassName) is not IExternalApplication externalApp)
+                {
+                    result = Result.Failed;
+                }
+                else
+                {
+                    result = externalApp.OnStartup(application);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString());
+            result = Result.Failed;
+        }
+        finally
+        {
+            vm.AssemLoader.UnhookAssemblyResolve();
+            vm.AssemLoader.CopyGeneratedFilesBack();
+        }
+        return result;
+    }
+
 #if R25 || R26 || R27
     public Result RunActiveCommand(ExternalCommandData data, ref string message, ElementSet elements)
     {
@@ -117,6 +160,48 @@ public sealed class AddinManagerBase
 
             var alcWeakRef = new WeakReference(alc, trackResurrection: true);
             
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
+            {
+                for (var counter = 0; alcWeakRef.IsAlive && counter < 10; counter++)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+
+                Debug.WriteLine(alcWeakRef.IsAlive ? "Assembly has not been unloaded properly" : "Assembly unloaded");
+            });
+        }
+        return result;
+    }
+
+    public Result RunActiveApp(UIControlledApplication application)
+    {
+        var filePath = _activeApp.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath, DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+            return Result.Failed;
+        }
+        Result result = Result.Failed;
+        var alc = new AssemblyLoadContext(filePath);
+        try
+        {
+            var assembly = Load(alc, filePath);
+            var instance = assembly.CreateInstance(_activeAppItem.FullClassName);
+
+            if (instance is IExternalApplication externalApp)
+                result = externalApp.OnStartup(application);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString());
+        }
+        finally
+        {
+            alc.Unload();
+
+            var alcWeakRef = new WeakReference(alc, trackResurrection: true);
+
             Dispatcher.CurrentDispatcher.BeginInvoke(() =>
             {
                 for (var counter = 0; alcWeakRef.IsAlive && counter < 10; counter++)

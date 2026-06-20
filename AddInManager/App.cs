@@ -20,6 +20,7 @@ public class App : IExternalApplication
     public static FrmAddInManager FrmAddInManager { get; set; }
     public static LogControl FrmLogControl { get; set; }
     public static FrmDockablePanel DockPanelProvider;
+    public static UIControlledApplication UIControlledApplication { get; set; }
     public static int ThemId { get; set; } = -1;
     public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));
     public static string PaneName => "Debug/Trace Output";
@@ -34,6 +35,7 @@ public class App : IExternalApplication
 
     public Result OnStartup(UIControlledApplication application)
     {
+        UIControlledApplication = application;
 #if !(R25 || R26 || R27)
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 #endif
