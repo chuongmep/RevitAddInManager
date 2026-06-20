@@ -231,6 +231,14 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref isTabStartSelected, value);
     }
 
+    private int selectedTab;
+
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => OnPropertyChanged(ref selectedTab, value);
+    }
+
     private bool isTabLogSelected;
 
     public bool IsTabLogSelected

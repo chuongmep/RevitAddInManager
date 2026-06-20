@@ -196,23 +196,6 @@ public sealed class AddinManagerBase
         {
             MessageBox.Show(ex.ToString());
         }
-        finally
-        {
-            alc.Unload();
-
-            var alcWeakRef = new WeakReference(alc, trackResurrection: true);
-
-            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
-            {
-                for (var counter = 0; alcWeakRef.IsAlive && counter < 10; counter++)
-                {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
-
-                Debug.WriteLine(alcWeakRef.IsAlive ? "Assembly has not been unloaded properly" : "Assembly unloaded");
-            });
-        }
         return result;
     }
 
