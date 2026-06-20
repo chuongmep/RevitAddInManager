@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <RevitVersion Condition="'$(RevitVersion)' == ''">2024</RevitVersion>
     <TargetFramework>net481</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>

@@ -33,16 +33,19 @@
         <TextBlock Text="Description:" Grid.Row="3" VerticalAlignment="Center" Margin="0,5"/>
         <TextBox x:Name="txtDescription" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="Revit Add-in"/>
 
-        <TextBlock Text="Icon (.ico):" Grid.Row="4" VerticalAlignment="Center" Margin="0,5"/>
-        <TextBox x:Name="txtIconPath" Grid.Row="4" Grid.Column="1" Margin="5"/>
-        <Button Content="Browse" Grid.Row="4" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseIcon"/>
+        <TextBlock Text="Full Class Name:" Grid.Row="4" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtClassName" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="Namespace.Command"/>
 
-        <TextBlock Text="Background (.png):" Grid.Row="5" VerticalAlignment="Center" Margin="0,5"/>
-        <TextBox x:Name="txtBgPath" Grid.Row="5" Grid.Column="1" Margin="5"/>
-        <Button Content="Browse" Grid.Row="5" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseBg"/>
+        <TextBlock Text="Icon (.ico):" Grid.Row="5" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtIconPath" Grid.Row="5" Grid.Column="1" Margin="5"/>
+        <Button Content="Browse" Grid.Row="5" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseIcon"/>
 
-        <TextBlock Text="Revit Year:" Grid.Row="6" VerticalAlignment="Center" Margin="0,5"/>
-        <ComboBox x:Name="cbRevitYear" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
+        <TextBlock Text="Background (.png):" Grid.Row="6" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="txtBgPath" Grid.Row="6" Grid.Column="1" Margin="5"/>
+        <Button Content="Browse" Grid.Row="6" Grid.Column="2" Padding="5" Margin="0,5" Click="OnBrowseBg"/>
+
+        <TextBlock Text="Revit Year:" Grid.Row="7" VerticalAlignment="Center" Margin="0,5"/>
+        <ComboBox x:Name="cbRevitYear" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
             <ComboBoxItem Content="2020"/>
             <ComboBoxItem Content="2021"/>
             <ComboBoxItem Content="2022"/>
@@ -51,6 +54,6 @@
             <ComboBoxItem Content="2025"/>
         </ComboBox>
 
-        <Button Content="Build MSI" Grid.Row="8" Grid.ColumnSpan="3" Padding="10" Margin="0,10" Click="OnBuildMsi"/>
+        <Button Content="Build MSI" Grid.Row="9" Grid.ColumnSpan="3" Padding="10" Margin="0,10" Click="OnBuildMsi"/>
     </Grid>
 </Window>

@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WixSharp.bin" Version="1.26.0" />
+    <PackageReference Include="WixSharp.wix.bin" Version="3.11.2" />
+  </ItemGroup>
+
 </Project>

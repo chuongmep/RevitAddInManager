@@ -3,6 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
+using WixSharp;
+using WixSharp.CommonTasks;
+using File = System.IO.File;
 
 namespace QuickMsiBuilder.CLI
 {
@@ -12,7 +17,7 @@ namespace QuickMsiBuilder.CLI
         {
             if (args.Length < 1)
             {
-                Console.WriteLine("Usage: QuickMsiBuilder.CLI <dll_path> [version] [author] [description] [icon_path] [bg_image_path] [revit_year]");
+                Console.WriteLine("Usage: QuickMsiBuilder.CLI <dll_path> [version] [author] [description] [icon_path] [bg_image_path] [revit_year] [full_class_name]");
                 return;
             }
 
@@ -23,6 +28,7 @@ namespace QuickMsiBuilder.CLI
             string iconPath = args.Length > 4 ? args[4] : "";
             string bgImagePath = args.Length > 5 ? args[5] : "";
             string revitYear = args.Length > 6 ? args[6] : "2024";
+            string fullClassName = args.Length > 7 ? args[7] : "";
 
             if (!File.Exists(dllPath))
             {
@@ -32,7 +38,7 @@ namespace QuickMsiBuilder.CLI
 
             try
             {
-                BuildMsi(dllPath, version, author, description, iconPath, bgImagePath, revitYear);
+                BuildMsi(dllPath, version, author, description, iconPath, bgImagePath, revitYear, fullClassName);
             }
             catch (Exception ex)
             {
@@ -40,7 +46,7 @@ namespace QuickMsiBuilder.CLI
             }
         }
 
-        static void BuildMsi(string dllPath, string version, string author, string description, string iconPath, string bgImagePath, string revitYear)
+        static void BuildMsi(string dllPath, string version, string author, string description, string iconPath, string bgImagePath, string revitYear, string fullClassName)
         {
             string assemblyName = Path.GetFileNameWithoutExtension(dllPath);
             string assemblyDir = Path.GetDirectoryName(dllPath);
@@ -48,67 +54,57 @@ namespace QuickMsiBuilder.CLI
             Directory.CreateDirectory(outputDir);
 
             string addinFilePath = Path.Combine(outputDir, assemblyName + ".addin");
-            GenerateAddinManifest(addinFilePath, assemblyName, author, description);
+            GenerateAddinManifest(addinFilePath, assemblyName, author, description, fullClassName);
 
-            Console.WriteLine("Generating Wix Source...");
-            string wxsPath = Path.Combine(outputDir, assemblyName + ".wxs");
-            string installDir = $@"AppDataFolder\Autodesk\Revit\Addins\{revitYear}";
+            string installDir = $@"%AppDataFolder%\Autodesk\Revit\Addins\{revitYear}";
 
-            string wxsContent = $@"<?xml version='1.0' encoding='UTF-8'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-    <Product Id='*' Name='{assemblyName}' Language='1033' Version='{version}' Manufacturer='{author}' UpgradeCode='{Guid.NewGuid()}'>
-        <Package InstallerVersion='200' Compressed='yes' InstallScope='perUser' />
-        <MajorUpgrade DowngradeErrorMessage='A newer version of [ProductName] is already installed.' />
-        <MediaTemplate EmbedCab='yes' />
+            // Stable UpgradeCode based on assembly name
+            Guid upgradeCode = GenerateGuidFromName(assemblyName);
 
-        <Feature Id='ProductFeature' Title='{assemblyName}' Level='1'>
-            <ComponentGroupRef Id='ProductComponents' />
-        </Feature>
+            var project = new Project
+            {
+                Name = assemblyName,
+                OutDir = outputDir,
+                Platform = Platform.x64,
+                Description = description,
+                UI = WUI.WixUI_InstallDir,
+                Version = new Version(version),
+                OutFileName = $"{assemblyName}-{version}",
+                InstallScope = InstallScope.perUser,
+                MajorUpgrade = MajorUpgrade.Default,
+                GUID = upgradeCode,
+                ControlPanelInfo =
+                {
+                    Manufacturer = author,
+                    Comments = description
+                },
+                Dirs = new Dir[]
+                {
+                    new InstallDir(installDir,
+                        new WixSharp.File(dllPath),
+                        new WixSharp.File(addinFilePath)
+                    )
+                }
+            };
 
-        <Icon Id='ProductIcon' SourceFile='{(File.Exists(iconPath) ? iconPath : "")}' />
-        <Property Id='ARPPRODUCTICON' Value='ProductIcon' />
-    </Product>
+            if (File.Exists(iconPath)) project.ControlPanelInfo.ProductIcon = iconPath;
+            if (File.Exists(bgImagePath)) project.BackgroundImage = bgImagePath;
 
-    <Fragment>
-        <Directory Id='TARGETDIR' Name='SourceDir'>
-            <Directory Id='AppDataFolder'>
-                <Directory Id='AutodeskDir' Name='Autodesk'>
-                    <Directory Id='RevitDir' Name='Revit'>
-                        <Directory Id='AddinsDir' Name='Addins'>
-                            <Directory Id='INSTALLFOLDER' Name='{revitYear}' />
-                        </Directory>
-                    </Directory>
-                </Directory>
-            </Directory>
-        </Directory>
-    </Fragment>
-
-    <Fragment>
-        <ComponentGroup Id='ProductComponents' Directory='INSTALLFOLDER'>
-            <Component Id='MainDll' Guid='{Guid.NewGuid()}'>
-                <File Source='{dllPath}' KeyPath='yes' />
-            </Component>
-            <Component Id='AddinManifest' Guid='{Guid.NewGuid()}'>
-                <File Source='{addinFilePath}' KeyPath='yes' />
-            </Component>
-        </ComponentGroup>
-    </Fragment>
-</Wix>";
-            File.WriteAllText(wxsPath, wxsContent);
-
-            Console.WriteLine($"Wxs generated: {wxsPath}");
-            Console.WriteLine("In a production environment, candle.exe and light.exe would be called here.");
+            Compiler.BuildMsi(project);
+            Console.WriteLine("MSI build process completed.");
         }
 
-        static void GenerateAddinManifest(string filePath, string assemblyName, string author, string description)
+        static void GenerateAddinManifest(string filePath, string assemblyName, string author, string description, string fullClassName)
         {
+            if (string.IsNullOrEmpty(fullClassName)) fullClassName = assemblyName + ".Command";
+
             XNamespace ns = "http://www.autodesk.com/revit/2009/addin";
             XElement root = new XElement(ns + "RevitAddIns",
                 new XElement(ns + "AddIn", new XAttribute("Type", "Command"),
                     new XElement(ns + "Text", assemblyName),
                     new XElement(ns + "Description", description),
                     new XElement(ns + "Assembly", assemblyName + ".dll"),
-                    new XElement(ns + "FullClassName", assemblyName + ".Command"),
+                    new XElement(ns + "FullClassName", fullClassName),
                     new XElement(ns + "ClientId", Guid.NewGuid().ToString()),
                     new XElement(ns + "VendorId", "ADSK"),
                     new XElement(ns + "VendorDescription", author)
@@ -116,6 +112,15 @@ namespace QuickMsiBuilder.CLI
             );
 
             root.Save(filePath);
+        }
+
+        static Guid GenerateGuidFromName(string name)
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(name));
+                return new Guid(hash);
+            }
         }
     }
 }

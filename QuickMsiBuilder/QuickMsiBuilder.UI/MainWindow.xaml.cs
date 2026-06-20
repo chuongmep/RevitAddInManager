@@ -83,11 +83,10 @@ namespace QuickMsiBuilder.UI
                 return;
             }
 
-            // Logic for Step 13
             string cliPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "QuickMsiBuilder.CLI.exe");
             string revitYear = ((System.Windows.Controls.ComboBoxItem)cbRevitYear.SelectedItem).Content.ToString();
 
-            string arguments = $"\"{txtDllPath.Text}\" \"{txtVersion.Text}\" \"{txtAuthor.Text}\" \"{txtDescription.Text}\" \"{txtIconPath.Text}\" \"{txtBgPath.Text}\" \"{revitYear}\"";
+            string arguments = $"\"{txtDllPath.Text}\" \"{txtVersion.Text}\" \"{txtAuthor.Text}\" \"{txtDescription.Text}\" \"{txtIconPath.Text}\" \"{txtBgPath.Text}\" \"{revitYear}\" \"{txtClassName.Text}\"";
 
             try
             {

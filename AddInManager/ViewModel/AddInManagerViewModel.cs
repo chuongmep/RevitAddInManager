@@ -865,12 +865,17 @@ public class AddInManagerViewModel : ViewModelBase
 
             if (!File.Exists(uiPath))
             {
-                // Fallback for development/debug environments where UI might be in a different folder
-                uiPath = Path.Combine(assemblyDir, "..", "..", "..", "QuickMsiBuilder", "QuickMsiBuilder.UI", "bin", "Debug", "net8.0-windows", "QuickMsiBuilder.UI.exe");
+                MessageBox.Show($"Quick MSI Builder UI not found at {uiPath}. Please ensure it is installed correctly.", Resource.AppName);
+                return;
             }
 
             string revitVersion = ExternalCommandData.Application.Application.VersionNumber;
-            Process.Start(uiPath, $"\"{filePath}\" \"{revitVersion}\"");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = uiPath,
+                Arguments = $"\"{filePath}\" \"{revitVersion}\"",
+                UseShellExecute = true
+            });
         }
         catch (Exception ex)
         {
