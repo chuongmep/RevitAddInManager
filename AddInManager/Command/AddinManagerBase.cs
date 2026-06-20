@@ -114,8 +114,22 @@ public sealed class AddinManagerBase
                 }
                 else
                 {
-                    RibbonUtils.RemovePanels(filePath);
-                    result = externalApp.OnStartup(application);
+                    try
+                    {
+                        RibbonUtils.RemovePanels(filePath);
+                        result = externalApp.OnStartup(application);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.Message.Contains("already exists"))
+                        {
+                            result = externalApp.OnStartup(application);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
                 }
             }
         }
@@ -192,8 +206,22 @@ public sealed class AddinManagerBase
 
             if (instance is IExternalApplication externalApp)
             {
-                RibbonUtils.RemovePanels(filePath);
-                result = externalApp.OnStartup(application);
+                try
+                {
+                    RibbonUtils.RemovePanels(filePath);
+                    result = externalApp.OnStartup(application);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("already exists"))
+                    {
+                        result = externalApp.OnStartup(application);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
         }
         catch (Exception ex)
