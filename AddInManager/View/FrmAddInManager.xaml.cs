@@ -31,8 +31,8 @@ public partial class FrmAddInManager : Window
         // We clear the search text after the window is fully loaded and idle.
         Dispatcher.BeginInvoke(new Action(() =>
         {
-            viewModel.SearchText = string.Empty;
-        }), DispatcherPriority.ContextIdle);
+            tbxSearch.Text = string.Empty;
+        }), DispatcherPriority.ApplicationIdle);
     }
 
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
