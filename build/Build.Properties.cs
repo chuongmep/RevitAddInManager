@@ -2,7 +2,9 @@ internal partial class Build
 {
     private readonly string[] Projects =
     {
-        "RevitAddinManager"
+                "RevitAddinManager",
+        "QuickMsiBuilder.CLI",
+        "QuickMsiBuilder.UI"
     };
 
     public const string InstallerProject = "Installer";

@@ -129,6 +129,7 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand ExploreCommand => new RelayCommand(ExploreCommandClick);
     public ICommand BuildMsiCommand => new RelayCommand(BuildMsiClick);
 
+
     private string searchText;
 
     public string SearchText
@@ -882,4 +883,3 @@ public class AddInManagerViewModel : ViewModelBase
             MessageBox.Show($"Error launching Quick MSI Builder: {ex.Message}", Resource.AppName);
         }
     }
-}

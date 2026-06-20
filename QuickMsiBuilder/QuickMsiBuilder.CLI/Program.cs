@@ -100,7 +100,7 @@ namespace QuickMsiBuilder.CLI
 
             XNamespace ns = "http://www.autodesk.com/revit/2009/addin";
             XElement root = new XElement(ns + "RevitAddIns",
-                new XElement(ns + "AddIn", new XAttribute("Type", "Command"),
+                new XElement(ns + "AddIn", new XAttribute("Type", "Application"),
                     new XElement(ns + "Text", assemblyName),
                     new XElement(ns + "Description", description),
                     new XElement(ns + "Assembly", assemblyName + ".dll"),
