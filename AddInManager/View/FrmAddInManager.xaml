@@ -17,12 +17,13 @@
     d:DesignHeight="600"
     d:DesignWidth="400"
     Closed="OnCloseApp"
-    FocusManager.FocusedElement="{Binding ElementName=TabControl}"
+    FocusManager.FocusedElement="{Binding ElementName=tbxSearch}"
     Icon="../Resources/dev.ico"
     Left="{model:SettingBinding AppLeft}"
     PreviewKeyDown="CloseFormEvent"
     SizeChanged="FrmSizeChanged"
     Top="{model:SettingBinding AppTop}"
+    Loaded="FrmAddInManager_OnLoaded"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>

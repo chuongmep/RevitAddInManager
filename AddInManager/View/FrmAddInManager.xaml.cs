@@ -24,6 +24,17 @@ public partial class FrmAddInManager : Window
         Title += DefaultSetting.Version;
     }
 
+    private void FrmAddInManager_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        // GitHub Issue: https://github.com/chuongmep/RevitAddInManager/issues/76
+        // When user use keyboard shortcut like "AA" to open AddInManager, the second "A" will be entered into tbxSearch
+        // We clear the search text after the window is fully loaded and idle.
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            viewModel.SearchText = string.Empty;
+        }), DispatcherPriority.ContextIdle);
+    }
+
     private void TbxDescription_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
         if (viewModel.MAddinManagerBase.ActiveCmdItem != null && TabControl.SelectedIndex == 0)
