@@ -51,7 +51,25 @@ public static class RibbonUtils
                 {
                     try
                     {
+                        string panelName = panel.Source.Title;
                         tab.Panels.Remove(panel);
+
+                        // Revit API internal cleanup to avoid "Panel already exists" error on re-load
+                        var uiApplicationType = typeof(UIApplication);
+                        var ribbonItemsProperty = uiApplicationType.GetProperty("RibbonItemDictionary",
+                            BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly);
+                        if (ribbonItemsProperty != null)
+                        {
+                            var ribbonItems = (Dictionary<string, Dictionary<string, Autodesk.Revit.UI.RibbonPanel>>)
+                                ribbonItemsProperty.GetValue(null);
+                            if (ribbonItems != null)
+                            {
+                                foreach (var tabItem in ribbonItems.Values)
+                                {
+                                    tabItem.Remove(panelName);
+                                }
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
