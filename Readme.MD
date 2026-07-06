@@ -242,4 +242,12 @@ I suggest you some of these projects, hope you will like it.
 
 - [Bowerbird](https://github.com/ara3d/bowerbird)
 
-[![Star History Chart](https://api.star-history.com/svg?repos=chuongmep/RevitAddInManager&type=Date)](https://star-history.com/#chuongmep/RevitAddInManager&Date)
+## Star History
+
+<a href="https://www.star-history.com/?type=date&repos=chuongmep%2FRevitAddInManager">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=chuongmep/RevitAddInManager&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=chuongmep/RevitAddInManager&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=chuongmep/RevitAddInManager&type=date&legend=top-left" />
+ </picture>
+</a>
