@@ -20,6 +20,7 @@ public class App : IExternalApplication
     public static FrmAddInManager FrmAddInManager { get; set; }
     public static LogControl FrmLogControl { get; set; }
     public static FrmDockablePanel DockPanelProvider;
+    public static UIControlledApplication UIControlledApplication { get; set; }
     public static int ThemId { get; set; } = -1;
     public static DockablePaneId PaneId => new DockablePaneId(new Guid("942D8578-7F25-4DC3-8BD8-585C1DBD3614"));
     public static string PaneName => "Debug/Trace Output";
@@ -34,6 +35,7 @@ public class App : IExternalApplication
 
     public Result OnStartup(UIControlledApplication application)
     {
+        UIControlledApplication = application;
 #if !(R25 || R26 || R27)
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 #endif
@@ -69,16 +71,10 @@ public class App : IExternalApplication
         if (tab != null)
         {
             var adwPanel = new Autodesk.Windows.RibbonPanel();
-            adwPanel.CopyFrom(GetRibbonPanel(ribbonPanel));
+            adwPanel.CopyFrom(RibbonUtils.GetRibbonPanel(ribbonPanel));
             tab.Panels.Add(adwPanel);
         }
 
-    }
-    private static readonly FieldInfo RibbonPanelField = typeof(Autodesk.Revit.UI.RibbonPanel).GetField("m_RibbonPanel", BindingFlags.Instance | BindingFlags.NonPublic);
-       
-    public static Autodesk.Windows.RibbonPanel GetRibbonPanel(Autodesk.Revit.UI.RibbonPanel panel)
-    {
-        return RibbonPanelField.GetValue(panel) as Autodesk.Windows.RibbonPanel;
     }
 
     private static void AddPushButton(PulldownButton pullDownButton, Type command, string buttonText)

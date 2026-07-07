@@ -50,19 +50,22 @@ public class AddInManagerViewModel : ViewModelBase
     {
         get
         {
-            if (selectedCommandItem != null && selectedCommandItem.IsParentTree == true && IsTabCmdSelected)
+            if (IsTabCmdSelected)
             {
-                IsCanRun = false;
-                MAddinManagerBase.ActiveCmd = selectedCommandItem.Addin;
+                if (selectedCommandItem != null && selectedCommandItem.IsParentTree == true)
+                {
+                    IsCanRun = false;
+                    MAddinManagerBase.ActiveCmd = selectedCommandItem.Addin;
+                }
+                else if (selectedCommandItem != null && selectedCommandItem.IsParentTree == false)
+                {
+                    IsCanRun = true;
+                    MAddinManagerBase.ActiveCmdItem = selectedCommandItem.AddinItem;
+                    MAddinManagerBase.ActiveCmd = selectedCommandItem.Addin;
+                    VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
+                }
+                else IsCanRun = false;
             }
-            else if (selectedCommandItem != null && selectedCommandItem.IsParentTree == false && IsTabCmdSelected)
-            {
-                IsCanRun = true;
-                MAddinManagerBase.ActiveCmdItem = selectedCommandItem.AddinItem;
-                MAddinManagerBase.ActiveCmd = selectedCommandItem.Addin;
-                VendorDescription = MAddinManagerBase.ActiveCmdItem.Description;
-            }
-            else IsCanRun = false;
 
             return selectedCommandItem;
         }
@@ -88,15 +91,21 @@ public class AddInManagerViewModel : ViewModelBase
     {
         get
         {
-            if (selectedAppItem != null && selectedAppItem.IsParentTree == true && IsTabAppSelected)
+            if (IsTabAppSelected)
             {
-                MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
-            }
-            else if (selectedAppItem != null && selectedAppItem.IsParentTree == false && IsTabAppSelected)
-            {
-                MAddinManagerBase.ActiveAppItem = selectedAppItem.AddinItem;
-                MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
-                VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
+                if (selectedAppItem != null && selectedAppItem.IsParentTree == true)
+                {
+                    IsCanRun = false;
+                    MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
+                }
+                else if (selectedAppItem != null && selectedAppItem.IsParentTree == false)
+                {
+                    IsCanRun = true;
+                    MAddinManagerBase.ActiveAppItem = selectedAppItem.AddinItem;
+                    MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
+                    VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
+                }
+                else IsCanRun = false;
             }
 
             return selectedAppItem;
@@ -197,11 +206,7 @@ public class AddInManagerViewModel : ViewModelBase
 
     public bool IsTabAppSelected
     {
-        get
-        {
-            if (isTabAppSelected) IsCanRun = false;
-            return isTabAppSelected;
-        }
+        get => isTabAppSelected;
         set => OnPropertyChanged(ref isTabAppSelected, value);
     }
 
@@ -224,6 +229,14 @@ public class AddInManagerViewModel : ViewModelBase
             return isTabStartSelected;
         }
         set => OnPropertyChanged(ref isTabStartSelected, value);
+    }
+
+    private int selectedTab;
+
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => OnPropertyChanged(ref selectedTab, value);
     }
 
     private bool isTabLogSelected;
@@ -339,17 +352,35 @@ public class AddInManagerViewModel : ViewModelBase
     {
         try
         {
-            if (SelectedCommandItem?.IsParentTree == false)
+            if (IsTabCmdSelected)
             {
-                MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
-                MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
-                CheckCountSelected(CommandItems, out var result);
-                if (result > 0)
+                if (SelectedCommandItem?.IsParentTree == false)
                 {
-                    App.FrmAddInManager.Close();
-                    RevitEvent.Run(Execute, false, null, false);
+                    MAddinManagerBase.ActiveCmd = SelectedCommandItem.Addin;
+                    MAddinManagerBase.ActiveCmdItem = SelectedCommandItem.AddinItem;
+                    CheckCountSelected(CommandItems, out var result);
+                    if (result > 0)
+                    {
+                        App.FrmAddInManager.Close();
+                        RevitEvent.Run(Execute, false, null, false);
+                    }
                 }
             }
+            else if (IsTabAppSelected)
+            {
+                if (SelectedAppItem?.IsParentTree == false)
+                {
+                    MAddinManagerBase.ActiveApp = SelectedAppItem.Addin;
+                    MAddinManagerBase.ActiveAppItem = SelectedAppItem.AddinItem;
+                    CheckCountSelected(ApplicationItems, out var result);
+                    if (result > 0)
+                    {
+                        App.FrmAddInManager.Close();
+                        RevitEvent.Run(Execute, false, null, false);
+                    }
+                }
+            }
+
         }
         catch (Exception e)
         {
@@ -360,11 +391,23 @@ public class AddInManagerViewModel : ViewModelBase
     private void Execute()
     {
         string message = Message;
-        #if R19 || R20 || R21 || R22 || R23 || R24
-        MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref message, Elements);
-        #else
-        MAddinManagerBase.RunActiveCommand(ExternalCommandData, ref message, Elements);
-        #endif
+        if (IsTabCmdSelected)
+        {
+#if R19 || R20 || R21 || R22 || R23 || R24
+            MAddinManagerBase.RunActiveCommand(this, ExternalCommandData, ref message, Elements);
+#else
+            MAddinManagerBase.RunActiveCommand(ExternalCommandData, ref message, Elements);
+#endif
+        }
+        else if (IsTabAppSelected)
+        {
+#if R19 || R20 || R21 || R22 || R23 || R24
+            MAddinManagerBase.RunActiveApp(this, App.UIControlledApplication);
+#else
+            MAddinManagerBase.RunActiveApp(App.UIControlledApplication);
+#endif
+        }
+
     }
 
     private void OpenLcAssemblyCommandClick()
