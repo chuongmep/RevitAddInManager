@@ -128,14 +128,10 @@
                             <ContextMenu>
                                 <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                 <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
-                                <Separator />
-                                <MenuItem Command="{Binding BuildMsiCommand}" Header="Build MSI..." />
                                 <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
                                 <MenuItem Command="{Binding OpenRefsAssemblyCommand}" Header="Assembly Info..." />
                                 <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                 <MenuItem Command="{Binding ReloadCommand}" Header="Reload" />
-                                <Separator />
-                                <MenuItem Command="{Binding BuildMsiCommand}" Header="Build MSI..." />
                                 <Separator />
                                 <MenuItem Command="{Binding BuildMsiCommand}" Header="Build MSI..." />
                             </ContextMenu>
@@ -183,8 +179,6 @@
                                     <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
                                     <MenuItem Command="{Binding LoadCommand}" Header="Load" />
                                     <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
-                                <Separator />
-                                <MenuItem Command="{Binding BuildMsiCommand}" Header="Build MSI..." />
                                     <Separator />
                                     <MenuItem Command="{Binding BuildMsiCommand}" Header="Build MSI..." />
                                 </ContextMenu>
@@ -344,10 +338,10 @@
                     ToolTip="Remove A Command Or Application Loaded" />
                 <Button
                     Margin="1,5,2,0"
-                    Command="{Binding ManagerCommand}"
-                    Content="Startup"
+                    Command="{Binding BuildMsiCommand}"
+                    Content="Build MSI"
                     DockPanel.Dock="Top"
-                    ToolTip="Manager List Add-in Loaded In Revit" />
+                    ToolTip="Build An MSI Installer For The Selected Assembly" />
                 <Button
                     Margin="1,5,2,0"
                     VerticalAlignment="Top"

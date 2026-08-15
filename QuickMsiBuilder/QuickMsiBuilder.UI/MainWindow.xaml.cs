@@ -1,36 +1,155 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
-using System.Windows;
-using Microsoft.Win32;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using Microsoft.Win32;
+using QuickMsiBuilder.CLI;
 
 namespace QuickMsiBuilder.UI
 {
     public partial class MainWindow : Window
     {
+        private readonly BuildHistoryStore _historyStore = new BuildHistoryStore();
+        private readonly List<RevitYearOption> _revitYears;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            // Check for command line arguments
+            _revitYears = RevitYearRange.Supported.Select(year => new RevitYearOption(year)).ToList();
+            RefreshRevitYears();
+
+            txtAuthor.Text = MsiBuildOptions.DefaultAuthor;
+
+            // Args: [1] dll path, [2] revit years, [3] full class name, [4] add-in type.
             var args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
+            if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
             {
                 txtDllPath.Text = args[1];
                 ExtractMetadata(args[1]);
             }
-            if (args.Length > 2)
+
+            SelectRevitYears(args.Length > 2 ? args[2] : MsiBuildOptions.DefaultRevitYear);
+            if (args.Length > 3 && !string.IsNullOrEmpty(args[3])) SetClassName(args[3]);
+            if (args.Length > 4) SelectAddinType(args[4]);
+
+            // Loaded last so a previous release wins over the defaults read from the assembly.
+            LoadHistory(txtDllPath.Text, true);
+        }
+
+        private void OnWindowKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape) Close();
+        }
+
+        #region History
+
+        /// <summary>
+        /// Fills the history picker for the given assembly. When <paramref name="applyLatest"/> is
+        /// set, the most recent release is also applied to the form.
+        /// </summary>
+        private void LoadHistory(string dllPath, bool applyLatest)
+        {
+            var entries = _historyStore.GetFor(dllPath);
+
+            cbHistory.ItemsSource = entries;
+            btnReuse.IsEnabled = entries.Count > 0;
+
+            if (entries.Count == 0)
             {
-                string revitYear = args[2];
-                foreach (System.Windows.Controls.ComboBoxItem item in cbRevitYear.Items)
-                {
-                    if (item.Content.ToString() == revitYear)
-                    {
-                        item.IsSelected = true;
-                        break;
-                    }
-                }
+                txtHistoryHint.Text = "No previous release recorded for this assembly.";
+                return;
             }
+
+            var latest = entries[0];
+            txtHistoryHint.Text = string.Format("Last release: {0} for Revit {1} on {2:yyyy-MM-dd HH:mm}",
+                latest.Version, latest.RevitYears, latest.BuiltUtc.ToLocalTime());
+
+            if (!applyLatest) return;
+
+            cbHistory.SelectedIndex = 0;
+            Apply(latest);
+        }
+
+        private void Apply(BuildHistoryEntry entry)
+        {
+            if (entry == null) return;
+
+            if (!string.IsNullOrEmpty(entry.Version)) txtVersion.Text = entry.Version;
+            if (!string.IsNullOrEmpty(entry.Author)) txtAuthor.Text = entry.Author;
+            if (!string.IsNullOrEmpty(entry.Description)) txtDescription.Text = entry.Description;
+            if (!string.IsNullOrEmpty(entry.FullClassName)) SetClassName(entry.FullClassName);
+            txtIconPath.Text = entry.IconPath ?? string.Empty;
+            txtBgPath.Text = entry.BackgroundImagePath ?? string.Empty;
+
+            SelectAddinType(entry.AddinType);
+            SelectRevitYears(entry.RevitYears);
+        }
+
+        private void OnHistorySelected(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            btnReuse.IsEnabled = cbHistory.SelectedItem != null;
+        }
+
+        private void OnReuseHistory(object sender, RoutedEventArgs e)
+        {
+            Apply(cbHistory.SelectedItem as BuildHistoryEntry);
+        }
+
+        #endregion
+
+        #region Form state
+
+        private void SelectRevitYears(string years)
+        {
+            if (string.IsNullOrEmpty(years)) return;
+
+            var wanted = years
+                .Split(new[] { ',', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(value => value.Trim())
+                .Where(value => value.Length > 0)
+                .ToList();
+
+            // The default list covers the releases currently in support. A request outside it - an
+            // older Revit still in use, or a release newer than this build - is added rather than
+            // dropped, so the tick box the user needs is always there.
+            var added = false;
+            foreach (var year in wanted.Where(year => _revitYears.All(option => option.Year != year)))
+            {
+                _revitYears.Add(new RevitYearOption(year));
+                added = true;
+            }
+
+            if (added)
+            {
+                _revitYears.Sort((left, right) => string.CompareOrdinal(left.Year, right.Year));
+                RefreshRevitYears();
+            }
+
+            foreach (var option in _revitYears) option.IsSelected = wanted.Contains(option.Year);
+        }
+
+        private void RefreshRevitYears()
+        {
+            icRevitYears.ItemsSource = null;
+            icRevitYears.ItemsSource = _revitYears;
+        }
+
+        private string SelectedRevitYears()
+        {
+            return string.Join(",", _revitYears.Where(o => o.IsSelected).Select(o => o.Year).ToArray());
+        }
+
+        private void SelectAddinType(string addinType)
+        {
+            if (string.IsNullOrEmpty(addinType)) return;
+            cbAddinType.SelectedIndex =
+                string.Equals(addinType, "Application", StringComparison.OrdinalIgnoreCase) ? 1 : 0;
         }
 
         private void OnBrowseDll(object sender, RoutedEventArgs e)
@@ -40,27 +159,68 @@ namespace QuickMsiBuilder.UI
             {
                 txtDllPath.Text = dialog.FileName;
                 ExtractMetadata(dialog.FileName);
+                LoadHistory(dialog.FileName, true);
             }
         }
 
+        /// <summary>
+        /// Prefills the form from the assembly itself: version, publisher, description and the
+        /// add-in entry points, so nothing has to be typed by hand for a normal build.
+        /// </summary>
         private void ExtractMetadata(string dllPath)
         {
             try
             {
-                if (File.Exists(dllPath))
-                {
-                    var fileVersionInfo = FileVersionInfo.GetVersionInfo(dllPath);
-                    if (!string.IsNullOrEmpty(fileVersionInfo.FileVersion))
-                        txtVersion.Text = fileVersionInfo.FileVersion;
+                if (!File.Exists(dllPath)) return;
 
-                    if (!string.IsNullOrEmpty(fileVersionInfo.CompanyName))
-                        txtAuthor.Text = fileVersionInfo.CompanyName;
+                var details = AssemblyInspector.Inspect(dllPath);
 
-                    if (!string.IsNullOrEmpty(fileVersionInfo.FileDescription))
-                        txtDescription.Text = fileVersionInfo.FileDescription;
-                }
+                if (!string.IsNullOrEmpty(details.Version)) txtVersion.Text = details.Version;
+                if (!string.IsNullOrEmpty(details.Company)) txtAuthor.Text = details.Company;
+                if (!string.IsNullOrEmpty(details.Description)) txtDescription.Text = details.Description;
+
+                LoadClassNames(details);
             }
             catch { /* Ignore errors in metadata extraction */ }
+        }
+
+        private void LoadClassNames(AssemblyDetails details)
+        {
+            cbClassName.ItemsSource = details.Candidates;
+
+            var preferred = cbAddinType.SelectedIndex == 1 ? RevitAddinType.Application : RevitAddinType.Command;
+            var candidate = AssemblyInspector.PickDefault(details, preferred);
+            if (candidate == null) return;
+
+            cbClassName.SelectedItem = candidate;
+            SelectAddinType(candidate.AddinType.ToString());
+        }
+
+        /// <summary>
+        /// The add-in type always follows the chosen entry point, so the two fields cannot disagree.
+        /// </summary>
+        private void OnClassNameSelected(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var candidate = cbClassName.SelectedItem as AddinCandidate;
+            if (candidate != null) SelectAddinType(candidate.AddinType.ToString());
+        }
+
+        private string SelectedClassName()
+        {
+            var candidate = cbClassName.SelectedItem as AddinCandidate;
+            return candidate != null ? candidate.FullClassName : (cbClassName.Text ?? string.Empty).Trim();
+        }
+
+        private void SetClassName(string fullClassName)
+        {
+            if (string.IsNullOrEmpty(fullClassName)) return;
+
+            var candidates = cbClassName.ItemsSource as IEnumerable<AddinCandidate>;
+            var match = candidates?.FirstOrDefault(c =>
+                string.Equals(c.FullClassName, fullClassName, StringComparison.Ordinal));
+
+            if (match != null) cbClassName.SelectedItem = match;
+            else cbClassName.Text = fullClassName;
         }
 
         private void OnBrowseIcon(object sender, RoutedEventArgs e)
@@ -75,33 +235,168 @@ namespace QuickMsiBuilder.UI
             if (dialog.ShowDialog() == true) txtBgPath.Text = dialog.FileName;
         }
 
-        private void OnBuildMsi(object sender, RoutedEventArgs e)
+        private void OnClearIcon(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtDllPath.Text))
+            txtIconPath.Text = string.Empty;
+        }
+
+        private void OnClearBg(object sender, RoutedEventArgs e)
+        {
+            txtBgPath.Text = string.Empty;
+        }
+
+        private void OnOpenLog(object sender, RoutedEventArgs e)
+        {
+            LogFile.Open(this);
+        }
+
+        #endregion
+
+        #region Build
+
+        private async void OnBuildMsi(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtDllPath.Text))
             {
-                MessageBox.Show("Please select a target DLL.");
+                MessageBox.Show(this, "Please select a target DLL.", Title);
                 return;
             }
 
-            string cliPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "QuickMsiBuilder.CLI.exe");
-            string revitYear = ((System.Windows.Controls.ComboBoxItem)cbRevitYear.SelectedItem).Content.ToString();
+            if (!File.Exists(txtDllPath.Text))
+            {
+                MessageBox.Show(this, "The selected DLL no longer exists:\n" + txtDllPath.Text, Title);
+                return;
+            }
 
-            string arguments = $"\"{txtDllPath.Text}\" \"{txtVersion.Text}\" \"{txtAuthor.Text}\" \"{txtDescription.Text}\" \"{txtIconPath.Text}\" \"{txtBgPath.Text}\" \"{revitYear}\" \"{txtClassName.Text}\"";
+            var revitYears = SelectedRevitYears();
+            if (string.IsNullOrEmpty(revitYears))
+            {
+                MessageBox.Show(this, "Select at least one Revit version.", Title);
+                return;
+            }
 
+            var cliPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "QuickMsiBuilder.CLI.exe");
+            if (!File.Exists(cliPath))
+            {
+                MessageBox.Show(this, "QuickMsiBuilder.CLI.exe was not found next to this application.", Title);
+                return;
+            }
+
+            var addinType = cbAddinType.SelectedIndex == 1 ? "Application" : "Command";
+
+            var arguments = Quote(
+                txtDllPath.Text,
+                txtVersion.Text,
+                txtAuthor.Text,
+                txtDescription.Text,
+                txtIconPath.Text,
+                txtBgPath.Text,
+                revitYears,
+                SelectedClassName(),
+                addinType);
+
+            btnBuild.IsEnabled = false;
+            txtStatus.Text = "Building MSI for Revit " + revitYears.Replace(",", ", ") + "...";
             try
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = cliPath,
-                    Arguments = arguments,
-                    UseShellExecute = true
-                });
-                MessageBox.Show("MSI build process started in background.");
+                var result = await Task.Run(() => RunCli(cliPath, arguments));
+                var succeeded = result.ExitCode == 0;
+                var msiPath = Program.ParseResultPath(result.Output);
+                var message = Program.StripResultLines(result.Output);
+
+                txtStatus.Text = succeeded
+                    ? "Built " + Path.GetFileName(msiPath)
+                    : "Build failed - see the log for details.";
+
+                // The CLI records the release, so pick it up without overwriting what is on screen.
+                if (succeeded) LoadHistory(txtDllPath.Text, false);
+
+                BuildResultWindow.Show(this, succeeded, msiPath, message);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error launching CLI: {ex.Message}");
+                txtStatus.Text = ex.Message;
+                MessageBox.Show(this, "Error launching CLI: " + ex.Message, Title);
+            }
+            finally
+            {
+                btnBuild.IsEnabled = true;
             }
         }
+
+        private static CliResult RunCli(string cliPath, string arguments)
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = cliPath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            using (var process = Process.Start(startInfo))
+            {
+                var output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
+                process.WaitForExit();
+                return new CliResult { ExitCode = process.ExitCode, Output = output };
+            }
+        }
+
+        /// <summary>
+        /// Free text fields can contain quotes and backslashes, so the command line has to be
+        /// escaped rather than string-interpolated.
+        /// </summary>
+        private static string Quote(params string[] values)
+        {
+            var builder = new StringBuilder();
+            foreach (var value in values)
+            {
+                if (builder.Length > 0) builder.Append(' ');
+                builder.Append(Escape(value ?? string.Empty));
+            }
+
+            return builder.ToString();
+        }
+
+        private static string Escape(string value)
+        {
+            var builder = new StringBuilder("\"");
+            for (var i = 0; i < value.Length; i++)
+            {
+                var backslashes = 0;
+                while (i < value.Length && value[i] == '\\')
+                {
+                    backslashes++;
+                    i++;
+                }
+
+                if (i == value.Length)
+                {
+                    builder.Append('\\', backslashes * 2);
+                    break;
+                }
+
+                if (value[i] == '"')
+                {
+                    builder.Append('\\', backslashes * 2 + 1).Append('"');
+                }
+                else
+                {
+                    builder.Append('\\', backslashes).Append(value[i]);
+                }
+            }
+
+            return builder.Append('"').ToString();
+        }
+
+        private class CliResult
+        {
+            public int ExitCode { get; set; }
+            public string Output { get; set; }
+        }
+
+        #endregion
     }
 }

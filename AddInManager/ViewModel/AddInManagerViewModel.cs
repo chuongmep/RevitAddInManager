@@ -225,7 +225,15 @@ public class AddInManagerViewModel : ViewModelBase
             if (isTabStartSelected) IsCanRun = false;
             return isTabStartSelected;
         }
-        set => OnPropertyChanged(ref isTabStartSelected, value);
+        set
+        {
+            var wasSelected = isTabStartSelected;
+            OnPropertyChanged(ref isTabStartSelected, value);
+
+            // Refreshing used to be the job of the Startup button. Selecting the tab now does it,
+            // so the list is never stale and the button is free for something else.
+            if (value && !wasSelected && ExternalCommandData != null) FreshItemStartupClick(false);
+        }
     }
 
     private bool isTabLogSelected;
@@ -841,40 +849,112 @@ public class AddInManagerViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Quick MSI Builder is installed once for all Revit versions, so it lives beside the version
+    /// folders rather than inside them. A copy next to the assembly still wins, which is what a
+    /// local build produces.
+    /// </summary>
+    private static string ResolveQuickMsiBuilder()
+    {
+        var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (string.IsNullOrEmpty(assemblyDir)) return null;
+
+        var candidates = new List<string>
+        {
+            Path.Combine(assemblyDir, DefaultSetting.QuickMsiBuilderExe),
+            // ...\Addins\<year>\RevitAddinManager -> ...\Addins\QuickMsiBuilder
+            Path.Combine(assemblyDir, "..", "..", DefaultSetting.QuickMsiBuilderFolder, DefaultSetting.QuickMsiBuilderExe),
+            // ...\Addins\<year> -> ...\Addins\QuickMsiBuilder
+            Path.Combine(assemblyDir, "..", DefaultSetting.QuickMsiBuilderFolder, DefaultSetting.QuickMsiBuilderExe),
+            // bin\AddIn <year> <config>\RevitAddinManager -> bin\AddInShared\QuickMsiBuilder
+            Path.Combine(assemblyDir, "..", "..", "AddInShared", DefaultSetting.QuickMsiBuilderFolder, DefaultSetting.QuickMsiBuilderExe)
+        };
+
+        foreach (var candidate in candidates)
+        {
+            if (File.Exists(candidate)) return Path.GetFullPath(candidate);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Any node of the tree identifies the same assembly: the parent carries the Addin, the children
+    /// carry the individual commands. Whichever one is selected - and whichever tab is active - is
+    /// enough to start a build, so the user never has to hunt for the "right" node.
+    /// </summary>
+    private bool TryGetSelectedAssembly(out string filePath, out AddinItem addinItem, out AddinType addinType)
+    {
+        var candidates = new List<Tuple<AddinModel, AddinType>>();
+
+        // The active tab comes first, then the other one, then whatever was last activated.
+        if (IsTabAppSelected)
+        {
+            candidates.Add(Tuple.Create(SelectedAppItem, AddinType.Application));
+            candidates.Add(Tuple.Create(SelectedCommandItem, AddinType.Command));
+        }
+        else
+        {
+            candidates.Add(Tuple.Create(SelectedCommandItem, AddinType.Command));
+            candidates.Add(Tuple.Create(SelectedAppItem, AddinType.Application));
+        }
+
+        foreach (var candidate in candidates)
+        {
+            var model = candidate.Item1;
+            if (model?.Addin == null || string.IsNullOrEmpty(model.Addin.FilePath)) continue;
+
+            filePath = model.Addin.FilePath;
+            // Null on a parent node; the builder then falls back to a default class name.
+            addinItem = model.AddinItem ?? model.Children?.FirstOrDefault()?.AddinItem;
+            addinType = candidate.Item2;
+            return true;
+        }
+
+        // Nothing selected but something was run or loaded earlier.
+        var active = MAddinManagerBase?.ActiveCmd ?? MAddinManagerBase?.ActiveApp;
+        if (active != null && !string.IsNullOrEmpty(active.FilePath))
+        {
+            filePath = active.FilePath;
+            addinItem = MAddinManagerBase.ActiveCmd != null ? MAddinManagerBase.ActiveCmdItem : MAddinManagerBase.ActiveAppItem;
+            addinType = MAddinManagerBase.ActiveCmd != null ? AddinType.Command : AddinType.Application;
+            return true;
+        }
+
+        filePath = null;
+        addinItem = null;
+        addinType = AddinType.Command;
+        return false;
+    }
+
     private void BuildMsiClick()
     {
-        string filePath = string.Empty;
-        if (IsTabCmdSelected && SelectedCommandItem != null)
-        {
-            filePath = SelectedCommandItem.Addin.FilePath;
-        }
-        else if (IsTabAppSelected && SelectedAppItem != null)
-        {
-            filePath = SelectedAppItem.Addin.FilePath;
-        }
+        string filePath;
+        AddinItem addinItem;
+        AddinType addinType;
+        TryGetSelectedAssembly(out filePath, out addinItem, out addinType);
 
         if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
         {
-            MessageBox.Show("Please select a valid assembly first.", Resource.AppName);
+            MessageBox.Show("Select an add-in in the Load Command or Load App tab first.", Resource.AppName);
             return;
         }
 
         try
         {
-            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string uiPath = Path.Combine(assemblyDir, "QuickMsiBuilder.UI.exe");
-
-            if (!File.Exists(uiPath))
+            string uiPath = ResolveQuickMsiBuilder();
+            if (uiPath == null)
             {
-                MessageBox.Show($"Quick MSI Builder UI not found at {uiPath}. Please ensure it is installed correctly.", Resource.AppName);
+                MessageBox.Show("Quick MSI Builder was not found. Reinstall Revit Add-in Manager to restore it.", Resource.AppName);
                 return;
             }
 
             string revitVersion = ExternalCommandData.Application.Application.VersionNumber;
+            string fullClassName = addinItem == null ? string.Empty : addinItem.FullClassName;
             Process.Start(new ProcessStartInfo
             {
                 FileName = uiPath,
-                Arguments = $"\"{filePath}\" \"{revitVersion}\"",
+                Arguments = ArgumentUtils.Quote(filePath, revitVersion, fullClassName, addinType.ToString()),
                 UseShellExecute = true
             });
         }
@@ -883,3 +963,4 @@ public class AddInManagerViewModel : ViewModelBase
             MessageBox.Show($"Error launching Quick MSI Builder: {ex.Message}", Resource.AppName);
         }
     }
+}

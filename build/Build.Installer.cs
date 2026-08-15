@@ -19,10 +19,13 @@ internal partial class Build
              var buildDirectories = GetBuildDirectories();
              var configurations = GetConfigurations(InstallerConfiguration);
 
+             var sharedDirectories = GetSharedDirectories();
+
              foreach (var directoryGroup in buildDirectories)
              {
                  var directories = directoryGroup.ToList();
-                 var exeArguments = BuildExeArguments(directories.Select(info => info.FullName).ToList());
+                 var payloadDirectories = directories.Select(info => info.FullName).Concat(sharedDirectories).ToList();
+                 var exeArguments = BuildExeArguments(payloadDirectories);
                  var exeFile = installerProject.GetExecutableFile(configurations, directories);
                  if (string.IsNullOrEmpty(exeFile))
                  {
@@ -40,6 +43,31 @@ internal partial class Build
                  if (proc.ExitCode != 0) throw new Exception("The installer creation failed.");
              }
          });
+
+    /// <summary>
+    /// Payload that is the same for every Revit version and therefore installed once, beside the
+    /// version folders instead of inside each of them. Staged by the add-in build.
+    /// </summary>
+    private List<string> GetSharedDirectories()
+    {
+        var addInProject = BuilderExtensions.GetProject(Solution, Projects[0]);
+        var sharedRoot = addInProject.GetBinDirectory() / SharedBinFolder;
+        var directories = new List<string>();
+
+        if (!Directory.Exists(sharedRoot))
+        {
+            Log.Warning("No shared payload directory found at {Directory}", sharedRoot.ToString());
+            return directories;
+        }
+
+        foreach (var directory in Directory.GetDirectories(sharedRoot))
+        {
+            Log.Information("Including shared payload: {Directory}", directory);
+            directories.Add(directory);
+        }
+
+        return directories;
+    }
 
     private void ParseProcessOutput([CanBeNull] string value)
     {

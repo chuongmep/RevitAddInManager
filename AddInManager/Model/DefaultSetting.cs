@@ -16,6 +16,11 @@ public static class DefaultSetting
     public static string FormatExAddin = ".addin";
     public static string FormatDisable = ".disable";
     public static string AdskPath = "Autodesk\\Revit\\Addins";
+
+    /// <summary>Folder the installer publishes Quick MSI Builder to, shared by every Revit version.</summary>
+    public static string QuickMsiBuilderFolder = "QuickMsiBuilder";
+
+    public static string QuickMsiBuilderExe = "QuickMsiBuilder.UI.exe";
     public static string IniName = "revit.ini";
     public static string TempFolderName = "RevitAddins";
 

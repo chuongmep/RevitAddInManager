@@ -1,12 +1,64 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Matches QuickMsiBuilder.CLI and the net48 flavour of the add-in, so no extra runtime
+         has to be installed on the user machine. -->
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
     <UseWPF>true</UseWPF>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- The linked theme helpers come from RevitAddinManager, which builds with implicit usings. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Built once as Release whatever Revit configuration the add-in uses. -->
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The UI launches the CLI as a process; the reference is for the shared build history types
+         and it conveniently drops QuickMsiBuilder.CLI.exe next to the UI. -->
+    <ProjectReference Include="..\QuickMsiBuilder.CLI\QuickMsiBuilder.CLI.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ApplicationIcon>..\..\AddInManager\Resources\dev.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Required by the linked theme dictionaries (SystemDropShadowChrome). -->
+    <Reference Include="PresentationFramework.Aero2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Same window icon as the Add-in Manager. -->
+    <Resource Include="..\..\AddInManager\Resources\dev.ico">
+      <Link>Resources\dev.ico</Link>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The Add-in Manager theme dictionaries are linked, not copied, so this window keeps looking
+         exactly like the Add-in Manager as that theme evolves. The two helper types below are the
+         only code the dictionaries reference. -->
+    <Page Include="..\..\AddInManager\Themes\Styles\LightTheme.xaml">
+      <Link>Themes\Styles\LightTheme.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <!-- The style dictionaries merge these by relative URI, so they must be compiled into this
+         assembly too - the tool is installed on its own and cannot reach RevitAddinManager.dll. -->
+    <Page Include="..\..\AddInManager\Themes\Base\*.xaml">
+      <Link>Themes\Base\%(Filename)%(Extension)</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="..\..\AddInManager\Themes\Controls\ToggleSwitch.cs">
+      <Link>Themes\Controls\ToggleSwitch.cs</Link>
+    </Compile>
+    <Compile Include="..\..\AddInManager\Themes\Converters\TreeViewMarginConverter.cs">
+      <Link>Themes\Converters\TreeViewMarginConverter.cs</Link>
+    </Compile>
+  </ItemGroup>
 
 </Project>
