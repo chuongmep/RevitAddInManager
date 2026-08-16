@@ -60,8 +60,8 @@ namespace QuickMsiBuilder.CLI
                     return 1;
                 }
 
-                log.Info("Building MSI for {0} v{1}, Revit {2}, type {3}",
-                    options.AssemblyName, options.Version, options.RevitYearsText, options.AddinType);
+                log.Info("Building MSI for {0} v{1}, Revit {2}, entry points: {3}",
+                    options.AssemblyName, options.Version, options.RevitYearsText, options.EntriesText);
                 log.Debug("Target assembly: {0}", options.DllPath);
 
                 string wixLocation;

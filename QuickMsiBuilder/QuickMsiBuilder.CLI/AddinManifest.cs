@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -16,12 +18,37 @@ namespace QuickMsiBuilder.CLI
         {
             if (options == null) throw new ArgumentNullException("options");
 
-            return Create(
-                options.AssemblyName,
-                options.AddinType,
-                options.FullClassName,
-                options.Author,
-                options.Description);
+            return Create(options.AssemblyName, options.Entries, options.Author, options.Description);
+        }
+
+        /// <summary>
+        /// One AddIn element per entry point, which is how a Revit manifest declares an assembly
+        /// that exposes several commands.
+        /// </summary>
+        public static XDocument Create(
+            string assemblyName,
+            IEnumerable<AddinCandidate> entries,
+            string author,
+            string description)
+        {
+            if (string.IsNullOrEmpty(assemblyName)) throw new ArgumentNullException("assemblyName");
+
+            var elements = (entries ?? new List<AddinCandidate>())
+                .Where(entry => entry != null && !string.IsNullOrEmpty(entry.FullClassName))
+                .Select(entry => CreateAddin(assemblyName, entry.AddinType, entry.FullClassName, author, description))
+                .ToArray();
+
+            if (elements.Length == 0)
+            {
+                elements = new[]
+                {
+                    CreateAddin(assemblyName, RevitAddinType.Command, assemblyName + ".Command", author, description)
+                };
+            }
+
+            return new XDocument(
+                new XDeclaration("1.0", "utf-8", null),
+                new XElement("RevitAddIns", elements));
         }
 
         public static XDocument Create(
@@ -31,7 +58,20 @@ namespace QuickMsiBuilder.CLI
             string author,
             string description)
         {
-            if (string.IsNullOrEmpty(assemblyName)) throw new ArgumentNullException("assemblyName");
+            return Create(
+                assemblyName,
+                new[] { new AddinCandidate(fullClassName, addinType) },
+                author,
+                description);
+        }
+
+        private static XElement CreateAddin(
+            string assemblyName,
+            RevitAddinType addinType,
+            string fullClassName,
+            string author,
+            string description)
+        {
             if (string.IsNullOrEmpty(fullClassName)) fullClassName = assemblyName + ".Command";
 
             var displayName = DisplayName(fullClassName);
@@ -63,9 +103,7 @@ namespace QuickMsiBuilder.CLI
                 addin.Add(new XElement("VisibilityMode", "AlwaysVisible"));
             }
 
-            return new XDocument(
-                new XDeclaration("1.0", "utf-8", null),
-                new XElement("RevitAddIns", addin));
+            return addin;
         }
 
         /// <summary>

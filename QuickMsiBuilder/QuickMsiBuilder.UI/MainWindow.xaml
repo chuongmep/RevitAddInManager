@@ -3,9 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Quick MSI Builder"
-    Width="480"
+    Width="540"
     Height="640"
-    MinWidth="440"
+    MinWidth="500"
     MinHeight="560"
     Icon="Resources/dev.ico"
     PreviewKeyDown="OnWindowKeyDown"
@@ -56,6 +56,7 @@
             VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -175,44 +176,73 @@
 
                 <TextBlock
                     Grid.Row="7"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource SectionHeader}"
+                    Text="Add-in entry points" />
+                <Border
+                    Grid.Row="8"
+                    Grid.ColumnSpan="3"
+                    Margin="0,3"
+                    Padding="8,6"
+                    BorderBrush="{DynamicResource TextBoxBorderBrush}"
+                    BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock
+                            x:Name="txtEntriesHint"
+                            Margin="0,0,0,6"
+                            Style="{StaticResource HintText}"
+                            Text="Every command found in the assembly is packaged. Untick what you do not want." />
+                        <ItemsControl x:Name="icEntries" MaxHeight="130">
+                            <ItemsControl.Template>
+                                <ControlTemplate TargetType="ItemsControl">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Margin="0,3"
+                                        Content="{Binding DisplayName}"
+                                        IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <!--  Only needed when the assembly declares no entry point at all  -->
+                <TextBlock
+                    x:Name="lblManualClass"
+                    Grid.Row="9"
                     Style="{StaticResource FieldLabel}"
-                    Text="Add-in type" />
+                    Text="Class name" />
+                <TextBox
+                    x:Name="txtManualClass"
+                    Grid.Row="9"
+                    Grid.Column="1"
+                    Height="25"
+                    Margin="0,3" />
                 <ComboBox
                     x:Name="cbAddinType"
-                    Grid.Row="7"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
+                    Grid.Row="9"
+                    Grid.Column="2"
+                    Width="110"
                     Height="25"
-                    Margin="0,3">
+                    Margin="5,3,0,3">
                     <ComboBoxItem Content="Command" IsSelected="True" />
                     <ComboBoxItem Content="Application" />
                 </ComboBox>
 
                 <TextBlock
-                    Grid.Row="8"
-                    Style="{StaticResource FieldLabel}"
-                    Text="Full class name" />
-                <ComboBox
-                    x:Name="cbClassName"
-                    Grid.Row="8"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Height="25"
-                    Margin="0,3"
-                    DisplayMemberPath="FullClassName"
-                    IsEditable="True"
-                    SelectionChanged="OnClassNameSelected"
-                    TextSearch.TextPath="FullClassName"
-                    ToolTip="Entry points detected in the assembly. Pick one, or type your own." />
-
-                <TextBlock
-                    Grid.Row="9"
+                    Grid.Row="10"
                     Grid.ColumnSpan="3"
                     Style="{StaticResource SectionHeader}"
                     Text="Revit versions" />
 
                 <Border
-                    Grid.Row="10"
+                    Grid.Row="11"
                     Grid.ColumnSpan="3"
                     Padding="8,6"
                     BorderBrush="{DynamicResource TextBoxBorderBrush}"
@@ -242,12 +272,12 @@
                 </Border>
 
                 <TextBlock
-                    Grid.Row="11"
+                    Grid.Row="12"
                     Grid.ColumnSpan="3"
                     Style="{StaticResource SectionHeader}"
                     Text="Cosmetics (optional)" />
 
-                <Grid Grid.Row="12" Grid.ColumnSpan="3">
+                <Grid Grid.Row="13" Grid.ColumnSpan="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />

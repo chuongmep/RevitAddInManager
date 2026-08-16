@@ -29,8 +29,29 @@ namespace QuickMsiBuilder.CLI
         public string IconPath { get; private set; }
         public string BackgroundImagePath { get; private set; }
         public List<string> RevitYears { get; private set; }
-        public string FullClassName { get; private set; }
-        public RevitAddinType AddinType { get; private set; }
+
+        /// <summary>
+        /// Every entry point that goes into the manifest. A Revit add-in usually exposes several
+        /// commands, and all of them belong in the same .addin file.
+        /// </summary>
+        public List<AddinCandidate> Entries { get; private set; }
+
+        /// <summary>First entry, kept for the places that only deal with one class.</summary>
+        public string FullClassName
+        {
+            get { return Entries.Count == 0 ? string.Empty : Entries[0].FullClassName; }
+        }
+
+        public RevitAddinType AddinType
+        {
+            get { return Entries.Count == 0 ? RevitAddinType.Command : Entries[0].AddinType; }
+        }
+
+        /// <summary>Comma separated class names, as stored in history and shown to the user.</summary>
+        public string EntriesText
+        {
+            get { return string.Join(", ", Entries.Select(entry => entry.FullClassName).ToArray()); }
+        }
 
         public string AssemblyName
         {
@@ -107,30 +128,59 @@ namespace QuickMsiBuilder.CLI
             if (!TryNormalizeRevitYears(Get(args, 6), out revitYears, out error)) return false;
             result.RevitYears = revitYears;
 
-            var fullClassName = Get(args, 7);
-            result.AddinType = ParseAddinType(Get(args, 8));
-
-            if (string.IsNullOrEmpty(fullClassName))
-            {
-                // Nobody should have to type this: read the entry point out of the assembly, and
-                // only fall back to a guess when the assembly declares none.
-                var candidate = AssemblyInspector.PickDefault(details, result.AddinType);
-                if (candidate != null)
-                {
-                    fullClassName = candidate.FullClassName;
-                    result.AddinType = candidate.AddinType;
-                }
-                else
-                {
-                    fullClassName = result.AssemblyName +
-                                    (result.AddinType == RevitAddinType.Application ? ".Application" : ".Command");
-                }
-            }
-
-            result.FullClassName = fullClassName;
+            result.Entries = ResolveEntries(Get(args, 7), ParseAddinType(Get(args, 8)), details, result.AssemblyName);
 
             options = result;
             return true;
+        }
+
+        /// <summary>
+        /// Turns the class name argument into the entries that go into the manifest.
+        /// Nothing supplied means "everything the assembly offers", starting with its commands -
+        /// that is what a developer packaging their own add-in almost always wants.
+        /// </summary>
+        public static List<AddinCandidate> ResolveEntries(
+            string classNames, RevitAddinType fallbackType, AssemblyDetails details, string assemblyName)
+        {
+            details = details ?? new AssemblyDetails();
+
+            if (!string.IsNullOrEmpty(classNames))
+            {
+                var requested = new List<AddinCandidate>();
+                foreach (var name in classNames
+                             .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                             .Select(value => value.Trim())
+                             .Where(value => value.Length > 0))
+                {
+                    // The assembly knows each class's real type; the argument only fills the gap
+                    // for a name typed by hand.
+                    var known = details.Candidates.FirstOrDefault(candidate =>
+                        string.Equals(candidate.FullClassName, name, StringComparison.Ordinal));
+
+                    requested.Add(known ?? new AddinCandidate(name, fallbackType));
+                }
+
+                if (requested.Count > 0) return requested;
+            }
+
+            var commands = details.Candidates
+                .Where(candidate => candidate.AddinType == RevitAddinType.Command)
+                .ToList();
+            if (commands.Count > 0) return commands;
+
+            var applications = details.Candidates
+                .Where(candidate => candidate.AddinType == RevitAddinType.Application)
+                .ToList();
+            if (applications.Count > 0) return applications;
+
+            // Nothing declared in the assembly: fall back to a guess so the build still produces
+            // something the user can correct.
+            return new List<AddinCandidate>
+            {
+                new AddinCandidate(
+                    assemblyName + (fallbackType == RevitAddinType.Application ? ".Application" : ".Command"),
+                    fallbackType)
+            };
         }
 
         /// <summary>

@@ -105,7 +105,7 @@ namespace QuickMsiBuilder.CLI
                 Version = options.Version,
                 Author = options.Author,
                 Description = options.Description,
-                FullClassName = options.FullClassName,
+                FullClassName = options.EntriesText,
                 AddinType = options.AddinType.ToString(),
                 IconPath = options.IconPath,
                 BackgroundImagePath = options.BackgroundImagePath,

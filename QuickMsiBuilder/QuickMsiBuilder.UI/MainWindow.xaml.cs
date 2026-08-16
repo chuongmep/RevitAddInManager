@@ -16,6 +16,7 @@ namespace QuickMsiBuilder.UI
     {
         private readonly BuildHistoryStore _historyStore = new BuildHistoryStore();
         private readonly List<RevitYearOption> _revitYears;
+        private List<AddinEntryOption> _entries = new List<AddinEntryOption>();
 
         public MainWindow()
         {
@@ -35,7 +36,7 @@ namespace QuickMsiBuilder.UI
             }
 
             SelectRevitYears(args.Length > 2 ? args[2] : MsiBuildOptions.DefaultRevitYear);
-            if (args.Length > 3 && !string.IsNullOrEmpty(args[3])) SetClassName(args[3]);
+            if (args.Length > 3 && !string.IsNullOrEmpty(args[3])) SetClassNames(args[3]);
             if (args.Length > 4) SelectAddinType(args[4]);
 
             // Loaded last so a previous release wins over the defaults read from the assembly.
@@ -83,7 +84,7 @@ namespace QuickMsiBuilder.UI
             if (!string.IsNullOrEmpty(entry.Version)) txtVersion.Text = entry.Version;
             if (!string.IsNullOrEmpty(entry.Author)) txtAuthor.Text = entry.Author;
             if (!string.IsNullOrEmpty(entry.Description)) txtDescription.Text = entry.Description;
-            if (!string.IsNullOrEmpty(entry.FullClassName)) SetClassName(entry.FullClassName);
+            if (!string.IsNullOrEmpty(entry.FullClassName)) SetClassNames(entry.FullClassName);
             txtIconPath.Text = entry.IconPath ?? string.Empty;
             txtBgPath.Text = entry.BackgroundImagePath ?? string.Empty;
 
@@ -184,43 +185,80 @@ namespace QuickMsiBuilder.UI
             catch { /* Ignore errors in metadata extraction */ }
         }
 
+        /// <summary>
+        /// Lists every entry point the assembly declares, with all commands ticked - packaging the
+        /// whole set is what a developer shipping their own add-in wants by default.
+        /// </summary>
         private void LoadClassNames(AssemblyDetails details)
         {
-            cbClassName.ItemsSource = details.Candidates;
+            _entries = details.Candidates
+                .Select(candidate => new AddinEntryOption(candidate, candidate.AddinType == RevitAddinType.Command))
+                .ToList();
 
-            var preferred = cbAddinType.SelectedIndex == 1 ? RevitAddinType.Application : RevitAddinType.Command;
-            var candidate = AssemblyInspector.PickDefault(details, preferred);
-            if (candidate == null) return;
+            // An assembly with only applications should not come up with nothing ticked.
+            if (_entries.Count > 0 && _entries.All(entry => !entry.IsSelected))
+            {
+                foreach (var entry in _entries) entry.IsSelected = true;
+            }
 
-            cbClassName.SelectedItem = candidate;
-            SelectAddinType(candidate.AddinType.ToString());
+            icEntries.ItemsSource = _entries;
+            ShowManualClassRow(_entries.Count == 0);
+
+            txtEntriesHint.Text = _entries.Count == 0
+                ? "No Revit entry point was found in this assembly. Enter the class name below."
+                : "Every command found in the assembly is packaged. Untick what you do not want.";
         }
 
         /// <summary>
-        /// The add-in type always follows the chosen entry point, so the two fields cannot disagree.
+        /// The manual class row is a fallback for assemblies the inspector cannot read; it only gets
+        /// in the way when real entry points are on screen.
         /// </summary>
-        private void OnClassNameSelected(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ShowManualClassRow(bool visible)
         {
-            var candidate = cbClassName.SelectedItem as AddinCandidate;
-            if (candidate != null) SelectAddinType(candidate.AddinType.ToString());
+            var visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            lblManualClass.Visibility = visibility;
+            txtManualClass.Visibility = visibility;
+            cbAddinType.Visibility = visibility;
         }
 
-        private string SelectedClassName()
+        private string SelectedClassNames()
         {
-            var candidate = cbClassName.SelectedItem as AddinCandidate;
-            return candidate != null ? candidate.FullClassName : (cbClassName.Text ?? string.Empty).Trim();
+            var ticked = _entries
+                .Where(entry => entry.IsSelected)
+                .Select(entry => entry.FullClassName)
+                .ToArray();
+
+            return ticked.Length > 0
+                ? string.Join(",", ticked)
+                : (txtManualClass.Text ?? string.Empty).Trim();
         }
 
-        private void SetClassName(string fullClassName)
+        /// <summary>
+        /// Restores a selection coming from the add-in or from a previous release. Names the assembly
+        /// does not declare are added to the list so they stay visible and ticked.
+        /// </summary>
+        private void SetClassNames(string classNames)
         {
-            if (string.IsNullOrEmpty(fullClassName)) return;
+            if (string.IsNullOrEmpty(classNames)) return;
 
-            var candidates = cbClassName.ItemsSource as IEnumerable<AddinCandidate>;
-            var match = candidates?.FirstOrDefault(c =>
-                string.Equals(c.FullClassName, fullClassName, StringComparison.Ordinal));
+            var wanted = classNames
+                .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(value => value.Trim())
+                .Where(value => value.Length > 0)
+                .ToList();
+            if (wanted.Count == 0) return;
 
-            if (match != null) cbClassName.SelectedItem = match;
-            else cbClassName.Text = fullClassName;
+            var addinType = cbAddinType.SelectedIndex == 1 ? RevitAddinType.Application : RevitAddinType.Command;
+            foreach (var name in wanted.Where(name => _entries.All(entry => entry.FullClassName != name)))
+            {
+                _entries.Add(new AddinEntryOption(new AddinCandidate(name, addinType), true));
+            }
+
+            foreach (var entry in _entries) entry.IsSelected = wanted.Contains(entry.FullClassName);
+
+            icEntries.ItemsSource = null;
+            icEntries.ItemsSource = _entries;
+            ShowManualClassRow(_entries.Count == 0);
         }
 
         private void OnBrowseIcon(object sender, RoutedEventArgs e)
@@ -292,7 +330,7 @@ namespace QuickMsiBuilder.UI
                 txtIconPath.Text,
                 txtBgPath.Text,
                 revitYears,
-                SelectedClassName(),
+                SelectedClassNames(),
                 addinType);
 
             btnBuild.IsEnabled = false;
