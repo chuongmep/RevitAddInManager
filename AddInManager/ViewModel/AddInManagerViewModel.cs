@@ -883,56 +883,28 @@ public class AddInManagerViewModel : ViewModelBase
     /// carry the individual commands. Whichever one is selected - and whichever tab is active - is
     /// enough to start a build, so the user never has to hunt for the "right" node.
     /// </summary>
-    private bool TryGetSelectedAssembly(out string filePath, out AddinItem addinItem, out AddinType addinType)
+    private string GetSelectedAssemblyPath()
     {
-        var candidates = new List<Tuple<AddinModel, AddinType>>();
+        // The active tab comes first, then the other one.
+        var models = IsTabAppSelected
+            ? new[] { SelectedAppItem, SelectedCommandItem }
+            : new[] { SelectedCommandItem, SelectedAppItem };
 
-        // The active tab comes first, then the other one, then whatever was last activated.
-        if (IsTabAppSelected)
+        foreach (var model in models)
         {
-            candidates.Add(Tuple.Create(SelectedAppItem, AddinType.Application));
-            candidates.Add(Tuple.Create(SelectedCommandItem, AddinType.Command));
-        }
-        else
-        {
-            candidates.Add(Tuple.Create(SelectedCommandItem, AddinType.Command));
-            candidates.Add(Tuple.Create(SelectedAppItem, AddinType.Application));
+            if (model?.Addin != null && !string.IsNullOrEmpty(model.Addin.FilePath)) return model.Addin.FilePath;
         }
 
-        foreach (var candidate in candidates)
-        {
-            var model = candidate.Item1;
-            if (model?.Addin == null || string.IsNullOrEmpty(model.Addin.FilePath)) continue;
-
-            filePath = model.Addin.FilePath;
-            // Null on a parent node; the builder then falls back to a default class name.
-            addinItem = model.AddinItem ?? model.Children?.FirstOrDefault()?.AddinItem;
-            addinType = candidate.Item2;
-            return true;
-        }
-
-        // Nothing selected but something was run or loaded earlier.
+        // Nothing selected, but something was run or loaded earlier.
         var active = MAddinManagerBase?.ActiveCmd ?? MAddinManagerBase?.ActiveApp;
-        if (active != null && !string.IsNullOrEmpty(active.FilePath))
-        {
-            filePath = active.FilePath;
-            addinItem = MAddinManagerBase.ActiveCmd != null ? MAddinManagerBase.ActiveCmdItem : MAddinManagerBase.ActiveAppItem;
-            addinType = MAddinManagerBase.ActiveCmd != null ? AddinType.Command : AddinType.Application;
-            return true;
-        }
-
-        filePath = null;
-        addinItem = null;
-        addinType = AddinType.Command;
-        return false;
+        return active == null ? null : active.FilePath;
     }
 
     private void BuildMsiClick()
     {
-        string filePath;
-        AddinItem addinItem;
-        AddinType addinType;
-        TryGetSelectedAssembly(out filePath, out addinItem, out addinType);
+        // The builder detects the entry points itself and defaults to every command in the
+        // assembly, so only the assembly is passed across.
+        string filePath = GetSelectedAssemblyPath();
 
         if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
         {
@@ -950,11 +922,10 @@ public class AddInManagerViewModel : ViewModelBase
             }
 
             string revitVersion = ExternalCommandData.Application.Application.VersionNumber;
-            string fullClassName = addinItem == null ? string.Empty : addinItem.FullClassName;
             Process.Start(new ProcessStartInfo
             {
                 FileName = uiPath,
-                Arguments = ArgumentUtils.Quote(filePath, revitVersion, fullClassName, addinType.ToString()),
+                Arguments = ArgumentUtils.Quote(filePath, revitVersion),
                 UseShellExecute = true
             });
         }

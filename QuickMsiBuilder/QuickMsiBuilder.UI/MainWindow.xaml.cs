@@ -36,8 +36,9 @@ namespace QuickMsiBuilder.UI
             }
 
             SelectRevitYears(args.Length > 2 ? args[2] : MsiBuildOptions.DefaultRevitYear);
-            if (args.Length > 3 && !string.IsNullOrEmpty(args[3])) SetClassNames(args[3]);
+            // Type first: SetClassNames uses it to type a class the assembly does not declare.
             if (args.Length > 4) SelectAddinType(args[4]);
+            if (args.Length > 3 && !string.IsNullOrEmpty(args[3])) SetClassNames(args[3]);
 
             // Loaded last so a previous release wins over the defaults read from the assembly.
             LoadHistory(txtDllPath.Text, true);
@@ -84,11 +85,12 @@ namespace QuickMsiBuilder.UI
             if (!string.IsNullOrEmpty(entry.Version)) txtVersion.Text = entry.Version;
             if (!string.IsNullOrEmpty(entry.Author)) txtAuthor.Text = entry.Author;
             if (!string.IsNullOrEmpty(entry.Description)) txtDescription.Text = entry.Description;
-            if (!string.IsNullOrEmpty(entry.FullClassName)) SetClassNames(entry.FullClassName);
             txtIconPath.Text = entry.IconPath ?? string.Empty;
             txtBgPath.Text = entry.BackgroundImagePath ?? string.Empty;
 
+            // Type before names, so a class the assembly does not declare is typed correctly.
             SelectAddinType(entry.AddinType);
+            if (!string.IsNullOrEmpty(entry.FullClassName)) SetClassNames(entry.FullClassName);
             SelectRevitYears(entry.RevitYears);
         }
 
@@ -170,6 +172,10 @@ namespace QuickMsiBuilder.UI
         /// </summary>
         private void ExtractMetadata(string dllPath)
         {
+            // Cleared up front so a failed read cannot leave the previous assembly's entry points
+            // on screen, which would package classes that are not in the new DLL.
+            LoadClassNames(new AssemblyDetails());
+
             try
             {
                 if (!File.Exists(dllPath)) return;
@@ -313,6 +319,30 @@ namespace QuickMsiBuilder.UI
                 return;
             }
 
+            var classNames = SelectedClassNames();
+            if (string.IsNullOrEmpty(classNames))
+            {
+                // Without this the CLI would fall back to "every command", quietly packaging what
+                // the user just unticked.
+                MessageBox.Show(this, _entries.Count > 0
+                        ? "Tick at least one add-in entry point."
+                        : "Enter the full class name of the add-in.",
+                    Title);
+                return;
+            }
+
+            string version;
+            string versionError;
+            if (!MsiBuildOptions.TryNormalizeVersion(txtVersion.Text, out version, out versionError))
+            {
+                MessageBox.Show(this, versionError, Title);
+                txtVersion.Focus();
+                return;
+            }
+
+            if (!ConfirmOptionalFile(txtIconPath.Text, "icon")) return;
+            if (!ConfirmOptionalFile(txtBgPath.Text, "background image")) return;
+
             var cliPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "QuickMsiBuilder.CLI.exe");
             if (!File.Exists(cliPath))
             {
@@ -324,13 +354,13 @@ namespace QuickMsiBuilder.UI
 
             var arguments = Quote(
                 txtDllPath.Text,
-                txtVersion.Text,
+                version,
                 txtAuthor.Text,
                 txtDescription.Text,
                 txtIconPath.Text,
                 txtBgPath.Text,
                 revitYears,
-                SelectedClassNames(),
+                classNames,
                 addinType);
 
             btnBuild.IsEnabled = false;
@@ -343,7 +373,7 @@ namespace QuickMsiBuilder.UI
                 var message = Program.StripResultLines(result.Output);
 
                 txtStatus.Text = succeeded
-                    ? "Built " + Path.GetFileName(msiPath)
+                    ? "Built " + (string.IsNullOrEmpty(msiPath) ? "the installer." : Path.GetFileName(msiPath))
                     : "Build failed - see the log for details.";
 
                 // The CLI records the release, so pick it up without overwriting what is on screen.
@@ -362,6 +392,21 @@ namespace QuickMsiBuilder.UI
             }
         }
 
+        /// <summary>
+        /// Icon and background are optional, but a path that points nowhere is silently dropped by
+        /// the builder - better to say so before spending a build on it.
+        /// </summary>
+        private bool ConfirmOptionalFile(string path, string what)
+        {
+            if (string.IsNullOrWhiteSpace(path) || File.Exists(path)) return true;
+
+            var answer = MessageBox.Show(this,
+                string.Format("The {0} was not found:{2}{1}{2}{2}Build without it?", what, path, Environment.NewLine),
+                Title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+
+            return answer == MessageBoxResult.OK;
+        }
+
         private static CliResult RunCli(string cliPath, string arguments)
         {
             var startInfo = new ProcessStartInfo
@@ -376,9 +421,14 @@ namespace QuickMsiBuilder.UI
 
             using (var process = Process.Start(startInfo))
             {
-                var output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
+                // Both pipes have to be drained concurrently: reading one to the end while the child
+                // fills the other would deadlock once that buffer is full.
+                var errorReader = Task.Run(() => process.StandardError.ReadToEnd());
+                var output = process.StandardOutput.ReadToEnd();
+                var error = errorReader.Result;
+
                 process.WaitForExit();
-                return new CliResult { ExitCode = process.ExitCode, Output = output };
+                return new CliResult { ExitCode = process.ExitCode, Output = output + error };
             }
         }
 

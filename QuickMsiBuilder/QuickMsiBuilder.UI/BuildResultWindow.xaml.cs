@@ -23,10 +23,12 @@ namespace QuickMsiBuilder.UI
 
             if (succeeded)
             {
+                var known = !string.IsNullOrEmpty(msiPath);
                 txtHeadline.Text = "MSI build finished.";
-                txtSummary.Text = "The installer is ready.";
-                txtPath.Text = msiPath;
-                btnFolder.IsEnabled = !string.IsNullOrEmpty(msiPath) && File.Exists(msiPath);
+                txtSummary.Text = known ? "The installer is ready." : "The build reported success but no file path.";
+                // WPF throws when TextBox.Text is set to null.
+                txtPath.Text = known ? msiPath : Shorten(message);
+                btnFolder.IsEnabled = known && File.Exists(msiPath);
             }
             else
             {
