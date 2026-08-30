@@ -19,8 +19,10 @@ namespace QuickMsiBuilder.CLI
     public class MsiBuildOptions
     {
         public const string Usage =
-            "Usage: QuickMsiBuilder.CLI <dll_path> [version] [author] [description] [icon_path] [bg_image_path] [revit_years] [full_class_name] [addin_type]\r\n" +
-            "       revit_years accepts one or more years, e.g. \"2024\" or \"2024,2025,2026\".";
+            "Usage: QuickMsiBuilder.CLI <dll_path> [version] [author] [description] [icon_path] [bg_image_path] [revit_years] [class_names] [addin_type]\r\n" +
+            "       revit_years  one or more years, e.g. \"2024\" or \"2024,2025,2026\".\r\n" +
+            "       class_names  one or more entry points; leave empty to package every command in the assembly.\r\n" +
+            "       version defaults to the assembly version, author to the Windows account name.";
 
         public string DllPath { get; private set; }
         public string Version { get; private set; }
@@ -35,12 +37,6 @@ namespace QuickMsiBuilder.CLI
         /// commands, and all of them belong in the same .addin file.
         /// </summary>
         public List<AddinCandidate> Entries { get; private set; }
-
-        /// <summary>First entry, kept for the places that only deal with one class.</summary>
-        public string FullClassName
-        {
-            get { return Entries.Count == 0 ? string.Empty : Entries[0].FullClassName; }
-        }
 
         public RevitAddinType AddinType
         {

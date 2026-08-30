@@ -17,6 +17,8 @@ namespace QuickMsiBuilder.UI
         private readonly BuildHistoryStore _historyStore = new BuildHistoryStore();
         private readonly List<RevitYearOption> _revitYears;
         private List<AddinEntryOption> _entries = new List<AddinEntryOption>();
+        private readonly string _launchRevitYears;
+        private string _dllPath = string.Empty;
 
         public MainWindow()
         {
@@ -25,23 +27,32 @@ namespace QuickMsiBuilder.UI
             _revitYears = RevitYearRange.Supported.Select(year => new RevitYearOption(year)).ToList();
             RefreshRevitYears();
 
+            cbAddinType.Items.Add("Command");
+            cbAddinType.Items.Add("Application");
+            cbAddinType.SelectedIndex = 0;
+
             txtAuthor.Text = MsiBuildOptions.DefaultAuthor;
 
             // Args: [1] dll path, [2] revit years, [3] full class name, [4] add-in type.
             var args = Environment.GetCommandLineArgs();
             if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
             {
-                txtDllPath.Text = args[1];
+                ShowAssembly(args[1]);
                 ExtractMetadata(args[1]);
             }
 
-            SelectRevitYears(args.Length > 2 ? args[2] : MsiBuildOptions.DefaultRevitYear);
+            _launchRevitYears = args.Length > 2 && !string.IsNullOrEmpty(args[2]) ? args[2] : MsiBuildOptions.DefaultRevitYear;
+            SelectRevitYears(_launchRevitYears);
             // Type first: SetClassNames uses it to type a class the assembly does not declare.
             if (args.Length > 4) SelectAddinType(args[4]);
             if (args.Length > 3 && !string.IsNullOrEmpty(args[3])) SetClassNames(args[3]);
 
             // Loaded last so a previous release wins over the defaults read from the assembly.
-            LoadHistory(txtDllPath.Text, true);
+            LoadHistory(_dllPath, true);
+
+            // ...except the Revit version this was launched from: building from Revit 2027 must not
+            // silently produce a package that only covers the release of some earlier build.
+            TickRevitYear(_launchRevitYears);
         }
 
         private void OnWindowKeyDown(object sender, KeyEventArgs e)
@@ -59,14 +70,12 @@ namespace QuickMsiBuilder.UI
         {
             var entries = _historyStore.GetFor(dllPath);
 
+            // An empty picker is just clutter on a first build, so the whole row goes away.
+            ShowHistoryRow(entries.Count > 0);
             cbHistory.ItemsSource = entries;
             btnReuse.IsEnabled = entries.Count > 0;
 
-            if (entries.Count == 0)
-            {
-                txtHistoryHint.Text = "No previous release recorded for this assembly.";
-                return;
-            }
+            if (entries.Count == 0) return;
 
             var latest = entries[0];
             txtHistoryHint.Text = string.Format("Last release: {0} for Revit {1} on {2:yyyy-MM-dd HH:mm}",
@@ -76,6 +85,15 @@ namespace QuickMsiBuilder.UI
 
             cbHistory.SelectedIndex = 0;
             Apply(latest);
+        }
+
+        private void ShowHistoryRow(bool visible)
+        {
+            var visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            lblHistory.Visibility = visibility;
+            cbHistory.Visibility = visibility;
+            btnReuse.Visibility = visibility;
+            txtHistoryHint.Visibility = visibility;
         }
 
         private void Apply(BuildHistoryEntry entry)
@@ -137,6 +155,16 @@ namespace QuickMsiBuilder.UI
             foreach (var option in _revitYears) option.IsSelected = wanted.Contains(option.Year);
         }
 
+        /// <summary>Adds years to the current selection instead of replacing it.</summary>
+        private void TickRevitYear(string years)
+        {
+            if (string.IsNullOrEmpty(years)) return;
+
+            var wanted = SelectedRevitYears();
+            wanted = string.IsNullOrEmpty(wanted) ? years : wanted + "," + years;
+            SelectRevitYears(wanted);
+        }
+
         private void RefreshRevitYears()
         {
             icRevitYears.ItemsSource = null;
@@ -160,9 +188,10 @@ namespace QuickMsiBuilder.UI
             var dialog = new OpenFileDialog { Filter = "DLL Files (*.dll)|*.dll" };
             if (dialog.ShowDialog() == true)
             {
-                txtDllPath.Text = dialog.FileName;
+                ShowAssembly(dialog.FileName);
                 ExtractMetadata(dialog.FileName);
                 LoadHistory(dialog.FileName, true);
+                TickRevitYear(_launchRevitYears);
             }
         }
 
@@ -170,6 +199,23 @@ namespace QuickMsiBuilder.UI
         /// Prefills the form from the assembly itself: version, publisher, description and the
         /// add-in entry points, so nothing has to be typed by hand for a normal build.
         /// </summary>
+        /// <summary>Keeps the header, the path box and its tooltip in step with the selected file.</summary>
+        private void ShowAssembly(string dllPath)
+        {
+            _dllPath = dllPath ?? string.Empty;
+
+            if (string.IsNullOrEmpty(dllPath))
+            {
+                txtAssemblyName.Text = "No assembly selected";
+                txtAssemblyPath.Text = "Choose the add-in assembly to package.";
+                return;
+            }
+
+            txtAssemblyName.Text = Path.GetFileNameWithoutExtension(dllPath);
+            txtAssemblyPath.Text = dllPath;
+            txtAssemblyPath.ToolTip = dllPath;
+        }
+
         private void ExtractMetadata(string dllPath)
         {
             // Cleared up front so a failed read cannot leave the previous assembly's entry points
@@ -211,8 +257,8 @@ namespace QuickMsiBuilder.UI
             ShowManualClassRow(_entries.Count == 0);
 
             txtEntriesHint.Text = _entries.Count == 0
-                ? "No Revit entry point was found in this assembly. Enter the class name below."
-                : "Every command found in the assembly is packaged. Untick what you do not want.";
+                ? "none found - enter a class name"
+                : string.Format("{0} found, commands ticked by default", _entries.Count);
         }
 
         /// <summary>
@@ -300,15 +346,15 @@ namespace QuickMsiBuilder.UI
 
         private async void OnBuildMsi(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtDllPath.Text))
+            if (string.IsNullOrWhiteSpace(_dllPath))
             {
                 MessageBox.Show(this, "Please select a target DLL.", Title);
                 return;
             }
 
-            if (!File.Exists(txtDllPath.Text))
+            if (!File.Exists(_dllPath))
             {
-                MessageBox.Show(this, "The selected DLL no longer exists:\n" + txtDllPath.Text, Title);
+                MessageBox.Show(this, "The selected DLL no longer exists:\n" + _dllPath, Title);
                 return;
             }
 
@@ -340,6 +386,7 @@ namespace QuickMsiBuilder.UI
                 return;
             }
 
+            if (!ConfirmRevitAssemblies()) return;
             if (!ConfirmOptionalFile(txtIconPath.Text, "icon")) return;
             if (!ConfirmOptionalFile(txtBgPath.Text, "background image")) return;
 
@@ -353,7 +400,7 @@ namespace QuickMsiBuilder.UI
             var addinType = cbAddinType.SelectedIndex == 1 ? "Application" : "Command";
 
             var arguments = Quote(
-                txtDllPath.Text,
+                _dllPath,
                 version,
                 txtAuthor.Text,
                 txtDescription.Text,
@@ -377,7 +424,7 @@ namespace QuickMsiBuilder.UI
                     : "Build failed - see the log for details.";
 
                 // The CLI records the release, so pick it up without overwriting what is on screen.
-                if (succeeded) LoadHistory(txtDllPath.Text, false);
+                if (succeeded) LoadHistory(_dllPath, false);
 
                 BuildResultWindow.Show(this, succeeded, msiPath, message);
             }
@@ -390,6 +437,27 @@ namespace QuickMsiBuilder.UI
             {
                 btnBuild.IsEnabled = true;
             }
+        }
+
+        /// <summary>
+        /// A build folder often carries copies of the Revit API assemblies. Shipping those into the
+        /// Revit Addins folder can make Revit load the wrong build of its own API, so it is worth
+        /// one question before it ends up in a package.
+        /// </summary>
+        private bool ConfirmRevitAssemblies()
+        {
+            var found = PayloadRules.FindRevitAssemblies(Path.GetDirectoryName(_dllPath));
+            if (found.Count == 0) return true;
+
+            var answer = MessageBox.Show(this,
+                "These assemblies are provided by Revit and normally must not ship with an add-in:"
+                + Environment.NewLine + Environment.NewLine
+                + string.Join(Environment.NewLine, found.ToArray())
+                + Environment.NewLine + Environment.NewLine
+                + "Set Copy Local to False for them and rebuild, or continue to package them anyway.",
+                Title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+
+            return answer == MessageBoxResult.OK;
         }
 
         /// <summary>

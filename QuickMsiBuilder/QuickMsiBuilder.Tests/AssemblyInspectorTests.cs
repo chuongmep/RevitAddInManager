@@ -157,17 +157,6 @@ namespace QuickMsiBuilder.Tests
         }
 
         [Fact]
-        public void PickDefault_PrefersTheRequestedAddinType()
-        {
-            var details = InspectSelf();
-
-            Assert.Equal(RevitAddinType.Application,
-                AssemblyInspector.PickDefault(details, RevitAddinType.Application).AddinType);
-            Assert.Equal(RevitAddinType.Command,
-                AssemblyInspector.PickDefault(details, RevitAddinType.Command).AddinType);
-        }
-
-        [Fact]
         public void TryParse_WithoutVersion_UsesTheAssemblyVersion()
         {
             MsiBuildOptions options;
@@ -192,20 +181,13 @@ namespace QuickMsiBuilder.Tests
         }
 
         [Fact]
-        public void PickDefault_WithoutCandidates_ReturnsNull()
-        {
-            Assert.Null(AssemblyInspector.PickDefault(new AssemblyDetails(), RevitAddinType.Command));
-            Assert.Null(AssemblyInspector.PickDefault(null, RevitAddinType.Command));
-        }
-
-        [Fact]
         public void TryParse_WithoutClassName_UsesTheDetectedEntryPoint()
         {
             MsiBuildOptions options;
             string error;
 
             Assert.True(MsiBuildOptions.TryParse(new[] { SelfPath }, out options, out error));
-            Assert.StartsWith("QuickMsiBuilder.Tests.Fixtures.", options.FullClassName);
+            Assert.StartsWith("QuickMsiBuilder.Tests.Fixtures.", options.EntriesText);
         }
 
         [Fact]
@@ -220,7 +202,7 @@ namespace QuickMsiBuilder.Tests
                 string error;
 
                 Assert.True(MsiBuildOptions.TryParse(new[] { path }, out options, out error));
-                Assert.Equal("Contoso.Plain.Command", options.FullClassName);
+                Assert.Equal("Contoso.Plain.Command", options.EntriesText);
             }
             finally
             {

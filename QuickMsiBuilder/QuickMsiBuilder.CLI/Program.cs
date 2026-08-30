@@ -262,6 +262,11 @@ namespace QuickMsiBuilder.CLI
             log.Info("Packaging {0} file(s), {1:N1} MB, from {2}",
                 files.Count, bytes / 1024d / 1024d, assemblyDir);
 
+            foreach (var revitAssembly in PayloadRules.FindRevitAssemblies(assemblyDir))
+            {
+                log.Warn("  {0} is provided by Revit and should not be packaged with an add-in.", revitAssembly);
+            }
+
             foreach (var file in files) log.Debug("  packaged: {0}", file.Substring(assemblyDir.Length).TrimStart(Path.DirectorySeparatorChar));
         }
     }

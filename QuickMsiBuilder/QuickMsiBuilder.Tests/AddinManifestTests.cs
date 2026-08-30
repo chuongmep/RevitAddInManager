@@ -10,14 +10,16 @@ namespace QuickMsiBuilder.Tests
     {
         private static XElement CreateAddin(RevitAddinType type, string fullClassName = "Contoso.Revit.MyCommand")
         {
-            var document = AddinManifest.Create("Contoso.Revit", type, fullClassName, "Contoso Ltd", "My add-in");
+            var document = AddinManifest.Create("Contoso.Revit",
+                new[] { new AddinCandidate(fullClassName, type) }, "Contoso Ltd", "My add-in");
             return document.Root.Element("AddIn");
         }
 
         [Fact]
         public void Create_UsesRevitAddInsRootWithoutNamespace()
         {
-            var document = AddinManifest.Create("Contoso.Revit", RevitAddinType.Command, "Contoso.Revit.MyCommand", "Contoso Ltd", "d");
+            var document = AddinManifest.Create("Contoso.Revit",
+                new[] { new AddinCandidate("Contoso.Revit.MyCommand", RevitAddinType.Command) }, "Contoso Ltd", "d");
 
             Assert.Equal("RevitAddIns", document.Root.Name.LocalName);
             // Revit's own manifests carry no default namespace; adding one makes the file unreadable.
@@ -106,7 +108,8 @@ namespace QuickMsiBuilder.Tests
         [Fact]
         public void Create_WithEmptyClassName_FallsBackToAssemblyCommand()
         {
-            var document = AddinManifest.Create("Contoso.Revit", RevitAddinType.Command, "", "Contoso Ltd", "d");
+            var document = AddinManifest.Create("Contoso.Revit",
+                new[] { new AddinCandidate("", RevitAddinType.Command) }, "Contoso Ltd", "d");
 
             Assert.Equal("Contoso.Revit.Command", document.Root.Element("AddIn").Element("FullClassName").Value);
         }

@@ -51,20 +51,6 @@ namespace QuickMsiBuilder.CLI
                 new XElement("RevitAddIns", elements));
         }
 
-        public static XDocument Create(
-            string assemblyName,
-            RevitAddinType addinType,
-            string fullClassName,
-            string author,
-            string description)
-        {
-            return Create(
-                assemblyName,
-                new[] { new AddinCandidate(fullClassName, addinType) },
-                author,
-                description);
-        }
-
         private static XElement CreateAddin(
             string assemblyName,
             RevitAddinType addinType,

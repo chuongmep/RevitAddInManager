@@ -46,8 +46,8 @@ namespace QuickMsiBuilder.CLI
     /// </summary>
     public static class AssemblyInspector
     {
-        public const string CommandInterface = "Autodesk.Revit.UI.IExternalCommand";
-        public const string ApplicationInterface = "Autodesk.Revit.UI.IExternalApplication";
+        private const string CommandInterface = "Autodesk.Revit.UI.IExternalCommand";
+        private const string ApplicationInterface = "Autodesk.Revit.UI.IExternalApplication";
 
         public static AssemblyDetails Inspect(string dllPath)
         {
@@ -89,17 +89,6 @@ namespace QuickMsiBuilder.CLI
                 .ToList();
 
             return details;
-        }
-
-        /// <summary>
-        /// The entry point to offer by default, preferring the requested add-in type.
-        /// </summary>
-        public static AddinCandidate PickDefault(AssemblyDetails details, RevitAddinType preferred)
-        {
-            if (details == null || details.Candidates.Count == 0) return null;
-
-            return details.Candidates.FirstOrDefault(candidate => candidate.AddinType == preferred)
-                   ?? details.Candidates[0];
         }
 
         private static AddinCandidate Match(TypeDefinition type)

@@ -107,7 +107,6 @@ public class AddInManagerViewModel : ViewModelBase
     public AssemblyInfo AssemblyInfo { get; set; }
 
     public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
-    public ICommand ManagerCommand => new RelayCommand(ManagerCommandClick);
     public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
     public ICommand RemoveCommand => new RelayCommand(RemoveAddinClick);
@@ -693,12 +692,6 @@ public class AddInManagerViewModel : ViewModelBase
             if (flag) FreshItemStartupClick(false);
             else FreshItemStartupClick(true);
         }
-    }
-
-    private void ManagerCommandClick()
-    {
-        IsTabStartSelected = true;
-        FreshItemStartupClick(false);
     }
 
     private void FreshItemStartupClick(bool isSearch)

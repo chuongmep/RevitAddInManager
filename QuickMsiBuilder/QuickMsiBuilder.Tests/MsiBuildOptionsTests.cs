@@ -59,7 +59,7 @@ namespace QuickMsiBuilder.Tests
             Assert.Equal(new[] { RevitYearRange.Default }, options.RevitYears.ToArray());
             Assert.Equal(MsiBuildOptions.DefaultAuthor, options.Author);
             Assert.Equal(RevitAddinType.Command, options.AddinType);
-            Assert.Equal("Contoso.Revit.Command", options.FullClassName);
+            Assert.Equal("Contoso.Revit.Command", options.EntriesText);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace QuickMsiBuilder.Tests
             Assert.Equal("Contoso Ltd", options.Author);
             Assert.Equal("My add-in", options.Description);
             Assert.Equal(new[] { "2026" }, options.RevitYears.ToArray());
-            Assert.Equal("Contoso.App", options.FullClassName);
+            Assert.Equal("Contoso.App", options.EntriesText);
             Assert.Equal(RevitAddinType.Application, options.AddinType);
         }
 
@@ -91,7 +91,7 @@ namespace QuickMsiBuilder.Tests
             var args = new[] { _dllPath, "", "", "", "", "", "", "", "Application" };
 
             Assert.True(MsiBuildOptions.TryParse(args, out options, out error));
-            Assert.Equal("Contoso.Revit.Application", options.FullClassName);
+            Assert.Equal("Contoso.Revit.Application", options.EntriesText);
         }
 
         [Theory]
