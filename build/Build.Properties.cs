@@ -11,6 +11,9 @@ internal partial class Build
     public const string InstallerConfiguration = "Installer";
 
     private const string AddInBinPrefix = "AddIn";
+
+    //Payload installed once for all Revit versions, staged by the add-in build under bin/
+    private const string SharedBinFolder = "AddInShared";
     private const string ArtifactsFolder = "output";
 
     //Specify the path to the MSBuild.exe file here if you are not using VisualStudio

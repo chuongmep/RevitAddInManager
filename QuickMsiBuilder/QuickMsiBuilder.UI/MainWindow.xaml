@@ -1,0 +1,471 @@
+<Window
+    x:Class="QuickMsiBuilder.UI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Quick MSI Builder"
+    Width="580"
+    Height="710"
+    MinWidth="520"
+    MinHeight="560"
+    Icon="Resources/dev.ico"
+    PreviewKeyDown="OnWindowKeyDown"
+    WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/QuickMsiBuilder.UI;component/Themes/Styles/LightTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="FieldLabel" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0,0,10,0" />
+            </Style>
+            <Style x:Key="HintText" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Opacity" Value="0.65" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <Style x:Key="Field" TargetType="TextBox">
+                <Setter Property="Height" Value="26" />
+                <Setter Property="Margin" Value="0,3" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="ActionButton" TargetType="Button">
+                <Setter Property="Width" Value="74" />
+                <Setter Property="Height" Value="26" />
+                <Setter Property="Margin" Value="6,3,0,3" />
+            </Style>
+            <Style
+                x:Key="ClearButton"
+                BasedOn="{StaticResource ActionButton}"
+                TargetType="Button">
+                <Setter Property="Width" Value="26" />
+                <Setter Property="ToolTip" Value="Clear" />
+            </Style>
+            <!--  A hairline under each section title, so the form reads as groups instead of a wall of fields  -->
+            <Style x:Key="Section" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}" />
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Setter Property="Margin" Value="0,14,0,6" />
+                <Setter Property="Padding" Value="0,0,0,4" />
+            </Style>
+            <Style x:Key="SectionTitle" TargetType="TextBlock">
+                <Setter Property="FontWeight" Value="SemiBold" />
+            </Style>
+            <Style x:Key="GroupBox" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="10,6" />
+                <Setter Property="Margin" Value="0,1,0,3" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource WindowBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  The assembly being packaged is the one thing that must always stay visible  -->
+        <Border
+            Grid.Row="0"
+            Padding="16,12"
+            Background="{DynamicResource TextBoxBackground}"
+            BorderBrush="{DynamicResource TextBoxBorderBrush}"
+            BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                    <TextBlock
+                        x:Name="txtAssemblyName"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        Text="No assembly selected"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        x:Name="txtAssemblyPath"
+                        Margin="0,2,0,0"
+                        Style="{StaticResource HintText}"
+                        Text="Choose the add-in assembly to package."
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                </StackPanel>
+                <Button
+                    Grid.Column="1"
+                    Width="90"
+                    Height="28"
+                    VerticalAlignment="Center"
+                    Click="OnBrowseDll"
+                    Content="Change..."
+                    ToolTip="Pick another assembly to package" />
+            </Grid>
+        </Border>
+
+        <ScrollViewer
+            Grid.Row="1"
+            Padding="16,0,16,8"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="116" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="112" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Package metadata  -->
+                <Border
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource SectionTitle}" Text="Package metadata" />
+                </Border>
+
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Version" />
+                <TextBox
+                    x:Name="txtVersion"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource Field}"
+                    Text="1.0.0"
+                    ToolTip="MSI product version: major.minor.build" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Author" />
+                <TextBox
+                    x:Name="txtAuthor"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Style="{StaticResource Field}" />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Description" />
+                <TextBox
+                    x:Name="txtDescription"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Style="{StaticResource Field}"
+                    Text="Revit Add-in" />
+
+                <TextBlock
+                    x:Name="lblHistory"
+                    Grid.Row="4"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Previous release" />
+                <ComboBox
+                    x:Name="cbHistory"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Height="26"
+                    Margin="0,3"
+                    DisplayMemberPath="DisplayName"
+                    SelectionChanged="OnHistorySelected"
+                    ToolTip="Settings recorded from earlier builds of this assembly" />
+                <Button
+                    x:Name="btnReuse"
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    HorizontalAlignment="Left"
+                    Click="OnReuseHistory"
+                    Content="Reuse"
+                    IsEnabled="False"
+                    Style="{StaticResource ActionButton}"
+                    ToolTip="Put the settings of the selected release back on the form" />
+                <TextBlock
+                    x:Name="txtHistoryHint"
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,1,0,0"
+                    Style="{StaticResource HintText}" />
+
+                <!--  Entry points  -->
+                <Border
+                    Grid.Row="6"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource Section}">
+                    <Grid>
+                        <TextBlock Style="{StaticResource SectionTitle}" Text="Add-in entry points" />
+                        <TextBlock
+                            x:Name="txtEntriesHint"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource HintText}" />
+                    </Grid>
+                </Border>
+
+                <Border
+                    Grid.Row="7"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource GroupBox}"
+                    ToolTip="Every ticked class becomes an AddIn entry in the .addin manifest.">
+                    <ItemsControl x:Name="icEntries" MaxHeight="118">
+                        <ItemsControl.Template>
+                            <ControlTemplate TargetType="ItemsControl">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    Margin="0,3"
+                                    Content="{Binding DisplayName}"
+                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+
+                <!--  Only shown when the assembly declares no entry point  -->
+                <TextBlock
+                    x:Name="lblManualClass"
+                    Grid.Row="8"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Class name" />
+                <TextBox
+                    x:Name="txtManualClass"
+                    Grid.Row="8"
+                    Grid.Column="1"
+                    Style="{StaticResource Field}" />
+                <ComboBox
+                    x:Name="cbAddinType"
+                    Grid.Row="8"
+                    Grid.Column="2"
+                    Height="26"
+                    Margin="6,3,0,3" />
+
+                <!--  Revit versions  -->
+                <Border
+                    Grid.Row="9"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource Section}">
+                    <Grid>
+                        <TextBlock Style="{StaticResource SectionTitle}" Text="Revit versions" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource HintText}"
+                            Text="One MSI covers every ticked release" />
+                    </Grid>
+                </Border>
+
+                <Border
+                    Grid.Row="10"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource GroupBox}">
+                    <ItemsControl x:Name="icRevitYears">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    Width="86"
+                                    Margin="0,3"
+                                    Content="{Binding Year}"
+                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+
+                <!--  Installer look  -->
+                <Border
+                    Grid.Row="11"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource Section}">
+                    <Grid>
+                        <TextBlock Style="{StaticResource SectionTitle}" Text="Installer look" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource HintText}"
+                            Text="Optional - leave empty for the default" />
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="12" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="116" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="112" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Style="{StaticResource FieldLabel}"
+                        Text="Icon (.ico)" />
+                    <TextBox
+                        x:Name="txtIconPath"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Style="{StaticResource Field}" />
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Orientation="Horizontal">
+                        <Button
+                            Click="OnBrowseIcon"
+                            Content="Browse..."
+                            Style="{StaticResource ActionButton}" />
+                        <Button
+                            Click="OnClearIcon"
+                            Content="&#x2715;"
+                            Style="{StaticResource ClearButton}" />
+                    </StackPanel>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Style="{StaticResource FieldLabel}"
+                        Text="Background (.png)" />
+                    <TextBox
+                        x:Name="txtBgPath"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource Field}" />
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Orientation="Horizontal">
+                        <Button
+                            Click="OnBrowseBg"
+                            Content="Browse..."
+                            Style="{StaticResource ActionButton}" />
+                        <Button
+                            Click="OnClearBg"
+                            Content="&#x2715;"
+                            Style="{StaticResource ClearButton}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+        <Border
+            Grid.Row="2"
+            Padding="16,10"
+            Background="{DynamicResource TextBoxBackground}"
+            BorderBrush="{DynamicResource TextBoxBorderBrush}"
+            BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Width="90"
+                    Height="30"
+                    Click="OnOpenLog"
+                    Content="Open log"
+                    ToolTip="Open the build log written by Quick MSI Builder" />
+                <TextBlock
+                    x:Name="txtStatus"
+                    Grid.Column="1"
+                    Margin="12,0"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource HintText}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="NoWrap" />
+                <Button
+                    x:Name="btnBuild"
+                    Grid.Column="2"
+                    Width="140"
+                    Height="30"
+                    Click="OnBuildMsi"
+                    Content="Build MSI"
+                    FontWeight="SemiBold"
+                    IsDefault="True" />
+            </Grid>
+        </Border>
+
+        <!--  Covers the whole window while the CLI runs, so the wait is unmistakable  -->
+        <Grid
+            x:Name="overlayBuilding"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Panel.ZIndex="100"
+            Background="Transparent"
+            Visibility="Collapsed">
+            <Rectangle Fill="{DynamicResource WindowBackground}" Opacity="0.9" />
+            <Border
+                Padding="28,24"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{DynamicResource TextBoxBackground}"
+                BorderBrush="{DynamicResource TextBoxBorderBrush}"
+                BorderThickness="1">
+                <StackPanel HorizontalAlignment="Center">
+                    <!--  A 270 degree arc; the rotation is driven from code while the build runs  -->
+                    <Path
+                        Width="40"
+                        Height="40"
+                        Data="M 20,3 A 17,17 0 1 1 3,20"
+                        RenderTransformOrigin="0.5,0.5"
+                        Stroke="{DynamicResource ButtonMouseOverBorderBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="3">
+                        <Path.RenderTransform>
+                            <RotateTransform x:Name="spinnerRotation" Angle="0" />
+                        </Path.RenderTransform>
+                    </Path>
+                    <TextBlock
+                        Margin="0,16,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        Text="Building MSI..." />
+                    <TextBlock
+                        x:Name="txtOverlayDetail"
+                        Margin="0,6,0,0"
+                        HorizontalAlignment="Center"
+                        MaxWidth="320"
+                        Style="{StaticResource HintText}"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource HintText}"
+                        Text="Please wait until the build finishes." />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

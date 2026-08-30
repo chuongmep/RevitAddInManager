@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- WixSharp.bin ships net451/net462 assemblies only, so this has to stay on .NET Framework.
+         net48 also matches the Installer project and runs without an extra runtime on any Windows box. -->
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Built once as Release whatever Revit configuration the add-in uses, so the payload is
+         staged in a single predictable folder instead of once per Revit version. -->
+    <Configurations>Debug;Release</Configurations>
+    <WixBinVersion>3.11.2</WixBinVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reads the target assembly's metadata and entry points without loading it, which is the only
+         option: the target references the Revit API and cannot be loaded into this process. -->
+    <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="WixSharp.bin" Version="1.26.0" />
+    <PackageReference Include="WixSharp.wix.bin" Version="$(WixBinVersion)" />
+  </ItemGroup>
+
+  <!-- WixSharp shells out to candle/light but does not ship them, and end users installing the
+       add-in have no WiX Toolset and no NuGet cache. Bundling the toolset next to the executable is
+       what makes "Build MSI..." work straight after installing the add-in. -->
+  <Target Name="BundleWixToolset" AfterTargets="Build" Condition="'$(NuGetPackageRoot)' != ''">
+    <PropertyGroup>
+      <WixToolsetSourceDir>$(NuGetPackageRoot)wixsharp.wix.bin\$(WixBinVersion)\tools\bin\</WixToolsetSourceDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <WixToolsetFile Include="$(WixToolsetSourceDir)**\*.*" />
+    </ItemGroup>
+    <Warning Condition="'@(WixToolsetFile)' == ''" Text="WiX toolset binaries were not found at $(WixToolsetSourceDir). Quick MSI Builder will require a locally installed WiX Toolset." />
+    <Copy
+      SourceFiles="@(WixToolsetFile)"
+      DestinationFolder="$(OutDir)wix\%(RecursiveDir)"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

@@ -6,6 +6,9 @@
     <LangVersion>latest</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
     <UseWpf>true</UseWpf>
+    <!-- This project has no per-Revit configurations, so the package references below would
+         resolve to ".*" and fail the whole solution restore without a default. -->
+    <RevitVersion Condition="'$(RevitVersion)' == ''">2024</RevitVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <DebugSymbols>true</DebugSymbols>

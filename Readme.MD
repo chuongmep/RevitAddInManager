@@ -166,6 +166,37 @@ Some topic common:
 
 ---
 
+
+---
+
+### 📦 Quick MSI Builder
+
+Turn any loaded add-in into a proper `.msi` installer without leaving Revit. Select an add-in in the
+**Load Command** or **Load App** tab and click **Build MSI** (also available from the right click
+menu).
+
+The builder fills itself in from the assembly, so a normal package needs no typing at all:
+
+- **Version, Author, Description** are read from the assembly, falling back to `1.0.0` and your
+  Windows account name.
+- **Add-in entry points** lists every `IExternalCommand` and `IExternalApplication` found in the
+  assembly. All commands are ticked by default - untick anything you do not want shipped.
+- **Revit versions** is a tick list, so one MSI can install into several Revit releases at once.
+- **Icon and background** are optional cosmetics for the installer.
+- **Previous release** brings back the settings of any earlier build of the same assembly.
+
+Everything sitting next to the assembly is packaged, subfolders included, so add-ins with their own
+dependencies install complete. The result is written to an `InstallerOutput` folder next to the
+assembly and installs as:
+
+```
+%AppData%\Autodesk\Revit\Addins\<year>\MyAddin.addin
+%AppData%\Autodesk\Revit\Addins\<year>\MyAddin\...
+```
+
+The WiX Toolset is bundled with the add-in, so nothing else has to be installed. Build output is
+logged to `%AppData%\RevitAddinManager\QuickMsiBuilder\logs`, reachable from the **Open log** button.
+
 ### 🧺 Practical Example
 
 Please visit to [Example](./Test/Sample) to keep learning and explore more about Revit API.

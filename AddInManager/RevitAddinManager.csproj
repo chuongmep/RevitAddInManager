@@ -149,6 +149,25 @@
   <ItemGroup>
     <ProjectReference Include="..\RevitElementBipChecker\RevitElementBipChecker.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Quick MSI Builder is launched as a separate process, so only the build order and the
+         output copy below matter. It stays on net48 while the add-in may be net8/net10, hence
+         ReferenceOutputAssembly/SkipGetTargetFrameworkProperties. -->
+    <ProjectReference Include="..\QuickMsiBuilder\QuickMsiBuilder.CLI\QuickMsiBuilder.CLI.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
+      <SetConfiguration>Configuration=Release</SetConfiguration>
+      <SetPlatform>Platform=AnyCPU</SetPlatform>
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\QuickMsiBuilder\QuickMsiBuilder.UI\QuickMsiBuilder.UI.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
+      <SetConfiguration>Configuration=Release</SetConfiguration>
+      <SetPlatform>Platform=AnyCPU</SetPlatform>
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files\Autodesk\Revit $(RevitVersion)\Revit.exe</StartProgram>
@@ -159,21 +178,34 @@
       <RootItem Include="$(ProjectDir)*.addin" />
       <AddinItem Include="$(TargetDir)*.dll" />
       <AddinItem Include="$(TargetDir)*.pdb" />
+      <!-- Quick MSI Builder (with its bundled WiX toolset) is the same for every Revit release, so
+           it is staged once beside the version folders instead of being copied into each of them.
+           The installer publishes it to %AppData%\Autodesk\Revit\Addins\QuickMsiBuilder. -->
+      <QuickMsiItem Include="$(ProjectDir)..\QuickMsiBuilder\QuickMsiBuilder.CLI\bin\Release\**\*.*" Exclude="$(ProjectDir)..\QuickMsiBuilder\QuickMsiBuilder.CLI\bin\Release\**\*.pdb;$(ProjectDir)..\QuickMsiBuilder\QuickMsiBuilder.CLI\bin\Release\nbsbuilder.exe" />
+      <QuickMsiItem Include="$(ProjectDir)..\QuickMsiBuilder\QuickMsiBuilder.UI\bin\Release\QuickMsiBuilder.UI.exe" />
+      <QuickMsiItem Include="$(ProjectDir)..\QuickMsiBuilder\QuickMsiBuilder.UI\bin\Release\QuickMsiBuilder.UI.exe.config" />
     </ItemGroup>
 
     <PropertyGroup>
       <RootDir>bin\AddIn $(RevitVersion) $(Configuration)\</RootDir>
       <AddinDir>$(RootDir)$(AssemblyName)\</AddinDir>
+      <!-- Starts with the AddIn prefix so the Nuke Cleaning target wipes it too, but carries no
+           "Release" in the name so it is never mistaken for a Revit version folder. -->
+      <QuickMsiStageDir>bin\AddInShared\QuickMsiBuilder\</QuickMsiStageDir>
     </PropertyGroup>
 
     <Copy SourceFiles="@(RootItem)" DestinationFolder="$(RootDir)" />
     <Copy SourceFiles="@(AddinItem)" DestinationFolder="$(AddinDir)" />
+    <Copy SourceFiles="@(QuickMsiItem)" DestinationFolder="$(QuickMsiStageDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
 
     <ItemGroup>
       <AddinFiles Include="$(RootDir)**\*.*" />
+      <QuickMsiStagedFile Include="$(QuickMsiStageDir)**\*.*" />
     </ItemGroup>
     <Message Text="Copy files to Addin folder" Importance="high" />
     <Copy SourceFiles="@(AddinFiles)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" />
+    <!-- Debug runs get the same layout the installer produces, so the lookup path is identical. -->
+    <Copy SourceFiles="@(QuickMsiStagedFile)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\QuickMsiBuilder\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>

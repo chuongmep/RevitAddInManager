@@ -58,15 +58,25 @@ WixEntity[] GenerateWixEntities()
     foreach (var directory in args)
     {
         var directoryInfo = new DirectoryInfo(directory);
-        var fileVersion = versionRegex.Match(directoryInfo.Name).Value;
+        if (!directoryInfo.Exists)
+        {
+            Console.WriteLine($"Skipped missing directory: '{directory}'");
+            continue;
+        }
+
+        // A directory whose name carries a Revit year becomes that year's folder; anything else
+        // (Quick MSI Builder) keeps its own name and is installed once, next to the year folders.
+        var version = versionRegex.Match(directoryInfo.Name).Value;
+        var folderName = string.IsNullOrEmpty(version) ? directoryInfo.Name : version;
+
         var files = new Files($@"{directory}\*.*");
-        if (versionStorages.ContainsKey(fileVersion))
-            versionStorages[fileVersion].Add(files);
+        if (versionStorages.ContainsKey(folderName))
+            versionStorages[folderName].Add(files);
         else
-            versionStorages.Add(fileVersion, new List<WixEntity> { files });
+            versionStorages.Add(folderName, new List<WixEntity> { files });
 
         var assemblies = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
-        Console.WriteLine($"Added '{fileVersion}' version files: ");
+        Console.WriteLine($"Added '{folderName}' files: ");
         foreach (var assembly in assemblies) Console.WriteLine($"'{assembly}'");
     }
 
