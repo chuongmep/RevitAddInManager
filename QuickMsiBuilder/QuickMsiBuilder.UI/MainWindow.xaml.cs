@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using Microsoft.Win32;
 using QuickMsiBuilder.CLI;
 
@@ -57,7 +59,8 @@ namespace QuickMsiBuilder.UI
 
         private void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) Close();
+            // Closing mid-build would leave the CLI running with nobody reading its result.
+            if (e.Key == Key.Escape && !IsBuilding) Close();
         }
 
         #region History
@@ -342,6 +345,40 @@ namespace QuickMsiBuilder.UI
 
         #endregion
 
+        #region Building overlay
+
+        /// <summary>
+        /// Blocks the whole window while the CLI runs. The build takes tens of seconds and spawns a
+        /// separate process, so without this the window looks frozen or, worse, still editable.
+        /// </summary>
+        private void ShowBuildingOverlay(string detail)
+        {
+            txtOverlayDetail.Text = detail;
+            overlayBuilding.Visibility = Visibility.Visible;
+            Cursor = Cursors.Wait;
+
+            var spin = new DoubleAnimation(0, 360, new Duration(TimeSpan.FromSeconds(1.1)))
+            {
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+            spinnerRotation.BeginAnimation(RotateTransform.AngleProperty, spin);
+        }
+
+        private void HideBuildingOverlay()
+        {
+            // Passing null releases the animation, otherwise it keeps running on a hidden element.
+            spinnerRotation.BeginAnimation(RotateTransform.AngleProperty, null);
+            overlayBuilding.Visibility = Visibility.Collapsed;
+            Cursor = Cursors.Arrow;
+        }
+
+        private bool IsBuilding
+        {
+            get { return overlayBuilding.Visibility == Visibility.Visible; }
+        }
+
+        #endregion
+
         #region Build
 
         private async void OnBuildMsi(object sender, RoutedEventArgs e)
@@ -412,9 +449,16 @@ namespace QuickMsiBuilder.UI
 
             btnBuild.IsEnabled = false;
             txtStatus.Text = "Building MSI for Revit " + revitYears.Replace(",", ", ") + "...";
+            ShowBuildingOverlay(string.Format("{0}  ->  Revit {1}",
+                Path.GetFileNameWithoutExtension(_dllPath), revitYears.Replace(",", ", ")));
             try
             {
                 var result = await Task.Run(() => RunCli(cliPath, arguments));
+
+                // Down before the modal result dialog: ShowDialog blocks, so leaving this to the
+                // finally block would keep the overlay up behind the dialog.
+                HideBuildingOverlay();
+
                 var succeeded = result.ExitCode == 0;
                 var msiPath = Program.ParseResultPath(result.Output);
                 var message = Program.StripResultLines(result.Output);
@@ -435,6 +479,7 @@ namespace QuickMsiBuilder.UI
             }
             finally
             {
+                HideBuildingOverlay();
                 btnBuild.IsEnabled = true;
             }
         }

@@ -414,5 +414,58 @@
                     IsDefault="True" />
             </Grid>
         </Border>
+
+        <!--  Covers the whole window while the CLI runs, so the wait is unmistakable  -->
+        <Grid
+            x:Name="overlayBuilding"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Panel.ZIndex="100"
+            Background="Transparent"
+            Visibility="Collapsed">
+            <Rectangle Fill="{DynamicResource WindowBackground}" Opacity="0.9" />
+            <Border
+                Padding="28,24"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{DynamicResource TextBoxBackground}"
+                BorderBrush="{DynamicResource TextBoxBorderBrush}"
+                BorderThickness="1">
+                <StackPanel HorizontalAlignment="Center">
+                    <!--  A 270 degree arc; the rotation is driven from code while the build runs  -->
+                    <Path
+                        Width="40"
+                        Height="40"
+                        Data="M 20,3 A 17,17 0 1 1 3,20"
+                        RenderTransformOrigin="0.5,0.5"
+                        Stroke="{DynamicResource ButtonMouseOverBorderBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="3">
+                        <Path.RenderTransform>
+                            <RotateTransform x:Name="spinnerRotation" Angle="0" />
+                        </Path.RenderTransform>
+                    </Path>
+                    <TextBlock
+                        Margin="0,16,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        Text="Building MSI..." />
+                    <TextBlock
+                        x:Name="txtOverlayDetail"
+                        Margin="0,6,0,0"
+                        HorizontalAlignment="Center"
+                        MaxWidth="320"
+                        Style="{StaticResource HintText}"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource HintText}"
+                        Text="Please wait until the build finishes." />
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
