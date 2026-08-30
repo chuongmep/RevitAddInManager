@@ -21,6 +21,27 @@ namespace QuickMsiBuilder.Tests
         }
 
         [Fact]
+        public void Inspect_FindsCommandsThatInheritTheInterfaceFromABaseClass()
+        {
+            var names = InspectSelf().Candidates.Select(c => c.FullClassName).ToList();
+
+            // The interface is on BaseCommand; every derived command still has to be found.
+            Assert.Contains("QuickMsiBuilder.Tests.Fixtures.Inherited.DerivedCommand", names);
+            Assert.Contains("QuickMsiBuilder.Tests.Fixtures.Inherited.DeeplyDerivedCommand", names);
+            Assert.Contains("QuickMsiBuilder.Tests.Fixtures.Inherited.DerivedApplication", names);
+            Assert.DoesNotContain("QuickMsiBuilder.Tests.Fixtures.Inherited.BaseCommand", names);
+        }
+
+        [Fact]
+        public void Inspect_FindsCommandsThroughAnInheritedInterface()
+        {
+            var candidates = InspectSelf().Candidates;
+            var match = candidates.Single(c => c.FullClassName.EndsWith("CommandViaInterfaceChain"));
+
+            Assert.Equal(RevitAddinType.Command, match.AddinType);
+        }
+
+        [Fact]
         public void Inspect_FindsPublicCommandsAndApplications()
         {
             var names = InspectSelf().Candidates.Select(c => c.FullClassName).ToList();

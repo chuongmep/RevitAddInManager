@@ -46,3 +46,38 @@ namespace QuickMsiBuilder.Tests.Fixtures
         }
     }
 }
+
+namespace QuickMsiBuilder.Tests.Fixtures.Inherited
+{
+    using Autodesk.Revit.UI;
+
+    // Interface sits on a shared base class - the pattern most add-ins use.
+    public abstract class BaseCommand : IExternalCommand
+    {
+    }
+
+    public class DerivedCommand : BaseCommand
+    {
+    }
+
+    public class DeeplyDerivedCommand : DerivedCommand
+    {
+    }
+
+    public abstract class BaseApplication : IExternalApplication
+    {
+    }
+
+    public class DerivedApplication : BaseApplication
+    {
+    }
+
+    // Interface inheriting the Revit one.
+    public interface ICompanyCommand : IExternalCommand
+    {
+    }
+
+    public class CommandViaInterfaceChain : ICompanyCommand
+    {
+    }
+}

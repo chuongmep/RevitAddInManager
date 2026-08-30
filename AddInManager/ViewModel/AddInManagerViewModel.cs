@@ -843,32 +843,69 @@ public class AddInManagerViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Quick MSI Builder is installed once for all Revit versions, so it lives beside the version
-    /// folders rather than inside them. A copy next to the assembly still wins, which is what a
-    /// local build produces.
+    /// Quick MSI Builder is installed once for all Revit versions, next to the version folders.
+    /// The known install roots are searched by absolute path rather than only relative to this
+    /// assembly: the add-in can be running from a copy - the Add-in Manager loads assemblies out of
+    /// a temp folder - and a relative walk would then point nowhere.
     /// </summary>
-    private static string ResolveQuickMsiBuilder()
+    private string ResolveQuickMsiBuilder(out List<string> searched)
     {
-        var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        if (string.IsNullOrEmpty(assemblyDir)) return null;
+        searched = new List<string>();
 
-        var candidates = new List<string>
+        foreach (var directory in QuickMsiBuilderDirectories())
         {
-            Path.Combine(assemblyDir, DefaultSetting.QuickMsiBuilderExe),
-            // ...\Addins\<year>\RevitAddinManager -> ...\Addins\QuickMsiBuilder
-            Path.Combine(assemblyDir, "..", "..", DefaultSetting.QuickMsiBuilderFolder, DefaultSetting.QuickMsiBuilderExe),
-            // ...\Addins\<year> -> ...\Addins\QuickMsiBuilder
-            Path.Combine(assemblyDir, "..", DefaultSetting.QuickMsiBuilderFolder, DefaultSetting.QuickMsiBuilderExe),
-            // bin\AddIn <year> <config>\RevitAddinManager -> bin\AddInShared\QuickMsiBuilder
-            Path.Combine(assemblyDir, "..", "..", "AddInShared", DefaultSetting.QuickMsiBuilderFolder, DefaultSetting.QuickMsiBuilderExe)
-        };
+            if (string.IsNullOrEmpty(directory)) continue;
 
-        foreach (var candidate in candidates)
-        {
-            if (File.Exists(candidate)) return Path.GetFullPath(candidate);
+            var candidate = Path.Combine(directory, DefaultSetting.QuickMsiBuilderExe);
+            searched.Add(candidate);
+
+            try
+            {
+                if (File.Exists(candidate)) return Path.GetFullPath(candidate);
+            }
+            catch
+            {
+                // A malformed candidate is simply not the answer.
+            }
         }
 
         return null;
+    }
+
+    private IEnumerable<string> QuickMsiBuilderDirectories()
+    {
+        // Where the installer puts it, and the layout a Debug build mirrors.
+        var roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+        yield return Path.Combine(roaming, DefaultSetting.AdskPath, DefaultSetting.QuickMsiBuilderFolder);
+        yield return Path.Combine(programData, DefaultSetting.AdskPath, DefaultSetting.QuickMsiBuilderFolder);
+
+        var assemblyDir = ExecutingDirectory();
+        if (string.IsNullOrEmpty(assemblyDir)) yield break;
+
+        // Next to the add-in, which is what a local build copies.
+        yield return assemblyDir;
+        // ...\Addins\<year>\RevitAddinManager -> ...\Addins\QuickMsiBuilder
+        yield return Path.Combine(assemblyDir, "..", "..", DefaultSetting.QuickMsiBuilderFolder);
+        // ...\Addins\<year> -> ...\Addins\QuickMsiBuilder
+        yield return Path.Combine(assemblyDir, "..", DefaultSetting.QuickMsiBuilderFolder);
+        // bin\AddIn <year> <config>\RevitAddinManager -> bin\AddInShared\QuickMsiBuilder
+        yield return Path.Combine(assemblyDir, "..", "..", "AddInShared", DefaultSetting.QuickMsiBuilderFolder);
+    }
+
+    private static string ExecutingDirectory()
+    {
+        try
+        {
+            // Location is empty for assemblies loaded from memory, so fall back to the base directory.
+            var location = Assembly.GetExecutingAssembly().Location;
+            if (!string.IsNullOrEmpty(location)) return Path.GetDirectoryName(location);
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -876,8 +913,10 @@ public class AddInManagerViewModel : ViewModelBase
     /// carry the individual commands. Whichever one is selected - and whichever tab is active - is
     /// enough to start a build, so the user never has to hunt for the "right" node.
     /// </summary>
-    private string GetSelectedAssemblyPath()
+    private string GetSelectedAssemblyPath(out string declaredPath)
     {
+        declaredPath = null;
+
         // The active tab comes first, then the other one.
         var models = IsTabAppSelected
             ? new[] { SelectedAppItem, SelectedCommandItem }
@@ -885,32 +924,73 @@ public class AddInManagerViewModel : ViewModelBase
 
         foreach (var model in models)
         {
-            if (model?.Addin != null && !string.IsNullOrEmpty(model.Addin.FilePath)) return model.Addin.FilePath;
+            if (model == null) continue;
+
+            // The item's own path first: a child node knows exactly which assembly it came from.
+            foreach (var path in new[] { model.AddinItem?.AssemblyPath, model.Addin?.FilePath })
+            {
+                if (string.IsNullOrEmpty(path)) continue;
+
+                declaredPath = declaredPath ?? path;
+                var resolved = AssemblyPathResolver.Resolve(path, RevitVersionNumber);
+                if (resolved != null) return resolved;
+            }
         }
 
         // Nothing selected, but something was run or loaded earlier.
         var active = MAddinManagerBase?.ActiveCmd ?? MAddinManagerBase?.ActiveApp;
-        return active == null ? null : active.FilePath;
+        if (active == null || string.IsNullOrEmpty(active.FilePath)) return null;
+
+        declaredPath = declaredPath ?? active.FilePath;
+        return AssemblyPathResolver.Resolve(active.FilePath, RevitVersionNumber);
+    }
+
+    private string RevitVersionNumber
+    {
+        get
+        {
+            try
+            {
+                return ExternalCommandData?.Application?.Application?.VersionNumber;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 
     private void BuildMsiClick()
     {
         // The builder detects the entry points itself and defaults to every command in the
         // assembly, so only the assembly is passed across.
-        string filePath = GetSelectedAssemblyPath();
+        string declaredPath;
+        string filePath = GetSelectedAssemblyPath(out declaredPath);
 
-        if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+        if (filePath == null)
         {
-            MessageBox.Show("Select an add-in in the Load Command or Load App tab first.", Resource.AppName);
+            // Two very different problems used to share one message; say which one it is.
+            MessageBox.Show(
+                declaredPath == null
+                    ? "Select an add-in in the Load Command or Load App tab first."
+                    : $"The assembly of the selected add-in was not found:{Environment.NewLine}{declaredPath}",
+                Resource.AppName);
             return;
         }
 
         try
         {
-            string uiPath = ResolveQuickMsiBuilder();
+            List<string> searched;
+            string uiPath = ResolveQuickMsiBuilder(out searched);
             if (uiPath == null)
             {
-                MessageBox.Show("Quick MSI Builder was not found. Reinstall Revit Add-in Manager to restore it.", Resource.AppName);
+                // List what was looked at: a missing tool is a deployment problem, and the paths
+                // are the only useful thing to report.
+                MessageBox.Show(
+                    "Quick MSI Builder was not found. Reinstall Revit Add-in Manager to restore it."
+                    + Environment.NewLine + Environment.NewLine + "Looked in:" + Environment.NewLine
+                    + string.Join(Environment.NewLine, searched.ToArray()),
+                    Resource.AppName);
                 return;
             }
 

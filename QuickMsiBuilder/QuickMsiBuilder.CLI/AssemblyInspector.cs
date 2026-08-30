@@ -49,6 +49,9 @@ namespace QuickMsiBuilder.CLI
         private const string CommandInterface = "Autodesk.Revit.UI.IExternalCommand";
         private const string ApplicationInterface = "Autodesk.Revit.UI.IExternalApplication";
 
+        /// <summary>Guards against a malformed or circular type hierarchy.</summary>
+        private const int MaxHierarchyDepth = 32;
+
         public static AssemblyDetails Inspect(string dllPath)
         {
             var details = new AssemblyDetails();
@@ -58,22 +61,31 @@ namespace QuickMsiBuilder.CLI
 
             try
             {
-                using (var assembly = AssemblyDefinition.ReadAssembly(dllPath))
+                // The resolver needs the assembly's own folder: a command often derives from a base
+                // class living in a sibling dll, and that base is where the interface is declared.
+                using (var resolver = new DefaultAssemblyResolver())
                 {
-                    // The assembly version is the one developers actually maintain; the Win32 file
-                    // version is often left at 0.0.0.0, so it only fills the gaps.
-                    var version = assembly.Name.Version;
-                    if (version != null && (version.Major > 0 || version.Minor > 0 || version.Build > 0))
-                    {
-                        details.Version = UsableVersion(FormatVersion(version)) ?? details.Version;
-                    }
+                    var directory = Path.GetDirectoryName(dllPath);
+                    if (!string.IsNullOrEmpty(directory)) resolver.AddSearchDirectory(directory);
 
-                    foreach (var module in assembly.Modules)
+                    var parameters = new ReaderParameters { AssemblyResolver = resolver };
+                    using (var assembly = AssemblyDefinition.ReadAssembly(dllPath, parameters))
                     {
-                        foreach (var type in module.Types.SelectMany(Flatten))
+                        // The assembly version is the one developers actually maintain; the Win32
+                        // file version is often left at 0.0.0.0, so it only fills the gaps.
+                        var version = assembly.Name.Version;
+                        if (version != null && (version.Major > 0 || version.Minor > 0 || version.Build > 0))
                         {
-                            var candidate = Match(type);
-                            if (candidate != null) details.Candidates.Add(candidate);
+                            details.Version = UsableVersion(FormatVersion(version)) ?? details.Version;
+                        }
+
+                        foreach (var module in assembly.Modules)
+                        {
+                            foreach (var type in module.Types.SelectMany(Flatten))
+                            {
+                                var candidate = Match(type);
+                                if (candidate != null) details.Candidates.Add(candidate);
+                            }
                         }
                     }
                 }
@@ -93,16 +105,71 @@ namespace QuickMsiBuilder.CLI
 
         private static AddinCandidate Match(TypeDefinition type)
         {
+            // Revit only instantiates public, concrete classes.
             if (!type.IsClass || type.IsAbstract || !type.IsPublic && !type.IsNestedPublic) return null;
 
-            foreach (var contract in type.Interfaces)
+            var addinType = Classify(type);
+            return addinType == null ? null : new AddinCandidate(ClassName(type), addinType.Value);
+        }
+
+        /// <summary>
+        /// Walks the whole hierarchy, not just the interfaces declared on the class itself.
+        /// Add-ins commonly put the interface on a shared base class - every derived command would
+        /// otherwise go unnoticed - and an interface may also inherit the Revit one.
+        /// </summary>
+        private static RevitAddinType? Classify(TypeDefinition type)
+        {
+            var current = type;
+
+            for (var depth = 0; current != null && depth < MaxHierarchyDepth; depth++)
             {
-                var name = contract.InterfaceType.FullName;
-                if (name == CommandInterface) return new AddinCandidate(ClassName(type), RevitAddinType.Command);
-                if (name == ApplicationInterface) return new AddinCandidate(ClassName(type), RevitAddinType.Application);
+                foreach (var contract in current.Interfaces)
+                {
+                    var addinType = ClassifyInterface(contract.InterfaceType, 0);
+                    if (addinType != null) return addinType;
+                }
+
+                current = Resolve(current.BaseType);
             }
 
             return null;
+        }
+
+        private static RevitAddinType? ClassifyInterface(TypeReference contract, int depth)
+        {
+            if (contract == null || depth >= MaxHierarchyDepth) return null;
+
+            if (contract.FullName == CommandInterface) return RevitAddinType.Command;
+            if (contract.FullName == ApplicationInterface) return RevitAddinType.Application;
+
+            var definition = Resolve(contract);
+            if (definition == null) return null;
+
+            foreach (var inherited in definition.Interfaces)
+            {
+                var addinType = ClassifyInterface(inherited.InterfaceType, depth + 1);
+                if (addinType != null) return addinType;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Resolving reaches outside the assembly, so it fails for types whose assembly is not
+        /// beside the target - the Revit API itself, for one. A failure just ends that branch.
+        /// </summary>
+        private static TypeDefinition Resolve(TypeReference reference)
+        {
+            if (reference == null) return null;
+
+            try
+            {
+                return reference.Resolve();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
